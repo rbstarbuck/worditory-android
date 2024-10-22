@@ -1,8 +1,7 @@
 package com.example.worditory.game
 
-import android.content.Context
-import android.view.View
+import androidx.compose.runtime.Composable
 
-class GameView(width: Int, height: Int, context: Context): View(context) {
-    private val viewModel = GameViewModel(width, height)
+@Composable
+fun GameView(viewModel: GameViewModel) {
 }

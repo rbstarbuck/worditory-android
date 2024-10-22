@@ -1,6 +1,7 @@
 package com.example.worditory.game.word
 
-import android.content.Context
-import android.view.View
+import androidx.compose.runtime.Composable
 
-class WordView(context: Context): View(context)
+@Composable
+fun WordView(viewModel: WordViewModel) {
+}

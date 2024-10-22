@@ -1,6 +1,7 @@
 package com.example.worditory.game.board
 
-import android.content.Context
-import android.view.View
+import androidx.compose.runtime.Composable
 
-class BoardView(width: Int, height: Int, context: Context): View(context)
+@Composable
+fun BoardView(viewModel: BoardViewModel) {
+}

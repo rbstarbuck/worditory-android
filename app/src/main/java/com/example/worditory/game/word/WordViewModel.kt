@@ -1,5 +1,8 @@
 package com.example.worditory.game.word
 
-class WordViewModel() {
-    private val model = WordModel()
+import androidx.lifecycle.ViewModel
+import com.example.worditory.game.board.tile.TileViewModel
+
+class WordViewModel(): ViewModel() {
+    private val tiles = ArrayList<TileViewModel>()
 }
