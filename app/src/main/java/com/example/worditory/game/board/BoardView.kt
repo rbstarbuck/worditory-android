@@ -11,6 +11,7 @@ import com.example.worditory.game.board.tile.TileView
 @Composable
 fun BoardView(viewModel: BoardViewModel) {
     val flatTiles = viewModel.tiles.flatten()
+
     LazyVerticalGrid(GridCells.Fixed(viewModel.width)) {
         items(flatTiles.size) { i ->
             Box(Modifier.aspectRatio(1f)) {
