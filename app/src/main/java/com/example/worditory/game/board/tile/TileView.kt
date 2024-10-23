@@ -1,7 +1,7 @@
 package com.example.worditory.game.board.tile
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -10,8 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun TileView(viewModel: TileViewModel) {
@@ -26,18 +27,19 @@ fun TileView(viewModel: TileViewModel) {
         Tile.Ownership.SUPER_OWNED_PLAYER_2 -> viewModel.colorScheme.player2.superOwned
     }
 
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
     ) {
+        val fontSize = this.maxWidth.value * 0.55f / LocalDensity.current.fontScale
         Text(
             text = letter.value,
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentHeight(Alignment.CenterVertically)
                 .wrapContentWidth(Alignment.CenterHorizontally),
-            fontSize = 7.em,
+            fontSize = fontSize.sp,
             fontWeight = FontWeight.Bold
         )
     }
