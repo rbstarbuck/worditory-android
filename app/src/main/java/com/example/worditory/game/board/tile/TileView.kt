@@ -1,6 +1,7 @@
 package com.example.worditory.game.board.tile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -15,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TileView(viewModel: TileViewModel) {
+fun TileView(viewModel: TileViewModel, clickAction: () -> Unit) {
     val letter = viewModel.letter.collectAsState("")
     val ownership = viewModel.ownership.collectAsState(Tile.Ownership.UNOWNED)
 
@@ -31,8 +32,10 @@ fun TileView(viewModel: TileViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
+            .clickable(onClick = clickAction)
     ) {
         val fontSize = this.maxWidth.value * 0.55f / LocalDensity.current.fontScale
+
         Text(
             text = letter.value,
             modifier = Modifier

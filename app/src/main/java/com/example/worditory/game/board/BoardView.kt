@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.TileView
 import com.example.worditory.game.board.word.WordView
 
@@ -15,11 +16,21 @@ fun BoardView(viewModel: BoardViewModel) {
     val flatTiles = viewModel.tiles.flatten()
     val aspectRatio = viewModel.width.toFloat() / viewModel.height.toFloat()
 
-    Box(Modifier.fillMaxSize().aspectRatio(aspectRatio)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .aspectRatio(aspectRatio)
+    ) {
         LazyVerticalGrid(GridCells.Fixed(viewModel.width)) {
             items(flatTiles.size) { i ->
                 Box(Modifier.aspectRatio(1f)) {
-                    TileView(flatTiles[i])
+                    val tile = flatTiles[i]
+                    TileView(
+                        viewModel = tile,
+                        clickAction = {
+                            viewModel.word.onTileClick(tile, Game.Player.PLAYER_1)
+                        }
+                    )
                 }
             }
         }

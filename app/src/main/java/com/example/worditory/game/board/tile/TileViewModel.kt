@@ -21,7 +21,7 @@ class TileViewModel(val x: Int, val y: Int, val colorScheme: Tile.ColorScheme): 
 
     fun equals(other: TileViewModel): Boolean = x == other.x && y == other.y
 
-    fun adjacent(other: TileViewModel): Boolean {
+    fun isAdjacent(other: TileViewModel): Boolean {
         val diffX = x - other.x
         val diffY = y - other.y
         return diffX <= 1 && diffX >= -1 && diffY <= 1 && diffY >=-1
