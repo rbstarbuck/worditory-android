@@ -4,8 +4,13 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class TileViewModel(val x: Int, val y: Int, val colorScheme: Tile.ColorScheme): ViewModel() {
-    private val _letter = MutableStateFlow("")
+class TileViewModel(
+    val x: Int,
+    val y: Int,
+    letter: String,
+    val colorScheme: Tile.ColorScheme
+): ViewModel() {
+    private val _letter = MutableStateFlow(letter)
     val letter = _letter.asStateFlow()
 
     private val _ownership = MutableStateFlow(Tile.Ownership.UNOWNED)

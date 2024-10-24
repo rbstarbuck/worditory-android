@@ -9,10 +9,16 @@ import kotlin.Array
 class BoardViewModel(val width: Int, val height: Int): ViewModel() {
     val tiles: Array<Array<TileViewModel>>
     val word = WordViewModel(width, height)
+    val letterBag = LetterBag()
 
     init {
         val colorScheme = Tile.ColorScheme.random()
-        tiles = Array(height) { y -> Array(width) { x -> TileViewModel(x, y, colorScheme) } }
+        tiles = Array(height) { y ->
+            Array(width) { x ->
+                TileViewModel(x, y, letterBag.takeLetter(), colorScheme)
+            }
+        }
+
         for (tile in tiles.first()) {
             tile.setOwnership(Tile.Ownership.OWNED_PLAYER_2)
         }
