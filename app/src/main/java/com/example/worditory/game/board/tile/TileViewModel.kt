@@ -1,6 +1,7 @@
 package com.example.worditory.game.board.tile
 
 import androidx.lifecycle.ViewModel
+import com.example.worditory.game.Game
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -31,6 +32,16 @@ class TileViewModel(
         val diffY = y - other.y
         return diffX <= 1 && diffX >= -1 && diffY <= 1 && diffY >=-1
     }
+
+    fun ownedBy(player: Game.Player) =
+        when (player) {
+            Game.Player.PLAYER_1 ->
+                ownership.value == Tile.Ownership.OWNED_PLAYER_1
+                        || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_1
+            Game.Player.PLAYER_2 ->
+                ownership.value == Tile.Ownership.OWNED_PLAYER_2
+                        || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_2
+        }
 
     fun unownedTileColor() =
         if ((x + y) % 2 == 0)

@@ -15,18 +15,18 @@ import com.example.worditory.game.board.tile.TileViewModel
 
 @Composable
 fun WordView(viewModel: WordViewModel) {
-    val tiles = viewModel.tiles.collectAsState(emptyList<TileViewModel>())
+    val model = viewModel.model.collectAsState(WordModel())
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        if (!tiles.value.isEmpty()) {
+        if (!model.value.tiles.isEmpty()) {
             val path = Path()
             val origin = Origin(viewModel.boardWidth, viewModel.boardHeight, drawContext.size)
-            val firstTile = tiles.value.first()
+            val firstTile = model.value.tiles.first()
             val strokeWidth = drawContext.size.width / viewModel.boardWidth / 10f
 
             path.moveTo(origin.ofX(firstTile), origin.ofY(firstTile))
-            for (i in 1..<tiles.value.size) {
-                path.lineTo(origin.ofX(tiles.value[i]), origin.ofY(tiles.value[i]))
+            for (i in 1..<model.value.tiles.size) {
+                path.lineTo(origin.ofX(model.value.tiles[i]), origin.ofY(model.value.tiles[i]))
             }
 
             val translateLeft = drawContext.size.width / viewModel.boardWidth / 2f
