@@ -5,11 +5,11 @@ import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileModel
 
 class WordModel(val tiles: List<TileModel> = emptyList(), val isSuperWord: Boolean = false) {
+    override fun toString(): String = tiles.map { it.letter }.joinToString().uppercase()
+
     fun clone(): WordModel = WordModel(tiles.toList(), isSuperWord)
 
     fun contains(tile: TileModel) = tiles.contains(tile)
-
-    fun buildWordString(): String = tiles.map { it.letter }.joinToString().uppercase()
 
     fun isSuperOwned(tile: TileModel): Boolean =
         tile.ownership == Tile.Ownership.SUPER_OWNED_PLAYER_1

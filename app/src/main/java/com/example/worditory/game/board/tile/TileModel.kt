@@ -3,6 +3,8 @@ package com.example.worditory.game.board.tile
 import com.example.worditory.game.Game
 
 class TileModel(val x: Int, val y: Int, val letter: String, val ownership: Tile.Ownership) {
+    override fun toString(): String = letter
+
     fun equals(other: TileModel): Boolean = x == other.x && y == other.y
 
     fun isAdjacent(other: TileModel): Boolean {

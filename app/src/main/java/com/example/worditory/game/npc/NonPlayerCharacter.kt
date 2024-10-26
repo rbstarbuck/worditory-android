@@ -19,7 +19,7 @@ class NonPlayerCharacter(val board: BoardViewModel, val player: Game.Player, val
                 )
                 findAllWords(
                     previousWord = word,
-                    previousWordString = word.buildWordString(),
+                    previousWordString = word.toString(),
                     previousResult = WordDictionary.SearchResult(),
                     tilesInWord = setOf(tileModel),
                     wordScores = wordScores

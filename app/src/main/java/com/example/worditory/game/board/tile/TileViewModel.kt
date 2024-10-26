@@ -11,6 +11,8 @@ class TileViewModel(
     private val _model = MutableStateFlow(model)
     val model = _model.asStateFlow()
 
+    override fun toString(): String = model.value.toString()
+
     val backgroundColor
         get() = when (model.value.ownership) {
             Tile.Ownership.UNOWNED -> unownedTileColor
