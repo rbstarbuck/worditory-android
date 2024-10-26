@@ -13,7 +13,6 @@ import com.example.worditory.game.board.word.WordView
 
 @Composable
 fun BoardView(viewModel: BoardViewModel) {
-    val flatTiles = viewModel.tiles.flatten()
     val aspectRatio = viewModel.width.toFloat() / viewModel.height.toFloat()
 
     Box(
@@ -22,9 +21,9 @@ fun BoardView(viewModel: BoardViewModel) {
             .aspectRatio(aspectRatio)
     ) {
         LazyVerticalGrid(GridCells.Fixed(viewModel.width)) {
-            items(flatTiles.size) { i ->
+            items(viewModel.flatTiles.size) { i ->
                 Box(Modifier.aspectRatio(1f)) {
-                    val tile = flatTiles[i]
+                    val tile = viewModel.flatTiles[i]
                     TileView(
                         viewModel = tile,
                         clickAction = {

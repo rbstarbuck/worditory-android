@@ -5,6 +5,12 @@ import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileViewModel
 
 class WordModel(val tiles: List<TileViewModel> = emptyList(), val isSuperWord: Boolean = false) {
+    fun clone(): WordModel = WordModel(tiles.toList(), isSuperWord)
+
+    fun contains(tile: TileViewModel) = tiles.contains(tile)
+
+    fun buildWordString(): String = tiles.map { it.letter.value }.joinToString().uppercase()
+
     fun isSuperOwned(tile: TileViewModel): Boolean =
         tile.ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_1
                 || tile.ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_2

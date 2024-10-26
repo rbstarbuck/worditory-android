@@ -20,7 +20,7 @@ class WordViewModel(
         val tileData = mutableListOf<TileViewModel>()
 
         if (model.value.tiles.isEmpty()) {
-            if (tile.ownedBy(currentPlayer)) {
+            if (tile.isOwnedBy(currentPlayer)) {
                 tileData.add(tile)
                 isSuperWord = model.value.isSuperOwned(tile)
                 didMutate = true

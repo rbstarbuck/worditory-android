@@ -30,10 +30,10 @@ class TileViewModel(
     fun isAdjacent(other: TileViewModel): Boolean {
         val diffX = x - other.x
         val diffY = y - other.y
-        return diffX <= 1 && diffX >= -1 && diffY <= 1 && diffY >=-1
+        return diffX <= 1 && diffX >= -1 && diffY <= 1 && diffY >=-1 && !equals(other)
     }
 
-    fun ownedBy(player: Game.Player) =
+    fun isOwnedBy(player: Game.Player) =
         when (player) {
             Game.Player.PLAYER_1 ->
                 ownership.value == Tile.Ownership.OWNED_PLAYER_1
@@ -42,6 +42,10 @@ class TileViewModel(
                 ownership.value == Tile.Ownership.OWNED_PLAYER_2
                         || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_2
         }
+
+    fun isSuperOwned() =
+        ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_1
+                || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_2
 
     fun unownedTileColor() =
         if ((x + y) % 2 == 0)
