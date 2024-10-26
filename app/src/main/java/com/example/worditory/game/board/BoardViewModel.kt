@@ -27,7 +27,5 @@ class BoardViewModel(val width: Int, val height: Int): ViewModel() {
         for (tile in tiles.last()) {
             tile.setOwnership(Tile.Ownership.OWNED_PLAYER_1)
         }
-
-        tiles.flatten().iterator()
     }
 }
