@@ -1,6 +1,5 @@
 package com.example.worditory.game.dict
 
-import androidx.core.graphics.drawable.toDrawable
 import java.io.BufferedReader
 import kotlin.math.absoluteValue
 
