@@ -20,23 +20,27 @@ class MainActivity : ComponentActivity() {
             WorditoryTheme {
                 WordDictionary.init()
 
-                val width = 7
-                val height = 7
+                val width = 8
+                val height = 8
                 val board = BoardViewModel(width, height)
 
                 val nonPlayerCharacter1 = NonPlayerCharacter(
                     board,
                     Game.Player.PLAYER_2,
-                    vocabulary = 0
+                    NonPlayerCharacter.VocabularyLevel.COMPLETE,
+                    NonPlayerCharacter.DefenseOffenseLevel.BLENDED,
+                    NonPlayerCharacter.OverallSkillLevel.VERY_ADVANCED
                 )
-                nonPlayerCharacter1.findAllWords()
+                nonPlayerCharacter1.findWordToPlay()
 
                 val nonPlayerCharacter2 = NonPlayerCharacter(
                     board,
                     Game.Player.PLAYER_2,
-                    vocabulary = 3
+                    NonPlayerCharacter.VocabularyLevel.LOW,
+                    NonPlayerCharacter.DefenseOffenseLevel.BLENDED,
+                    NonPlayerCharacter.OverallSkillLevel.VERY_BEGINNER
                 )
-                nonPlayerCharacter2.findAllWords()
+                nonPlayerCharacter2.findWordToPlay()
 
                 BoardView(board)
             }

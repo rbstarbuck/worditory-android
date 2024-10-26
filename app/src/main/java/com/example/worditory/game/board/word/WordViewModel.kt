@@ -13,7 +13,7 @@ class WordViewModel(
 ): ViewModel() {
     private val _model = MutableStateFlow(model)
     val model = _model.asStateFlow()
-    
+
     override fun toString(): String = model.value.toString()
 
     fun onTileClick(tile: TileModel, currentPlayer: Game.Player): Boolean {
@@ -32,7 +32,7 @@ class WordViewModel(
             if (tileIndex != -1) {
                 tileData.addAll(model.value.tiles.subList(fromIndex = 0, toIndex = tileIndex))
                 didMutate = true
-            } else if (tile.isAdjacent(model.value.tiles.last())
+            } else if (tile.isConnectedTo(model.value.tiles.last())
                     && model.value.playerCanOwn(currentPlayer, tile)) {
                 tileData.addAll(model.value.tiles)
                 tileData.add(tile)

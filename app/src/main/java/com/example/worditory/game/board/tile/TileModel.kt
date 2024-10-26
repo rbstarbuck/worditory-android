@@ -7,7 +7,7 @@ class TileModel(val x: Int, val y: Int, val letter: String, val ownership: Tile.
 
     fun equals(other: TileModel): Boolean = x == other.x && y == other.y
 
-    fun isAdjacent(other: TileModel): Boolean {
+    fun isConnectedTo(other: TileModel): Boolean {
         val diffX = x - other.x
         val diffY = y - other.y
         return diffX <= 1 && diffX >= -1 && diffY <= 1 && diffY >=-1 && !equals(other)
@@ -26,4 +26,6 @@ class TileModel(val x: Int, val y: Int, val letter: String, val ownership: Tile.
     fun isSuperOwned() =
         ownership == Tile.Ownership.SUPER_OWNED_PLAYER_1
                 || ownership == Tile.Ownership.SUPER_OWNED_PLAYER_2
+
+    fun isUnowned() = ownership == Tile.Ownership.UNOWNED
 }

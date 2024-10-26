@@ -30,4 +30,35 @@ class BoardViewModel(val width: Int, val height: Int): ViewModel() {
 
         flatTiles = tiles.flatten()
     }
+
+    fun connectedTiles(tile: TileModel): List<TileModel> {
+        val tiles = mutableListOf<TileModel>()
+
+        addIfExists(tile.x - 1, tile.y - 1, tiles)
+        addIfExists(tile.x, tile.y - 1, tiles)
+        addIfExists(tile.x + 1, tile.y - 1, tiles)
+        addIfExists(tile.x + 1, tile.y, tiles)
+        addIfExists(tile.x + 1, tile.y + 1, tiles)
+        addIfExists(tile.x, tile.y + 1, tiles)
+        addIfExists(tile.x - 1, tile.y + 1, tiles)
+        addIfExists(tile.x - 1, tile.y, tiles)
+
+        return tiles
+    }
+
+    fun adjacentTiles(tile: TileModel): List<TileModel> {
+        val tiles = mutableListOf<TileModel>()
+
+        addIfExists(tile.x, tile.y - 1, tiles)
+        addIfExists(tile.x + 1, tile.y, tiles)
+        addIfExists(tile.x, tile.y + 1, tiles)
+        addIfExists(tile.x - 1, tile.y, tiles)
+
+        return tiles
+    }
+
+    private fun addIfExists(x: Int, y: Int, list: MutableList<TileModel>) {
+        if (x >= 0 && x < width && y >= 0 && y < height)
+            list.add(tiles[y][x].model.value)
+    }
 }
