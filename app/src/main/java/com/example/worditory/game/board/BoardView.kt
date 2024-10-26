@@ -27,7 +27,7 @@ fun BoardView(viewModel: BoardViewModel) {
                     TileView(
                         viewModel = tile,
                         clickAction = {
-                            viewModel.word.onTileClick(tile, Game.Player.PLAYER_1)
+                            viewModel.word.onTileClick(tile.model.value, Game.Player.PLAYER_1)
                         }
                     )
                 }
