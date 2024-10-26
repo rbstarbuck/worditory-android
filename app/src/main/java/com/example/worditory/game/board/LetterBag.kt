@@ -6,27 +6,27 @@ class LetterBag {
     private data class LetterCount(val letter: String, var count: Int)
 
     private val tiles = listOf(
-        LetterCount("A", 10),
-        LetterCount("B", 2),
-        LetterCount("C", 2),
-        LetterCount("D", 4),
-        LetterCount("E", 12),
-        LetterCount("F", 2),
-        LetterCount("G", 3),
-        LetterCount("H", 2),
-        LetterCount("I", 9),
+        LetterCount("A", 11),
+        LetterCount("B", 3),
+        LetterCount("C", 3),
+        LetterCount("D", 5),
+        LetterCount("E", 13),
+        LetterCount("F", 3),
+        LetterCount("G", 4),
+        LetterCount("H", 3),
+        LetterCount("I", 10),
         LetterCount("J", 1),
-        LetterCount("K", 1),
-        LetterCount("L", 4),
-        LetterCount("M", 3),
-        LetterCount("N", 6),
-        LetterCount("O", 8),
-        LetterCount("P", 2),
+        LetterCount("K", 2),
+        LetterCount("L", 5),
+        LetterCount("M", 4),
+        LetterCount("N", 7),
+        LetterCount("O", 9),
+        LetterCount("P", 3),
         LetterCount("Qu", 1),
-        LetterCount("R", 6),
-        LetterCount("S", 4),
-        LetterCount("T", 6),
-        LetterCount("U", 4),
+        LetterCount("R", 7),
+        LetterCount("S", 5),
+        LetterCount("T", 7),
+        LetterCount("U", 5),
         LetterCount("V", 2),
         LetterCount("W", 2),
         LetterCount("X", 1),
@@ -34,7 +34,7 @@ class LetterBag {
         LetterCount("Z", 1)
     )
 
-    private var tilesInBag = 101
+    private var tilesInBag = 120
 
     fun takeLetter(): String {
         val index = randomLetterIndex()
