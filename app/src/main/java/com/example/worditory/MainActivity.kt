@@ -16,10 +16,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WorditoryTheme {
-                WordDictionary.Companion.init()
+                WordDictionary.init()
 
-                val width = 6
-                val height = 6
+                val width = 7
+                val height = 7
                 val board = BoardViewModel(width, height)
 
                 BoardView(board)
