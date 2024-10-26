@@ -17,27 +17,18 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun TileView(viewModel: TileViewModel, clickAction: () -> Unit) {
-    val letter = viewModel.letter.collectAsState("")
-    val ownership = viewModel.ownership.collectAsState(Tile.Ownership.UNOWNED)
-
-    val backgroundColor = when (ownership.value) {
-        Tile.Ownership.UNOWNED -> viewModel.unownedTileColor()
-        Tile.Ownership.OWNED_PLAYER_1 -> viewModel.colorScheme.player1.owned
-        Tile.Ownership.OWNED_PLAYER_2 -> viewModel.colorScheme.player2.owned
-        Tile.Ownership.SUPER_OWNED_PLAYER_1 -> viewModel.colorScheme.player1.superOwned
-        Tile.Ownership.SUPER_OWNED_PLAYER_2 -> viewModel.colorScheme.player2.superOwned
-    }
+    val model = viewModel.model.collectAsState()
 
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor)
+            .background(viewModel.backgroundColor)
             .clickable(onClick = clickAction)
     ) {
         val fontSize = this.maxWidth.value * 0.55f / LocalDensity.current.fontScale
 
         Text(
-            text = letter.value,
+            text = model.value.letter,
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentHeight(Alignment.CenterVertically)

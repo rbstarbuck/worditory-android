@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
-import com.example.worditory.game.board.tile.TileViewModel
+import com.example.worditory.game.board.tile.TileModel
 
 @Composable
 fun WordView(viewModel: WordViewModel) {
@@ -45,6 +45,6 @@ fun WordView(viewModel: WordViewModel) {
 }
 
 private class Origin(val boardWidth: Int, val boardHeight: Int, val canvasSize: Size) {
-    fun ofX(tile: TileViewModel) = canvasSize.width / boardWidth * tile.x
-    fun ofY(tile: TileViewModel) = canvasSize.height / boardHeight * tile.y
+    fun ofX(tile: TileModel) = canvasSize.width / boardWidth * tile.x
+    fun ofY(tile: TileModel) = canvasSize.height / boardHeight * tile.y
 }

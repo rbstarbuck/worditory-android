@@ -2,7 +2,7 @@ package com.example.worditory.game.npc
 
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.BoardViewModel
-import com.example.worditory.game.board.tile.TileViewModel
+import com.example.worditory.game.board.tile.TileModel
 import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.dict.WordDictionary
 
@@ -11,13 +11,17 @@ class NonPlayerCharacter(val board: BoardViewModel, val player: Game.Player, val
         val wordScores = mutableListOf<WordScore>()
 
         for (tile in board.flatTiles) {
-            if (tile.isOwnedBy(player)) {
-                val word = WordModel(tiles = listOf(tile), isSuperWord = tile.isSuperOwned())
+            val tileModel = tile.model.value
+            if (tileModel.isOwnedBy(player)) {
+                val word = WordModel(
+                    tiles = listOf(tileModel),
+                    isSuperWord = tileModel.isSuperOwned()
+                )
                 findAllWords(
                     previousWord = word,
                     previousWordString = word.buildWordString(),
                     previousResult = WordDictionary.SearchResult(),
-                    tilesInWord = setOf(tile),
+                    tilesInWord = setOf(tileModel),
                     wordScores = wordScores
                 )
             }
@@ -30,36 +34,37 @@ class NonPlayerCharacter(val board: BoardViewModel, val player: Game.Player, val
         previousWord: WordModel,
         previousWordString: String,
         previousResult: WordDictionary.SearchResult,
-        tilesInWord: Set<TileViewModel>,
+        tilesInWord: Set<TileModel>,
         wordScores: MutableList<WordScore>
     ) {
         for (tile in board.flatTiles) {
-            if (previousWord.playerCanOwn(player, tile)
-                    && tile.isAdjacent(previousWord.tiles.last())
-                    && !tilesInWord.contains(tile)) {
-                val nextWordString = "${previousWordString}${tile.letter.value}"
+            val tileModel = tile.model.value
+            if (previousWord.playerCanOwn(player, tileModel)
+                    && tileModel.isAdjacent(previousWord.tiles.last())
+                    && !tilesInWord.contains(tileModel)) {
+                val nextWordString = "${previousWordString}${tileModel.letter}"
                 val nextResult = WordDictionary.search(nextWordString, previousResult)
                 var nextWord: WordModel? = null
 
                 if (nextResult.isWord && nextResult.frequency <= vocabulary) {
-                    nextWord = buildNextWord(previousWord, tile)
+                    nextWord = buildNextWord(previousWord, tileModel)
                     wordScores.add(WordScore(nextWord, score = 0))
                 }
 
                 if (nextResult.isPrefix) {
                     if (nextWord == null)
-                        nextWord = buildNextWord(previousWord, tile)
-                    var nextTilesInWord = mutableSetOf<TileViewModel>()
+                        nextWord = buildNextWord(previousWord, tileModel)
+                    var nextTilesInWord = mutableSetOf<TileModel>()
                     nextTilesInWord.addAll(tilesInWord)
-                    nextTilesInWord.add(tile)
+                    nextTilesInWord.add(tileModel)
                     findAllWords(nextWord, nextWordString, nextResult, nextTilesInWord, wordScores)
                 }
             }
         }
     }
 
-    private fun buildNextWord(word: WordModel, tile: TileViewModel): WordModel {
-        val nextTiles = mutableListOf<TileViewModel>()
+    private fun buildNextWord(word: WordModel, tile: TileModel): WordModel {
+        val nextTiles = mutableListOf<TileModel>()
         nextTiles.addAll(word.tiles)
         nextTiles.add(tile)
         return WordModel(nextTiles, word.isSuperWord)
