@@ -25,8 +25,6 @@ class NonPlayerCharacter(val board: BoardViewModel, val player: Game.Player, val
             }
         }
 
-        val strings = wordScores.map { it.word.buildWordString() }
-
         return wordScores
     }
 
