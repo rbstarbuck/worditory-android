@@ -3,8 +3,6 @@ package com.example.worditory.game.board
 import kotlin.random.Random
 
 class LetterBag {
-    private data class LetterCount(val letter: String, var count: Int)
-
     private val tiles = listOf(
         LetterCount("A", 11),
         LetterCount("B", 3),
@@ -68,4 +66,6 @@ class LetterBag {
 
         return index
     }
+
+    private data class LetterCount(val letter: String, var count: Int)
 }

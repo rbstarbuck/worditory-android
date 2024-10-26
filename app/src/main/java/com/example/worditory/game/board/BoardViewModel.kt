@@ -14,11 +14,13 @@ class BoardViewModel(val width: Int, val height: Int): ViewModel() {
 
     init {
         val colorScheme = Tile.ColorScheme.random()
+
         tiles = Array(height) { y ->
             Array(width) { x ->
                 TileViewModel(x, y, letterBag.takeLetter(), colorScheme)
             }
         }
+
         flatTiles = tiles.flatten()
 
         for (tile in tiles.first()) {

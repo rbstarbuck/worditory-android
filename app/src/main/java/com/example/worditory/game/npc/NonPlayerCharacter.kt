@@ -7,8 +7,6 @@ import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.dict.WordDictionary
 
 class NonPlayerCharacter(val board: BoardViewModel, val player: Game.Player, val vocabulary: Int) {
-    /*private*/ data class WordScore(val word: WordModel, val score: Int)
-
     /*private*/ fun findAllWords(): List<WordScore> {
         val wordScores = mutableListOf<WordScore>()
 
@@ -66,4 +64,6 @@ class NonPlayerCharacter(val board: BoardViewModel, val player: Game.Player, val
         nextTiles.add(tile)
         return WordModel(nextTiles, word.isSuperWord)
     }
+
+    /*private*/ data class WordScore(val word: WordModel, val score: Int)
 }
