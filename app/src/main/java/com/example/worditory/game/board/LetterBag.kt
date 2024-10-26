@@ -34,7 +34,7 @@ class LetterBag {
         LetterCount("Z", 1)
     )
 
-    private var tilesInBag = 100
+    private var tilesInBag = 101
 
     fun takeLetter(): String {
         val index = randomLetterIndex()
