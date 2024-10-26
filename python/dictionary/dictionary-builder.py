@@ -35,8 +35,8 @@ bad.close()
 print("Scrabble length = %s" % len(scrabble))
 print("Unigram length = %s" % len(unigrams))
 
-l0split = 40000
-l1split = 120000
+l0split = 25000
+l1split = 100000
 
 level0 = set()
 for i in range(0, l0split):
