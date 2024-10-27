@@ -2,8 +2,11 @@ package com.example.worditory.game.board.tile
 
 import androidx.lifecycle.ViewModel
 import com.example.worditory.game.Game
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class TileViewModel(
     val x: Int,
@@ -15,8 +18,16 @@ class TileViewModel(
     private val _letter = MutableStateFlow(letter)
     val letter = _letter.asStateFlow()
 
+    private val _letterVisibility = MutableStateFlow(true)
+    val letterVisibility = _letterVisibility.asStateFlow()
+
     fun setLetter(l: String) {
-        _letter.value = l
+        GlobalScope.launch {
+            _letterVisibility.value = false
+            delay(500L)
+            _letter.value = l
+            _letterVisibility.value = true
+        }
     }
 
     private val _ownership = MutableStateFlow(ownership)
