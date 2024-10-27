@@ -62,6 +62,13 @@ class BoardViewModel(val width: Int, val height: Int): ViewModel() {
         }
     }
 
+    fun updateLettersForWord() {
+        for (tile in word.model.value.tiles) {
+            val previousLetter = tile.letter.value
+            tile.setLetter(letterBag.exchangeLetter(previousLetter))
+        }
+    }
+
     private fun willBeSuperOwned(
         tile: TileViewModel,
         player: Game.Player,
