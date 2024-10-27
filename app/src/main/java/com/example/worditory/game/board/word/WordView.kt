@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -20,11 +22,23 @@ fun WordView(viewModel: WordViewModel) {
     Canvas(modifier = Modifier.fillMaxSize()) {
         if (!model.value.tiles.isEmpty()) {
             val path = Path()
-            val strokeWidth = drawContext.size.width / viewModel.boardWidth / 10f
+            val tileSize = drawContext.size.width / viewModel.boardWidth
+            val strokeWidth = tileSize / 10f
             val origin = Origin(viewModel.boardWidth, viewModel.boardHeight, drawContext.size)
             val firstTile = model.value.tiles.first()
 
+            val circleBounds = Rect(
+                center = Offset(origin.ofX(firstTile), origin.ofY(firstTile)),
+                radius = tileSize * 0.35f
+            )
+
             path.moveTo(origin.ofX(firstTile), origin.ofY(firstTile))
+            val startAngleDegress =
+                if (model.value.tiles.size > 1)
+                    getArcStartAngleDegrees(firstTile, model.value.tiles[1])
+                else 0f
+
+            path.addArc(circleBounds, startAngleDegress, sweepAngleDegrees = 360f)
             for (i in 1..<model.value.tiles.size) {
                 path.lineTo(origin.ofX(model.value.tiles[i]), origin.ofY(model.value.tiles[i]))
             }
@@ -42,6 +56,26 @@ fun WordView(viewModel: WordViewModel) {
             }
         }
     }
+}
+
+private fun getArcStartAngleDegrees(firstTile: TileViewModel, secondTile: TileViewModel): Float {
+    val diffX = firstTile.x - secondTile.x
+    val diffY = firstTile.y - secondTile.y
+
+    if (diffX == -1) {
+        if (diffY == -1) return -315f
+        if (diffY == 0) return 0f
+        if (diffY == 1) return -45f
+    } else if (diffX == 0) {
+        if (diffY == -1) return 90f
+        if (diffY == 1) return -90f
+    } else if (diffX == 1) {
+        if (diffY == -1) return 135f
+        if (diffY == 0) return 180f
+        if (diffY == 1) return -135f
+    }
+
+    return 0f
 }
 
 private class Origin(val boardWidth: Int, val boardHeight: Int, val canvasSize: Size) {
