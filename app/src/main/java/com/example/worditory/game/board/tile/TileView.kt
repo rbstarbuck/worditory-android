@@ -1,5 +1,9 @@
 package com.example.worditory.game.board.tile
 
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -19,11 +23,16 @@ import androidx.compose.ui.unit.sp
 fun TileView(viewModel: TileViewModel, clickAction: () -> Unit) {
     val letter = viewModel.letter.collectAsState()
     val ownership = viewModel.ownership.collectAsState()
+    val animatedColor = animateColorAsState(
+        targetValue = viewModel.backgroundColor(ownership.value),
+        animationSpec = tween(500),
+        label = "color"
+    )
 
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(viewModel.backgroundColor(ownership.value))
+            .background(animatedColor.value)
             .clickable(onClick = clickAction)
     ) {
         val fontSize = this.maxWidth.value * 0.55f / LocalDensity.current.fontScale
