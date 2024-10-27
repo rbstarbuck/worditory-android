@@ -78,7 +78,11 @@ private fun getArcStartAngleDegrees(firstTile: TileViewModel, secondTile: TileVi
     return 0f
 }
 
-private class Origin(val boardWidth: Int, val boardHeight: Int, val canvasSize: Size) {
+private class Origin(
+    private val boardWidth: Int,
+    private val boardHeight: Int,
+    private val canvasSize: Size
+) {
     fun ofX(tile: TileViewModel) = canvasSize.width / boardWidth * tile.x
     fun ofY(tile: TileViewModel) = canvasSize.height / boardHeight * tile.y
 }
