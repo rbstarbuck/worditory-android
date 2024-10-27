@@ -13,6 +13,9 @@ class WordViewModel(
 ): ViewModel() {
     private val _model = MutableStateFlow(model)
     val model = _model.asStateFlow()
+    fun setModel(m: WordModel) {
+        _model.value = m
+    }
 
     override fun toString(): String = model.value.toString()
 

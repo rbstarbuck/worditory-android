@@ -31,16 +31,20 @@ class MainActivity : ComponentActivity() {
                     NonPlayerCharacter.DefenseOffenseLevel.BLENDED,
                     NonPlayerCharacter.OverallSkillLevel.VERY_ADVANCED
                 )
-                nonPlayerCharacter1.findWordToPlay()
+                val word = nonPlayerCharacter1.findWordToPlay()
+                if (word != null) {
+                    board.word.setModel(word)
+                    board.updateOwnershipsForWord(Game.Player.PLAYER_2)
+                }
 
-                val nonPlayerCharacter2 = NonPlayerCharacter(
-                    board,
-                    Game.Player.PLAYER_2,
-                    NonPlayerCharacter.VocabularyLevel.LOW,
-                    NonPlayerCharacter.DefenseOffenseLevel.BLENDED,
-                    NonPlayerCharacter.OverallSkillLevel.VERY_BEGINNER
-                )
-                nonPlayerCharacter2.findWordToPlay()
+//                val nonPlayerCharacter2 = NonPlayerCharacter(
+//                    board,
+//                    Game.Player.PLAYER_2,
+//                    NonPlayerCharacter.VocabularyLevel.LOW,
+//                    NonPlayerCharacter.DefenseOffenseLevel.BLENDED,
+//                    NonPlayerCharacter.OverallSkillLevel.VERY_BEGINNER
+//                )
+//                nonPlayerCharacter2.findWordToPlay()
 
                 BoardView(board)
             }

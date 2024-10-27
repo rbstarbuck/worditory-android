@@ -14,9 +14,15 @@ class TileViewModel(
 ): ViewModel() {
     private val _letter = MutableStateFlow(letter)
     val letter = _letter.asStateFlow()
+    fun setLetter(l: String) {
+        _letter.value = l
+    }
 
     private val _ownership = MutableStateFlow(ownership)
     val ownership = _ownership.asStateFlow()
+    fun setOwnership(o: Tile.Ownership) {
+        _ownership.value = o
+    }
 
     val backgroundColor
         get() = when (ownership.value) {
@@ -27,18 +33,15 @@ class TileViewModel(
             Tile.Ownership.SUPER_OWNED_PLAYER_2 -> colorScheme.player2.superOwned
         }
 
-    override fun toString(): String {
-        return letter.value
-    }
+    override fun toString(): String = letter.value
+
+    fun equals(other: TileViewModel): Boolean = x == other.x && y == other.y
 
     private val unownedTileColor
         get() = if ((x + y) % 2 == 0)
             Tile.ColorScheme.unownedTileLight
         else
             Tile.ColorScheme.unownedTileDark
-
-
-    fun equals(other: TileViewModel): Boolean = x == other.x && y == other.y
 
     fun isConnectedTo(other: TileViewModel): Boolean {
         val diffX = x - other.x

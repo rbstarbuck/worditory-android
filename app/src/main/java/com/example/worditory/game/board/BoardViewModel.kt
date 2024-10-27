@@ -1,6 +1,7 @@
 package com.example.worditory.game.board
 
 import androidx.lifecycle.ViewModel
+import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordViewModel
@@ -29,6 +30,43 @@ class BoardViewModel(val width: Int, val height: Int): ViewModel() {
 
         flatTiles = tiles.flatten()
     }
+
+    fun updateOwnershipsForWord(player: Game.Player) {
+        val tilesInWord = mutableSetOf<TileViewModel>()
+        tilesInWord.addAll(word.model.value.tiles)
+
+        for (tile in flatTiles) {
+            if (tile.isUnowned()) {
+                if (tilesInWord.contains(tile)) {
+                    val ownership =
+                        if (willBeSuperOwned(tile, player, tilesInWord)) when (player) {
+                            Game.Player.PLAYER_1 -> Tile.Ownership.SUPER_OWNED_PLAYER_1
+                            Game.Player.PLAYER_2 -> Tile.Ownership.SUPER_OWNED_PLAYER_2
+                        } else when (player) {
+                            Game.Player.PLAYER_1 -> Tile.Ownership.OWNED_PLAYER_1
+                            Game.Player.PLAYER_2 -> Tile.Ownership.OWNED_PLAYER_2
+                        }
+                    tile.setOwnership(ownership)
+                }
+            } else if (tile.isOwnedBy(player)) {
+                if (!tile.isSuperOwned() && willBeSuperOwned(tile, player, tilesInWord)) {
+                    val ownership = when (player) {
+                        Game.Player.PLAYER_1 -> Tile.Ownership.SUPER_OWNED_PLAYER_1
+                        Game.Player.PLAYER_2 -> Tile.Ownership.SUPER_OWNED_PLAYER_2
+                    }
+                    tile.setOwnership(ownership)
+                }
+            } else if (tilesInWord.contains(tile)) {
+                tile.setOwnership(Tile.Ownership.UNOWNED)
+            }
+        }
+    }
+
+    private fun willBeSuperOwned(
+        tile: TileViewModel,
+        player: Game.Player,
+        tilesInWord: Set<TileViewModel>
+    ) = adjacentTiles(tile).all { it.isOwnedBy(player) || tilesInWord.contains(it) }
 
     fun connectedTiles(tile: TileViewModel): List<TileViewModel> {
         val tiles = mutableListOf<TileViewModel>()

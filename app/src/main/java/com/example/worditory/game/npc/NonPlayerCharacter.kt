@@ -139,13 +139,13 @@ class NonPlayerCharacter(
 
         for (tile in board.flatTiles) {
             if (tile.isOwnedBy(player)) {
-                if (!tile.isSuperOwned() && tileWillBeSuperOwned(tile, tilesInWord)) {
+                if (!tile.isSuperOwned() && willBeSuperOwned(tile, tilesInWord)) {
                     defenseScore += 1
                 }
             } else if (tile.isUnowned()) {
                 if (tilesInWord.contains(tile)) {
                     offenseScore += 1
-                    if (tileWillBeSuperOwned(tile, tilesInWord)) defenseScore += 2
+                    if (willBeSuperOwned(tile, tilesInWord)) defenseScore += 2
                 }
             } else if (tilesInWord.contains(tile)) {
                 offenseScore += if (tile.isSuperOwned()) 3 else 1
@@ -158,7 +158,7 @@ class NonPlayerCharacter(
             overallScore = offenseScore + defenseScore)
     }
 
-    private fun tileWillBeSuperOwned(tile: TileViewModel, tilesInWord: Set<TileViewModel>) =
+    private fun willBeSuperOwned(tile: TileViewModel, tilesInWord: Set<TileViewModel>) =
         board.adjacentTiles(tile).all { it.isOwnedBy(player) || tilesInWord.contains(it) }
 
     enum class VocabularyLevel {
