@@ -5,7 +5,7 @@ import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileViewModel
 
 class WordModel(val tiles: List<TileViewModel> = emptyList(), val isSuperWord: Boolean = false) {
-    override fun toString(): String = tiles.map { it.letter.value }.joinToString().uppercase()
+    override fun toString(): String = tiles.map { it.letter.value }.joinToString("").uppercase()
 
     fun clone(): WordModel = WordModel(tiles.toList(), isSuperWord)
 

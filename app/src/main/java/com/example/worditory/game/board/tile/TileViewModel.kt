@@ -24,15 +24,6 @@ class TileViewModel(
         _ownership.value = o
     }
 
-    val backgroundColor
-        get() = when (ownership.value) {
-            Tile.Ownership.UNOWNED -> unownedTileColor
-            Tile.Ownership.OWNED_PLAYER_1 -> colorScheme.player1.owned
-            Tile.Ownership.OWNED_PLAYER_2 -> colorScheme.player2.owned
-            Tile.Ownership.SUPER_OWNED_PLAYER_1 -> colorScheme.player1.superOwned
-            Tile.Ownership.SUPER_OWNED_PLAYER_2 -> colorScheme.player2.superOwned
-        }
-
     override fun toString(): String = letter.value
 
     fun equals(other: TileViewModel): Boolean = x == other.x && y == other.y
@@ -42,6 +33,15 @@ class TileViewModel(
             Tile.ColorScheme.unownedTileLight
         else
             Tile.ColorScheme.unownedTileDark
+
+    fun backgroundColor(owner: Tile.Ownership) =
+        when (owner) {
+            Tile.Ownership.UNOWNED -> unownedTileColor
+            Tile.Ownership.OWNED_PLAYER_1 -> colorScheme.player1.owned
+            Tile.Ownership.OWNED_PLAYER_2 -> colorScheme.player2.owned
+            Tile.Ownership.SUPER_OWNED_PLAYER_1 -> colorScheme.player1.superOwned
+            Tile.Ownership.SUPER_OWNED_PLAYER_2 -> colorScheme.player2.superOwned
+        }
 
     fun isConnectedTo(other: TileViewModel): Boolean {
         val diffX = x - other.x

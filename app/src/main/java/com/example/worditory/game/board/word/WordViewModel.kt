@@ -39,6 +39,7 @@ class WordViewModel(
                     && model.value.playerCanOwn(currentPlayer, tile)) {
                 tileData.addAll(model.value.tiles)
                 tileData.add(tile)
+                isSuperWord = model.value.isSuperWord
                 didMutate = true
             }
         }

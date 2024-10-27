@@ -18,12 +18,12 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun TileView(viewModel: TileViewModel, clickAction: () -> Unit) {
     val letter = viewModel.letter.collectAsState()
-    val ownership = viewModel.letter.collectAsState()
+    val ownership = viewModel.ownership.collectAsState()
 
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(viewModel.backgroundColor)
+            .background(viewModel.backgroundColor(ownership.value))
             .clickable(onClick = clickAction)
     ) {
         val fontSize = this.maxWidth.value * 0.55f / LocalDensity.current.fontScale

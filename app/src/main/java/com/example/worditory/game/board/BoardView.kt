@@ -3,6 +3,7 @@ package com.example.worditory.game.board
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
@@ -17,7 +18,7 @@ fun BoardView(viewModel: BoardViewModel) {
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .aspectRatio(aspectRatio)
     ) {
         LazyVerticalGrid(GridCells.Fixed(viewModel.width)) {

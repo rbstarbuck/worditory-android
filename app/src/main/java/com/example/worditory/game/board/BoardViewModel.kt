@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileViewModel
+import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.board.word.WordViewModel
 import kotlin.Array
 
@@ -67,6 +68,12 @@ class BoardViewModel(val width: Int, val height: Int): ViewModel() {
             val previousLetter = tile.letter.value
             tile.setLetter(letterBag.exchangeLetter(previousLetter))
         }
+    }
+
+    fun playWord(player: Game.Player) {
+        updateOwnershipsForWord(player)
+        updateLettersForWord()
+        word.setModel(WordModel())
     }
 
     private fun willBeSuperOwned(
