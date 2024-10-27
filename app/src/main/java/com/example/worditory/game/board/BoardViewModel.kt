@@ -57,8 +57,16 @@ class BoardViewModel(val width: Int, val height: Int): ViewModel() {
                     }
                     tile.setOwnership(ownership)
                 }
-            } else if (tilesInWord.contains(tile)) {
-                tile.setOwnership(Tile.Ownership.UNOWNED)
+            } else {
+                if (tilesInWord.contains(tile)) {
+                    tile.setOwnership(Tile.Ownership.UNOWNED)
+                } else if (tile.isSuperOwned()
+                        && adjacentTiles(tile).any { tilesInWord.contains(it) }) {
+                    when (player) {
+                        Game.Player.PLAYER_1 -> tile.setOwnership(Tile.Ownership.OWNED_PLAYER_2)
+                        Game.Player.PLAYER_2 -> tile.setOwnership(Tile.Ownership.OWNED_PLAYER_1)
+                    }
+                }
             }
         }
     }

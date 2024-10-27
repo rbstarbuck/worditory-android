@@ -147,8 +147,13 @@ class NonPlayerCharacter(
                     offenseScore += 1
                     if (willBeSuperOwned(tile, tilesInWord)) defenseScore += 2
                 }
-            } else if (tilesInWord.contains(tile)) {
-                offenseScore += if (tile.isSuperOwned()) 3 else 1
+            } else {
+                if (tilesInWord.contains(tile)) {
+                    offenseScore += if (tile.isSuperOwned()) 3 else 1
+                } else if (tile.isSuperOwned()
+                        && board.adjacentTiles(tile).any { tilesInWord.contains(it) }) {
+                    offenseScore += 1
+                }
             }
         }
 
