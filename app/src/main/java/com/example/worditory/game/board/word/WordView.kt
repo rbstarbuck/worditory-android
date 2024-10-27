@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
-import com.example.worditory.game.board.tile.TileModel
+import com.example.worditory.game.board.tile.TileViewModel
 
 @Composable
 fun WordView(viewModel: WordViewModel) {
@@ -20,9 +20,9 @@ fun WordView(viewModel: WordViewModel) {
     Canvas(modifier = Modifier.fillMaxSize()) {
         if (!model.value.tiles.isEmpty()) {
             val path = Path()
+            val strokeWidth = drawContext.size.width / viewModel.boardWidth / 10f
             val origin = Origin(viewModel.boardWidth, viewModel.boardHeight, drawContext.size)
             val firstTile = model.value.tiles.first()
-            val strokeWidth = drawContext.size.width / viewModel.boardWidth / 10f
 
             path.moveTo(origin.ofX(firstTile), origin.ofY(firstTile))
             for (i in 1..<model.value.tiles.size) {
@@ -45,6 +45,6 @@ fun WordView(viewModel: WordViewModel) {
 }
 
 private class Origin(val boardWidth: Int, val boardHeight: Int, val canvasSize: Size) {
-    fun ofX(tile: TileModel) = canvasSize.width / boardWidth * tile.x
-    fun ofY(tile: TileModel) = canvasSize.height / boardHeight * tile.y
+    fun ofX(tile: TileViewModel) = canvasSize.width / boardWidth * tile.x
+    fun ofY(tile: TileViewModel) = canvasSize.height / boardHeight * tile.y
 }

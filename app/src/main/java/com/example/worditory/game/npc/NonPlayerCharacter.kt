@@ -2,8 +2,7 @@ package com.example.worditory.game.npc
 
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.BoardViewModel
-import com.example.worditory.game.board.tile.Tile
-import com.example.worditory.game.board.tile.TileModel
+import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.dict.WordDictionary
 
@@ -16,6 +15,7 @@ class NonPlayerCharacter(
 {
     fun findWordToPlay(): WordModel? {
         var words = findAllWords()
+        if (words.isEmpty()) return null
 
         val skillLevelMultipliers = when(overallSkillLevel) {
             OverallSkillLevel.VERY_BEGINNER -> Pair(0.0, 0.2)
@@ -35,6 +35,7 @@ class NonPlayerCharacter(
         }
 
         words = words.sortedBy { it.overallScore }.subList(skillLevelFromIndex, skillLevelToIndex)
+        if (words.isEmpty()) return null
 
         val defenseOffenseMultiplier = when(defenseOffenseLevel) {
             DefenseOffenseLevel.VERY_DEFENSIVE -> 0.0
@@ -54,17 +55,16 @@ class NonPlayerCharacter(
         val wordScores = mutableListOf<WordScore>()
 
         for (tile in board.flatTiles) {
-            val tileModel = tile.model.value
-            if (tileModel.isOwnedBy(player)) {
+            if (tile.isOwnedBy(player)) {
                 val word = WordModel(
-                    tiles = listOf(tileModel),
-                    isSuperWord = tileModel.isSuperOwned()
+                    tiles = listOf(tile),
+                    isSuperWord = tile.isSuperOwned()
                 )
                 findAllWords(
                     previousWord = word,
                     previousWordString = word.toString(),
                     previousResult = WordDictionary.SearchResult(),
-                    tilesInWord = setOf(tileModel),
+                    tilesInWord = setOf(tile),
                     wordScores = wordScores
                 )
             }
@@ -77,16 +77,15 @@ class NonPlayerCharacter(
         previousWord: WordModel,
         previousWordString: String,
         previousResult: WordDictionary.SearchResult,
-        tilesInWord: Set<TileModel>,
+        tilesInWord: Set<TileViewModel>,
         wordScores: MutableList<WordScore>
     ) {
         for (tile in board.connectedTiles(previousWord.tiles.last())) {
-            if (previousWord.playerCanOwn(player, tile)
-                    && !tilesInWord.contains(tile)) {
-                val nextWordString = "${previousWordString}${tile.letter}"
+            if (previousWord.playerCanOwn(player, tile) && !tilesInWord.contains(tile)) {
+                val nextWordString = "${previousWordString}${tile.letter.value}"
                 val nextResult = WordDictionary.search(nextWordString, previousResult)
                 var nextWord: WordModel? = null
-                var nextTilesInWord: Set<TileModel>? = null
+                var nextTilesInWord: Set<TileViewModel>? = null
 
                 if (nextResult.isWord && resultIsWithinVocabulary(nextResult)) {
                     nextWord = buildNextWord(previousWord, tile)
@@ -117,29 +116,28 @@ class NonPlayerCharacter(
             VocabularyLevel.COMPLETE -> result.frequency <= 3
         }
 
-    private fun buildNextWord(word: WordModel, tile: TileModel): WordModel {
-        val nextTiles = mutableListOf<TileModel>()
+    private fun buildNextWord(word: WordModel, tile: TileViewModel): WordModel {
+        val nextTiles = mutableListOf<TileViewModel>()
         nextTiles.addAll(word.tiles)
         nextTiles.add(tile)
         return WordModel(nextTiles, word.isSuperWord)
     }
 
     private fun buildNextTilesInWord(
-        tiles: Set<TileModel>,
-        tilesInWord: TileModel
-    ): Set<TileModel> {
-        val nextTilesInWord = mutableSetOf<TileModel>()
+        tiles: Set<TileViewModel>,
+        tilesInWord: TileViewModel
+    ): Set<TileViewModel> {
+        val nextTilesInWord = mutableSetOf<TileViewModel>()
         nextTilesInWord.addAll(tiles)
         nextTilesInWord.add(tilesInWord)
         return nextTilesInWord
     }
 
-    private fun evaluateWordScore(word: WordModel, tilesInWord: Set<TileModel>): WordScore {
+    private fun evaluateWordScore(word: WordModel, tilesInWord: Set<TileViewModel>): WordScore {
         var offenseScore = 0
         var defenseScore = 0
 
-        for (tileViewModel in board.flatTiles) {
-            val tile = tileViewModel.model.value
+        for (tile in board.flatTiles) {
             if (tile.isOwnedBy(player)) {
                 if (!tile.isSuperOwned() && tileWillBeSuperOwned(tile, tilesInWord)) {
                     defenseScore += 1
@@ -160,7 +158,7 @@ class NonPlayerCharacter(
             overallScore = offenseScore + defenseScore)
     }
 
-    private fun tileWillBeSuperOwned(tile: TileModel, tilesInWord: Set<TileModel>) =
+    private fun tileWillBeSuperOwned(tile: TileViewModel, tilesInWord: Set<TileViewModel>) =
         board.adjacentTiles(tile).all { it.isOwnedBy(player) || tilesInWord.contains(it) }
 
     enum class VocabularyLevel {

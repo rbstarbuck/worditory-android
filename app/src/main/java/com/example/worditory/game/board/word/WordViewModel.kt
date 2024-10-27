@@ -2,7 +2,7 @@ package com.example.worditory.game.board.word
 
 import androidx.lifecycle.ViewModel
 import com.example.worditory.game.Game
-import com.example.worditory.game.board.tile.TileModel
+import com.example.worditory.game.board.tile.TileViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -16,10 +16,10 @@ class WordViewModel(
 
     override fun toString(): String = model.value.toString()
 
-    fun onTileClick(tile: TileModel, currentPlayer: Game.Player): Boolean {
+    fun onTileClick(tile: TileViewModel, currentPlayer: Game.Player): Boolean {
         var didMutate = false
         var isSuperWord = false
-        val tileData = mutableListOf<TileModel>()
+        val tileData = mutableListOf<TileViewModel>()
 
         if (model.value.tiles.isEmpty()) {
             if (tile.isOwnedBy(currentPlayer)) {

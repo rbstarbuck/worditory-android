@@ -2,7 +2,6 @@ package com.example.worditory.game.board
 
 import androidx.lifecycle.ViewModel
 import com.example.worditory.game.board.tile.Tile
-import com.example.worditory.game.board.tile.TileModel
 import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordViewModel
 import kotlin.Array
@@ -24,15 +23,15 @@ class BoardViewModel(val width: Int, val height: Int): ViewModel() {
             }
             Array(width) { x ->
                 val letter = letterBag.takeLetter()
-                TileViewModel(colorScheme, TileModel(x, y, letter, ownership))
+                TileViewModel(x, y, letter, ownership, colorScheme)
             }
         }
 
         flatTiles = tiles.flatten()
     }
 
-    fun connectedTiles(tile: TileModel): List<TileModel> {
-        val tiles = mutableListOf<TileModel>()
+    fun connectedTiles(tile: TileViewModel): List<TileViewModel> {
+        val tiles = mutableListOf<TileViewModel>()
 
         addIfExists(tile.x - 1, tile.y - 1, tiles)
         addIfExists(tile.x, tile.y - 1, tiles)
@@ -46,8 +45,8 @@ class BoardViewModel(val width: Int, val height: Int): ViewModel() {
         return tiles
     }
 
-    fun adjacentTiles(tile: TileModel): List<TileModel> {
-        val tiles = mutableListOf<TileModel>()
+    fun adjacentTiles(tile: TileViewModel): List<TileViewModel> {
+        val tiles = mutableListOf<TileViewModel>()
 
         addIfExists(tile.x, tile.y - 1, tiles)
         addIfExists(tile.x + 1, tile.y, tiles)
@@ -57,8 +56,8 @@ class BoardViewModel(val width: Int, val height: Int): ViewModel() {
         return tiles
     }
 
-    private fun addIfExists(x: Int, y: Int, list: MutableList<TileModel>) {
+    private fun addIfExists(x: Int, y: Int, list: MutableList<TileViewModel>) {
         if (x >= 0 && x < width && y >= 0 && y < height)
-            list.add(tiles[y][x].model.value)
+            list.add(tiles[y][x])
     }
 }
