@@ -6,9 +6,14 @@ import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.board.word.WordViewModel
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.Array
 
-class BoardViewModel(val width: Int, val height: Int): ViewModel() {
+class BoardViewModel(
+    val width: Int,
+    val height: Int,
+    val isPlayerTurnStateFlow: StateFlow<Boolean>
+): ViewModel() {
     val tiles: Array<Array<TileViewModel>>
     val flatTiles: List<TileViewModel>
     val word = WordViewModel(width, height)

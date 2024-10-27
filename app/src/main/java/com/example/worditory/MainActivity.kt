@@ -21,17 +21,13 @@ class MainActivity : ComponentActivity() {
             WorditoryTheme {
                 WordDictionary.init()
 
-                val board = BoardViewModel(width = 8, height = 8)
-
-                val npc = NonPlayerCharacter(
-                    board = board,
-                    player = Game.Player.PLAYER_2,
+                val gameViewModel = GameAgainstNpcViewModel(
+                    boardWidth = 6,
+                    boardHeight = 6,
                     vocabulary = NonPlayerCharacter.VocabularyLevel.MEDIUM,
                     defenseOffenseLevel = NonPlayerCharacter.DefenseOffenseLevel.BLENDED,
                     overallSkillLevel = NonPlayerCharacter.OverallSkillLevel.SEMI_ADVANCED
                 )
-
-                val gameViewModel = GameAgainstNpcViewModel(board, npc)
 
                 GameView(gameViewModel)
             }

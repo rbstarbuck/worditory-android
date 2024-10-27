@@ -7,9 +7,11 @@ import com.example.worditory.game.dict.WordDictionary
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-abstract class GameViewModel(val board: BoardViewModel): ViewModel() {
+abstract class GameViewModel(boardWidth: Int, boardHeight: Int): ViewModel() {
     private val _isPlayerTurn = MutableStateFlow(true)
     val isPlayerTurn = _isPlayerTurn.asStateFlow()
+
+    val board = BoardViewModel(boardWidth, boardHeight, isPlayerTurn)
 
     fun setIsPlayerTurn(t: Boolean) {
         _isPlayerTurn.value = t

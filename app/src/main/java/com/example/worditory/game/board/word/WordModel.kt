@@ -20,4 +20,8 @@ class WordModel(val tiles: List<TileViewModel> = emptyList(), val isSuperWord: B
             Game.Player.PLAYER_1 -> tile.ownership.value != Tile.Ownership.SUPER_OWNED_PLAYER_2
             Game.Player.PLAYER_2 -> tile.ownership.value != Tile.Ownership.SUPER_OWNED_PLAYER_1
         }
+
+    fun subWord(fromIndex: Int, toIndex: Int): WordModel {
+        return WordModel(tiles.subList(fromIndex, toIndex), isSuperWord)
+    }
 }
