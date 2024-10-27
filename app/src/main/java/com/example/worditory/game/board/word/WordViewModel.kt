@@ -13,6 +13,7 @@ class WordViewModel(
 ): ViewModel() {
     private val _model = MutableStateFlow(model)
     val model = _model.asStateFlow()
+
     fun setModel(m: WordModel) {
         _model.value = m
     }
@@ -21,7 +22,7 @@ class WordViewModel(
 
     fun onTileClick(tile: TileViewModel, currentPlayer: Game.Player): Boolean {
         var didMutate = false
-        var isSuperWord = false
+        var isSuperWord = model.value.isSuperWord
         val tileData = mutableListOf<TileViewModel>()
 
         if (model.value.tiles.isEmpty()) {
@@ -39,7 +40,6 @@ class WordViewModel(
                     && model.value.playerCanOwn(currentPlayer, tile)) {
                 tileData.addAll(model.value.tiles)
                 tileData.add(tile)
-                isSuperWord = model.value.isSuperWord
                 didMutate = true
             }
         }

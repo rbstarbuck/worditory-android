@@ -14,12 +14,14 @@ class TileViewModel(
 ): ViewModel() {
     private val _letter = MutableStateFlow(letter)
     val letter = _letter.asStateFlow()
+
     fun setLetter(l: String) {
         _letter.value = l
     }
 
     private val _ownership = MutableStateFlow(ownership)
     val ownership = _ownership.asStateFlow()
+
     fun setOwnership(o: Tile.Ownership) {
         _ownership.value = o
     }

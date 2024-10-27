@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 abstract class GameViewModel(val board: BoardViewModel): ViewModel() {
     private val _isPlayerTurn = MutableStateFlow(true)
     val isPlayerTurn = _isPlayerTurn.asStateFlow()
+
     fun setIsPlayerTurn(t: Boolean) {
         _isPlayerTurn.value = t
     }
