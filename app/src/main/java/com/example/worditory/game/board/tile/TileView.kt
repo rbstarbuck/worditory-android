@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun TileView(viewModel: TileViewModel, clickAction: () -> Unit) {
-    val letter = viewModel.letter.collectAsState()
     val ownership = viewModel.ownership.collectAsState()
     val animatedColor = animateColorAsState(
         targetValue = viewModel.backgroundColor(ownership.value),
@@ -33,6 +32,7 @@ fun TileView(viewModel: TileViewModel, clickAction: () -> Unit) {
             .background(animatedColor.value)
             .clickable(onClick = clickAction)
     ) {
+        val letter = viewModel.letter.collectAsState()
         val fontSize = this.maxWidth.value * 0.55f / LocalDensity.current.fontScale
 
         Text(
