@@ -20,7 +20,7 @@ class WordViewModel(
 
     override fun toString(): String = model.value.toString()
 
-    fun onTileClick(tile: TileViewModel, currentPlayer: Game.Player): Boolean {
+    fun onSelectTile(tile: TileViewModel, currentPlayer: Game.Player): Boolean {
         var didMutate = false
         var isSuperWord = model.value.isSuperWord
         val tileData = mutableListOf<TileViewModel>()
