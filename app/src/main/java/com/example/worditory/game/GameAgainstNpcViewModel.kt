@@ -21,23 +21,27 @@ class GameAgainstNpcViewModel(
         overallSkillLevel
     )
 
-    override fun onPlayButtonClick() {
-        if (playCurrentPlayerWord()) {
+    override fun onPlayButtonClick(): Boolean {
+        if (super.onPlayButtonClick()) {
             setIsPlayerTurn(false)
 
             val npcWord = nonPlayerCharacter.findWordToPlay()
             if (npcWord != null) {
                 GlobalScope.launch {
-                    delay(Random.nextLong(from = 750, until = 2000))
+                    delay(Random.nextLong(from = 1500L, until = 3000L))
                     for (toIndex in 1..npcWord.tiles.size) {
                         board.word.setModel(npcWord.subWord(fromIndex = 0, toIndex))
-                        delay(250L)
+                        delay(350L)
                     }
-                    delay(1250L)
+                    delay(1500L)
+
                     board.playWord(Game.Player.PLAYER_2)
                     setIsPlayerTurn(true)
+                    updateScore()
                 }
             }
+            return true
         }
+        return false
     }
 }

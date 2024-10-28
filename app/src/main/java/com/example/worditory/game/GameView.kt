@@ -11,16 +11,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.worditory.game.board.BoardView
+import com.example.worditory.game.playbutton.PlayButtonView
+import com.example.worditory.game.scoreboard.ScoreBoardView
 
 @Composable
 fun GameView(viewModel: GameViewModel) {
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+        ScoreBoardView(viewModel.scoreBoard)
+
+        Spacer(Modifier.height(15.dp))
+
         BoardView(viewModel.board)
 
         Spacer(Modifier.height(15.dp))
 
-        Button(onClick = { viewModel.onPlayButtonClick() }) {
-            Text("Play")
+        PlayButtonView(viewModel.playButton) {
+            viewModel.onPlayButtonClick()
         }
     }
 }

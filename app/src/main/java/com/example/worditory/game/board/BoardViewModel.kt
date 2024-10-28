@@ -37,6 +37,21 @@ class BoardViewModel(
         flatTiles = tiles.flatten()
     }
 
+    fun getScore(): Game.Score {
+        var scorePlayer1 = 0
+        var scorePlayer2 = 0
+
+        for (tile in flatTiles) {
+            if (tile.isOwnedBy(Game.Player.PLAYER_1)) {
+                ++scorePlayer1
+            } else if (tile.isOwnedBy(Game.Player.PLAYER_2)) {
+                ++scorePlayer2
+            }
+        }
+
+        return Game.Score(scorePlayer1, scorePlayer2)
+    }
+
     fun updateOwnershipsForWord(player: Game.Player) {
         val tilesInWord = mutableSetOf<TileViewModel>()
         tilesInWord.addAll(word.model.value.tiles)
