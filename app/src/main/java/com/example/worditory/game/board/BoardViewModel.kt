@@ -1,5 +1,7 @@
 package com.example.worditory.game.board
 
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.ViewModel
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
@@ -8,6 +10,8 @@ import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.board.word.WordViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.Array
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class BoardViewModel(
     val width: Int,
@@ -18,6 +22,8 @@ class BoardViewModel(
     val flatTiles: List<TileViewModel>
     val word = WordViewModel(width, height)
     val letterBag = LetterBag()
+
+    var currentDragPoint = Offset(0f, 0f)
 
     init {
         val colorScheme = Tile.ColorScheme.random()
@@ -50,6 +56,46 @@ class BoardViewModel(
         }
 
         return Game.Score(scorePlayer1, scorePlayer2)
+    }
+
+    fun onDragStart(startPoint: Offset) {
+        currentDragPoint = startPoint
+    }
+
+    private val boardWidthFloat = width.toFloat()
+    private val boardHeightFloat = height.toFloat()
+
+    fun onDrag(offset: Offset, viewSize: IntSize) {
+        currentDragPoint += offset
+
+        val viewWidthFloat = viewSize.width.toFloat()
+        val viewHeightFloat = viewSize.height.toFloat()
+        val tileX = (boardWidthFloat * currentDragPoint.x / viewWidthFloat).toInt()
+        val tileY = (boardHeightFloat * currentDragPoint.y / viewHeightFloat).toInt()
+
+        if (tileX >= 0 && tileX < width && tileY >= 0 && tileY < height) {
+            val tile = tiles[tileY][tileX]
+
+            val tileDiameter = viewWidthFloat / boardWidthFloat
+            val tileRadius = tileDiameter / 2f
+            val tileDragPointX =
+                currentDragPoint.x - viewWidthFloat * tile.x.toFloat() / boardWidthFloat
+            val tileDragPointY =
+                currentDragPoint.y - viewHeightFloat * tile.y.toFloat() / boardHeightFloat
+            val distanceToCenter = sqrt(
+                (tileDragPointX - tileRadius).pow(2) + (tileDragPointY - tileRadius).pow(2)
+            )
+
+            if (distanceToCenter < tileDiameter / 2.75f) {
+                val wordTiles = word.model.value.tiles
+
+                if (wordTiles.size > 1 && tile == wordTiles[wordTiles.size - 2]) {
+                    word.onSelectTile(wordTiles.last(), Game.Player.PLAYER_1)
+                } else if (!wordTiles.contains(tile)) {
+                    word.onSelectTile(tile, Game.Player.PLAYER_1)
+                }
+            }
+        }
     }
 
     fun updateOwnershipsForWord(player: Game.Player) {
@@ -108,7 +154,10 @@ class BoardViewModel(
         tile: TileViewModel,
         player: Game.Player,
         tilesInWord: Set<TileViewModel>
-    ) = adjacentTiles(tile).all { it.isOwnedBy(player) || tilesInWord.contains(it) }
+    ) = adjacentTiles(tile).all {
+        it.isOwnedBy(player)
+                || tilesInWord.contains(it) && it.isUnowned()
+    }
 
     fun connectedTiles(tile: TileViewModel): List<TileViewModel> {
         val tiles = mutableListOf<TileViewModel>()
