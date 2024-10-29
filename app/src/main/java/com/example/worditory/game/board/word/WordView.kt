@@ -1,5 +1,7 @@
 package com.example.worditory.game.board.word
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -15,13 +17,21 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import com.example.worditory.game.board.tile.TileViewModel
+import kotlin.math.min
 
 @Composable
 fun WordView(viewModel: WordViewModel) {
     val model = viewModel.model.collectAsState(WordModel())
+    val animator = animateFloatAsState(
+        targetValue = model.value.tiles.size.toFloat(),
+        animationSpec = tween(viewModel.drawPathTweenDurationMillis),
+        label = "animator"
+    )
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        val tiles = model.value.tiles
+        val tiles = mutableListOf<TileViewModel>()
+        tiles.addAll(viewModel.model.value.tiles)
+        tiles.addAll(viewModel.removedTiles)
 
         if (!tiles.isEmpty()) {
             val path = Path()
@@ -30,20 +40,47 @@ fun WordView(viewModel: WordViewModel) {
             val origin = Origin(viewModel.boardWidth, viewModel.boardHeight, drawContext.size)
             val firstTile = tiles.first()
 
+            val radiusMultiplier = if (animator.value < 1f) animator.value else 1f
+
             val circleBounds = Rect(
                 center = Offset(origin.ofX(firstTile), origin.ofY(firstTile)),
-                radius = tileSize * 0.35f
+                radius = tileSize * 0.35f * radiusMultiplier
             )
 
-            path.moveTo(origin.ofX(firstTile), origin.ofY(firstTile))
-            val startAngleDegress =
-                if (tiles.size > 1)
-                    getArcStartAngleDegrees(firstTile, tiles[1])
-                else 0f
+            path.addArc(circleBounds, startAngleDegrees = 0f, sweepAngleDegrees = 360f)
 
-            path.addArc(circleBounds, startAngleDegress, sweepAngleDegrees = 360f)
-            for (i in 1..<model.value.tiles.size) {
-                path.lineTo(origin.ofX(model.value.tiles[i]), origin.ofY(model.value.tiles[i]))
+            if (animator.value > 1f && tiles.size > 1) {
+                val arcOriginDiff = getArcOriginDiff(tiles.first(), tiles[1], tileSize)
+                val arcOriginDiffMultiplier = if (animator.value < 2f) animator.value - 1f else 1f
+                val arcOriginX = origin.ofX(tiles.first()) + arcOriginDiff.x
+                val arcOriginY = origin.ofY(tiles.first()) + arcOriginDiff.y
+
+                path.moveTo(arcOriginX, arcOriginY)
+                path.lineTo(
+                    arcOriginX + arcOriginDiff.x * arcOriginDiffMultiplier,
+                    arcOriginY + arcOriginDiff.y * arcOriginDiffMultiplier
+                )
+
+                if (animator.value > 2f && tiles.size > 2) {
+                    val index = min(animator.value.toInt(), tiles.size)
+                    val originDiffMultiplier = animator.value - animator.value.toInt()
+
+                    for (i in 1..<index) {
+                        path.lineTo(origin.ofX(tiles[i]), origin.ofY(tiles[i]))
+                    }
+
+                    if (originDiffMultiplier > 0f && tiles.size > index) {
+                        val previousOriginX = origin.ofX(tiles[index - 1])
+                        val previousOriginY = origin.ofY(tiles[index - 1])
+                        val diffX = origin.ofX(tiles[index]) - previousOriginX
+                        val diffY = origin.ofY(tiles[index]) - previousOriginY
+
+                        path.lineTo(
+                            previousOriginX + diffX * originDiffMultiplier,
+                            previousOriginY + diffY * originDiffMultiplier
+                        )
+                    }
+                }
             }
 
             val translateLeft = drawContext.size.width / viewModel.boardWidth / 2f
@@ -65,24 +102,28 @@ fun WordView(viewModel: WordViewModel) {
     }
 }
 
-private fun getArcStartAngleDegrees(firstTile: TileViewModel, secondTile: TileViewModel): Float {
-    val diffX = firstTile.x - secondTile.x
-    val diffY = firstTile.y - secondTile.y
+private fun getArcOriginDiff(
+    firstTile: TileViewModel,
+    secondTile: TileViewModel,
+    tileSize: Float
+): Offset {
+    val diffX = secondTile.x - firstTile.x
+    val diffY = secondTile.y - firstTile.y
 
     if (diffX == -1) {
-        if (diffY == -1) return -315f
-        if (diffY == 0) return 0f
-        if (diffY == 1) return -45f
+        if (diffY == -1) return Offset(tileSize * -0.2475f, tileSize * -0.2475f)
+        if (diffY == 0) return Offset(tileSize * -0.35f, 0f)
+        if (diffY == 1) return Offset(tileSize * -0.2475f, tileSize * 0.2475f)
     } else if (diffX == 0) {
-        if (diffY == -1) return 90f
-        if (diffY == 1) return -90f
+        if (diffY == -1) return Offset(0f, tileSize * -0.35f)
+        if (diffY == 1) return Offset(0f, tileSize * 0.35f)
     } else if (diffX == 1) {
-        if (diffY == -1) return 135f
-        if (diffY == 0) return 180f
-        if (diffY == 1) return -135f
+        if (diffY == -1) return Offset(tileSize * 0.2475f, tileSize * -0.2475f)
+        if (diffY == 0) return Offset(tileSize * 0.35f, 0f)
+        if (diffY == 1) return Offset(tileSize * 0.2475f, tileSize * 0.2475f)
     }
 
-    return 0f
+    return Offset.Zero
 }
 
 private class Origin(

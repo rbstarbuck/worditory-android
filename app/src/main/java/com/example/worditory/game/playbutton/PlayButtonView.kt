@@ -10,15 +10,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun PlayButtonView(viewModel: PlayButtonViewModel, onClick: () -> Unit) {
+fun PlayButtonView(
+    viewModel: PlayButtonViewModel,
+    isPlayerTurnStateFlow: StateFlow<Boolean>,
+    onClick: () -> Unit
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         val word = viewModel.currentWord.collectAsState()
+        val isPlayerTurn = isPlayerTurnStateFlow.collectAsState()
 
         Spacer(Modifier.height(15.dp))
 
-        FilledTonalButton(onClick) {
+        FilledTonalButton(onClick, enabled = isPlayerTurn.value) {
             Text("Play")
         }
 

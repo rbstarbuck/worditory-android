@@ -105,7 +105,7 @@ class BoardViewModel(
 
     fun onDragEnd() {
         if (didDragIntoSecondTile && word.model.value.tiles.size == 1) {
-            word.setModel(WordModel())
+            word.onSelectTile(word.model.value.tiles.first(), Game.Player.PLAYER_1)
         }
         didDragIntoSecondTile = false
     }
@@ -151,7 +151,7 @@ class BoardViewModel(
     fun playWord(player: Game.Player) {
         updateOwnershipsForWord(player)
         updateLettersForWord()
-        word.setModel(WordModel())
+        word.onSelectTile(word.model.value.tiles.first(), player)
     }
 
     fun connectedTiles(tile: TileViewModel): List<TileViewModel> {
