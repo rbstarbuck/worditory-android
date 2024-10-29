@@ -28,14 +28,14 @@ class GameAgainstNpcViewModel(
             val npcWord = nonPlayerCharacter.findWordToPlay()
             if (npcWord != null) {
                 GlobalScope.launch {
-                    delay(Random.nextLong(from = 2500L, until = 4000L))
+                    delay(Random.nextLong(from = 2000L, until = 3500L))
 
                     board.word.withDrawPathTweenDuration(millis = npcWord.tiles.size * 350) {
                         for (tile in npcWord.tiles) {
                             board.word.onSelectTile(tile, Game.Player.PLAYER_2)
                         }
 
-                        delay(3000L)
+                        delay(4000L)
                     }
 
                     board.playWord(Game.Player.PLAYER_2)
