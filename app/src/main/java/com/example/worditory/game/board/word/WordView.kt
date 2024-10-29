@@ -1,9 +1,13 @@
 package com.example.worditory.game.board.word
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -20,12 +24,14 @@ fun WordView(viewModel: WordViewModel) {
     val model = viewModel.model.collectAsState(WordModel())
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        if (!model.value.tiles.isEmpty()) {
+        val tiles = model.value.tiles
+
+        if (!tiles.isEmpty()) {
             val path = Path()
             val tileSize = drawContext.size.width / viewModel.boardWidth
             val strokeWidth = tileSize / 10f
             val origin = Origin(viewModel.boardWidth, viewModel.boardHeight, drawContext.size)
-            val firstTile = model.value.tiles.first()
+            val firstTile = tiles.first()
 
             val circleBounds = Rect(
                 center = Offset(origin.ofX(firstTile), origin.ofY(firstTile)),
@@ -34,8 +40,8 @@ fun WordView(viewModel: WordViewModel) {
 
             path.moveTo(origin.ofX(firstTile), origin.ofY(firstTile))
             val startAngleDegress =
-                if (model.value.tiles.size > 1)
-                    getArcStartAngleDegrees(firstTile, model.value.tiles[1])
+                if (tiles.size > 1)
+                    getArcStartAngleDegrees(firstTile, tiles[1])
                 else 0f
 
             path.addArc(circleBounds, startAngleDegress, sweepAngleDegrees = 360f)

@@ -100,7 +100,7 @@ class BoardViewModel(
 
     fun updateOwnershipsForWord(player: Game.Player) {
         for (tile in word.model.value.tiles) {
-            if (tile.isUnowned()) {
+            if (tile.isUnowned) {
                 tile.setOwnership(
                     when (player) {
                         Game.Player.PLAYER_1 -> Tile.Ownership.OWNED_PLAYER_1

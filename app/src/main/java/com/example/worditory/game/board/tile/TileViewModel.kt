@@ -47,6 +47,23 @@ class TileViewModel(
         else
             Tile.ColorScheme.unownedTileDark
 
+    val isSuperOwned
+        get() = ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_1
+                || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_2
+
+    val isUnowned
+        get() = ownership.value == Tile.Ownership.UNOWNED
+
+    fun isOwnedBy(player: Game.Player) =
+        when (player) {
+            Game.Player.PLAYER_1 ->
+                ownership.value == Tile.Ownership.OWNED_PLAYER_1
+                        || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_1
+            Game.Player.PLAYER_2 ->
+                ownership.value == Tile.Ownership.OWNED_PLAYER_2
+                        || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_2
+        }
+
     fun backgroundColor(owner: Tile.Ownership) =
         when (owner) {
             Tile.Ownership.UNOWNED -> unownedTileColor
@@ -61,20 +78,4 @@ class TileViewModel(
         val diffY = y - other.y
         return diffX <= 1 && diffX >= -1 && diffY <= 1 && diffY >=-1 && !equals(other)
     }
-
-    fun isOwnedBy(player: Game.Player) =
-        when (player) {
-            Game.Player.PLAYER_1 ->
-                ownership.value == Tile.Ownership.OWNED_PLAYER_1
-                        || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_1
-            Game.Player.PLAYER_2 ->
-                ownership.value == Tile.Ownership.OWNED_PLAYER_2
-                        || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_2
-        }
-
-    fun isSuperOwned() =
-        ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_1
-                || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_2
-
-    fun isUnowned() = ownership.value == Tile.Ownership.UNOWNED
 }

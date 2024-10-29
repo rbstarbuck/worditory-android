@@ -58,8 +58,9 @@ class NonPlayerCharacter(
             if (tile.isOwnedBy(player)) {
                 val word = WordModel(
                     tiles = listOf(tile),
-                    isSuperWord = tile.isSuperOwned()
+                    isSuperWord = tile.isSuperOwned
                 )
+
                 findAllWords(
                     previousWord = word,
                     previousWordString = word.toString(),
@@ -118,8 +119,10 @@ class NonPlayerCharacter(
 
     private fun buildNextWord(word: WordModel, tile: TileViewModel): WordModel {
         val nextTiles = mutableListOf<TileViewModel>()
+
         nextTiles.addAll(word.tiles)
         nextTiles.add(tile)
+
         return WordModel(nextTiles, word.isSuperWord)
     }
 
@@ -128,8 +131,10 @@ class NonPlayerCharacter(
         tilesInWord: TileViewModel
     ): Set<TileViewModel> {
         val nextTilesInWord = mutableSetOf<TileViewModel>()
+
         nextTilesInWord.addAll(tiles)
         nextTilesInWord.add(tilesInWord)
+
         return nextTilesInWord
     }
 
@@ -139,18 +144,18 @@ class NonPlayerCharacter(
 
         for (tile in board.flatTiles) {
             if (tile.isOwnedBy(player)) {
-                if (!tile.isSuperOwned() && willBeSuperOwned(tile, tilesInWord)) {
+                if (!tile.isSuperOwned && willBeSuperOwned(tile, tilesInWord)) {
                     defenseScore += 1
                 }
-            } else if (tile.isUnowned()) {
+            } else if (tile.isUnowned) {
                 if (tilesInWord.contains(tile)) {
                     offenseScore += 1
                     if (willBeSuperOwned(tile, tilesInWord)) defenseScore += 2
                 }
             } else {
                 if (tilesInWord.contains(tile)) {
-                    offenseScore += if (tile.isSuperOwned()) 3 else 1
-                } else if (tile.isSuperOwned()
+                    offenseScore += if (tile.isSuperOwned) 3 else 1
+                } else if (tile.isSuperOwned
                         && board.adjacentTiles(tile).any { tilesInWord.contains(it) }) {
                     offenseScore += 1
                 }
