@@ -31,11 +31,14 @@ fun BoardView(viewModel: BoardViewModel) {
                     onDrag = { change, offset ->
                         change.consume()
                         viewModel.onDrag(offset, this.size)
+                    },
+                    onDragEnd = {
+                        viewModel.onDragEnd()
                     }
                 )
             }
     ) {
-        LazyVerticalGrid(GridCells.Fixed(viewModel.width)) {
+        LazyVerticalGrid(GridCells.Fixed(viewModel.width), userScrollEnabled = false) {
             items(viewModel.flatTiles.size) { i ->
                 Box(Modifier.aspectRatio(1f)) {
                     val tile = viewModel.flatTiles[i]

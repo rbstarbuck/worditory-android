@@ -64,6 +64,7 @@ class BoardViewModel(
 
     private val boardWidthFloat = width.toFloat()
     private val boardHeightFloat = height.toFloat()
+    private var didDragIntoSecondTile = true
 
     fun onDrag(offset: Offset, viewSize: IntSize) {
         currentDragPoint += offset
@@ -93,9 +94,20 @@ class BoardViewModel(
                     word.onSelectTile(wordTiles.last(), Game.Player.PLAYER_1)
                 } else if (!wordTiles.contains(tile)) {
                     word.onSelectTile(tile, Game.Player.PLAYER_1)
+
+                    if (!wordTiles.isEmpty()) {
+                        didDragIntoSecondTile = true
+                    }
                 }
             }
         }
+    }
+
+    fun onDragEnd() {
+        if (didDragIntoSecondTile && word.model.value.tiles.size == 1) {
+            word.setModel(WordModel())
+        }
+        didDragIntoSecondTile = false
     }
 
     fun updateOwnershipsForWord(player: Game.Player) {
