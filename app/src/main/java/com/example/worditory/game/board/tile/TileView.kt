@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +34,9 @@ fun TileView(viewModel: TileViewModel, selectAction: () -> Unit) {
     BoxWithConstraints(
         Modifier
             .fillMaxSize()
-            .background(animatedColor.value)
+            .drawBehind {
+                drawRect(animatedColor.value)
+            }
             .pointerInput(key1 = Unit) {
                 detectTapGestures(
                     onPress = { selectAction() }
