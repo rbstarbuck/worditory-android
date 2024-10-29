@@ -21,8 +21,8 @@ class MainActivity : ComponentActivity() {
                 WordDictionary.init()
 
                 val gameViewModel = GameAgainstNpcViewModel(
-                    boardWidth = 6,
-                    boardHeight = 6,
+                    boardWidth = 5,
+                    boardHeight = 5,
                     vocabulary = NonPlayerCharacter.VocabularyLevel.MEDIUM,
                     defenseOffenseLevel = NonPlayerCharacter.DefenseOffenseLevel.BLENDED,
                     overallSkillLevel = NonPlayerCharacter.OverallSkillLevel.SEMI_ADVANCED

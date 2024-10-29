@@ -30,7 +30,7 @@ class GameAgainstNpcViewModel(
                 GlobalScope.launch {
                     delay(Random.nextLong(from = 2500L, until = 4000L))
 
-                    board.word.withDrawPathTweenDurationMillis(millis = npcWord.tiles.size * 350) {
+                    board.word.withDrawPathTweenDuration(millis = npcWord.tiles.size * 350) {
                         for (tile in npcWord.tiles) {
                             board.word.onSelectTile(tile, Game.Player.PLAYER_2)
                         }

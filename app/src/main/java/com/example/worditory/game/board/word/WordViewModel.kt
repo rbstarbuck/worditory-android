@@ -24,7 +24,7 @@ class WordViewModel(
 
     override fun toString(): String = model.value.toString()
 
-    suspend fun withDrawPathTweenDurationMillis(
+    suspend fun withDrawPathTweenDuration(
         millis: Int,
         action: suspend (previousValue: Int) -> Unit)
     {
