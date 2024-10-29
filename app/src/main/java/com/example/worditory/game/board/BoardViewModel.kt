@@ -99,40 +99,32 @@ class BoardViewModel(
     }
 
     fun updateOwnershipsForWord(player: Game.Player) {
-        val tilesInWord = mutableSetOf<TileViewModel>()
-        tilesInWord.addAll(word.model.value.tiles)
+        for (tile in word.model.value.tiles) {
+            if (tile.isUnowned()) {
+                tile.setOwnership(
+                    when (player) {
+                        Game.Player.PLAYER_1 -> Tile.Ownership.OWNED_PLAYER_1
+                        Game.Player.PLAYER_2 -> Tile.Ownership.OWNED_PLAYER_2
+                    }
+                )
+            } else if (!tile.isOwnedBy(player)) {
+                tile.setOwnership(Tile.Ownership.UNOWNED)
+            }
+        }
 
         for (tile in flatTiles) {
-            if (tile.isUnowned()) {
-                if (tilesInWord.contains(tile)) {
-                    val ownership =
-                        if (willBeSuperOwned(tile, player, tilesInWord)) when (player) {
-                            Game.Player.PLAYER_1 -> Tile.Ownership.SUPER_OWNED_PLAYER_1
-                            Game.Player.PLAYER_2 -> Tile.Ownership.SUPER_OWNED_PLAYER_2
-                        } else when (player) {
-                            Game.Player.PLAYER_1 -> Tile.Ownership.OWNED_PLAYER_1
-                            Game.Player.PLAYER_2 -> Tile.Ownership.OWNED_PLAYER_2
-                        }
-                    tile.setOwnership(ownership)
-                }
-            } else if (tile.isOwnedBy(player)) {
-                if (!tile.isSuperOwned() && willBeSuperOwned(tile, player, tilesInWord)) {
-                    val ownership = when (player) {
-                        Game.Player.PLAYER_1 -> Tile.Ownership.SUPER_OWNED_PLAYER_1
-                        Game.Player.PLAYER_2 -> Tile.Ownership.SUPER_OWNED_PLAYER_2
-                    }
-                    tile.setOwnership(ownership)
-                }
-            } else {
-                if (tilesInWord.contains(tile)) {
-                    tile.setOwnership(Tile.Ownership.UNOWNED)
-                } else if (tile.isSuperOwned()
-                        && adjacentTiles(tile).any { tilesInWord.contains(it) }) {
-                    when (player) {
-                        Game.Player.PLAYER_1 -> tile.setOwnership(Tile.Ownership.OWNED_PLAYER_2)
-                        Game.Player.PLAYER_2 -> tile.setOwnership(Tile.Ownership.OWNED_PLAYER_1)
-                    }
-                }
+            if (tile.isOwnedBy(Game.Player.PLAYER_1)) {
+                tile.setOwnership(
+                    if (adjacentTiles(tile).all { it.isOwnedBy(Game.Player.PLAYER_1) })
+                        Tile.Ownership.SUPER_OWNED_PLAYER_1
+                    else Tile.Ownership.OWNED_PLAYER_1
+                )
+            } else if (tile.isOwnedBy(Game.Player.PLAYER_2)) {
+                tile.setOwnership(
+                    if (adjacentTiles(tile).all { it.isOwnedBy(Game.Player.PLAYER_2) })
+                        Tile.Ownership.SUPER_OWNED_PLAYER_2
+                    else Tile.Ownership.OWNED_PLAYER_2
+                )
             }
         }
     }
@@ -148,15 +140,6 @@ class BoardViewModel(
         updateOwnershipsForWord(player)
         updateLettersForWord()
         word.setModel(WordModel())
-    }
-
-    private fun willBeSuperOwned(
-        tile: TileViewModel,
-        player: Game.Player,
-        tilesInWord: Set<TileViewModel>
-    ) = adjacentTiles(tile).all {
-        it.isOwnedBy(player)
-                || tilesInWord.contains(it) && it.isUnowned()
     }
 
     fun connectedTiles(tile: TileViewModel): List<TileViewModel> {
