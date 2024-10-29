@@ -7,6 +7,7 @@ import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordViewModel
+import com.example.worditory.game.dict.WordDictionary
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.Array
 import kotlin.math.pow
@@ -143,7 +144,16 @@ class BoardViewModel(
     fun updateLettersForWord() {
         for (tile in word.model.value.tiles) {
             val previousLetter = tile.letter.value
-            tile.setLetter(letterBag.exchangeLetter(previousLetter))
+            val connectedTiles = connectedTiles(tile)
+            val numberOfConnectedVowels =
+                connectedTiles.count { WordDictionary.isVowel(it.letter.value) }
+            tile.setLetter(
+                if (numberOfConnectedVowels < connectedTiles.size / 2f) {
+                    letterBag.exchangeForVowel(previousLetter)
+                } else {
+                    letterBag.exchangeForConsonant(previousLetter)
+                }
+            )
         }
     }
 

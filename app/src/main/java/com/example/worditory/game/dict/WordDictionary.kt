@@ -6,6 +6,7 @@ import kotlin.math.absoluteValue
 object WordDictionary {
     private val wordFrequencies: List<WordFrequency>
     private val wordSet: Set<String>
+    private val vowels: Set<String> = setOfNotNull("A", "E", "I", "O", "U")
 
     init {
         val frequencies = mutableListOf<WordFrequency>()
@@ -34,6 +35,8 @@ object WordDictionary {
         get() = wordFrequencies.size
 
     fun init() = Unit
+
+    fun isVowel(letter: String) = vowels.contains(letter)
 
     fun contains(word: String) = wordSet.contains(word)
 
