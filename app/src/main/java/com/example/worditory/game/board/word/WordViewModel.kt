@@ -14,32 +14,60 @@ class WordViewModel(
     private val _model = MutableStateFlow(model)
     val model = _model.asStateFlow()
 
-    fun setModel(m: WordModel) {
-        _model.value = m
-    }
+    private var _removedTiles = emptyList<TileViewModel>()
+    val removedTiles
+        get() = _removedTiles
+
+    private var _drawPathTweenDurationMillis = 750
+    val drawPathTweenDurationMillis
+        get() = _drawPathTweenDurationMillis
 
     override fun toString(): String = model.value.toString()
+
+    suspend fun withDrawPathTweenDurationMillis(
+        millis: Int,
+        action: suspend (previousValue: Int) -> Unit)
+    {
+        val previousDrawPathTweenDurationMillis = drawPathTweenDurationMillis
+        _drawPathTweenDurationMillis = millis
+
+        action(previousDrawPathTweenDurationMillis)
+
+        _drawPathTweenDurationMillis = previousDrawPathTweenDurationMillis
+    }
 
     fun onSelectTile(tile: TileViewModel, currentPlayer: Game.Player) {
         var didMutate = false
         var isSuperWord = model.value.isSuperWord
+        val tiles = model.value.tiles
         val tileData = mutableListOf<TileViewModel>()
 
-        if (model.value.tiles.isEmpty()) {
+        if (tiles.isEmpty()) {
             if (tile.isOwnedBy(currentPlayer)) {
                 tileData.add(tile)
                 isSuperWord = model.value.isSuperOwned(tile)
+                _removedTiles = emptyList<TileViewModel>()
+
                 didMutate = true
             }
         } else {
-            val tileIndex = model.value.tiles.indexOf(tile)
+            val tileIndex = tiles.indexOf(tile)
+
             if (tileIndex != -1) {
-                tileData.addAll(model.value.tiles.subList(fromIndex = 0, toIndex = tileIndex))
+                tileData.addAll(tiles.subList(fromIndex = 0, toIndex = tileIndex))
+
+                val removedTileData = mutableListOf<TileViewModel>()
+                removedTileData.addAll(tiles.subList(fromIndex = tileIndex, toIndex = tiles.size))
+                removedTileData.addAll(_removedTiles)
+                _removedTiles = removedTileData
+
                 didMutate = true
-            } else if (tile.isConnectedTo(model.value.tiles.last())
+            } else if (tile.isConnectedTo(tiles.last())
                     && model.value.playerCanOwn(currentPlayer, tile)) {
-                tileData.addAll(model.value.tiles)
+                tileData.addAll(tiles)
                 tileData.add(tile)
+                _removedTiles = emptyList<TileViewModel>()
+
                 didMutate = true
             }
         }

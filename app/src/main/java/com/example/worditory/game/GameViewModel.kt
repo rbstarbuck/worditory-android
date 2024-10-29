@@ -30,9 +30,7 @@ abstract class GameViewModel(boardWidth: Int, boardHeight: Int): ViewModel() {
         if (isPlayerTurn.value) {
             val wordString = board.word.model.value.toString()
             if (WordDictionary.contains(wordString)) {
-                board.updateOwnershipsForWord(Game.Player.PLAYER_1)
-                board.updateLettersForWord()
-                board.word.setModel(WordModel())
+                board.playWord(Game.Player.PLAYER_1)
                 updateScore()
                 return true
             }

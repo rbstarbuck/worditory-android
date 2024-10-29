@@ -28,12 +28,15 @@ class GameAgainstNpcViewModel(
             val npcWord = nonPlayerCharacter.findWordToPlay()
             if (npcWord != null) {
                 GlobalScope.launch {
-                    delay(Random.nextLong(from = 1500L, until = 3000L))
-                    for (toIndex in 1..npcWord.tiles.size) {
-                        board.word.setModel(npcWord.subWord(fromIndex = 0, toIndex))
-                        delay(350L)
+                    delay(Random.nextLong(from = 2500L, until = 4000L))
+
+                    board.word.withDrawPathTweenDurationMillis(millis = npcWord.tiles.size * 350) {
+                        for (tile in npcWord.tiles) {
+                            board.word.onSelectTile(tile, Game.Player.PLAYER_2)
+                        }
+
+                        delay(3000L)
                     }
-                    delay(1500L)
 
                     board.playWord(Game.Player.PLAYER_2)
                     setIsPlayerTurn(true)
