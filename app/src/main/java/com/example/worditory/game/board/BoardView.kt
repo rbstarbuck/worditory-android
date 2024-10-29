@@ -26,14 +26,20 @@ fun BoardView(viewModel: BoardViewModel) {
             .pointerInput(key1 = Unit) {
                 detectDragGestures(
                     onDragStart = { startPoint ->
-                        viewModel.onDragStart(startPoint)
+                        if (isPlayerTurn.value) {
+                            viewModel.onDragStart(startPoint)
+                        }
                     },
                     onDrag = { change, offset ->
-                        change.consume()
-                        viewModel.onDrag(offset, this.size)
+                        if (isPlayerTurn.value) {
+                            change.consume()
+                            viewModel.onDrag(offset, this.size)
+                        }
                     },
                     onDragEnd = {
-                        viewModel.onDragEnd()
+                        if (isPlayerTurn.value) {
+                            viewModel.onDragEnd()
+                        }
                     }
                 )
             }
@@ -45,8 +51,9 @@ fun BoardView(viewModel: BoardViewModel) {
                     TileView(
                         viewModel = tile,
                         selectAction = {
-                            if (isPlayerTurn.value)
+                            if (isPlayerTurn.value) {
                                 viewModel.word.onSelectTile(tile, Game.Player.PLAYER_1)
+                            }
                         }
                     )
                 }
