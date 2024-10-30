@@ -1,9 +1,11 @@
 package com.example.worditory.game.scoreboard
 
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -15,20 +17,50 @@ import com.example.worditory.game.scoreboard.player.PlayerScoreView
 import com.example.worditory.game.scoreboard.scoretowin.ScoreToWinView
 
 @Composable
-fun ScoreBoardView(viewModel: ScoreBoardViewModel) {
-    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(Modifier.height(15.dp))
+fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier = Modifier) {
+    BoxWithConstraints(modifier) {
+        val maxHeight = this.maxHeight
+        val maxWidth = this.maxWidth
+        if (maxWidth.value / maxHeight.value > 3f) {
+            Column {
+                Spacer(Modifier.height(15.dp))
 
-        ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.width(100.dp))
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Spacer(Modifier.weight(0.5f))
 
-        Row(Modifier.height(125.dp)) {
-            PlayerScoreView(viewModel.scorePlayer1, Modifier.fillMaxHeight())
+                    PlayerScoreView(viewModel.scorePlayer1, Modifier.fillMaxHeight())
 
-            Spacer(Modifier.width(100.dp))
+                    Spacer(Modifier.weight(1f))
 
-            PlayerScoreView(viewModel.scorePlayer2, Modifier.fillMaxHeight())
+                    ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.height(maxHeight / 2f))
+
+                    Spacer(Modifier.weight(1f))
+
+                    PlayerScoreView(viewModel.scorePlayer2, Modifier.fillMaxHeight())
+
+                    Spacer(Modifier.weight(0.5f))
+                }
+            }
+        } else {
+            Column(Modifier.fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Spacer(Modifier.height(15.dp))
+
+                ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.weight(0.5f))
+
+                Row(Modifier.weight(1f)) {
+                    Spacer(Modifier.weight(0.35f))
+
+                    PlayerScoreView(viewModel.scorePlayer1, Modifier.fillMaxHeight())
+
+                    Spacer(Modifier.weight(1f))
+
+                    PlayerScoreView(viewModel.scorePlayer2, Modifier.fillMaxHeight())
+
+                    Spacer(Modifier.weight(0.35f))
+                }
+
+                Spacer(Modifier.height(15.dp))
+            }
         }
-
-        Spacer(Modifier.height(15.dp))
     }
 }
