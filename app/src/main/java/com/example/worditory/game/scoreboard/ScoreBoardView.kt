@@ -24,21 +24,11 @@ fun ScoreBoardView(viewModel: ScoreBoardViewModel) {
         Spacer(Modifier.height(15.dp))
 
         Row {
-            Text("Player 1 score: ")
-            Text(scorePlayer1.value.toString())
-        }
-
-        Row {
-            Text("Player 2 score: ")
-            Text(scorePlayer2.value.toString())
-        }
-
-        Row {
             Text("Score to win: ")
             Text(scoreToWin.value.toString())
         }
 
-        Spacer(Modifier.height(5.dp))
+        Spacer(Modifier.height(15.dp))
 
         Row(Modifier.height(200.dp)) {
             PlayerScoreView(viewModel.scorePlayer1)
@@ -47,5 +37,7 @@ fun ScoreBoardView(viewModel: ScoreBoardViewModel) {
 
             PlayerScoreView(viewModel.scorePlayer2)
         }
+
+        Spacer(Modifier.height(15.dp))
     }
 }
