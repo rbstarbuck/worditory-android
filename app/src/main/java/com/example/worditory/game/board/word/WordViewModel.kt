@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class WordViewModel(
     val boardWidth: Int,
     val boardHeight: Int,
+    val onWordChanged: () -> Unit,
     model: WordModel = WordModel()
 ): ViewModel() {
     private val _modelStateFlow = MutableStateFlow(model)
@@ -77,6 +78,9 @@ class WordViewModel(
             }
         }
 
-        if (didMutate) model = WordModel(tileData, isSuperWord)
+        if (didMutate) {
+            model = WordModel(tileData, isSuperWord)
+            onWordChanged()
+        }
     }
 }

@@ -18,10 +18,24 @@ abstract class GameViewModel(boardWidth: Int, boardHeight: Int): ViewModel() {
             _isPlayerTurnStateFlow.value = value
         }
 
+    private val _isNotAWordStateFlow = MutableStateFlow(false)
+    val isNotAWordStateFlow = _isNotAWordStateFlow.asStateFlow()
+    var isNotAWord: Boolean
+        get() = isNotAWordStateFlow.value
+        set(value) {
+            _isNotAWordStateFlow.value = value
+        }
+
     private val colorScheme = Tile.ColorScheme.random()
-    val board = BoardViewModel(boardWidth, boardHeight, isPlayerTurnStateFlow, colorScheme)
+    val board = BoardViewModel(
+        boardWidth,
+        boardHeight,
+        isPlayerTurnStateFlow,
+        colorScheme,
+        onWordChanged = { isNotAWord = false }
+    )
     val scoreBoard = ScoreBoardViewModel(initialScoreToWin = boardWidth * boardHeight, colorScheme)
-    val playButton = PlayButtonViewModel(board.word.modelStateFlow)
+    val playButton = PlayButtonViewModel(board.word.modelStateFlow, isNotAWordStateFlow)
 
     init {
         WordDictionary.init()
@@ -35,6 +49,8 @@ abstract class GameViewModel(boardWidth: Int, boardHeight: Int): ViewModel() {
                 board.playWord(Game.Player.PLAYER_1)
                 updateScore()
                 return true
+            } else {
+                isNotAWord = true
             }
         }
         return false

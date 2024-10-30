@@ -17,11 +17,12 @@ class BoardViewModel(
     val width: Int,
     val height: Int,
     val isPlayerTurnStateFlow: StateFlow<Boolean>,
-    colorScheme: Tile.ColorScheme
+    colorScheme: Tile.ColorScheme,
+    onWordChanged: () -> Unit
 ): ViewModel() {
     val tiles: Array<Array<TileViewModel>>
     val flatTiles: List<TileViewModel>
-    val word = WordViewModel(width, height)
+    val word = WordViewModel(width, height, onWordChanged)
     val letterBag = LetterBag()
 
     var currentDragPoint = Offset.Zero
