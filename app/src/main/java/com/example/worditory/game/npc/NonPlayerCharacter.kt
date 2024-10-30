@@ -15,40 +15,35 @@ class NonPlayerCharacter(
 {
     fun findWordToPlay(): WordModel? {
         var words = findAllWords()
+
         if (words.isEmpty()) return null
 
         val skillLevelMultipliers = when(overallSkillLevel) {
-            OverallSkillLevel.VERY_BEGINNER -> Pair(0.0, 0.2)
-            OverallSkillLevel.SEMI_BEGINNER -> Pair(0.2, 0.4)
-            OverallSkillLevel.INTERMEDIATE -> Pair(0.4, 0.6)
-            OverallSkillLevel.SEMI_ADVANCED -> Pair(0.6, 0.8)
-            OverallSkillLevel.VERY_ADVANCED -> Pair(0.8, 1.0)
+            OverallSkillLevel.BEGINNER -> Pair(0.55f, 0.7f)
+            OverallSkillLevel.INTERMEDIATE -> Pair(0.7f, 0.85f)
+            OverallSkillLevel.ADVANCED -> Pair(0.85f, 1.0f)
         }
 
         var skillLevelFromIndex = (words.size * skillLevelMultipliers.first).toInt()
         var skillLevelToIndex = (words.size * skillLevelMultipliers.second).toInt()
+
         if (skillLevelToIndex == words.size) --skillLevelToIndex
+
         if (skillLevelFromIndex == skillLevelToIndex) {
-            if (skillLevelFromIndex > 0) --skillLevelFromIndex
-            else if (skillLevelToIndex < words.size - 1) ++skillLevelToIndex
-            else return null
+            return if (skillLevelToIndex < words.size) {
+                words[skillLevelToIndex].word
+            } else {
+                words[skillLevelToIndex - 1].word
+            }
         }
 
         words = words.sortedBy { it.overallScore }.subList(skillLevelFromIndex, skillLevelToIndex)
-        if (words.isEmpty()) return null
 
-        val defenseOffenseMultiplier = when(defenseOffenseLevel) {
-            DefenseOffenseLevel.VERY_DEFENSIVE -> 0.0
-            DefenseOffenseLevel.SEMI_DEFENSIVE -> 0.25
-            DefenseOffenseLevel.BLENDED -> 0.5
-            DefenseOffenseLevel.SEMI_OFFENSIVE -> 0.75
-            DefenseOffenseLevel.VERY_OFFENSIVE -> 1.0
+        return when(defenseOffenseLevel) {
+            DefenseOffenseLevel.DEFENSIVE -> words.first().word
+            DefenseOffenseLevel.BLENDED -> words[words.size / 2].word
+            DefenseOffenseLevel.OFFENSIVE -> words.last().word
         }
-
-        var index = (words.size * defenseOffenseMultiplier).toInt()
-        if (index == words.size) --index
-
-        return words[index].word
     }
 
     private fun findAllWords(): List<WordScore> {
@@ -149,12 +144,11 @@ class NonPlayerCharacter(
                 }
             } else if (tile.isUnowned) {
                 if (tilesInWord.contains(tile)) {
-                    offenseScore += 1
-                    if (willBeSuperOwned(tile, tilesInWord)) defenseScore += 2
+                    defenseScore += if (willBeSuperOwned(tile, tilesInWord)) 2 else 1
                 }
             } else {
                 if (tilesInWord.contains(tile)) {
-                    offenseScore += if (tile.isSuperOwned) 3 else 1
+                    offenseScore += if (tile.isSuperOwned) 2 else 1
                 } else if (tile.isSuperOwned
                         && board.adjacentTiles(tile).any { tilesInWord.contains(it) }) {
                     offenseScore += 1
@@ -179,19 +173,15 @@ class NonPlayerCharacter(
     }
 
     enum class DefenseOffenseLevel {
-        VERY_DEFENSIVE,
-        SEMI_DEFENSIVE,
+        DEFENSIVE,
         BLENDED,
-        SEMI_OFFENSIVE,
-        VERY_OFFENSIVE
+        OFFENSIVE
     }
 
     enum class OverallSkillLevel {
-        VERY_BEGINNER,
-        SEMI_BEGINNER,
+        BEGINNER,
         INTERMEDIATE,
-        SEMI_ADVANCED,
-        VERY_ADVANCED
+        ADVANCED
     }
 
     private data class WordScore(

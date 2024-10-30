@@ -24,8 +24,8 @@ class MainActivity : ComponentActivity() {
                     boardWidth = 5,
                     boardHeight = 5,
                     vocabulary = NonPlayerCharacter.VocabularyLevel.MEDIUM,
-                    defenseOffenseLevel = NonPlayerCharacter.DefenseOffenseLevel.BLENDED,
-                    overallSkillLevel = NonPlayerCharacter.OverallSkillLevel.SEMI_ADVANCED
+                    defenseOffenseLevel = NonPlayerCharacter.DefenseOffenseLevel.OFFENSIVE,
+                    overallSkillLevel = NonPlayerCharacter.OverallSkillLevel.ADVANCED
                 )
 
                 GameView(gameViewModel)
