@@ -23,7 +23,7 @@ class GameAgainstNpcViewModel(
 
     override fun onPlayButtonClick(): Boolean {
         if (super.onPlayButtonClick()) {
-            setIsPlayerTurn(false)
+            isPlayerTurn = false
 
             val npcWord = nonPlayerCharacter.findWordToPlay()
             if (npcWord != null) {
@@ -39,7 +39,7 @@ class GameAgainstNpcViewModel(
                     }
 
                     board.playWord(Game.Player.PLAYER_2)
-                    setIsPlayerTurn(true)
+                    isPlayerTurn = true
                     updateScore()
                 }
             }

@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun TileView(viewModel: TileViewModel, selectAction: () -> Unit) {
-    val ownership = viewModel.ownership.collectAsState()
+    val ownershipState = viewModel.ownershipStateFlow.collectAsState()
     val animatedColor = animateColorAsState(
-        targetValue = viewModel.backgroundColor(ownership.value),
+        targetValue = viewModel.backgroundColor(ownershipState.value),
         animationSpec = tween(500),
         label = "color"
     )
@@ -42,17 +42,17 @@ fun TileView(viewModel: TileViewModel, selectAction: () -> Unit) {
                 )
             }
     ) {
-        val letter = viewModel.letter.collectAsState()
-        val letterVisibility = viewModel.letterVisibility.collectAsState()
+        val letterState = viewModel.letterStateFLow.collectAsState()
+        val letterVisibilityState = viewModel.letterVisibilityStateFlow.collectAsState()
         val fontSize = this.maxWidth.value * 0.55f / LocalDensity.current.fontScale
 
         AnimatedVisibility(
-            visible = letterVisibility.value,
+            visible = letterVisibilityState.value,
             enter = fadeIn(tween(500)),
             exit = fadeOut(tween(500))
         ) {
             Text(
-                text = letter.value,
+                text = letterState.value,
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentHeight(Alignment.CenterVertically)

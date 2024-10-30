@@ -83,7 +83,7 @@ class NonPlayerCharacter(
     ) {
         for (tile in board.connectedTiles(previousWord.tiles.last())) {
             if (previousWord.playerCanOwn(player, tile) && !tilesInWord.contains(tile)) {
-                val nextWordString = "${previousWordString}${tile.letter.value}"
+                val nextWordString = "${previousWordString}${tile.letter}"
                 val nextResult = WordDictionary.search(nextWordString, previousResult)
                 var nextWord: WordModel? = null
                 var nextTilesInWord: Set<TileViewModel>? = null

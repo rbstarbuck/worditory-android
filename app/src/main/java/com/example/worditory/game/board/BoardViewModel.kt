@@ -88,7 +88,7 @@ class BoardViewModel(
             )
 
             if (distanceToCenter < tileDiameter / 2.75f) {
-                val wordTiles = word.model.value.tiles
+                val wordTiles = word.model.tiles
 
                 if (wordTiles.size > 1 && tile == wordTiles[wordTiles.size - 2]) {
                     word.onSelectTile(wordTiles.last(), Game.Player.PLAYER_1)
@@ -104,63 +104,62 @@ class BoardViewModel(
     }
 
     fun onDragEnd() {
-        if (didDragIntoSecondTile && word.model.value.tiles.size == 1) {
-            word.onSelectTile(word.model.value.tiles.first(), Game.Player.PLAYER_1)
+        if (didDragIntoSecondTile && word.model.tiles.size == 1) {
+            word.onSelectTile(word.model.tiles.first(), Game.Player.PLAYER_1)
         }
         didDragIntoSecondTile = false
     }
 
     fun updateOwnershipsForWord(player: Game.Player) {
-        for (tile in word.model.value.tiles) {
+        for (tile in word.model.tiles) {
             if (tile.isUnowned) {
-                tile.setOwnership(
-                    when (player) {
-                        Game.Player.PLAYER_1 -> Tile.Ownership.OWNED_PLAYER_1
-                        Game.Player.PLAYER_2 -> Tile.Ownership.OWNED_PLAYER_2
-                    }
-                )
+                tile.ownership = when (player) {
+                    Game.Player.PLAYER_1 -> Tile.Ownership.OWNED_PLAYER_1
+                    Game.Player.PLAYER_2 -> Tile.Ownership.OWNED_PLAYER_2
+                }
             } else if (!tile.isOwnedBy(player)) {
-                tile.setOwnership(Tile.Ownership.UNOWNED)
+                tile.ownership = Tile.Ownership.UNOWNED
             }
         }
 
         for (tile in flatTiles) {
             if (tile.isOwnedBy(Game.Player.PLAYER_1)) {
-                tile.setOwnership(
-                    if (adjacentTiles(tile).all { it.isOwnedBy(Game.Player.PLAYER_1) })
+                tile.ownership =
+                    if (adjacentTiles(tile).all { it.isOwnedBy(Game.Player.PLAYER_1) }) {
                         Tile.Ownership.SUPER_OWNED_PLAYER_1
-                    else Tile.Ownership.OWNED_PLAYER_1
-                )
+                    } else {
+                        Tile.Ownership.OWNED_PLAYER_1
+                    }
             } else if (tile.isOwnedBy(Game.Player.PLAYER_2)) {
-                tile.setOwnership(
-                    if (adjacentTiles(tile).all { it.isOwnedBy(Game.Player.PLAYER_2) })
+                tile.ownership =
+                    if (adjacentTiles(tile).all { it.isOwnedBy(Game.Player.PLAYER_2) }) {
                         Tile.Ownership.SUPER_OWNED_PLAYER_2
-                    else Tile.Ownership.OWNED_PLAYER_2
-                )
+                    } else {
+                        Tile.Ownership.OWNED_PLAYER_2
+                    }
+
             }
         }
     }
 
     fun updateLettersForWord() {
-        for (tile in word.model.value.tiles) {
-            val previousLetter = tile.letter.value
+        for (tile in word.model.tiles) {
+            val previousLetter = tile.letter
             val connectedTiles = connectedTiles(tile)
             val numberOfConnectedVowels =
-                connectedTiles.count { WordDictionary.isVowel(it.letter.value) }
-            tile.setLetter(
-                if (numberOfConnectedVowels < connectedTiles.size / 2f) {
-                    letterBag.exchangeForVowel(previousLetter)
-                } else {
-                    letterBag.exchangeForConsonant(previousLetter)
-                }
-            )
+                connectedTiles.count { WordDictionary.isVowel(it.letter) }
+            tile.letter = if (numberOfConnectedVowels < connectedTiles.size / 2f) {
+                letterBag.exchangeForVowel(previousLetter)
+            } else {
+                letterBag.exchangeForConsonant(previousLetter)
+            }
         }
     }
 
     fun playWord(player: Game.Player) {
         updateOwnershipsForWord(player)
         updateLettersForWord()
-        word.onSelectTile(word.model.value.tiles.first(), player)
+        word.onSelectTile(word.model.tiles.first(), player)
     }
 
     fun connectedTiles(tile: TileViewModel): List<TileViewModel> {

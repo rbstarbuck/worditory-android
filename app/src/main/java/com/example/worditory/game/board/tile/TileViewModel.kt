@@ -15,29 +15,31 @@ class TileViewModel(
     ownership: Tile.Ownership,
     val colorScheme: Tile.ColorScheme
 ): ViewModel() {
-    private val _letter = MutableStateFlow(letter)
-    val letter = _letter.asStateFlow()
-
-    private val _letterVisibility = MutableStateFlow(true)
-    val letterVisibility = _letterVisibility.asStateFlow()
-
-    fun setLetter(l: String) {
-        GlobalScope.launch {
-            _letterVisibility.value = false
-            delay(500L)
-            _letter.value = l
-            _letterVisibility.value = true
+    private val _ownershipStateFlow = MutableStateFlow(ownership)
+    val ownershipStateFlow = _ownershipStateFlow.asStateFlow()
+    var ownership: Tile.Ownership
+        get() = ownershipStateFlow.value
+        set(value) {
+            _ownershipStateFlow.value = value
         }
-    }
 
-    private val _ownership = MutableStateFlow(ownership)
-    val ownership = _ownership.asStateFlow()
+    private val _letterStateFlow = MutableStateFlow(letter)
+    val letterStateFLow = _letterStateFlow.asStateFlow()
+    var letter: String
+        get() = letterStateFLow.value
+        set(value) {
+            GlobalScope.launch {
+                _letterVisibilityStateFlow.value = false
+                delay(500L)
+                _letterStateFlow.value = value
+                _letterVisibilityStateFlow.value = true
+            }
+        }
 
-    fun setOwnership(o: Tile.Ownership) {
-        _ownership.value = o
-    }
+    private val _letterVisibilityStateFlow = MutableStateFlow(true)
+    val letterVisibilityStateFlow = _letterVisibilityStateFlow.asStateFlow()
 
-    override fun toString(): String = letter.value
+    override fun toString(): String = letter
 
     fun equals(other: TileViewModel): Boolean = x == other.x && y == other.y
 
@@ -48,20 +50,20 @@ class TileViewModel(
             Tile.ColorScheme.unownedTileDark
 
     val isSuperOwned
-        get() = ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_1
-                || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_2
+        get() = ownership == Tile.Ownership.SUPER_OWNED_PLAYER_1
+                || ownership == Tile.Ownership.SUPER_OWNED_PLAYER_2
 
     val isUnowned
-        get() = ownership.value == Tile.Ownership.UNOWNED
+        get() = ownership == Tile.Ownership.UNOWNED
 
     fun isOwnedBy(player: Game.Player) =
         when (player) {
             Game.Player.PLAYER_1 ->
-                ownership.value == Tile.Ownership.OWNED_PLAYER_1
-                        || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_1
+                ownership == Tile.Ownership.OWNED_PLAYER_1
+                        || ownership == Tile.Ownership.SUPER_OWNED_PLAYER_1
             Game.Player.PLAYER_2 ->
-                ownership.value == Tile.Ownership.OWNED_PLAYER_2
-                        || ownership.value == Tile.Ownership.SUPER_OWNED_PLAYER_2
+                ownership == Tile.Ownership.OWNED_PLAYER_2
+                        || ownership == Tile.Ownership.SUPER_OWNED_PLAYER_2
         }
 
     fun backgroundColor(owner: Tile.Ownership) =

@@ -9,25 +9,26 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 abstract class GameViewModel(boardWidth: Int, boardHeight: Int): ViewModel() {
-    private val _isPlayerTurn = MutableStateFlow(true)
-    val isPlayerTurn = _isPlayerTurn.asStateFlow()
+    private val _isPlayerTurnStateFlow = MutableStateFlow(true)
+    val isPlayerTurnStateFlow = _isPlayerTurnStateFlow.asStateFlow()
+    var isPlayerTurn: Boolean
+        get() = isPlayerTurnStateFlow.value
+        set(value) {
+            _isPlayerTurnStateFlow.value = value
+        }
 
-    val board = BoardViewModel(boardWidth, boardHeight, isPlayerTurn)
+    val board = BoardViewModel(boardWidth, boardHeight, isPlayerTurnStateFlow)
     val scoreBoard = ScoreBoardViewModel(initialScoreToWin = boardWidth * boardHeight)
-    val playButton = PlayButtonViewModel(board.word.model)
-
-    fun setIsPlayerTurn(t: Boolean) {
-        _isPlayerTurn.value = t
-    }
+    val playButton = PlayButtonViewModel(board.word.modelStateFlow)
 
     init {
         WordDictionary.init()
-        scoreBoard.setScore(board.getScore())
+        scoreBoard.score = board.getScore()
     }
 
     open fun onPlayButtonClick(): Boolean {
-        if (isPlayerTurn.value) {
-            val wordString = board.word.model.value.toString()
+        if (isPlayerTurn) {
+            val wordString = board.word.toString()
             if (WordDictionary.contains(wordString)) {
                 board.playWord(Game.Player.PLAYER_1)
                 updateScore()
@@ -38,7 +39,7 @@ abstract class GameViewModel(boardWidth: Int, boardHeight: Int): ViewModel() {
     }
 
     fun updateScore() {
-        scoreBoard.setScore(board.getScore())
+        scoreBoard.score = board.getScore()
         scoreBoard.decrementScoreToWin()
     }
 }

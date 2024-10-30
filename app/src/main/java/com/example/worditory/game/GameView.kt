@@ -23,7 +23,7 @@ fun GameView(viewModel: GameViewModel) {
 
         Spacer(Modifier.height(15.dp))
 
-        PlayButtonView(viewModel.playButton, viewModel.isPlayerTurn) {
+        PlayButtonView(viewModel.playButton, viewModel.isPlayerTurnStateFlow) {
             viewModel.onPlayButtonClick()
         }
     }

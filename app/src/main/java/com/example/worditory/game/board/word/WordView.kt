@@ -21,7 +21,7 @@ import kotlin.math.min
 
 @Composable
 fun WordView(viewModel: WordViewModel) {
-    val model = viewModel.model.collectAsState(WordModel())
+    val model = viewModel.modelStateFlow.collectAsState(WordModel())
     val animator = animateFloatAsState(
         targetValue = model.value.tiles.size.toFloat(),
         animationSpec = tween(viewModel.drawPathTweenDurationMillis),
@@ -30,7 +30,7 @@ fun WordView(viewModel: WordViewModel) {
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         val tiles = mutableListOf<TileViewModel>()
-        tiles.addAll(viewModel.model.value.tiles)
+        tiles.addAll(viewModel.model.tiles)
         tiles.addAll(viewModel.removedTiles)
 
         if (!tiles.isEmpty()) {

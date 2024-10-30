@@ -11,8 +11,13 @@ class WordViewModel(
     val boardHeight: Int,
     model: WordModel = WordModel()
 ): ViewModel() {
-    private val _model = MutableStateFlow(model)
-    val model = _model.asStateFlow()
+    private val _modelStateFlow = MutableStateFlow(model)
+    val modelStateFlow = _modelStateFlow.asStateFlow()
+    var model: WordModel
+        get() = modelStateFlow.value
+        private set(value) {
+            _modelStateFlow.value = value
+        }
 
     private var _removedTiles = emptyList<TileViewModel>()
     val removedTiles
@@ -22,7 +27,7 @@ class WordViewModel(
     val drawPathTweenDurationMillis
         get() = _drawPathTweenDurationMillis
 
-    override fun toString(): String = model.value.toString()
+    override fun toString(): String = model.toString()
 
     suspend fun withDrawPathTweenDuration(
         millis: Int,
@@ -38,14 +43,14 @@ class WordViewModel(
 
     fun onSelectTile(tile: TileViewModel, currentPlayer: Game.Player) {
         var didMutate = false
-        var isSuperWord = model.value.isSuperWord
-        val tiles = model.value.tiles
+        var isSuperWord = model.isSuperWord
+        val tiles = model.tiles
         val tileData = mutableListOf<TileViewModel>()
 
         if (tiles.isEmpty()) {
             if (tile.isOwnedBy(currentPlayer)) {
                 tileData.add(tile)
-                isSuperWord = model.value.isSuperOwned(tile)
+                isSuperWord = model.isSuperOwned(tile)
                 _removedTiles = emptyList<TileViewModel>()
 
                 didMutate = true
@@ -63,7 +68,7 @@ class WordViewModel(
 
                 didMutate = true
             } else if (tile.isConnectedTo(tiles.last())
-                    && model.value.playerCanOwn(currentPlayer, tile)) {
+                    && model.playerCanOwn(currentPlayer, tile)) {
                 tileData.addAll(tiles)
                 tileData.add(tile)
                 _removedTiles = emptyList<TileViewModel>()
@@ -72,6 +77,6 @@ class WordViewModel(
             }
         }
 
-        if (didMutate) _model.value = WordModel(tileData, isSuperWord)
+        if (didMutate) model = WordModel(tileData, isSuperWord)
     }
 }
