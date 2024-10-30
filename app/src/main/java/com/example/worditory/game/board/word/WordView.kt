@@ -20,7 +20,7 @@ import com.example.worditory.game.board.tile.TileViewModel
 import kotlin.math.min
 
 @Composable
-fun WordView(viewModel: WordViewModel) {
+fun WordView(viewModel: WordViewModel, modifier: Modifier = Modifier) {
     val model = viewModel.modelStateFlow.collectAsState(WordModel())
     val animator = animateFloatAsState(
         targetValue = model.value.tiles.size.toFloat(),
@@ -28,7 +28,7 @@ fun WordView(viewModel: WordViewModel) {
         label = "animator"
     )
 
-    Canvas(modifier = Modifier.fillMaxSize()) {
+    Canvas(modifier) {
         val tiles = mutableListOf<TileViewModel>()
         tiles.addAll(viewModel.model.tiles)
         tiles.addAll(viewModel.removedTiles)

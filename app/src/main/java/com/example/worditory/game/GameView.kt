@@ -3,6 +3,7 @@ package com.example.worditory.game
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,13 +14,13 @@ import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
 
 @Composable
-fun GameView(viewModel: GameViewModel) {
-    Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+fun GameView(viewModel: GameViewModel, modifier: Modifier = Modifier) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         ScoreBoardView(viewModel.scoreBoard)
 
         Spacer(Modifier.height(15.dp))
 
-        BoardView(viewModel.board)
+        BoardView(viewModel.board, Modifier.fillMaxWidth())
 
         Spacer(Modifier.height(15.dp))
 

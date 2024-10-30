@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 
 @Composable
-fun PlayerScoreView(viewModel: PlayerScoreViewModel) {
+fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifier) {
     val score = viewModel.scoreStateFlow.collectAsState()
     val scoreToWin = viewModel.scoreToWinStateFlow.collectAsState()
 
@@ -53,17 +53,16 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel) {
         label = "scoreToWin"
     )
 
-    BoxWithConstraints(Modifier.fillMaxHeight().aspectRatio(1f)) {
-        Canvas(Modifier.fillMaxHeight().aspectRatio(1f)) {
+    BoxWithConstraints(modifier.aspectRatio(1f)) {
+        Canvas(modifier.aspectRatio(1f)) {
             drawCircle(Color.DarkGray, center = this.center, radius = this.size.width / 2f)
-
             drawCircle(Color.LightGray, center = this.center, radius = this.size.width / 2f - 42.5f)
 
+            val scoreIndicatorBackground = Path()
             val scoreIndicatorRect = Rect(
                 center = this.center,
                 radius = this.size.width / 2f - 22.5f
             )
-            val scoreIndicatorBackground = Path()
             scoreIndicatorBackground.addArc(
                 scoreIndicatorRect,
                 startAngleDegrees = 0f,

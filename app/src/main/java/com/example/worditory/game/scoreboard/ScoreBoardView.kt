@@ -3,6 +3,7 @@ package com.example.worditory.game.scoreboard
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -21,11 +22,11 @@ fun ScoreBoardView(viewModel: ScoreBoardViewModel) {
         ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.width(100.dp))
 
         Row(Modifier.height(125.dp)) {
-            PlayerScoreView(viewModel.scorePlayer1)
+            PlayerScoreView(viewModel.scorePlayer1, Modifier.fillMaxHeight())
 
             Spacer(Modifier.width(100.dp))
 
-            PlayerScoreView(viewModel.scorePlayer2)
+            PlayerScoreView(viewModel.scorePlayer2, Modifier.fillMaxHeight())
         }
 
         Spacer(Modifier.height(15.dp))

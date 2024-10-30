@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import com.example.worditory.game.Game
 import com.example.worditory.game.GameAgainstNpcViewModel
 import com.example.worditory.game.GameView
@@ -28,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     overallSkillLevel = NonPlayerCharacter.OverallSkillLevel.ADVANCED
                 )
 
-                GameView(gameViewModel)
+                GameView(gameViewModel, Modifier.fillMaxSize())
             }
         }
     }

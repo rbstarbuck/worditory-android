@@ -30,11 +30,11 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ScoreToWinView(viewModel: ScoreToWinViewModel, modifier: Modifier = Modifier) {
-    BoxWithConstraints(
-        modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .background(Color.Yellow)) {
+BoxWithConstraints(
+    modifier
+        .aspectRatio(1f)
+        .background(Color.Yellow)
+) {
         val scoreToWinState = viewModel.scoreToWinStateFlow.collectAsState()
 
         val fontSize = this.maxWidth.value * 0.5f / LocalDensity.current.fontScale

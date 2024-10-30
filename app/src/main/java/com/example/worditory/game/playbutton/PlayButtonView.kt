@@ -19,9 +19,10 @@ import kotlinx.coroutines.flow.StateFlow
 fun PlayButtonView(
     viewModel: PlayButtonViewModel,
     isPlayerTurnStateFlow: StateFlow<Boolean>,
-    onClick: () -> Unit
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         val wordState = viewModel.wordStateFlow.collectAsState()
         val isPlayerTurnState = isPlayerTurnStateFlow.collectAsState()
         val isNotAWordState = viewModel.isNotAWordStateFlow.collectAsState()

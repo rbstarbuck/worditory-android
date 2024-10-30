@@ -22,7 +22,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TileView(viewModel: TileViewModel, selectAction: () -> Unit) {
+fun TileView(
+    viewModel: TileViewModel,
+    modifier: Modifier = Modifier,
+    selectAction: () -> Unit = {}
+) {
     val ownershipState = viewModel.ownershipStateFlow.collectAsState()
     val animatedColor = animateColorAsState(
         targetValue = viewModel.backgroundColor(ownershipState.value),
@@ -31,7 +35,7 @@ fun TileView(viewModel: TileViewModel, selectAction: () -> Unit) {
     )
 
     BoxWithConstraints(
-        Modifier
+        modifier
             .fillMaxSize()
             .drawBehind {
                 drawRect(animatedColor.value)

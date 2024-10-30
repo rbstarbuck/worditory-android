@@ -3,6 +3,7 @@ package com.example.worditory.game.board
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -15,13 +16,12 @@ import com.example.worditory.game.board.tile.TileView
 import com.example.worditory.game.board.word.WordView
 
 @Composable
-fun BoardView(viewModel: BoardViewModel) {
+fun BoardView(viewModel: BoardViewModel, modifier: Modifier = Modifier) {
     val isPlayerTurn = viewModel.isPlayerTurnStateFlow.collectAsState()
     val aspectRatio = viewModel.width.toFloat() / viewModel.height.toFloat()
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier
             .aspectRatio(aspectRatio)
             .pointerInput(key1 = Unit) {
                 detectDragGestures(
@@ -46,20 +46,19 @@ fun BoardView(viewModel: BoardViewModel) {
     ) {
         LazyVerticalGrid(GridCells.Fixed(viewModel.width), userScrollEnabled = false) {
             items(viewModel.flatTiles.size) { i ->
-                Box(Modifier.aspectRatio(1f)) {
-                    val tile = viewModel.flatTiles[i]
-                    TileView(
-                        viewModel = tile,
-                        selectAction = {
-                            if (isPlayerTurn.value) {
-                                viewModel.word.onSelectTile(tile, Game.Player.PLAYER_1)
-                            }
+                val tile = viewModel.flatTiles[i]
+                TileView(
+                    viewModel = tile,
+                    modifier = Modifier.fillMaxSize().aspectRatio(1f),
+                    selectAction = {
+                        if (isPlayerTurn.value) {
+                            viewModel.word.onSelectTile(tile, Game.Player.PLAYER_1)
                         }
-                    )
-                }
+                    }
+                )
             }
         }
 
-        WordView(viewModel.word)
+        WordView(viewModel.word, Modifier.fillMaxSize())
     }
 }
