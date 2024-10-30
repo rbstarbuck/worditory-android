@@ -40,7 +40,7 @@ fun ScoreBoardView(viewModel: ScoreBoardViewModel) {
 
         Spacer(Modifier.height(5.dp))
 
-        Row(Modifier.height(125.dp)) {
+        Row(Modifier.height(200.dp)) {
             PlayerScoreView(viewModel.scorePlayer1)
 
             Spacer(Modifier.width(100.dp))

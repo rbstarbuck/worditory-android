@@ -2,6 +2,7 @@ package com.example.worditory.game
 
 import androidx.lifecycle.ViewModel
 import com.example.worditory.game.board.BoardViewModel
+import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.game.playbutton.PlayButtonViewModel
 import com.example.worditory.game.scoreboard.ScoreBoardViewModel
@@ -17,8 +18,9 @@ abstract class GameViewModel(boardWidth: Int, boardHeight: Int): ViewModel() {
             _isPlayerTurnStateFlow.value = value
         }
 
-    val board = BoardViewModel(boardWidth, boardHeight, isPlayerTurnStateFlow)
-    val scoreBoard = ScoreBoardViewModel(initialScoreToWin = boardWidth * boardHeight)
+    private val colorScheme = Tile.ColorScheme.random()
+    val board = BoardViewModel(boardWidth, boardHeight, isPlayerTurnStateFlow, colorScheme)
+    val scoreBoard = ScoreBoardViewModel(initialScoreToWin = boardWidth * boardHeight, colorScheme)
     val playButton = PlayButtonViewModel(board.word.modelStateFlow)
 
     init {

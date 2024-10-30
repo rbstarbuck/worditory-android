@@ -2,11 +2,15 @@ package com.example.worditory.game.scoreboard
 
 import androidx.lifecycle.ViewModel
 import com.example.worditory.game.Game
+import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.scoreboard.player.PlayerScoreViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ScoreBoardViewModel(initialScoreToWin: Int): ViewModel() {
+class ScoreBoardViewModel(
+    initialScoreToWin: Int,
+    colorScheme: Tile.ColorScheme
+): ViewModel() {
     private val _scoreToWinStateFlow = MutableStateFlow(initialScoreToWin)
     val scoreToWinStateFlow = _scoreToWinStateFlow.asStateFlow()
 
@@ -20,8 +24,8 @@ class ScoreBoardViewModel(initialScoreToWin: Int): ViewModel() {
             scorePlayer2.score = value.player2
         }
 
-    val scorePlayer1 = PlayerScoreViewModel(scoreToWinStateFlow)
-    val scorePlayer2 = PlayerScoreViewModel(scoreToWinStateFlow)
+    val scorePlayer1 = PlayerScoreViewModel(scoreToWinStateFlow, colorScheme.player1)
+    val scorePlayer2 = PlayerScoreViewModel(scoreToWinStateFlow, colorScheme.player2)
 
     fun decrementScoreToWin(): Boolean {
         if (scoreToWin > scorePlayer1.score + 1 && scoreToWin > scorePlayer2.score) {

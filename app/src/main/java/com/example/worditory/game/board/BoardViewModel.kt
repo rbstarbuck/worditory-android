@@ -16,7 +16,8 @@ import kotlin.math.sqrt
 class BoardViewModel(
     val width: Int,
     val height: Int,
-    val isPlayerTurnStateFlow: StateFlow<Boolean>
+    val isPlayerTurnStateFlow: StateFlow<Boolean>,
+    colorScheme: Tile.ColorScheme
 ): ViewModel() {
     val tiles: Array<Array<TileViewModel>>
     val flatTiles: List<TileViewModel>
@@ -26,8 +27,6 @@ class BoardViewModel(
     var currentDragPoint = Offset.Zero
 
     init {
-        val colorScheme = Tile.ColorScheme.random()
-
         tiles = Array(height) { y ->
             val ownership = when {
                 y == 0 -> Tile.Ownership.OWNED_PLAYER_2
