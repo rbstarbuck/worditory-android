@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Worditory</string>
+    <string name="is_not_a_word">ain\'t a word!</string>
 </resources>
