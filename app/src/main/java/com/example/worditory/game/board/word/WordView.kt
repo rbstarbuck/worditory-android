@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
@@ -22,11 +21,11 @@ import kotlin.math.min
 
 @Composable
 fun WordView(viewModel: WordViewModel, modifier: Modifier = Modifier) {
-    val model = viewModel.modelStateFlow.collectAsState(WordModel())
+    val modelState = viewModel.modelStateFlow.collectAsState()
 
     val pathColor = colorResource(R.color.word_path)
     val animator = animateFloatAsState(
-        targetValue = model.value.tiles.size.toFloat(),
+        targetValue = modelState.value.tiles.size.toFloat(),
         animationSpec = tween(viewModel.drawPathTweenDurationMillis),
         label = "animator"
     )

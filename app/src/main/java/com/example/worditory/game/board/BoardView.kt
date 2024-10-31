@@ -4,7 +4,6 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
@@ -17,7 +16,8 @@ import com.example.worditory.game.board.word.WordView
 
 @Composable
 fun BoardView(viewModel: BoardViewModel, modifier: Modifier = Modifier) {
-    val isPlayerTurn = viewModel.isPlayerTurnStateFlow.collectAsState()
+    val isPlayerTurnState = viewModel.isPlayerTurnStateFlow.collectAsState()
+
     val aspectRatio = viewModel.width.toFloat() / viewModel.height.toFloat()
 
     Box(
@@ -26,18 +26,18 @@ fun BoardView(viewModel: BoardViewModel, modifier: Modifier = Modifier) {
             .pointerInput(key1 = Unit) {
                 detectDragGestures(
                     onDragStart = { startPoint ->
-                        if (isPlayerTurn.value) {
+                        if (isPlayerTurnState.value) {
                             viewModel.onDragStart(startPoint)
                         }
                     },
                     onDrag = { change, offset ->
-                        if (isPlayerTurn.value) {
+                        if (isPlayerTurnState.value) {
                             change.consume()
                             viewModel.onDrag(offset, this.size)
                         }
                     },
                     onDragEnd = {
-                        if (isPlayerTurn.value) {
+                        if (isPlayerTurnState.value) {
                             viewModel.onDragEnd()
                         }
                     }
@@ -51,7 +51,7 @@ fun BoardView(viewModel: BoardViewModel, modifier: Modifier = Modifier) {
                     viewModel = tile,
                     modifier = Modifier.fillMaxSize().aspectRatio(1f),
                     selectAction = {
-                        if (isPlayerTurn.value) {
+                        if (isPlayerTurnState.value) {
                             viewModel.word.onSelectTile(tile, Game.Player.PLAYER_1)
                         }
                     }

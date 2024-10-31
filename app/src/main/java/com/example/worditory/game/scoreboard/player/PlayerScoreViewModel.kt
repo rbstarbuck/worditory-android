@@ -12,7 +12,6 @@ class PlayerScoreViewModel(
 ) : ViewModel() {
     private val _scoreStateFlow = MutableStateFlow(0)
     val scoreStateFlow = _scoreStateFlow.asStateFlow()
-
     var score: Int
         get() = scoreStateFlow.value
         set(value) {

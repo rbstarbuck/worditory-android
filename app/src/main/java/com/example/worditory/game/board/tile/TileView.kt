@@ -30,6 +30,7 @@ fun TileView(
     selectAction: () -> Unit = {}
 ) {
     val ownershipState = viewModel.ownershipStateFlow.collectAsState()
+
     val animatedColor = animateColorAsState(
         targetValue = colorResource(viewModel.backgroundColor(ownershipState.value)),
         animationSpec = tween(500),
@@ -50,6 +51,7 @@ fun TileView(
     ) {
         val letterState = viewModel.letterStateFLow.collectAsState()
         val letterVisibilityState = viewModel.letterVisibilityStateFlow.collectAsState()
+
         val fontSize = this.maxWidth.value * 0.55f / LocalDensity.current.fontScale
         val fontColor = colorResource(R.color.font_color_dark)
 

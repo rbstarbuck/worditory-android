@@ -35,8 +35,8 @@ import com.example.worditory.R
 
 @Composable
 fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifier) {
-    val score = viewModel.scoreStateFlow.collectAsState()
-    val scoreToWin = viewModel.scoreToWinStateFlow.collectAsState()
+    val scoreState = viewModel.scoreStateFlow.collectAsState()
+    val scoreToWinState = viewModel.scoreToWinStateFlow.collectAsState()
 
     val outlineColor = colorResource(R.color.game_background)
     val indicatorColor = colorResource(viewModel.colorScheme.superOwned)
@@ -47,13 +47,13 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
     val avatarPainter = rememberVectorPainter(avatarVector)
 
     val scoreAnimator = animateFloatAsState(
-        targetValue = score.value.toFloat(),
+        targetValue = scoreState.value.toFloat(),
         animationSpec = tween(750),
         label = "score"
     )
 
     val scoreToWinAnimator = animateFloatAsState(
-        targetValue = scoreToWin.value.toFloat(),
+        targetValue = scoreToWinState.value.toFloat(),
         animationSpec = tween(750),
         label = "scoreToWin"
     )
@@ -137,7 +137,7 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
         val fontSize = this.maxWidth.value * 0.25f / LocalDensity.current.fontScale
 
         Text(
-            text = score.value.toString(),
+            text = scoreState.value.toString(),
             color = fontColor,
             modifier = Modifier
                 .fillMaxHeight()
