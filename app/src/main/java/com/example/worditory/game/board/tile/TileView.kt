@@ -18,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.worditory.R
 
 @Composable
 fun TileView(
@@ -29,7 +31,7 @@ fun TileView(
 ) {
     val ownershipState = viewModel.ownershipStateFlow.collectAsState()
     val animatedColor = animateColorAsState(
-        targetValue = viewModel.backgroundColor(ownershipState.value),
+        targetValue = colorResource(viewModel.backgroundColor(ownershipState.value)),
         animationSpec = tween(500),
         label = "color"
     )
@@ -49,6 +51,7 @@ fun TileView(
         val letterState = viewModel.letterStateFLow.collectAsState()
         val letterVisibilityState = viewModel.letterVisibilityStateFlow.collectAsState()
         val fontSize = this.maxWidth.value * 0.55f / LocalDensity.current.fontScale
+        val fontColor = colorResource(R.color.font_color_dark)
 
         AnimatedVisibility(
             visible = letterVisibilityState.value,
@@ -57,6 +60,7 @@ fun TileView(
         ) {
             Text(
                 text = letterState.value,
+                color = fontColor,
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentHeight(Alignment.CenterVertically)

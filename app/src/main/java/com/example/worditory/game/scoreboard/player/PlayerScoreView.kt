@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -37,9 +38,13 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
     val score = viewModel.scoreStateFlow.collectAsState()
     val scoreToWin = viewModel.scoreToWinStateFlow.collectAsState()
 
+    val outlineColor = colorResource(R.color.game_background)
+    val indicatorColor = colorResource(viewModel.colorScheme.superOwned)
+    val indicatorBackgroundColor = colorResource(R.color.tile_gray_light)
+    val avatarBackgroundColor = colorResource(viewModel.colorScheme.owned)
+
     val avatarVector = ImageVector.vectorResource(id = R.drawable.avatar_1)
     val avatarPainter = rememberVectorPainter(avatarVector)
-
 
     val scoreAnimator = animateFloatAsState(
         targetValue = score.value.toFloat(),
@@ -55,8 +60,12 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
 
     BoxWithConstraints(modifier.aspectRatio(1f)) {
         Canvas(modifier.aspectRatio(1f)) {
-            drawCircle(Color.DarkGray, center = this.center, radius = this.size.width / 2f)
-            drawCircle(Color.LightGray, center = this.center, radius = this.size.width / 2f - 42.5f)
+            drawCircle(outlineColor, center = this.center, radius = this.size.width / 2f)
+            drawCircle(
+                avatarBackgroundColor,
+                center = this.center,
+                radius = this.size.width / 2f - 42.5f
+            )
 
             val scoreIndicatorBackground = Path()
             val scoreIndicatorRect = Rect(
@@ -68,7 +77,11 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
                 startAngleDegrees = 0f,
                 sweepAngleDegrees = 360f
             )
-            drawPath(scoreIndicatorBackground, Color.White, style = Stroke(width = 30f))
+            drawPath(
+                scoreIndicatorBackground,
+                indicatorBackgroundColor,
+                style = Stroke(width = 30f)
+            )
 
             val scoreRect = Rect(
                 offset = Offset(this.center.x - this.size.width / 4f, this.size.height * 0.675f),
@@ -81,7 +94,7 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
                 cornerRadius = CornerRadius(22.5f, 22.5f)
             )
             drawRoundRect(
-                color = viewModel.colorScheme.owned,
+                color = indicatorColor,
                 topLeft = scoreRect.topLeft,
                 size = scoreRect.size,
                 cornerRadius = CornerRadius(20f, 20f)
@@ -98,7 +111,7 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
                 startAngleDegrees = 60f,
                 sweepAngleDegrees = -150 * scoreAnimator.value / scoreToWinAnimator.value
             )
-            drawPath(scoreIndicator, viewModel.colorScheme.owned, style = Stroke(width = 30f))
+            drawPath(scoreIndicator, indicatorColor, style = Stroke(width = 30f))
 
         }
 
@@ -120,9 +133,12 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
             }
         }
 
+        val fontColor = colorResource(R.color.font_color_dark)
         val fontSize = this.maxWidth.value * 0.25f / LocalDensity.current.fontScale
+
         Text(
             text = score.value.toString(),
+            color = fontColor,
             modifier = Modifier
                 .fillMaxHeight()
                 .width(this.maxWidth)

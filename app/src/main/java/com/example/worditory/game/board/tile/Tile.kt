@@ -2,6 +2,7 @@ package com.example.worditory.game.board.tile
 
 import androidx.compose.ui.graphics.Color
 import com.example.worditory.game.board.tile.Tile.ColorScheme.Player.Companion.Colors
+import com.example.worditory.R
 import kotlin.random.Random
 
 class Tile {
@@ -29,36 +30,36 @@ class Tile {
             }
         }
 
-        data class Player(val owned: Color, val superOwned: Color) {
+        data class Player(val owned: Int, val superOwned: Int) {
             companion object {
                 val Green = Player(
-                    owned = Color(0xFFA9F56E),
-                    superOwned = Color(0xFF78D433)
+                    owned = R.color.player_green_light,
+                    superOwned = R.color.player_green_dark
                 )
 
                 val Purple = Player(
-                    owned = Color(0xFFDE93ED),
-                    superOwned = Color(0xFFC547DE)
+                    owned = R.color.player_purple_light,
+                    superOwned = R.color.player_purple_dark
                 )
 
                 val Yellow = Player(
-                    owned = Color(0xFFEDf590),
-                    superOwned = Color(0xFFEBFA43)
+                    owned = R.color.player_yellow_light,
+                    superOwned = R.color.player_yellow_dark
                 )
 
                 val Pink = Player(
-                    owned = Color(0xFFFFACDF),
-                    superOwned = Color(0xFFFF73AD)
+                    owned = R.color.player_pink_light,
+                    superOwned = R.color.player_pink_dark
                 )
 
                 val Blue = Player(
-                    owned = Color(0xFFAFDBFA),
-                    superOwned = Color(0xFF64BCFA)
+                    owned = R.color.player_blue_light,
+                    superOwned = R.color.player_blue_dark
                 )
 
                 val Orange = Player(
-                    owned = Color(0xFFFFD1A6),
-                    superOwned = Color(0xFFFFB36B)
+                    owned = R.color.player_orange_light,
+                    superOwned = R.color.player_orange_dark
                 )
 
                 val Colors = arrayOf(Green, Purple, Yellow, Pink, Blue, Orange)

@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="player_green_light">#FFA9F56E</color>
+    <color name="player_green_dark">#FF78D433</color>
+    <color name="player_purple_light">#FFDE93ED</color>
+    <color name="player_purple_dark">#FFC547DE</color>
+    <color name="player_yellow_light">#FFEDf590</color>
+    <color name="player_yellow_dark">#FFD1D100</color>
+    <color name="player_pink_light">#FFFFACDF</color>
+    <color name="player_pink_dark">#FFFF73AD</color>
+    <color name="player_blue_light">#FFAFDBFA</color>
+    <color name="player_blue_dark">#FF64BCFA</color>
+    <color name="player_orange_light">#FFFFD1A6</color>
+    <color name="player_orange_dark">#FFFFB36B</color>
+
+    <color name="tile_gray_light">#FFEEEEEE</color>
+    <color name="tile_gray_dark">#FFDDDDDD</color>
+
+    <color name="game_background">#FF525252</color>
+    <color name="font_color_dark">#FF363636</color>
+    <color name="score_to_win_background">#FF9FE3D9</color>
+    <color name="score_to_win_indicator">#FF25B39E</color>
+    <color name="word_path">#FFFF0000</color>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>

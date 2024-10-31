@@ -21,7 +21,7 @@ fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier = Modifier
     BoxWithConstraints(modifier) {
         val maxHeight = this.maxHeight
         val maxWidth = this.maxWidth
-        if (maxWidth.value / maxHeight.value > 3f) {
+        if (maxWidth.value / maxHeight.value > 2.5f) {
             Column {
                 Spacer(Modifier.height(15.dp))
 

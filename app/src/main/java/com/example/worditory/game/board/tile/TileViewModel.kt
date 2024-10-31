@@ -2,6 +2,7 @@ package com.example.worditory.game.board.tile
 
 import androidx.lifecycle.ViewModel
 import com.example.worditory.game.Game
+import com.example.worditory.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,9 +46,9 @@ class TileViewModel(
 
     private val unownedTileColor
         get() = if ((x + y) % 2 == 0)
-            Tile.ColorScheme.unownedTileLight
+            R.color.tile_gray_light
         else
-            Tile.ColorScheme.unownedTileDark
+            R.color.tile_gray_dark
 
     val isSuperOwned
         get() = ownership == Tile.Ownership.SUPER_OWNED_PLAYER_1

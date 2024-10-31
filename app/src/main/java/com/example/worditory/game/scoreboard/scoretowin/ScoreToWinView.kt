@@ -21,23 +21,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.worditory.R
 
 @Composable
 fun ScoreToWinView(viewModel: ScoreToWinViewModel, modifier: Modifier = Modifier) {
-BoxWithConstraints(
-    modifier
-        .aspectRatio(1f)
-        .background(Color.Yellow)
-) {
+    BoxWithConstraints(
+        modifier
+            .aspectRatio(1f)
+            .background(colorResource(R.color.score_to_win_background))
+    ) {
         val scoreToWinState = viewModel.scoreToWinStateFlow.collectAsState()
 
-        val fontSize = this.maxWidth.value * 0.5f / LocalDensity.current.fontScale
+        val fontSize = this.maxWidth.value * 0.4f / LocalDensity.current.fontScale
+        val fontColor = colorResource(R.color.font_color_dark)
+
         val maxHeight = this.maxHeight
 
         AnimatedContent(
@@ -46,9 +49,10 @@ BoxWithConstraints(
                 slideInVertically { -it } togetherWith slideOutVertically { it }
             },
             label = "scoreToWin"
-        ) { count ->
+        ) { scoreToWin ->
             Text(
-                text = count.toString(),
+                text = scoreToWin.toString(),
+                color = fontColor,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(maxHeight)
@@ -57,6 +61,10 @@ BoxWithConstraints(
                 fontWeight = FontWeight.Bold
             )
         }
+
+        val maskColor = colorResource(R.color.game_background)
+        val indicatorBackgroundColor = colorResource(R.color.tile_gray_light)
+        val indicatorColor = colorResource(R.color.score_to_win_indicator)
 
         val scoreToWinPct =
             scoreToWinState.value.toFloat() / viewModel.initialScoreToWin.toFloat()
@@ -67,13 +75,13 @@ BoxWithConstraints(
         )
 
         Canvas(Modifier.fillMaxSize()) {
-            val circleBoundPath = Path()
-            val boundsRect = Rect(Offset.Zero, this.size)
+            val maskPath = Path()
+            val maskRect = Rect(Offset.Zero, this.size)
 
-            circleBoundPath.addRect(boundsRect)
-            circleBoundPath.addArc(boundsRect, startAngleDegrees = 0f, sweepAngleDegrees = 360f)
+            maskPath.addRect(maskRect)
+            maskPath.addArc(maskRect, startAngleDegrees = 0f, sweepAngleDegrees = 360f)
 
-            drawPath(circleBoundPath, Color.White)
+            drawPath(maskPath, maskColor)
 
             val circlePath = Path()
             val circlePathRect = Rect(center = this.center, radius = this.size.width / 2f - 15f)
@@ -83,16 +91,8 @@ BoxWithConstraints(
                 sweepAngleDegrees = 360f
             )
 
-            drawPath(
-                path = circlePath,
-                color = Color.DarkGray,
-                style = Stroke(width = 30f)
-            )
-            drawPath(
-                path = circlePath,
-                color = Color.White,
-                style = Stroke(width = 20f)
-            )
+            drawPath(circlePath, maskColor, style = Stroke(width = 30f))
+            drawPath(circlePath, indicatorBackgroundColor, style = Stroke(width = 20f))
 
             val indicatorPath = Path()
 
@@ -107,10 +107,7 @@ BoxWithConstraints(
                 sweepAngleDegrees = -180f * animatedIndicator.value
             )
 
-            drawPath(
-                path = indicatorPath,
-                color = Color.LightGray,
-                style = Stroke(width = 20f))
+            drawPath(indicatorPath, indicatorColor, style = Stroke(width = 20f))
         }
 
     }
