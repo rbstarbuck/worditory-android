@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="game_background">#FF44444D</color>
+    <color name="font_color_light">#FFFFFFFF</color>
+    <color name="font_color_dark">#FF363636</color>
+
     <color name="player_green_light">#FFA9F56E</color>
     <color name="player_green_dark">#FF78D433</color>
     <color name="player_purple_light">#FFDE93ED</color>
@@ -16,19 +20,18 @@
     <color name="tile_gray_light">#FFEEEEEE</color>
     <color name="tile_gray_dark">#FFDDDDDD</color>
 
-    <color name="game_background">#FF525252</color>
-    <color name="font_color_light">#FFEEEEEE</color>
-    <color name="font_color_dark">#FF363636</color>
     <color name="score_to_win_background">#FF9FE3D9</color>
     <color name="score_to_win_indicator">#FF25B39E</color>
+    <color name="indicator_background">#FFEEEEEE</color>
+
     <color name="word_path">#FFFF0000</color>
 
     <color name="button_container">#FF9FE3D9</color>
     <color name="button_content">#FF363636</color>
     <color name="button_stroke">#FF25B39E</color>
-    <color name="disabled_button_container">#FFDDDDDD</color>
-    <color name="disabled_button_content">#FFBBBBBB</color>
-    <color name="disabled_button_stroke">#FFBBBBBB</color>
+    <color name="disabled_button_container">#FFCCCCCC</color>
+    <color name="disabled_button_content">#FFAAAAAA</color>
+    <color name="disabled_button_stroke">#FFAAAAAA</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

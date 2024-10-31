@@ -44,7 +44,8 @@ class GameAgainstNpcViewModel(
                 }
             }
             return true
+        } else {
+            return false
         }
-        return false
     }
 }

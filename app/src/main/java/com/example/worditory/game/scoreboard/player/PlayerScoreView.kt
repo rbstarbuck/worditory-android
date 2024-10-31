@@ -40,7 +40,7 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
 
     val outlineColor = colorResource(R.color.game_background)
     val indicatorColor = colorResource(viewModel.colorScheme.superOwned)
-    val indicatorBackgroundColor = colorResource(R.color.tile_gray_light)
+    val indicatorBackgroundColor = colorResource(R.color.indicator_background)
     val avatarBackgroundColor = colorResource(viewModel.colorScheme.owned)
 
     val avatarVector = ImageVector.vectorResource(id = R.drawable.avatar_1)

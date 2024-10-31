@@ -3,8 +3,6 @@ package com.example.worditory.game
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -29,11 +27,10 @@ fun GameView(viewModel: GameViewModel, modifier: Modifier = Modifier) {
 
         BoardView(viewModel.board, Modifier.fillMaxWidth())
 
-        Spacer(Modifier.height(15.dp))
-
         PlayButtonView(
             viewModel.playButton,
-            viewModel.isPlayerTurnStateFlow
+            viewModel.isPlayerTurnStateFlow,
+            Modifier.height(130.dp)
         ) {
             viewModel.onPlayButtonClick()
         }

@@ -21,9 +21,14 @@ fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier = Modifier
         val maxWidth = this.maxWidth
         if (maxWidth.value / maxHeight.value > 2.5f) {
             Column {
-                Spacer(Modifier.height(15.dp))
+                Spacer(Modifier.weight(0.2f))
 
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Spacer(Modifier.weight(0.5f))
 
                     PlayerScoreView(viewModel.scorePlayer1, Modifier.fillMaxHeight())
@@ -38,6 +43,8 @@ fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier = Modifier
 
                     Spacer(Modifier.weight(0.5f))
                 }
+
+                Spacer(Modifier.weight(0.2f))
             }
         } else {
             Column(Modifier.fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
