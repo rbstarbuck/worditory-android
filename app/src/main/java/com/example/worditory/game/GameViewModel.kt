@@ -13,7 +13,8 @@ abstract class GameViewModel(
     boardWidth: Int,
     boardHeight: Int,
     avatarIdPlayer1: Int,
-    avatarIdPlayer2: Int
+    avatarIdPlayer2: Int,
+    colorScheme: Tile.ColorScheme
 ): ViewModel() {
     private val _isPlayerTurnStateFlow = MutableStateFlow(true)
     val isPlayerTurnStateFlow = _isPlayerTurnStateFlow.asStateFlow()
@@ -31,7 +32,6 @@ abstract class GameViewModel(
             _isNotAWordStateFlow.value = value
         }
 
-    private val colorScheme = Tile.ColorScheme.random()
     val board = BoardViewModel(
         boardWidth,
         boardHeight,

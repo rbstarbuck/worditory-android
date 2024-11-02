@@ -22,10 +22,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.worditory.R
+import com.example.worditory.navigation.Screen.Game
 
 @Composable
-fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier = Modifier) {
+fun NpcChooserView(
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
     Column(modifier) {
         HorizontalArrowsView(Modifier.fillMaxWidth().padding(horizontal = 40.dp))
 
@@ -44,9 +49,21 @@ fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier = Modifier
                     modifier = Modifier.padding(horizontal = 30.dp)
                 ) {
                     items(NpcChooser.opponents.size) { item ->
+                        val opponent = NpcChooser.opponents[item]
+
                         Box(Modifier.padding(5.dp)) {
                             OutlinedButton(
-                                onClick = {},
+                                onClick = {
+                                    navController.navigate(
+                                        Game.buildRoute(
+                                            width = 6,
+                                            height = 6,
+                                            avatar1 = R.drawable.avatar_1,
+                                            avatar2 = opponent.avatar,
+                                            spec = opponent.spec
+                                        )
+                                    )
+                                },
                                 shape = RoundedCornerShape(15.dp),
                                 colors = ButtonColors(
                                     containerColor = colorResource(R.color.opponent_chooser_button),
@@ -65,7 +82,7 @@ fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier = Modifier
                                     bottom = 0.dp
                                 )
                             ) {
-                                val avatar = NpcChooser.opponents[item].avatar
+                                val avatar = opponent.avatar
                                 val avatarVector = ImageVector.vectorResource(id = avatar)
 
                                 Image(

@@ -1,5 +1,6 @@
 package com.example.worditory.game
 
+import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.npc.NonPlayerCharacter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -11,8 +12,9 @@ class GameAgainstNpcViewModel(
     boardHeight: Int,
     avatarIdPlayer1: Int,
     avatarIdPlayer2: Int,
+    colorScheme: Tile.ColorScheme,
     spec: NonPlayerCharacter.Spec
-): GameViewModel(boardWidth, boardHeight, avatarIdPlayer1, avatarIdPlayer2) {
+): GameViewModel(boardWidth, boardHeight, avatarIdPlayer1, avatarIdPlayer2, colorScheme) {
     val nonPlayerCharacter = NonPlayerCharacter(board, Game.Player.PLAYER_2, spec)
 
     override fun onPlayButtonClick(): Boolean {

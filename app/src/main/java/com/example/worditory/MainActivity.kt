@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.example.worditory.chooser.npcopponent.NpcChooserView
-import com.example.worditory.chooser.npcopponent.NpcChooserViewModel
 import com.example.worditory.game.Game
 import com.example.worditory.game.GameAgainstNpcViewModel
 import com.example.worditory.game.GameView
@@ -25,6 +24,7 @@ import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.game.npc.NonPlayerCharacter
+import com.example.worditory.navigation.NavigationStack
 import com.example.worditory.ui.theme.WorditoryTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,26 +35,28 @@ class MainActivity : ComponentActivity() {
             WorditoryTheme {
                 WordDictionary.init()
 
-                val npcSpec = NonPlayerCharacter.Spec(
-                    NonPlayerCharacter.Spec.VocabularyLevel.MEDIUM,
-                    NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
-                    NonPlayerCharacter.Spec.OverallSkillLevel.ADVANCED
-                )
+                NavigationStack()
 
-                val gameViewModel = GameAgainstNpcViewModel(
-                    boardWidth = 6,
-                    boardHeight = 6,
-                    avatarIdPlayer1 = R.drawable.avatar_1,
-                    avatarIdPlayer2 = R.drawable.npc_monkey,
-                    spec = npcSpec
-                )
-
-                val npcChooserViewModel = NpcChooserViewModel()
-
-                Box(Modifier.fillMaxSize().background(colorResource(R.color.background))) {
-                    NpcChooserView(npcChooserViewModel)
-                }
-//                GameView(gameViewModel, Modifier.fillMaxSize())
+//                val npcSpec = NonPlayerCharacter.Spec(
+//                    NonPlayerCharacter.Spec.VocabularyLevel.MEDIUM,
+//                    NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
+//                    NonPlayerCharacter.Spec.OverallSkillLevel.ADVANCED
+//                )
+//
+//                val gameViewModel = GameAgainstNpcViewModel(
+//                    boardWidth = 6,
+//                    boardHeight = 6,
+//                    avatarIdPlayer1 = R.drawable.avatar_1,
+//                    avatarIdPlayer2 = R.drawable.npc_monkey,
+//                    spec = npcSpec
+//                )
+//
+//                Box(Modifier.fillMaxSize().background(colorResource(R.color.background))) {
+//                    NpcChooserView {
+//
+//                    }
+//                }
+//                GameView(gameViewModel)
             }
         }
     }
