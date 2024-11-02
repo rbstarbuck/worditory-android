@@ -18,7 +18,7 @@ import com.example.worditory.game.scoreboard.ScoreBoardView
 @Composable
 fun GameView(viewModel: GameViewModel, modifier: Modifier = Modifier) {
     Column(
-        modifier.background(colorResource(R.color.game_background)),
+        modifier.background(colorResource(R.color.background)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ScoreBoardView(viewModel.scoreBoard, Modifier.fillMaxWidth().weight(1f))

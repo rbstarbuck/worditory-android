@@ -1,13 +1,12 @@
 package com.example.worditory.chooser.npcopponent
 
-import androidx.annotation.DrawableRes
 import com.example.worditory.R
 import com.example.worditory.game.npc.NonPlayerCharacter
 
 class NpcChooser {
     companion object {
         private val opponent1 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_bear,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.LOW,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.DEFENSIVE,
@@ -15,7 +14,7 @@ class NpcChooser {
             )
         )
         private val opponent2 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_fish,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.LOW,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
@@ -23,7 +22,7 @@ class NpcChooser {
             )
         )
         private val opponent3 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_chicken,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.LOW,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.OFFENSIVE,
@@ -31,7 +30,7 @@ class NpcChooser {
             )
         )
         private val opponent4 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_cat,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.LOW,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.DEFENSIVE,
@@ -39,7 +38,7 @@ class NpcChooser {
             )
         )
         private val opponent5 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_penguin,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.LOW,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
@@ -47,7 +46,7 @@ class NpcChooser {
             )
         )
         private val opponent6 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_cow,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.LOW,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.OFFENSIVE,
@@ -55,7 +54,7 @@ class NpcChooser {
             )
         )
         private val opponent7 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_sloth,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.MEDIUM,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.DEFENSIVE,
@@ -63,7 +62,7 @@ class NpcChooser {
             )
         )
         private val opponent8 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_owl,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.MEDIUM,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
@@ -71,7 +70,7 @@ class NpcChooser {
             )
         )
         private val opponent9 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_rabbit,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.MEDIUM,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.OFFENSIVE,
@@ -79,7 +78,7 @@ class NpcChooser {
             )
         )
         private val opponent10 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_elephant,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.HIGH,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.DEFENSIVE,
@@ -87,7 +86,7 @@ class NpcChooser {
             )
         )
         private val opponent11 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_monkey,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.HIGH,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
@@ -95,7 +94,7 @@ class NpcChooser {
             )
         )
         private val opponent12 = Opponent(
-            R.drawable.avatar_1,
+            R.drawable.npc_cobra,
             NonPlayerCharacter.Spec(
                 NonPlayerCharacter.Spec.VocabularyLevel.HIGH,
                 NonPlayerCharacter.Spec.DefenseOffenseLevel.OFFENSIVE,

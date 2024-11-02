@@ -25,7 +25,7 @@ fun VerticalArrowsView(modifier: Modifier = Modifier) {
         val strokeWidth = 5f
 
         Text(
-            text = stringResource(R.string.beginner),
+            text = stringResource(R.string.easy),
             modifier = Modifier.rotate(-90f).vertical().padding(start = 10.dp),
             color = color,
             fontSize = fontSize
@@ -69,7 +69,7 @@ fun VerticalArrowsView(modifier: Modifier = Modifier) {
         }
 
         Text(
-            text = stringResource(R.string.advanced),
+            text = stringResource(R.string.hard),
             modifier = Modifier.rotate(-90f).vertical().padding(end = 10.dp),
             color = color,
             fontSize = fontSize

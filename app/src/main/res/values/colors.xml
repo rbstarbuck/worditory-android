@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="game_background">#FF44444D</color>
+    <color name="background">#FF44444D</color>
     <color name="font_color_light">#FFFFFFFF</color>
     <color name="font_color_dark">#FF363636</color>
 
@@ -33,7 +33,9 @@
     <color name="disabled_button_content">#FFAAAAAA</color>
     <color name="disabled_button_stroke">#FFAAAAAA</color>
 
-    <color name="opponent_chooser_arrow">#FF000000</color>
+    <color name="opponent_chooser_arrow">#FFFFFFFF</color>
+    <color name="opponent_chooser_border">#FF000000</color>
+    <color name="opponent_chooser_button">#FFDDDDDD</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

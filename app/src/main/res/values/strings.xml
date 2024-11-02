@@ -5,6 +5,6 @@
 
     <string name="defensive">Defensive</string>
     <string name="offensive">Offensive</string>
-    <string name="beginner">Beginner</string>
-    <string name="advanced">Advanced</string>
+    <string name="easy">Easy</string>
+    <string name="hard">Hard</string>
 </resources>

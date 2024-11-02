@@ -62,7 +62,7 @@ fun ScoreToWinView(viewModel: ScoreToWinViewModel, modifier: Modifier = Modifier
             )
         }
 
-        val maskColor = colorResource(R.color.game_background)
+        val maskColor = colorResource(R.color.background)
         val indicatorBackgroundColor = colorResource(R.color.indicator_background)
         val indicatorColor = colorResource(R.color.score_to_win_indicator)
 

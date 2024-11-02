@@ -13,13 +13,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.example.worditory.R
 
 @Composable
 fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier = Modifier) {
@@ -45,7 +48,16 @@ fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier = Modifier
                             OutlinedButton(
                                 onClick = {},
                                 shape = RoundedCornerShape(15.dp),
-                                border = BorderStroke(width = 2.dp, color = Color.DarkGray),
+                                colors = ButtonColors(
+                                    containerColor = colorResource(R.color.opponent_chooser_button),
+                                    contentColor = Color.White,
+                                    disabledContainerColor = Color.White,
+                                    disabledContentColor = Color.White
+                                ),
+                                border = BorderStroke(
+                                    width = 2.dp,
+                                    color = colorResource(R.color.opponent_chooser_border)
+                                ),
                                 contentPadding = PaddingValues(
                                     start = 7.dp,
                                     top = 14.dp,
