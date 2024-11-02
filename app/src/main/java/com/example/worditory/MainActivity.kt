@@ -4,8 +4,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.example.worditory.chooser.npcopponent.NpcChooserView
+import com.example.worditory.chooser.npcopponent.NpcChooserViewModel
 import com.example.worditory.game.Game
 import com.example.worditory.game.GameAgainstNpcViewModel
 import com.example.worditory.game.GameView
@@ -22,15 +31,22 @@ class MainActivity : ComponentActivity() {
             WorditoryTheme {
                 WordDictionary.init()
 
+                val npcSpec = NonPlayerCharacter.Spec(
+                    NonPlayerCharacter.Spec.VocabularyLevel.MEDIUM,
+                    NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
+                    NonPlayerCharacter.Spec.OverallSkillLevel.ADVANCED
+                )
+
                 val gameViewModel = GameAgainstNpcViewModel(
                     boardWidth = 6,
                     boardHeight = 6,
-                    vocabulary = NonPlayerCharacter.VocabularyLevel.MEDIUM,
-                    defenseOffenseLevel = NonPlayerCharacter.DefenseOffenseLevel.OFFENSIVE,
-                    overallSkillLevel = NonPlayerCharacter.OverallSkillLevel.ADVANCED
+                    spec = npcSpec
                 )
 
-                GameView(gameViewModel, Modifier.fillMaxSize())
+                val npcChooserViewModel = NpcChooserViewModel()
+
+                NpcChooserView(npcChooserViewModel)
+//                GameView(gameViewModel, Modifier.fillMaxSize())
             }
         }
     }

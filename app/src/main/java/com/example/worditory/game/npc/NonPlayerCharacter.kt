@@ -9,19 +9,17 @@ import com.example.worditory.game.dict.WordDictionary
 class NonPlayerCharacter(
     val board: BoardViewModel,
     val player: Game.Player,
-    val vocabulary: VocabularyLevel,
-    val defenseOffenseLevel: DefenseOffenseLevel,
-    val overallSkillLevel: OverallSkillLevel)
-{
+    val spec: Spec
+) {
     fun findWordToPlay(): WordModel? {
         var words = findAllWords()
 
         if (words.isEmpty()) return null
 
-        val skillLevelMultipliers = when(overallSkillLevel) {
-            OverallSkillLevel.BEGINNER -> Pair(0.55f, 0.7f)
-            OverallSkillLevel.INTERMEDIATE -> Pair(0.7f, 0.85f)
-            OverallSkillLevel.ADVANCED -> Pair(0.85f, 1.0f)
+        val skillLevelMultipliers = when(spec.overallSkillLevel) {
+            Spec.OverallSkillLevel.BEGINNER -> Pair(0.55f, 0.7f)
+            Spec.OverallSkillLevel.INTERMEDIATE -> Pair(0.7f, 0.85f)
+            Spec.OverallSkillLevel.ADVANCED -> Pair(0.85f, 1.0f)
         }
 
         var skillLevelFromIndex = (words.size * skillLevelMultipliers.first).toInt()
@@ -39,10 +37,10 @@ class NonPlayerCharacter(
 
         words = words.sortedBy { it.overallScore }.subList(skillLevelFromIndex, skillLevelToIndex)
 
-        return when(defenseOffenseLevel) {
-            DefenseOffenseLevel.DEFENSIVE -> words.first().word
-            DefenseOffenseLevel.BLENDED -> words[words.size / 2].word
-            DefenseOffenseLevel.OFFENSIVE -> words.last().word
+        return when(spec.defenseOffenseLevel) {
+            Spec.DefenseOffenseLevel.DEFENSIVE -> words.first().word
+            Spec.DefenseOffenseLevel.BLENDED -> words[words.size / 2].word
+            Spec.DefenseOffenseLevel.OFFENSIVE -> words.last().word
         }
     }
 
@@ -105,11 +103,11 @@ class NonPlayerCharacter(
     }
 
     private fun resultIsWithinVocabulary(result: WordDictionary.SearchResult): Boolean =
-        when(vocabulary) {
-            VocabularyLevel.LOW -> result.frequency == 0
-            VocabularyLevel.MEDIUM -> result.frequency <= 1
-            VocabularyLevel.HIGH -> result.frequency <= 2
-            VocabularyLevel.COMPLETE -> result.frequency <= 3
+        when(spec.vocabularyLevel) {
+            Spec.VocabularyLevel.LOW -> result.frequency == 0
+            Spec.VocabularyLevel.MEDIUM -> result.frequency <= 1
+            Spec.VocabularyLevel.HIGH -> result.frequency <= 2
+            Spec.VocabularyLevel.COMPLETE -> result.frequency <= 3
         }
 
     private fun buildNextWord(word: WordModel, tile: TileViewModel): WordModel {
@@ -165,23 +163,29 @@ class NonPlayerCharacter(
     private fun willBeSuperOwned(tile: TileViewModel, tilesInWord: Set<TileViewModel>) =
         board.adjacentTiles(tile).all { it.isOwnedBy(player) || tilesInWord.contains(it) }
 
-    enum class VocabularyLevel {
-        LOW,
-        MEDIUM,
-        HIGH,
-        COMPLETE
-    }
+    class Spec(
+        val vocabularyLevel: VocabularyLevel,
+        val defenseOffenseLevel: DefenseOffenseLevel,
+        val overallSkillLevel: OverallSkillLevel
+    ) {
+        enum class VocabularyLevel {
+            LOW,
+            MEDIUM,
+            HIGH,
+            COMPLETE
+        }
 
-    enum class DefenseOffenseLevel {
-        DEFENSIVE,
-        BLENDED,
-        OFFENSIVE
-    }
+        enum class DefenseOffenseLevel {
+            DEFENSIVE,
+            BLENDED,
+            OFFENSIVE
+        }
 
-    enum class OverallSkillLevel {
-        BEGINNER,
-        INTERMEDIATE,
-        ADVANCED
+        enum class OverallSkillLevel {
+            BEGINNER,
+            INTERMEDIATE,
+            ADVANCED
+        }
     }
 
     private data class WordScore(

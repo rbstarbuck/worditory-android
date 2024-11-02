@@ -122,10 +122,7 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(boxMaxHeight * 0.1725f))
-            Canvas(
-                Modifier
-                    .height(boxMaxHeight / 2f)
-                    .width(boxMaxWidth / 2f)
+            Canvas(Modifier.height(boxMaxHeight / 2f).width(boxMaxWidth / 2f)
             ) {
                 with(avatarPainter) {
                     draw(drawContext.size)

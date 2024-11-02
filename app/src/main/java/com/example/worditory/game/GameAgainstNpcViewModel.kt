@@ -9,17 +9,9 @@ import kotlin.random.Random
 class GameAgainstNpcViewModel(
     boardWidth: Int,
     boardHeight: Int,
-    vocabulary: NonPlayerCharacter.VocabularyLevel,
-    defenseOffenseLevel: NonPlayerCharacter.DefenseOffenseLevel,
-    overallSkillLevel: NonPlayerCharacter.OverallSkillLevel
+    spec: NonPlayerCharacter.Spec
 ): GameViewModel(boardWidth, boardHeight) {
-    val nonPlayerCharacter = NonPlayerCharacter(
-        board,
-        Game.Player.PLAYER_2,
-        vocabulary,
-        defenseOffenseLevel,
-        overallSkillLevel
-    )
+    val nonPlayerCharacter = NonPlayerCharacter(board, Game.Player.PLAYER_2, spec)
 
     override fun onPlayButtonClick(): Boolean {
         if (super.onPlayButtonClick()) {
