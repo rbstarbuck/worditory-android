@@ -3,13 +3,13 @@
 
     <string name="is_not_a_word">ain\'t a word!</string>
 
-    <string name="opponent">Opponent</string>
+    <string name="opponent">OPPONENT</string>
     <string name="defensive">Defensive</string>
     <string name="offensive">Offensive</string>
     <string name="easy">Easy</string>
     <string name="hard">Hard</string>
 
-    <string name="board_size">Board size</string>
+    <string name="board_size">BOARD SIZE</string>
     <string name="lightning">Lightning</string>
     <string name="rapid">Rapid</string>
     <string name="classic">Classic</string>
