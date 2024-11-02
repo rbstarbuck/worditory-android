@@ -2,12 +2,14 @@ package com.example.worditory.chooser.npcopponent
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -15,23 +17,40 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.worditory.R
-import com.example.worditory.navigation.Screen.Game
+import com.example.worditory.navigation.Screen.BoardSizeChooser
 
 @Composable
 fun NpcChooserView(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
+    Column(
+        modifier = modifier.background(colorResource(R.color.background)).fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(Modifier.weight(1f))
+
+        Text(
+            text = stringResource(R.string.opponent),
+            color = colorResource(R.color.font_color_light),
+            fontSize = 36.sp
+        )
+
+        Spacer(Modifier.weight(1f))
+
         HorizontalArrowsView(Modifier.fillMaxWidth().padding(horizontal = 40.dp))
 
         Row {
@@ -54,15 +73,7 @@ fun NpcChooserView(
                         Box(Modifier.padding(5.dp)) {
                             OutlinedButton(
                                 onClick = {
-                                    navController.navigate(
-                                        Game.buildRoute(
-                                            width = 6,
-                                            height = 6,
-                                            avatar1 = R.drawable.avatar_1,
-                                            avatar2 = opponent.avatar,
-                                            spec = opponent.spec
-                                        )
-                                    )
+                                    navController.navigate(BoardSizeChooser.buildRoute(opponent))
                                 },
                                 shape = RoundedCornerShape(15.dp),
                                 colors = ButtonColors(
@@ -73,7 +84,7 @@ fun NpcChooserView(
                                 ),
                                 border = BorderStroke(
                                     width = 2.dp,
-                                    color = colorResource(R.color.opponent_chooser_border)
+                                    color = colorResource(R.color.chooser_grid_cell_border)
                                 ),
                                 contentPadding = PaddingValues(
                                     start = 7.dp,
@@ -82,8 +93,7 @@ fun NpcChooserView(
                                     bottom = 0.dp
                                 )
                             ) {
-                                val avatar = opponent.avatar
-                                val avatarVector = ImageVector.vectorResource(id = avatar)
+                                val avatarVector = ImageVector.vectorResource(id = opponent.avatar)
 
                                 Image(
                                     imageVector = avatarVector,
@@ -95,5 +105,7 @@ fun NpcChooserView(
                 }
             }
         }
+
+        Spacer(Modifier.weight(1f))
     }
 }

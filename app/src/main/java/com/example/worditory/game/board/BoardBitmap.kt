@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.worditory.R
 import com.example.worditory.game.board.tile.Tile
@@ -27,6 +28,9 @@ fun drawBoardToBitmap(
 
 fun BoardViewModel.drawToBitmap(context: Context, size: Size): ImageBitmap {
     val drawScope = CanvasDrawScope()
+    if (size.width == 0f || size.height == 0f) {
+        return ImageBitmap(1, 1)
+    }
     val bitmap = ImageBitmap(size.width.toInt(), size.height.toInt())
     val canvas = Canvas(bitmap)
 
@@ -47,19 +51,17 @@ fun BoardViewModel.drawToBitmap(context: Context, size: Size): ImageBitmap {
 
         drawRect(Color.White, Offset.Zero, size)
 
-        for (row in tiles) {
-            for (tile in row) {
-                val color = when (tile.ownership) {
-                    Tile.Ownership.UNOWNED ->
-                        if ((tile.x + tile.y) % 2 == 0) unownedTileLight else unownedTileDark
-                    Tile.Ownership.OWNED_PLAYER_1 -> ownedPlayer1
-                    Tile.Ownership.OWNED_PLAYER_2 -> ownedPlayer2
-                    Tile.Ownership.SUPER_OWNED_PLAYER_1 -> superOwnedPlayer1
-                    Tile.Ownership.SUPER_OWNED_PLAYER_2 -> superOwnedPlayer2
-                }
-                val offset = Offset(tileSize.width * tile.x, tileSize.height * tile.y)
-                drawRect(color = color, topLeft = offset, size = tileSize)
+        for (tile in flatTiles) {
+            val color = when (tile.ownership) {
+                Tile.Ownership.UNOWNED ->
+                    if ((tile.x + tile.y) % 2 == 0) unownedTileLight else unownedTileDark
+                Tile.Ownership.OWNED_PLAYER_1 -> ownedPlayer1
+                Tile.Ownership.OWNED_PLAYER_2 -> ownedPlayer2
+                Tile.Ownership.SUPER_OWNED_PLAYER_1 -> superOwnedPlayer1
+                Tile.Ownership.SUPER_OWNED_PLAYER_2 -> superOwnedPlayer2
             }
+            val offset = Offset(tileSize.width * tile.x, tileSize.height * tile.y)
+            drawRect(color = color, topLeft = offset, size = tileSize)
         }
     }
     return bitmap

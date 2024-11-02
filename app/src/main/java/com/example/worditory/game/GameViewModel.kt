@@ -1,6 +1,7 @@
 package com.example.worditory.game
 
 import androidx.lifecycle.ViewModel
+import com.example.worditory.R
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.dict.WordDictionary
@@ -12,7 +13,6 @@ import kotlinx.coroutines.flow.asStateFlow
 abstract class GameViewModel(
     boardWidth: Int,
     boardHeight: Int,
-    avatarIdPlayer1: Int,
     avatarIdPlayer2: Int,
     colorScheme: Tile.ColorScheme
 ): ViewModel() {
@@ -41,7 +41,7 @@ abstract class GameViewModel(
     )
     val scoreBoard = ScoreBoardViewModel(
         initialScoreToWin = boardWidth * boardHeight,
-        avatarIdPlayer1,
+        R.drawable.avatar_1,
         avatarIdPlayer2,
         colorScheme
     )
