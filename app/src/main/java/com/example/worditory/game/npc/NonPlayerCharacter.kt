@@ -35,7 +35,10 @@ class NonPlayerCharacter(
             }
         }
 
-        words = words.sortedBy { it.overallScore }.subList(skillLevelFromIndex, skillLevelToIndex)
+        words = words
+            .sortedBy { it.overallScore }
+            .subList(skillLevelFromIndex, skillLevelToIndex)
+            .sortedBy { it.defenseOffenseScore }
 
         return when(spec.defenseOffenseLevel) {
             Spec.DefenseOffenseLevel.DEFENSIVE -> words.first().word
