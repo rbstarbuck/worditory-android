@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class PlayerScoreViewModel(
     val scoreToWinStateFlow: StateFlow<Int>,
+    val avatarId: Int,
     val colorScheme: Tile.ColorScheme.Player
 ) : ViewModel() {
     private val _scoreStateFlow = MutableStateFlow(0)

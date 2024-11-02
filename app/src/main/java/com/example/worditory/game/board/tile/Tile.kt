@@ -16,9 +16,6 @@ class Tile {
 
     data class ColorScheme(val player1: Player, val player2: Player) {
         companion object {
-            val unownedTileLight = Color.White
-            val unownedTileDark = Color.LightGray
-
             fun random(): ColorScheme {
                 val index1 = Random.nextInt(until = Colors.size)
                 var index2 = 0

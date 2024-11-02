@@ -43,7 +43,7 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
     val indicatorBackgroundColor = colorResource(R.color.indicator_background)
     val avatarBackgroundColor = colorResource(viewModel.colorScheme.owned)
 
-    val avatarVector = ImageVector.vectorResource(id = R.drawable.npc_bear)
+    val avatarVector = ImageVector.vectorResource(viewModel.avatarId)
     val avatarPainter = rememberVectorPainter(avatarVector)
 
     val scoreAnimator = animateFloatAsState(

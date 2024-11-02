@@ -9,7 +9,12 @@ import com.example.worditory.game.scoreboard.ScoreBoardViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-abstract class GameViewModel(boardWidth: Int, boardHeight: Int): ViewModel() {
+abstract class GameViewModel(
+    boardWidth: Int,
+    boardHeight: Int,
+    avatarIdPlayer1: Int,
+    avatarIdPlayer2: Int
+): ViewModel() {
     private val _isPlayerTurnStateFlow = MutableStateFlow(true)
     val isPlayerTurnStateFlow = _isPlayerTurnStateFlow.asStateFlow()
     var isPlayerTurn: Boolean
@@ -34,7 +39,12 @@ abstract class GameViewModel(boardWidth: Int, boardHeight: Int): ViewModel() {
         colorScheme,
         onWordChanged = { isNotAWord = false }
     )
-    val scoreBoard = ScoreBoardViewModel(initialScoreToWin = boardWidth * boardHeight, colorScheme)
+    val scoreBoard = ScoreBoardViewModel(
+        initialScoreToWin = boardWidth * boardHeight,
+        avatarIdPlayer1,
+        avatarIdPlayer2,
+        colorScheme
+    )
     val playButton = PlayButtonViewModel(board.word.modelStateFlow, isNotAWordStateFlow)
 
     init {
