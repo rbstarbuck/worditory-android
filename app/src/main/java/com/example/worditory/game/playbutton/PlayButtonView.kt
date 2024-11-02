@@ -73,9 +73,7 @@ fun PlayButtonView(
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold)
             ) {
-                if (isPlayerTurnState.value) {
-                    append(wordState.value.toString())
-                } 
+                append(wordState.value.toString())
             }
             if (isNotAWordState.value) {
                 withStyle(SpanStyle(
