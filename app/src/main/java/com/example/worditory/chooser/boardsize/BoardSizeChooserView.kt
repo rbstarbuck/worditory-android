@@ -25,13 +25,13 @@ import com.example.worditory.navigation.Screen.Game
 @Composable
 fun BoardSizeChooserView(
     navController: NavController,
+    playerAvatarId: Int,
     opponent: NpcChooser.Opponent,
     modifier: Modifier = Modifier
 ) {
     Box(Modifier.fillMaxSize().background(colorResource(R.color.background))) {
         Column(
             modifier = modifier
-//                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 40.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -64,7 +64,9 @@ fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1.25f)
                 ) {
-                    navController.navigate(Game.buildRoute(width = 5, height = 4, opponent))
+                    navController.navigate(
+                        Game.buildRoute(width = 5, height = 4, playerAvatarId, opponent)
+                    )
                 }
 
                 Spacer(Modifier.weight(0.2f))
@@ -86,7 +88,9 @@ fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1f)
                 ) {
-                    navController.navigate(Game.buildRoute(width = 5, height = 5, opponent))
+                    navController.navigate(
+                        Game.buildRoute(width = 5, height = 5, playerAvatarId, opponent)
+                    )
                 }
             }
 
@@ -108,7 +112,9 @@ fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1f)
                 ) {
-                    navController.navigate(Game.buildRoute(width = 5, height = 5, opponent))
+                    navController.navigate(
+                        Game.buildRoute(width = 5, height = 5, playerAvatarId, opponent)
+                    )
                 }
 
                 Spacer(Modifier.weight(0.2f))
@@ -130,7 +136,9 @@ fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1.4f)
                 ) {
-                    navController.navigate(Game.buildRoute(width = 7, height = 5, opponent))
+                    navController.navigate(
+                        Game.buildRoute(width = 7, height = 5, playerAvatarId, opponent)
+                    )
                 }
             }
 
@@ -152,7 +160,9 @@ fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1.3333f)
                 ) {
-                    navController.navigate(Game.buildRoute(width = 8, height = 6, opponent))
+                    navController.navigate(
+                        Game.buildRoute(width = 8, height = 6, playerAvatarId, opponent)
+                    )
                 }
 
                 Spacer(Modifier.weight(0.2f))
@@ -174,7 +184,9 @@ fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1f)
                 ) {
-                    navController.navigate(Game.buildRoute(width = 8, height = 8, opponent))
+                    navController.navigate(
+                        Game.buildRoute(width = 8, height = 8, playerAvatarId, opponent)
+                    )
                 }
             }
 

@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.worditory.R
 import com.example.worditory.game.board.tile.Tile

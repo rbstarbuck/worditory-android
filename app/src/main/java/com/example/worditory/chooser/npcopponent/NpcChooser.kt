@@ -3,7 +3,7 @@ package com.example.worditory.chooser.npcopponent
 import com.example.worditory.R
 import com.example.worditory.game.npc.NonPlayerCharacter
 
-class NpcChooser {
+class NpcChooser private constructor() {
     companion object {
         private val opponent1 = Opponent(
             R.drawable.npc_bear,

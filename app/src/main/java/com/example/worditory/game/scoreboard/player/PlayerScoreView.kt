@@ -43,7 +43,12 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
     val indicatorBackgroundColor = colorResource(R.color.indicator_background)
     val avatarBackgroundColor = colorResource(viewModel.colorScheme.owned)
 
-    val avatarVector = ImageVector.vectorResource(viewModel.avatarId)
+    val avatarId = if (viewModel.avatarId == 0) {
+        R.drawable.avatar_placeholder
+    } else {
+        viewModel.avatarId
+    }
+    val avatarVector = ImageVector.vectorResource(avatarId)
     val avatarPainter = rememberVectorPainter(avatarVector)
 
     val scoreAnimator = animateFloatAsState(
@@ -118,11 +123,16 @@ fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifi
         val boxMaxHeight = this.maxHeight
         val boxMaxWidth = this.maxWidth
         Column(
-            modifier = Modifier.height(boxMaxHeight).width(boxMaxWidth),
+            modifier = Modifier
+                .height(boxMaxHeight)
+                .width(boxMaxWidth),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(boxMaxHeight * 0.1725f))
-            Canvas(Modifier.height(boxMaxHeight / 2f).width(boxMaxWidth / 2f)
+            Canvas(
+                Modifier
+                    .height(boxMaxHeight / 2f)
+                    .width(boxMaxWidth / 2f)
             ) {
                 with(avatarPainter) {
                     draw(drawContext.size)

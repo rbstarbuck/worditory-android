@@ -11,9 +11,10 @@ import kotlin.random.Random
 class GameAgainstNpcViewModel(
     boardWidth: Int,
     boardHeight: Int,
+    playerAvatarId: Int,
     opponent: NpcChooser.Opponent,
     colorScheme: Tile.ColorScheme
-): GameViewModel(boardWidth, boardHeight, opponent.avatar, colorScheme) {
+): GameViewModel(boardWidth, boardHeight, playerAvatarId, opponent.avatar, colorScheme) {
     val nonPlayerCharacter = NonPlayerCharacter(board, Game.Player.PLAYER_2, opponent.spec)
 
     override fun onPlayButtonClick(): Boolean {

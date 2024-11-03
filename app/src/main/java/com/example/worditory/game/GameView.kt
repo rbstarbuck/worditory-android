@@ -11,14 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.worditory.R
 import com.example.worditory.game.board.BoardView
 import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
 
 @Composable
-fun GameView(navController: NavController, viewModel: GameViewModel) {
+fun GameView(viewModel: GameViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -35,6 +35,7 @@ import com.example.worditory.navigation.Screen.BoardSizeChooser
 @Composable
 fun NpcChooserView(
     navController: NavController,
+    avatarIdPlayer1: Int,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -73,11 +74,13 @@ fun NpcChooserView(
                         Box(Modifier.padding(5.dp)) {
                             OutlinedButton(
                                 onClick = {
-                                    navController.navigate(BoardSizeChooser.buildRoute(opponent))
+                                    navController.navigate(
+                                        BoardSizeChooser.buildRoute(avatarIdPlayer1, opponent)
+                                    )
                                 },
                                 shape = RoundedCornerShape(15.dp),
                                 colors = ButtonColors(
-                                    containerColor = colorResource(R.color.opponent_chooser_button),
+                                    containerColor = colorResource(R.color.chooser_button),
                                     contentColor = Color.White,
                                     disabledContainerColor = Color.White,
                                     disabledContentColor = Color.White

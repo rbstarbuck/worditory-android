@@ -33,6 +33,9 @@
     <color name="disabled_button_content">#FFAAAAAA</color>
     <color name="disabled_button_stroke">#FFAAAAAA</color>
 
+    <color name="avatar_chooser_grid_background">#FFEEEEEE</color>
+    <color name="avatar_chooser_grid_cell_background">#FFBBBBBB</color>
+
     <color name="opponent_chooser_arrow">#FFFFFFFF</color>
     <color name="chooser_grid_cell_border">#FF000000</color>
     <color name="chooser_button">#FFDDDDDD</color>

@@ -55,11 +55,11 @@ fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier = Modifier
                 Row(Modifier.weight(1f)) {
                     Spacer(Modifier.weight(0.35f))
 
-                    PlayerScoreView(viewModel.scorePlayer1, Modifier.fillMaxHeight())
+                    PlayerScoreView(viewModel.scorePlayer1, Modifier.fillMaxHeight().weight(4f))
 
                     Spacer(Modifier.weight(1f))
 
-                    PlayerScoreView(viewModel.scorePlayer2, Modifier.fillMaxHeight())
+                    PlayerScoreView(viewModel.scorePlayer2, Modifier.fillMaxHeight().weight(4f))
 
                     Spacer(Modifier.weight(0.35f))
                 }
