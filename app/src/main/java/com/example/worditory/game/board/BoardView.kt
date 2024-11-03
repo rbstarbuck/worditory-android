@@ -51,12 +51,13 @@ fun BoardView(
             }
     ) {
         LazyVerticalGrid(GridCells.Fixed(viewModel.width), userScrollEnabled = false) {
-            items(viewModel.flatTiles.size) { i ->
-                val tile = viewModel.flatTiles[i]
+            items(viewModel.tiles.size) { i ->
+                val tile = viewModel.tiles[i]
                 TileView(
                     viewModel = tile,
                     modifier = Modifier.fillMaxSize().aspectRatio(1f),
                     selectAction = {
+                        println("Pressed tile at (${tile.x},${tile.y})")
                         if (isPlayerTurnState.value) {
                             viewModel.word.onSelectTile(tile, Game.Player.PLAYER_1)
                         }

@@ -14,11 +14,11 @@ import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
 import com.example.worditory.chooser.npcopponent.NpcChooser.*
 import com.example.worditory.chooser.npcopponent.NpcChooserView
+import com.example.worditory.game.Game
 import com.example.worditory.game.GameAgainstNpcViewModel
 import com.example.worditory.game.GameView
+import com.example.worditory.game.board.NpcModel
 import com.example.worditory.game.board.tile.Tile
-import com.example.worditory.game.npc.NonPlayerCharacter
-import com.example.worditory.navigation.Screen.NpcChooser
 
 @Composable
 fun NavigationStack(navController: NavHostController) {
@@ -32,18 +32,17 @@ fun NavigationStack(navController: NavHostController) {
         }
 
         composable(
-            route = NpcChooser.route,
+            route = Screen.NpcChooser.route,
             enterTransition = {
                 slideInHorizontally(tween(500), initialOffsetX = { it })
             },
             exitTransition = {
                 slideOutHorizontally(tween(500), targetOffsetX = { -it })
             }
-        ) { navBackStackEntry ->
-            val avatar = navBackStackEntry.arguments?.getString("avatar1")?.toInt()
-            if (avatar != null) {
-                NpcChooserView(navController, avatar)
-            }
+        ) { backStack ->
+            val avatar = checkNotNull(backStack.arguments?.getString("avatar1")?.toInt())
+
+            NpcChooserView(navController, avatar)
         }
 
         composable(
@@ -54,30 +53,23 @@ fun NavigationStack(navController: NavHostController) {
             exitTransition = {
                 slideOutHorizontally(tween(500), targetOffsetX = { -it })
             }
-        ) { navBackStackEntry ->
-            val avatar1 = navBackStackEntry.arguments?.getString("avatar1")?.toInt()
-            val avatar2 = navBackStackEntry.arguments?.getString("avatar2")?.toInt()
-            val vocab = navBackStackEntry.arguments?.getString("vocab")
-            val offense = navBackStackEntry.arguments?.getString("offense")
-            val skill = navBackStackEntry.arguments?.getString("skill")
+        ) { backStack ->
+            val avatar1 = checkNotNull(backStack.arguments?.getString("avatar1")?.toInt())
+            val avatar2 = checkNotNull(backStack.arguments?.getString("avatar2")?.toInt())
+            val vocab = checkNotNull(backStack.arguments?.getString("vocab"))
+            val offense = checkNotNull(backStack.arguments?.getString("offense"))
+            val skill = checkNotNull(backStack.arguments?.getString("skill"))
 
-            if (avatar1 != null
-                && avatar2 != null
-                && vocab != null
-                && offense != null
-                && skill != null
-            ) {
-                val opponent = Opponent(
-                    avatar = avatar2,
-                    spec = NonPlayerCharacter.Spec(
-                        NonPlayerCharacter.Spec.VocabularyLevel.valueOf(vocab),
-                        NonPlayerCharacter.Spec.DefenseOffenseLevel.valueOf(offense),
-                        NonPlayerCharacter.Spec.OverallSkillLevel.valueOf(skill)
-                    )
-                )
+            val opponent = NpcModel.newBuilder()
+                .setAvatar(avatar2)
+                .setSpec(NpcModel.Spec.newBuilder()
+                    .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.valueOf(vocab))
+                    .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.valueOf(offense))
+                    .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.valueOf(skill))
+                    .build()
+                ).build()
 
-                BoardSizeChooserView(navController, avatar1, opponent)
-            }
+            BoardSizeChooserView(navController, avatar1, opponent)
         }
 
         composable(
@@ -88,44 +80,33 @@ fun NavigationStack(navController: NavHostController) {
             exitTransition = {
                 slideOutHorizontally(tween(500), targetOffsetX = { -it })
             }
-        ) { navBackStackEntry ->
-            val width = navBackStackEntry.arguments?.getString("width")?.toInt()
-            val height = navBackStackEntry.arguments?.getString("height")?.toInt()
-            val avatar1 = navBackStackEntry.arguments?.getString("avatar1")?.toInt()
-            val avatar2 = navBackStackEntry.arguments?.getString("avatar2")?.toInt()
-            val vocab = navBackStackEntry.arguments?.getString("vocab")
-            val offense = navBackStackEntry.arguments?.getString("offense")
-            val skill = navBackStackEntry.arguments?.getString("skill")
+        ) { backStack ->
+            val width = checkNotNull(backStack.arguments?.getString("width")?.toInt())
+            val height = checkNotNull(backStack.arguments?.getString("height")?.toInt())
+            val avatar1 = checkNotNull(backStack.arguments?.getString("avatar1")?.toInt())
+            val avatar2 = checkNotNull(backStack.arguments?.getString("avatar2")?.toInt())
+            val vocab = checkNotNull(backStack.arguments?.getString("vocab"))
+            val offense = checkNotNull(backStack.arguments?.getString("offense"))
+            val skill = checkNotNull(backStack.arguments?.getString("skill"))
 
-            if (width != null
-                && height != null
-                && avatar1 != null
-                && avatar2 != null
-                && vocab != null
-                && offense != null
-                && skill != null
-            ) {
-                val opponent = Opponent(
-                    avatar = avatar2,
-                    spec = NonPlayerCharacter.Spec(
-                        NonPlayerCharacter.Spec.VocabularyLevel.valueOf(vocab),
-                        NonPlayerCharacter.Spec.DefenseOffenseLevel.valueOf(offense),
-                        NonPlayerCharacter.Spec.OverallSkillLevel.valueOf(skill)
-                    )
+            val opponent = NpcModel.newBuilder()
+                .setAvatar(avatar2)
+                .setSpec(NpcModel.Spec.newBuilder()
+                    .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.valueOf(vocab))
+                    .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.valueOf(offense))
+                    .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.valueOf(skill))
+                    .build()
+                ).build()
+
+            val viewModel = remember {
+                GameAgainstNpcViewModel(
+                    Game.newGame(width, height, Tile.ColorScheme.random()),
+                    playerAvatarId = avatar1,
+                    opponent = opponent
                 )
-
-                val viewModel = remember {
-                    GameAgainstNpcViewModel(
-                        boardWidth = width,
-                        boardHeight = height,
-                        playerAvatarId = avatar1,
-                        opponent = opponent,
-                        colorScheme = Tile.ColorScheme.random()
-                    )
-                }
-
-                GameView(viewModel, navController)
             }
+
+            GameView(viewModel, navController)
         }
     }
 }

@@ -2,24 +2,29 @@ package com.example.worditory.game.npc
 
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.BoardViewModel
+import com.example.worditory.game.board.NpcModel
 import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.dict.WordDictionary
+import java.security.InvalidParameterException
 
 class NonPlayerCharacter(
     val board: BoardViewModel,
     val player: Game.Player,
-    val spec: Spec
+    val spec: NpcModel.Spec
 ) {
     fun findWordToPlay(): WordModel? {
         var words = findAllWords()
 
         if (words.isEmpty()) return null
 
-        val skillLevelMultipliers = when(spec.overallSkillLevel) {
-            Spec.OverallSkillLevel.BEGINNER -> Pair(0.55f, 0.7f)
-            Spec.OverallSkillLevel.INTERMEDIATE -> Pair(0.7f, 0.85f)
-            Spec.OverallSkillLevel.ADVANCED -> Pair(0.85f, 1.0f)
+        val skillLevelMultipliers = when (spec.overallSkillLevel) {
+            NpcModel.Spec.OverallSkillLevel.BEGINNER -> Pair(0.55f, 0.7f)
+            NpcModel.Spec.OverallSkillLevel.INTERMEDIATE -> Pair(0.7f, 0.85f)
+            NpcModel.Spec.OverallSkillLevel.ADVANCED -> Pair(0.85f, 1.0f)
+            NpcModel.Spec.OverallSkillLevel.UNRECOGNIZED -> throw InvalidParameterException(
+                "Unrecognized overall skill level"
+            )
         }
 
         var skillLevelFromIndex = (words.size * skillLevelMultipliers.first).toInt()
@@ -41,16 +46,19 @@ class NonPlayerCharacter(
             .sortedBy { it.defenseOffenseScore }
 
         return when(spec.defenseOffenseLevel) {
-            Spec.DefenseOffenseLevel.DEFENSIVE -> words.first().word
-            Spec.DefenseOffenseLevel.BLENDED -> words[words.size / 2].word
-            Spec.DefenseOffenseLevel.OFFENSIVE -> words.last().word
+            NpcModel.Spec.DefenseOffenseLevel.DEFENSIVE -> words.first().word
+            NpcModel.Spec.DefenseOffenseLevel.BLENDED -> words[words.size / 2].word
+            NpcModel.Spec.DefenseOffenseLevel.OFFENSIVE -> words.last().word
+            NpcModel.Spec.DefenseOffenseLevel.UNRECOGNIZED -> throw InvalidParameterException(
+                "Unrecognized defense/offense level"
+            )
         }
     }
 
     private fun findAllWords(): List<WordScore> {
         val wordScores = mutableListOf<WordScore>()
 
-        for (tile in board.flatTiles) {
+        for (tile in board.tiles) {
             if (tile.isOwnedBy(player)) {
                 val word = WordModel(
                     tiles = listOf(tile),
@@ -106,11 +114,14 @@ class NonPlayerCharacter(
     }
 
     private fun resultIsWithinVocabulary(result: WordDictionary.SearchResult): Boolean =
-        when(spec.vocabularyLevel) {
-            Spec.VocabularyLevel.LOW -> result.frequency == 0
-            Spec.VocabularyLevel.MEDIUM -> result.frequency <= 1
-            Spec.VocabularyLevel.HIGH -> result.frequency <= 2
-            Spec.VocabularyLevel.COMPLETE -> result.frequency <= 3
+        when (spec.vocabularyLevel) {
+            NpcModel.Spec.VocabularyLevel.LOW -> result.frequency == 0
+            NpcModel.Spec.VocabularyLevel.MEDIUM -> result.frequency <= 1
+            NpcModel.Spec.VocabularyLevel.HIGH -> result.frequency <= 2
+            NpcModel.Spec.VocabularyLevel.COMPLETE -> result.frequency <= 3
+            NpcModel.Spec.VocabularyLevel.UNRECOGNIZED -> throw InvalidParameterException(
+                "Unrecognized vocabulary level"
+            )
         }
 
     private fun buildNextWord(word: WordModel, tile: TileViewModel): WordModel {
@@ -138,7 +149,7 @@ class NonPlayerCharacter(
         var offenseScore = 0
         var defenseScore = 0
 
-        for (tile in board.flatTiles) {
+        for (tile in board.tiles) {
             if (tile.isOwnedBy(player)) {
                 if (!tile.isSuperOwned && willBeSuperOwned(tile, tilesInWord)) {
                     defenseScore += 1
@@ -165,31 +176,6 @@ class NonPlayerCharacter(
 
     private fun willBeSuperOwned(tile: TileViewModel, tilesInWord: Set<TileViewModel>) =
         board.adjacentTiles(tile).all { it.isOwnedBy(player) || tilesInWord.contains(it) }
-
-    class Spec(
-        val vocabularyLevel: VocabularyLevel,
-        val defenseOffenseLevel: DefenseOffenseLevel,
-        val overallSkillLevel: OverallSkillLevel
-    ) {
-        enum class VocabularyLevel {
-            LOW,
-            MEDIUM,
-            HIGH,
-            COMPLETE
-        }
-
-        enum class DefenseOffenseLevel {
-            DEFENSIVE,
-            BLENDED,
-            OFFENSIVE
-        }
-
-        enum class OverallSkillLevel {
-            BEGINNER,
-            INTERMEDIATE,
-            ADVANCED
-        }
-    }
 
     private data class WordScore(
         val word: WordModel,

@@ -110,6 +110,12 @@ class LetterBag {
         return consonant
     }
 
+    fun removeLetter(letter: String) {
+        letterCounts[letter] = letterCounts.getValue(letter) - 1
+        --tilesInBag
+        if (WordDictionary.isVowel(letter)) --vowelsInBag else --consonantsInBag
+    }
+
     private fun randomLetter(): String {
         var selection = Random.nextInt(tilesInBag)
 

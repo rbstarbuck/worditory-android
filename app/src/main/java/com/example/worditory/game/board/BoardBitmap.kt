@@ -20,8 +20,11 @@ fun drawBoardToBitmap(
     boardHeight: Int,
     colorScheme: Tile.ColorScheme
 ): ImageBitmap {
-    return BoardViewModel(boardWidth, boardHeight, MutableStateFlow(false), colorScheme, { })
-        .drawToBitmap(context, size)
+    return BoardViewModel(
+        Board.newBoard(boardWidth, boardHeight),
+        MutableStateFlow(false),
+        colorScheme,
+    ) { }.drawToBitmap(context, size)
 }
 
 fun BoardViewModel.drawToBitmap(context: Context, size: Size): ImageBitmap {
@@ -42,7 +45,7 @@ fun BoardViewModel.drawToBitmap(context: Context, size: Size): ImageBitmap {
 
         drawRect(Color.White, Offset.Zero, size)
 
-        for (tile in flatTiles) {
+        for (tile in tiles) {
             val colorId = tile.backgroundColor(tile.ownership)
             val color = Color(ContextCompat.getColor(context, colorId))
             val offset = Offset(tileSize.width * tile.x, tileSize.height * tile.y)

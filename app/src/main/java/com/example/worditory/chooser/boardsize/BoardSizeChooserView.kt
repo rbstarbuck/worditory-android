@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.worditory.R
-import com.example.worditory.chooser.npcopponent.NpcChooser
+import com.example.worditory.game.board.NpcModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.navigation.Screen.Game
 
@@ -26,7 +26,7 @@ import com.example.worditory.navigation.Screen.Game
 fun BoardSizeChooserView(
     navController: NavController,
     playerAvatarId: Int,
-    opponent: NpcChooser.Opponent,
+    opponent: NpcModel,
     modifier: Modifier = Modifier
 ) {
     Box(Modifier.fillMaxSize().background(colorResource(R.color.background))) {

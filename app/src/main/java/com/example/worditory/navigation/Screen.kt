@@ -1,6 +1,6 @@
 package com.example.worditory.navigation
 
-import com.example.worditory.chooser.npcopponent.NpcChooser.Opponent
+import com.example.worditory.game.board.NpcModel
 
 sealed class Screen(val route: String) {
     object Main: Screen("main")
@@ -16,7 +16,7 @@ sealed class Screen(val route: String) {
     object BoardSizeChooser: Screen(
         "boardSizeChooser/{avatar1}/{avatar2}/{vocab}/{offense}/{skill}"
     ) {
-        fun buildRoute(avatarIdPlayer1: Int, opponent: Opponent): String {
+        fun buildRoute(avatarIdPlayer1: Int, opponent: NpcModel): String {
             return route
                 .replace("{avatar1}", avatarIdPlayer1.toString())
                 .replace("{avatar2}", opponent.avatar.toString())
@@ -31,7 +31,7 @@ sealed class Screen(val route: String) {
             width: Int,
             height: Int,
             playerAvatarId: Int,
-            opponent: Opponent
+            opponent: NpcModel
         ): String {
             return route
                 .replace("{width}", width.toString())

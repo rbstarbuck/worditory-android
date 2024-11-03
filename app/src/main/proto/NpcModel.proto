@@ -1,0 +1,33 @@
+syntax = "proto3";
+option java_package = "com.example.worditory.game.board";
+option java_multiple_files = true;
+
+message NpcModel {
+  int32 avatar = 1;
+  Spec spec = 2;
+
+  message Spec {
+    VocabularyLevel vocabulary_level = 1;
+    DefenseOffenseLevel defense_offense_level = 2;
+    OverallSkillLevel overall_skill_level = 3;
+
+    enum VocabularyLevel {
+      LOW = 0;
+      MEDIUM = 1;
+      HIGH = 2;
+      COMPLETE = 4;
+    }
+
+    enum DefenseOffenseLevel {
+      DEFENSIVE = 0;
+      BLENDED = 1;
+      OFFENSIVE = 2;
+    }
+
+    enum OverallSkillLevel {
+      BEGINNER = 0;
+      INTERMEDIATE = 1;
+      ADVANCED = 2;
+    }
+  }
+}

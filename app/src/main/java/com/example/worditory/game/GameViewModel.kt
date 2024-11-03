@@ -2,6 +2,7 @@ package com.example.worditory.game
 
 import androidx.lifecycle.ViewModel
 import com.example.worditory.game.board.BoardViewModel
+import com.example.worditory.game.board.GameModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.game.playbutton.PlayButtonViewModel
@@ -10,13 +11,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 abstract class GameViewModel(
-    boardWidth: Int,
-    boardHeight: Int,
+    model: GameModel,
     avatarIdPlayer1: Int,
-    avatarIdPlayer2: Int,
-    colorScheme: Tile.ColorScheme
+    avatarIdPlayer2: Int
 ): ViewModel() {
-    private val _isPlayerTurnStateFlow = MutableStateFlow(true)
+    val boardWidth = model.board.width
+    val boardHeight = model.board.height
+    val colorScheme = Tile.ColorScheme.from(model.colorScheme)
+
+    private val _isPlayerTurnStateFlow = MutableStateFlow(model.isPlayerTurn)
     val isPlayerTurnStateFlow = _isPlayerTurnStateFlow.asStateFlow()
     var isPlayerTurn: Boolean
         get() = isPlayerTurnStateFlow.value
@@ -33,8 +36,7 @@ abstract class GameViewModel(
         }
 
     val board = BoardViewModel(
-        boardWidth,
-        boardHeight,
+        model.board,
         isPlayerTurnStateFlow,
         colorScheme,
         onWordChanged = { isNotAWord = false }
@@ -48,7 +50,6 @@ abstract class GameViewModel(
     val playButton = PlayButtonViewModel(board.word.modelStateFlow, isNotAWordStateFlow)
 
     init {
-        WordDictionary.init()
         scoreBoard.score = board.getScore()
     }
 

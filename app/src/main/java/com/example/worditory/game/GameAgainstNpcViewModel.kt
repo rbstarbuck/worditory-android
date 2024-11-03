@@ -1,7 +1,7 @@
 package com.example.worditory.game
 
-import com.example.worditory.chooser.npcopponent.NpcChooser
-import com.example.worditory.game.board.tile.Tile
+import com.example.worditory.game.board.GameModel
+import com.example.worditory.game.board.NpcModel
 import com.example.worditory.game.npc.NonPlayerCharacter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -9,12 +9,10 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class GameAgainstNpcViewModel(
-    boardWidth: Int,
-    boardHeight: Int,
+    model: GameModel,
     playerAvatarId: Int,
-    opponent: NpcChooser.Opponent,
-    colorScheme: Tile.ColorScheme
-): GameViewModel(boardWidth, boardHeight, playerAvatarId, opponent.avatar, colorScheme) {
+    opponent: NpcModel
+): GameViewModel(model, playerAvatarId, opponent.avatar) {
     val nonPlayerCharacter = NonPlayerCharacter(board, Game.Player.PLAYER_2, opponent.spec)
 
     override fun onPlayButtonClick(): Boolean {

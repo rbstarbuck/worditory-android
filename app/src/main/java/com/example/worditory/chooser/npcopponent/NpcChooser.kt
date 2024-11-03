@@ -1,106 +1,117 @@
 package com.example.worditory.chooser.npcopponent
 
 import com.example.worditory.R
-import com.example.worditory.game.npc.NonPlayerCharacter
+import com.example.worditory.game.board.NpcModel
 
 class NpcChooser private constructor() {
     companion object {
-        private val opponent1 = Opponent(
-            R.drawable.npc_bear,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.LOW,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.DEFENSIVE,
-                NonPlayerCharacter.Spec.OverallSkillLevel.BEGINNER
-            )
-        )
-        private val opponent2 = Opponent(
-            R.drawable.npc_fish,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.LOW,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
-                NonPlayerCharacter.Spec.OverallSkillLevel.BEGINNER
-            )
-        )
-        private val opponent3 = Opponent(
-            R.drawable.npc_chicken,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.LOW,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.OFFENSIVE,
-                NonPlayerCharacter.Spec.OverallSkillLevel.BEGINNER
-            )
-        )
-        private val opponent4 = Opponent(
-            R.drawable.npc_cat,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.LOW,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.DEFENSIVE,
-                NonPlayerCharacter.Spec.OverallSkillLevel.INTERMEDIATE
-            )
-        )
-        private val opponent5 = Opponent(
-            R.drawable.npc_penguin,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.LOW,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
-                NonPlayerCharacter.Spec.OverallSkillLevel.INTERMEDIATE
-            )
-        )
-        private val opponent6 = Opponent(
-            R.drawable.npc_cow,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.LOW,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.OFFENSIVE,
-                NonPlayerCharacter.Spec.OverallSkillLevel.INTERMEDIATE
-            )
-        )
-        private val opponent7 = Opponent(
-            R.drawable.npc_sloth,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.MEDIUM,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.DEFENSIVE,
-                NonPlayerCharacter.Spec.OverallSkillLevel.ADVANCED
-            )
-        )
-        private val opponent8 = Opponent(
-            R.drawable.npc_owl,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.MEDIUM,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
-                NonPlayerCharacter.Spec.OverallSkillLevel.ADVANCED
-            )
-        )
-        private val opponent9 = Opponent(
-            R.drawable.npc_rabbit,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.MEDIUM,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.OFFENSIVE,
-                NonPlayerCharacter.Spec.OverallSkillLevel.ADVANCED
-            )
-        )
-        private val opponent10 = Opponent(
-            R.drawable.npc_elephant,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.HIGH,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.DEFENSIVE,
-                NonPlayerCharacter.Spec.OverallSkillLevel.ADVANCED
-            )
-        )
-        private val opponent11 = Opponent(
-            R.drawable.npc_monkey,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.HIGH,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
-                NonPlayerCharacter.Spec.OverallSkillLevel.ADVANCED
-            )
-        )
-        private val opponent12 = Opponent(
-            R.drawable.npc_cobra,
-            NonPlayerCharacter.Spec(
-                NonPlayerCharacter.Spec.VocabularyLevel.HIGH,
-                NonPlayerCharacter.Spec.DefenseOffenseLevel.OFFENSIVE,
-                NonPlayerCharacter.Spec.OverallSkillLevel.ADVANCED
-            )
-        )
+        private val opponent1 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_bear)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.LOW)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.DEFENSIVE)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.BEGINNER)
+                .build()
+            ).build()
+
+        private val opponent2 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_fish)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.LOW)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.BLENDED)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.BEGINNER)
+                .build()
+            ).build()
+
+        private val opponent3 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_chicken)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.LOW)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.OFFENSIVE)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.BEGINNER)
+                .build()
+            ).build()
+
+        private val opponent4 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_cat)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.LOW)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.DEFENSIVE)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.INTERMEDIATE)
+                .build()
+            ).build()
+
+        private val opponent5 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_penguin)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.LOW)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.BLENDED)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.INTERMEDIATE)
+                .build()
+            ).build()
+
+        private val opponent6 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_cow)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.LOW)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.OFFENSIVE)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.INTERMEDIATE)
+                .build()
+            ).build()
+
+        private val opponent7 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_sloth)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.MEDIUM)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.DEFENSIVE)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.ADVANCED)
+                .build()
+            ).build()
+
+        private val opponent8 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_owl)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.MEDIUM)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.BLENDED)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.ADVANCED)
+                .build()
+            ).build()
+
+        private val opponent9 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_rabbit)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.MEDIUM)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.OFFENSIVE)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.ADVANCED)
+                .build()
+            ).build()
+
+        private val opponent10 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_elephant)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.HIGH)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.DEFENSIVE)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.ADVANCED)
+                .build()
+            ).build()
+
+        private val opponent11 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_monkey)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.HIGH)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.BLENDED)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.ADVANCED)
+                .build()
+            ).build()
+
+        private val opponent12 = NpcModel.newBuilder()
+            .setAvatar(R.drawable.npc_cobra)
+            .setSpec(NpcModel.Spec.newBuilder()
+                .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.HIGH)
+                .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.OFFENSIVE)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.ADVANCED)
+                .build()
+            ).build()
 
         val opponents = listOf(
             opponent1,
@@ -117,6 +128,4 @@ class NpcChooser private constructor() {
             opponent12,
         )
     }
-
-    data class Opponent(val avatar: Int, val spec: NonPlayerCharacter.Spec)
 }

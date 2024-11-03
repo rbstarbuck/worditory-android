@@ -10,51 +10,34 @@ import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordViewModel
 import com.example.worditory.game.dict.WordDictionary
 import kotlinx.coroutines.flow.StateFlow
-import kotlin.Array
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 class BoardViewModel(
-    val width: Int,
-    val height: Int,
+    model: BoardModel,
     val isPlayerTurnStateFlow: StateFlow<Boolean>,
     val colorScheme: Tile.ColorScheme,
     onWordChanged: () -> Unit
 ): ViewModel() {
-    val tiles: Array<Array<TileViewModel>>
-    val flatTiles: List<TileViewModel>
+    val width = model.width
+    val height = model.height
+    val tiles: List<TileViewModel> = model.tilesList.map { TileViewModel(it, colorScheme) }
     val word = WordViewModel(width, height, onWordChanged)
     val letterBag = LetterBag()
 
     var currentDragPoint = Offset.Zero
 
     init {
-        tiles = Array(height) { y ->
-            val ownership = when {
-                y == 0 -> TileModel.Ownership.OWNED_PLAYER_2
-                y == height - 1 -> TileModel.Ownership.OWNED_PLAYER_1
-                else -> TileModel.Ownership.UNOWNED
-            }
-            Array(width) { x ->
-                val letter = letterBag.takeLetter()
-                val model = TileModel.newBuilder()
-                    .setX(x)
-                    .setY(y)
-                    .setLetter(letter)
-                    .setOwnership(ownership)
-                    .build()
-                TileViewModel(model, colorScheme)
-            }
+        tiles.forEach { tile ->
+            letterBag.removeLetter(tile.letter)
         }
-
-        flatTiles = tiles.flatten()
     }
 
     fun getScore(): Game.Score {
         var scorePlayer1 = 0
         var scorePlayer2 = 0
 
-        for (tile in flatTiles) {
+        for (tile in tiles) {
             if (tile.isOwnedBy(Game.Player.PLAYER_1)) {
                 ++scorePlayer1
             } else if (tile.isOwnedBy(Game.Player.PLAYER_2)) {
@@ -82,7 +65,7 @@ class BoardViewModel(
         val tileY = (boardHeightFloat * currentDragPoint.y / viewHeightFloat).toInt()
 
         if (tileX >= 0 && tileX < width && tileY >= 0 && tileY < height) {
-            val tile = tiles[tileY][tileX]
+            val tile = tiles[tileY * height + tileX]
 
             val tileDiameter = viewWidthFloat / boardWidthFloat
             val tileRadius = tileDiameter / 2f
@@ -117,7 +100,13 @@ class BoardViewModel(
         didDragIntoSecondTile = false
     }
 
-    fun updateOwnershipsForWord(player: Game.Player) {
+    fun playWord(player: Game.Player) {
+        updateOwnershipsForWord(player)
+        updateLettersForWord()
+        word.onSelectTile(word.model.tiles.first(), player)
+    }
+
+    private fun updateOwnershipsForWord(player: Game.Player) {
         for (tile in word.model.tiles) {
             if (tile.isUnowned) {
                 tile.ownership = when (player) {
@@ -129,7 +118,7 @@ class BoardViewModel(
             }
         }
 
-        for (tile in flatTiles) {
+        for (tile in tiles) {
             if (tile.isOwnedBy(Game.Player.PLAYER_1)) {
                 tile.ownership =
                     if (adjacentTiles(tile).all { it.isOwnedBy(Game.Player.PLAYER_1) }) {
@@ -149,7 +138,7 @@ class BoardViewModel(
         }
     }
 
-    fun updateLettersForWord() {
+    private fun updateLettersForWord() {
         for (tile in word.model.tiles) {
             val previousLetter = tile.letter
             val connectedTiles = connectedTiles(tile)
@@ -161,12 +150,6 @@ class BoardViewModel(
                 letterBag.exchangeForConsonant(previousLetter)
             }
         }
-    }
-
-    fun playWord(player: Game.Player) {
-        updateOwnershipsForWord(player)
-        updateLettersForWord()
-        word.onSelectTile(word.model.tiles.first(), player)
     }
 
     fun connectedTiles(tile: TileViewModel): List<TileViewModel> {
@@ -197,6 +180,6 @@ class BoardViewModel(
 
     private fun addIfExists(x: Int, y: Int, list: MutableList<TileViewModel>) {
         if (x >= 0 && x < width && y >= 0 && y < height)
-            list.add(tiles[y][x])
+            list.add(tiles[y * height + x])
     }
 }

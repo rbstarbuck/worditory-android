@@ -2,9 +2,11 @@ package com.example.worditory.game.board.tile
 
 import com.example.worditory.game.board.tile.Tile.ColorScheme.Player.Companion.Colors
 import com.example.worditory.R
+import com.example.worditory.game.board.GameModel
+import java.security.InvalidParameterException
 import kotlin.random.Random
 
-class Tile {
+class Tile private constructor() {
     data class ColorScheme(val player1: Player, val player2: Player) {
         companion object {
             fun random(): ColorScheme {
@@ -15,6 +17,13 @@ class Tile {
                 } while (index2 == index1)
 
                 return ColorScheme(player1 = Colors[index1], player2 = Colors[index2])
+            }
+
+            fun from(colorScheme: GameModel.ColorScheme): ColorScheme {
+                return ColorScheme(
+                    player1 = Player.from(colorScheme.player1),
+                    player2 = Player.from(colorScheme.player2)
+                )
             }
         }
 
@@ -51,6 +60,20 @@ class Tile {
                 )
 
                 val Colors = arrayOf(Green, Purple, Yellow, Pink, Blue, Orange)
+
+                fun from(player: GameModel.ColorScheme.Color): Player {
+                    return when (player) {
+                        GameModel.ColorScheme.Color.PURPLE -> Purple
+                        GameModel.ColorScheme.Color.GREEN -> Green
+                        GameModel.ColorScheme.Color.ORANGE -> Orange
+                        GameModel.ColorScheme.Color.PINK -> Pink
+                        GameModel.ColorScheme.Color.YELLOW -> Yellow
+                        GameModel.ColorScheme.Color.BLUE -> Blue
+                        GameModel.ColorScheme.Color.UNRECOGNIZED -> throw InvalidParameterException(
+                            "Unrecognized color scheme"
+                        )
+                    }
+                }
             }
         }
     }

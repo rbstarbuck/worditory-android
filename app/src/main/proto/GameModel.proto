@@ -5,10 +5,12 @@ option java_multiple_files = true;
 
 message GameModel {
   BoardModel board = 1;
+  bool is_player_turn = 2;
+  ColorScheme color_scheme = 3;
 
   message ColorScheme {
-    Player player1 = 1;
-    Player player2 = 2;
+    Color player1 = 1;
+    Color player2 = 2;
 
     enum Color {
       PURPLE = 0;
@@ -17,11 +19,6 @@ message GameModel {
       PINK = 3;
       YELLOW = 4;
       BLUE = 5;
-    }
-
-    message Player {
-      Color owned = 1;
-      Color super_owned = 2;
     }
   }
 }

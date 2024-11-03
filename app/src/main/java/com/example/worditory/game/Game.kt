@@ -1,8 +1,12 @@
 package com.example.worditory.game
 
 import com.example.worditory.R
+import com.example.worditory.game.board.Board
+import com.example.worditory.game.board.GameModel
+import com.example.worditory.game.board.tile.Tile
+import java.security.InvalidParameterException
 
-class Game {
+class Game private constructor() {
     enum class Player {
         PLAYER_1,
         PLAYER_2
@@ -72,6 +76,37 @@ class Game {
             avatar29,
             avatar30
         )
+
+        fun newGame(boardWidth: Int, boardHeight: Int, colorScheme: Tile.ColorScheme): GameModel {
+            return GameModel.newBuilder()
+                .setBoard(Board.newBoard(boardWidth, boardHeight))
+                .setIsPlayerTurn(true)
+                .setColorScheme(gameModelColorSchemeFromTileColorScheme(colorScheme))
+                .build()
+        }
+
+        private fun gameModelColorSchemeFromTileColorScheme(
+            colorScheme: Tile.ColorScheme
+        ): GameModel.ColorScheme {
+            return GameModel.ColorScheme.newBuilder()
+                .setPlayer1(gameModelColorFromPlayerColor(colorScheme.player1))
+                .setPlayer2(gameModelColorFromPlayerColor(colorScheme.player2))
+                .build()
+        }
+
+        private fun gameModelColorFromPlayerColor(
+            player: Tile.ColorScheme.Player
+        ): GameModel.ColorScheme.Color {
+            return when (player) {
+                Tile.ColorScheme.Player.Purple -> GameModel.ColorScheme.Color.PURPLE
+                Tile.ColorScheme.Player.Green -> GameModel.ColorScheme.Color.GREEN
+                Tile.ColorScheme.Player.Pink -> GameModel.ColorScheme.Color.PINK
+                Tile.ColorScheme.Player.Orange -> GameModel.ColorScheme.Color.ORANGE
+                Tile.ColorScheme.Player.Blue -> GameModel.ColorScheme.Color.BLUE
+                Tile.ColorScheme.Player.Yellow -> GameModel.ColorScheme.Color.YELLOW
+                else -> throw InvalidParameterException("Unrecognized player color")
+            }
+        }
     }
 
     data class Score(val player1: Int, val player2: Int)
