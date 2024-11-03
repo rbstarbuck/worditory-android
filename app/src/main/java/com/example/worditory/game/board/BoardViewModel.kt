@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.ViewModel
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
+import com.example.worditory.game.board.tile.TileModel
 import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordViewModel
 import com.example.worditory.game.dict.WordDictionary
@@ -30,13 +31,19 @@ class BoardViewModel(
     init {
         tiles = Array(height) { y ->
             val ownership = when {
-                y == 0 -> Tile.Ownership.OWNED_PLAYER_2
-                y == height - 1 -> Tile.Ownership.OWNED_PLAYER_1
-                else -> Tile.Ownership.UNOWNED
+                y == 0 -> TileModel.Ownership.OWNED_PLAYER_2
+                y == height - 1 -> TileModel.Ownership.OWNED_PLAYER_1
+                else -> TileModel.Ownership.UNOWNED
             }
             Array(width) { x ->
                 val letter = letterBag.takeLetter()
-                TileViewModel(x, y, letter, ownership, colorScheme)
+                val model = TileModel.newBuilder()
+                    .setX(x)
+                    .setY(y)
+                    .setLetter(letter)
+                    .setOwnership(ownership)
+                    .build()
+                TileViewModel(model, colorScheme)
             }
         }
 
@@ -114,11 +121,11 @@ class BoardViewModel(
         for (tile in word.model.tiles) {
             if (tile.isUnowned) {
                 tile.ownership = when (player) {
-                    Game.Player.PLAYER_1 -> Tile.Ownership.OWNED_PLAYER_1
-                    Game.Player.PLAYER_2 -> Tile.Ownership.OWNED_PLAYER_2
+                    Game.Player.PLAYER_1 -> TileModel.Ownership.OWNED_PLAYER_1
+                    Game.Player.PLAYER_2 -> TileModel.Ownership.OWNED_PLAYER_2
                 }
             } else if (!tile.isOwnedBy(player)) {
-                tile.ownership = Tile.Ownership.UNOWNED
+                tile.ownership = TileModel.Ownership.UNOWNED
             }
         }
 
@@ -126,16 +133,16 @@ class BoardViewModel(
             if (tile.isOwnedBy(Game.Player.PLAYER_1)) {
                 tile.ownership =
                     if (adjacentTiles(tile).all { it.isOwnedBy(Game.Player.PLAYER_1) }) {
-                        Tile.Ownership.SUPER_OWNED_PLAYER_1
+                        TileModel.Ownership.SUPER_OWNED_PLAYER_1
                     } else {
-                        Tile.Ownership.OWNED_PLAYER_1
+                        TileModel.Ownership.OWNED_PLAYER_1
                     }
             } else if (tile.isOwnedBy(Game.Player.PLAYER_2)) {
                 tile.ownership =
                     if (adjacentTiles(tile).all { it.isOwnedBy(Game.Player.PLAYER_2) }) {
-                        Tile.Ownership.SUPER_OWNED_PLAYER_2
+                        TileModel.Ownership.SUPER_OWNED_PLAYER_2
                     } else {
-                        Tile.Ownership.OWNED_PLAYER_2
+                        TileModel.Ownership.OWNED_PLAYER_2
                     }
 
             }

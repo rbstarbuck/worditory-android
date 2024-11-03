@@ -1,19 +1,10 @@
 package com.example.worditory.game.board.tile
 
-import androidx.compose.ui.graphics.Color
 import com.example.worditory.game.board.tile.Tile.ColorScheme.Player.Companion.Colors
 import com.example.worditory.R
 import kotlin.random.Random
 
 class Tile {
-    enum class Ownership {
-        UNOWNED,
-        OWNED_PLAYER_1,
-        OWNED_PLAYER_2,
-        SUPER_OWNED_PLAYER_1,
-        SUPER_OWNED_PLAYER_2
-    }
-
     data class ColorScheme(val player1: Player, val player2: Player) {
         companion object {
             fun random(): ColorScheme {

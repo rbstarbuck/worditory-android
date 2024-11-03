@@ -1,0 +1,10 @@
+syntax = "proto3";
+import "TileModel.proto";
+option java_package = "com.example.worditory.game.board";
+option java_multiple_files = true;
+
+message BoardModel {
+  int32 width = 1;
+  int32 height = 2;
+  repeated TileModel tiles = 3;
+}

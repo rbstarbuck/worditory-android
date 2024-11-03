@@ -22,7 +22,11 @@ import com.example.worditory.navigation.Screen
 @Composable
 fun GameView(viewModel: GameViewModel, navController: NavController) {
     BackHandler {
-        navController.navigate(Screen.Main.route)
+        navController.navigate(Screen.Main.route) {
+            popUpTo(Screen.Main.route) {
+                inclusive = true
+            }
+        }
     }
 
     Column(

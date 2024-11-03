@@ -1,0 +1,18 @@
+syntax = "proto3";
+option java_package = "com.example.worditory.game.board.tile";
+option java_multiple_files = true;
+
+message TileModel {
+  int32 x = 1;
+  int32 y = 2;
+  string letter = 3;
+  Ownership ownership = 4;
+
+  enum Ownership {
+    UNOWNED = 0;
+    OWNED_PLAYER_1 = 2;
+    OWNED_PLAYER_2 = 3;
+    SUPER_OWNED_PLAYER_1 = 4;
+    SUPER_OWNED_PLAYER_2 = 5;
+  }
+}

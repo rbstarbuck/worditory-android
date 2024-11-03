@@ -8,23 +8,21 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.security.InvalidParameterException
 
-class TileViewModel(
-    val x: Int,
-    val y: Int,
-    letter: String,
-    ownership: Tile.Ownership,
-    val colorScheme: Tile.ColorScheme
-): ViewModel() {
-    private val _ownershipStateFlow = MutableStateFlow(ownership)
+class TileViewModel(model: TileModel, val colorScheme: Tile.ColorScheme): ViewModel() {
+    val x: Int = model.x
+    val y: Int = model.y
+
+    private val _ownershipStateFlow = MutableStateFlow(model.ownership)
     val ownershipStateFlow = _ownershipStateFlow.asStateFlow()
-    var ownership: Tile.Ownership
+    var ownership: TileModel.Ownership
         get() = ownershipStateFlow.value
         set(value) {
             _ownershipStateFlow.value = value
         }
 
-    private val _letterStateFlow = MutableStateFlow(letter)
+    private val _letterStateFlow = MutableStateFlow(model.letter)
     val letterStateFLow = _letterStateFlow.asStateFlow()
     var letter: String
         get() = letterStateFLow.value
@@ -51,29 +49,32 @@ class TileViewModel(
             R.color.tile_gray_dark
 
     val isSuperOwned
-        get() = ownership == Tile.Ownership.SUPER_OWNED_PLAYER_1
-                || ownership == Tile.Ownership.SUPER_OWNED_PLAYER_2
+        get() = ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_1
+                || ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_2
 
     val isUnowned
-        get() = ownership == Tile.Ownership.UNOWNED
+        get() = ownership == TileModel.Ownership.UNOWNED
 
     fun isOwnedBy(player: Game.Player) =
         when (player) {
             Game.Player.PLAYER_1 ->
-                ownership == Tile.Ownership.OWNED_PLAYER_1
-                        || ownership == Tile.Ownership.SUPER_OWNED_PLAYER_1
+                ownership == TileModel.Ownership.OWNED_PLAYER_1
+                        || ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_1
             Game.Player.PLAYER_2 ->
-                ownership == Tile.Ownership.OWNED_PLAYER_2
-                        || ownership == Tile.Ownership.SUPER_OWNED_PLAYER_2
+                ownership == TileModel.Ownership.OWNED_PLAYER_2
+                        || ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_2
         }
 
-    fun backgroundColor(owner: Tile.Ownership) =
+    fun backgroundColor(owner: TileModel.Ownership) =
         when (owner) {
-            Tile.Ownership.UNOWNED -> unownedTileColor
-            Tile.Ownership.OWNED_PLAYER_1 -> colorScheme.player1.owned
-            Tile.Ownership.OWNED_PLAYER_2 -> colorScheme.player2.owned
-            Tile.Ownership.SUPER_OWNED_PLAYER_1 -> colorScheme.player1.superOwned
-            Tile.Ownership.SUPER_OWNED_PLAYER_2 -> colorScheme.player2.superOwned
+            TileModel.Ownership.UNOWNED -> unownedTileColor
+            TileModel.Ownership.OWNED_PLAYER_1 -> colorScheme.player1.owned
+            TileModel.Ownership.OWNED_PLAYER_2 -> colorScheme.player2.owned
+            TileModel.Ownership.SUPER_OWNED_PLAYER_1 -> colorScheme.player1.superOwned
+            TileModel.Ownership.SUPER_OWNED_PLAYER_2 -> colorScheme.player2.superOwned
+            TileModel.Ownership.UNRECOGNIZED -> throw InvalidParameterException(
+                "Unrecognized tile ownership state"
+            )
         }
 
     fun isConnectedTo(other: TileViewModel): Boolean {

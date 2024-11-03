@@ -1,7 +1,10 @@
+import com.google.protobuf.gradle.id
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.protobuf)
 }
 
 android {
@@ -38,11 +41,29 @@ android {
         compose = true
         viewBinding = true
     }
+
+    protobuf {
+        protoc {
+            artifact = "com.google.protobuf:protoc:4.28.3"
+        }
+
+        generateProtoTasks {
+            all().forEach { task ->
+                task.builtins {
+                    id("java")
+                    id("kotlin")
+                }
+            }
+        }
+    }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.protobuf.java)
+    implementation(libs.protobuf.kotlin)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
