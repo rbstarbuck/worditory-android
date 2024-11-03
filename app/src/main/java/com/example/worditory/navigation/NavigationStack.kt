@@ -124,7 +124,7 @@ fun NavigationStack(navController: NavHostController) {
                     )
                 }
 
-                GameView(viewModel)
+                GameView(viewModel, navController)
             }
         }
     }

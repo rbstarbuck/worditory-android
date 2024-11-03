@@ -17,7 +17,10 @@ import com.example.worditory.game.board.tile.TileView
 import com.example.worditory.game.board.word.WordView
 
 @Composable
-fun BoardView(viewModel: BoardViewModel, modifier: Modifier = Modifier) {
+fun BoardView(
+    viewModel: BoardViewModel,
+    modifier: Modifier = Modifier
+) {
     val isPlayerTurnState = viewModel.isPlayerTurnStateFlow.collectAsState()
 
     val aspectRatio = viewModel.width.toFloat() / viewModel.height.toFloat()
