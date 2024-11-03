@@ -35,7 +35,7 @@
 
     <color name="opponent_chooser_arrow">#FFFFFFFF</color>
     <color name="chooser_grid_cell_border">#FF000000</color>
-    <color name="opponent_chooser_button">#FFDDDDDD</color>
+    <color name="chooser_button">#FFDDDDDD</color>
 
     <color name = "board_chooser_grid_cell_text">#FF222222</color>
 
