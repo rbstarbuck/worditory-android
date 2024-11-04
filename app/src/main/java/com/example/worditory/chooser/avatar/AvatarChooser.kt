@@ -2,7 +2,7 @@ package com.example.worditory.chooser.avatar
 
 import com.example.worditory.R
 
-class AvatarChooser private constructor() {
+internal class AvatarChooser private constructor() {
     companion object {
         val avatars = listOf(
             R.drawable.avatar_1,

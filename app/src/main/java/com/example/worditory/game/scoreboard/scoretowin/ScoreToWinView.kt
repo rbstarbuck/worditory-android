@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 
 @Composable
-fun ScoreToWinView(viewModel: ScoreToWinViewModel, modifier: Modifier = Modifier) {
+internal fun ScoreToWinView(viewModel: ScoreToWinViewModel, modifier: Modifier = Modifier) {
     BoxWithConstraints(
         modifier
             .aspectRatio(1f)

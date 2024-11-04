@@ -17,16 +17,16 @@ class TileViewModel(
     val colorScheme: Tile.ColorScheme
 ): ViewModel() {
     private val _ownershipStateFlow = MutableStateFlow(model.ownership)
-    val ownershipStateFlow = _ownershipStateFlow.asStateFlow()
-    var ownership: TileModel.Ownership
+    internal val ownershipStateFlow = _ownershipStateFlow.asStateFlow()
+    internal var ownership: TileModel.Ownership
         get() = ownershipStateFlow.value
         set(value) {
             _ownershipStateFlow.value = value
         }
 
     private val _letterStateFlow = MutableStateFlow(model.letter.asLetter())
-    val letterStateFLow = _letterStateFlow.asStateFlow()
-    var letter: String
+    internal val letterStateFLow = _letterStateFlow.asStateFlow()
+    internal var letter: String
         get() = letterStateFLow.value
         set(value) {
             GlobalScope.launch {
@@ -38,9 +38,9 @@ class TileViewModel(
         }
 
     private val _letterVisibilityStateFlow = MutableStateFlow(true)
-    val letterVisibilityStateFlow = _letterVisibilityStateFlow.asStateFlow()
+    internal val letterVisibilityStateFlow = _letterVisibilityStateFlow.asStateFlow()
 
-    val model: TileModel
+    internal val model: TileModel
         get() = TileModel.newBuilder()
             .setLetter(letter.asCharCode())
             .setOwnership(ownership)
@@ -48,7 +48,7 @@ class TileViewModel(
 
     override fun toString(): String = letter
 
-    fun equals(other: TileViewModel): Boolean = x == other.x && y == other.y
+    private fun equals(other: TileViewModel): Boolean = x == other.x && y == other.y
 
     private val unownedTileColor
         get() = if ((x + y) % 2 == 0)
@@ -56,14 +56,14 @@ class TileViewModel(
         else
             R.color.tile_gray_dark
 
-    val isSuperOwned
+    internal val isSuperOwned
         get() = ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_1
                 || ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_2
 
-    val isUnowned
+    internal val isUnowned
         get() = ownership == TileModel.Ownership.UNOWNED
 
-    fun isOwnedBy(player: Game.Player) =
+    internal fun isOwnedBy(player: Game.Player) =
         when (player) {
             Game.Player.PLAYER_1 ->
                 ownership == TileModel.Ownership.OWNED_PLAYER_1
@@ -73,7 +73,7 @@ class TileViewModel(
                         || ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_2
         }
 
-    fun backgroundColor(owner: TileModel.Ownership) =
+    internal fun backgroundColor(owner: TileModel.Ownership) =
         when (owner) {
             TileModel.Ownership.UNOWNED -> unownedTileColor
             TileModel.Ownership.OWNED_PLAYER_1 -> colorScheme.player1.owned
@@ -85,7 +85,7 @@ class TileViewModel(
             )
         }
 
-    fun isConnectedTo(other: TileViewModel): Boolean {
+    internal fun isConnectedTo(other: TileViewModel): Boolean {
         val diffX = x - other.x
         val diffY = y - other.y
         return diffX <= 1 && diffX >= -1 && diffY <= 1 && diffY >=-1 && !equals(other)

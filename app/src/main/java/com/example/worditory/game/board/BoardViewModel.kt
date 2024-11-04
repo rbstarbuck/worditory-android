@@ -7,7 +7,6 @@ import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileModel
 import com.example.worditory.game.board.tile.TileViewModel
-import com.example.worditory.game.board.tile.asCharCode
 import com.example.worditory.game.board.tile.asLetter
 import com.example.worditory.game.board.word.WordViewModel
 import com.example.worditory.game.dict.WordDictionary
@@ -18,19 +17,19 @@ import kotlin.math.sqrt
 
 class BoardViewModel(
     model: BoardModel,
-    val colorScheme: Tile.ColorScheme,
-    val isPlayerTurnStateFlow: StateFlow<Boolean> = MutableStateFlow(false),
+    colorScheme: Tile.ColorScheme,
+    internal val isPlayerTurnStateFlow: StateFlow<Boolean> = MutableStateFlow(false),
     onWordChanged: () -> Unit = {}
 ): ViewModel() {
-    val width = model.width
-    val height = model.height
-    val tiles: List<TileViewModel>
-    val word = WordViewModel(width, height, onWordChanged)
-    val letterBag = LetterBag()
+    internal val width = model.width
+    internal val height = model.height
+    internal val tiles: List<TileViewModel>
+    internal val word = WordViewModel(width, height, onWordChanged)
+    private val letterBag = LetterBag()
 
-    var currentDragPoint = Offset.Zero
+    private var currentDragPoint = Offset.Zero
 
-    val model: BoardModel
+    internal val model: BoardModel
         get() = BoardModel.newBuilder()
             .setWidth(width)
             .setHeight(height)
@@ -52,7 +51,7 @@ class BoardViewModel(
         tiles = tilesData
     }
 
-    fun getScore(): Game.Score {
+    internal fun getScore(): Game.Score {
         var scorePlayer1 = 0
         var scorePlayer2 = 0
 
@@ -67,7 +66,7 @@ class BoardViewModel(
         return Game.Score(scorePlayer1, scorePlayer2)
     }
 
-    fun onDragStart(startPoint: Offset) {
+    internal fun onDragStart(startPoint: Offset) {
         currentDragPoint = startPoint
     }
 
@@ -75,7 +74,7 @@ class BoardViewModel(
     private val boardHeightFloat = height.toFloat()
     private var didDragIntoSecondTile = true
 
-    fun onDrag(offset: Offset, viewSize: IntSize) {
+    internal fun onDrag(offset: Offset, viewSize: IntSize) {
         currentDragPoint += offset
 
         val viewWidthFloat = viewSize.width.toFloat()
@@ -112,14 +111,14 @@ class BoardViewModel(
         }
     }
 
-    fun onDragEnd() {
+    internal fun onDragEnd() {
         if (didDragIntoSecondTile && word.model.tiles.size == 1) {
             word.onSelectTile(word.model.tiles.first(), Game.Player.PLAYER_1)
         }
         didDragIntoSecondTile = false
     }
 
-    fun playWord(player: Game.Player) {
+    internal fun playWord(player: Game.Player) {
         updateOwnershipsForWord(player)
         updateLettersForWord()
         word.onSelectTile(word.model.tiles.first(), player)
@@ -171,7 +170,7 @@ class BoardViewModel(
         }
     }
 
-    fun connectedTiles(tile: TileViewModel): List<TileViewModel> {
+    internal fun connectedTiles(tile: TileViewModel): List<TileViewModel> {
         val tiles = mutableListOf<TileViewModel>()
 
         addIfExists(tile.x - 1, tile.y - 1, tiles)
@@ -186,7 +185,7 @@ class BoardViewModel(
         return tiles
     }
 
-    fun adjacentTiles(tile: TileViewModel): List<TileViewModel> {
+    internal fun adjacentTiles(tile: TileViewModel): List<TileViewModel> {
         val tiles = mutableListOf<TileViewModel>()
 
         addIfExists(tile.x, tile.y - 1, tiles)

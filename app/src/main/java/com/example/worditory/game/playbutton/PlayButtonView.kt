@@ -1,11 +1,8 @@
 package com.example.worditory.game.playbutton
 
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -29,7 +26,7 @@ import com.example.worditory.R
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun PlayButtonView(
+internal fun PlayButtonView(
     viewModel: PlayButtonViewModel,
     isPlayerTurnStateFlow: StateFlow<Boolean>,
     modifier: Modifier = Modifier,

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 
 @Composable
-fun TileView(
+internal fun TileView(
     viewModel: TileViewModel,
     modifier: Modifier = Modifier,
     selectAction: () -> Unit = {}

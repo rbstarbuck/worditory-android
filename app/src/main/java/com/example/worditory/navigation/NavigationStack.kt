@@ -27,10 +27,10 @@ import com.example.worditory.game.GameAgainstNpcViewModel
 import com.example.worditory.game.GameView
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.npc.NpcModel
-import com.example.worditory.saved.savedGamesDataStore
+import com.example.worditory.savedgames.savedGamesDataStore
 
 @Composable
-fun NavigationStack(navController: NavHostController) {
+internal fun NavigationStack(navController: NavHostController) {
     NavHost(navController, startDestination = Screen.Main.route) {
         composable(route = Screen.Main.route) {
             MainView(navController)

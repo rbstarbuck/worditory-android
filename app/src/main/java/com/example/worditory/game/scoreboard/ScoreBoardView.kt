@@ -15,7 +15,7 @@ import com.example.worditory.game.scoreboard.player.PlayerScoreView
 import com.example.worditory.game.scoreboard.scoretowin.ScoreToWinView
 
 @Composable
-fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier = Modifier) {
+internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier) {
         val maxHeight = this.maxHeight
         val maxWidth = this.maxWidth

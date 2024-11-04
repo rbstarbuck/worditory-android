@@ -15,7 +15,7 @@ class Tile private constructor() {
                 .build()
 
         companion object {
-            fun random(): ColorScheme {
+            internal fun random(): ColorScheme {
                 val index1 = Random.nextInt(until = Colors.size)
                 var index2 = 0
                 do {
@@ -25,7 +25,7 @@ class Tile private constructor() {
                 return ColorScheme(player1 = Colors[index1], player2 = Colors[index2])
             }
 
-            fun from(colorScheme: GameModel.ColorScheme): ColorScheme {
+            internal fun from(colorScheme: GameModel.ColorScheme): ColorScheme {
                 return ColorScheme(
                     player1 = Player.from(colorScheme.player1),
                     player2 = Player.from(colorScheme.player2)
@@ -46,39 +46,39 @@ class Tile private constructor() {
                 }
 
             companion object {
-                val Green = Player(
+                private val Green = Player(
                     owned = R.color.player_green_light,
                     superOwned = R.color.player_green_dark
                 )
 
-                val Purple = Player(
+                private val Purple = Player(
                     owned = R.color.player_purple_light,
                     superOwned = R.color.player_purple_dark
                 )
 
-                val Yellow = Player(
+                private val Yellow = Player(
                     owned = R.color.player_yellow_light,
                     superOwned = R.color.player_yellow_dark
                 )
 
-                val Pink = Player(
+                private val Pink = Player(
                     owned = R.color.player_pink_light,
                     superOwned = R.color.player_pink_dark
                 )
 
-                val Blue = Player(
+                private val Blue = Player(
                     owned = R.color.player_blue_light,
                     superOwned = R.color.player_blue_dark
                 )
 
-                val Orange = Player(
+                private val Orange = Player(
                     owned = R.color.player_orange_light,
                     superOwned = R.color.player_orange_dark
                 )
 
-                val Colors = arrayOf(Green, Purple, Yellow, Pink, Blue, Orange)
+                internal val Colors = arrayOf(Green, Purple, Yellow, Pink, Blue, Orange)
 
-                fun from(player: GameModel.ColorScheme.Color): Player {
+                internal fun from(player: GameModel.ColorScheme.Color): Player {
                     return when (player) {
                         GameModel.ColorScheme.Color.PURPLE -> Purple
                         GameModel.ColorScheme.Color.GREEN -> Green
@@ -96,11 +96,11 @@ class Tile private constructor() {
     }
 }
 
-fun Int.asLetter(): String {
+internal fun Int.asLetter(): String {
     val letter = toChar().toString()
     return if (letter == "Q") "Qu" else letter
 }
 
-fun String.asCharCode(): Int {
+internal fun String.asCharCode(): Int {
     return first().toChar().code
 }

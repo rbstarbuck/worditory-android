@@ -3,7 +3,7 @@ package com.example.worditory.chooser.npcopponent
 import com.example.worditory.R
 import com.example.worditory.game.npc.NpcModel
 
-class NpcChooser private constructor() {
+internal class NpcChooser private constructor() {
     companion object {
         private val opponent1 = NpcModel.newBuilder()
             .setAvatar(R.drawable.npc_bear)
@@ -113,7 +113,7 @@ class NpcChooser private constructor() {
                 .build()
             ).build()
 
-        val opponents = listOf(
+        internal val opponents = listOf(
             opponent1,
             opponent2,
             opponent3,

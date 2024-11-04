@@ -14,45 +14,45 @@ abstract class GameViewModel(
     avatarIdPlayer1: Int,
     avatarIdPlayer2: Int
 ): ViewModel() {
-    val id = model.id
-    val boardWidth = model.board.width
-    val boardHeight = model.board.height
-    val opponent = model.opponent
-    val colorScheme = Tile.ColorScheme.from(model.colorScheme)
+    internal val id = model.id
+    internal val boardWidth = model.board.width
+    internal val boardHeight = model.board.height
+    internal val opponent = model.opponent
+    internal val colorScheme = Tile.ColorScheme.from(model.colorScheme)
 
     private val _isPlayerTurnStateFlow = MutableStateFlow(model.isPlayerTurn)
-    val isPlayerTurnStateFlow = _isPlayerTurnStateFlow.asStateFlow()
-    var isPlayerTurn: Boolean
+    internal val isPlayerTurnStateFlow = _isPlayerTurnStateFlow.asStateFlow()
+    internal var isPlayerTurn: Boolean
         get() = isPlayerTurnStateFlow.value
         set(value) {
             _isPlayerTurnStateFlow.value = value
         }
 
     private val _isNotAWordStateFlow = MutableStateFlow(false)
-    val isNotAWordStateFlow = _isNotAWordStateFlow.asStateFlow()
-    var isNotAWord: Boolean
+    internal val isNotAWordStateFlow = _isNotAWordStateFlow.asStateFlow()
+    internal var isNotAWord: Boolean
         get() = isNotAWordStateFlow.value
         set(value) {
             _isNotAWordStateFlow.value = value
         }
 
-    val board = BoardViewModel(
+    internal val board = BoardViewModel(
         model.board,
         colorScheme,
         isPlayerTurnStateFlow,
         onWordChanged = { isNotAWord = false }
     )
 
-    val scoreBoard = ScoreBoardViewModel(
+    internal val scoreBoard = ScoreBoardViewModel(
         initialScoreToWin = boardWidth * boardHeight,
         avatarIdPlayer1,
         avatarIdPlayer2,
         colorScheme
     )
 
-    val playButton = PlayButtonViewModel(board.word.modelStateFlow, isNotAWordStateFlow)
+    internal val playButton = PlayButtonViewModel(board.word.modelStateFlow, isNotAWordStateFlow)
 
-    val model: GameModel
+    internal val model: GameModel
         get() = GameModel.newBuilder()
             .setId(id)
             .setBoard(board.model)
@@ -65,7 +65,7 @@ abstract class GameViewModel(
         scoreBoard.score = board.getScore()
     }
 
-    open fun onPlayButtonClick(): Boolean {
+    internal open fun onPlayButtonClick(): Boolean {
         if (isPlayerTurn) {
             val wordString = board.word.toString()
             if (WordDictionary.contains(wordString)) {
@@ -79,7 +79,7 @@ abstract class GameViewModel(
         return false
     }
 
-    fun updateScore() {
+    internal fun updateScore() {
         scoreBoard.score = board.getScore()
         scoreBoard.decrementScoreToWin()
     }

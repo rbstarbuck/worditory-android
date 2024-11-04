@@ -5,6 +5,6 @@ import com.example.worditory.game.board.word.WordModel
 import kotlinx.coroutines.flow.StateFlow
 
 class PlayButtonViewModel(
-    val wordStateFlow: StateFlow<WordModel>,
-    val isNotAWordStateFlow: StateFlow<Boolean>
+    internal val wordStateFlow: StateFlow<WordModel>,
+    internal val isNotAWordStateFlow: StateFlow<Boolean>
 ): ViewModel()

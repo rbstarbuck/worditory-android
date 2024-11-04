@@ -29,7 +29,7 @@ import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.toBitmap
 
 @Composable
-fun BoardSizeChooserGridView(
+internal fun BoardSizeChooserGridView(
     boardWidth: Int,
     boardHeight: Int,
     speedIconId: Int,

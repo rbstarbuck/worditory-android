@@ -21,12 +21,12 @@ import com.example.worditory.game.board.BoardView
 import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
 import com.example.worditory.navigation.Screen
-import com.example.worditory.saved.savedGamesDataStore
+import com.example.worditory.savedgames.savedGamesDataStore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun GameView(viewModel: GameViewModel, navController: NavController) {
+internal fun GameView(viewModel: GameViewModel, navController: NavController) {
     val context = LocalContext.current
 
     BackHandler {
@@ -55,7 +55,7 @@ fun GameView(viewModel: GameViewModel, navController: NavController) {
     }
 }
 
-fun exitGame(context: Context, viewModel: GameViewModel, navController: NavController) {
+private fun exitGame(context: Context, viewModel: GameViewModel, navController: NavController) {
     GlobalScope.launch {
         context.savedGamesDataStore.updateData { savedGames ->
             SavedGames.newBuilder()

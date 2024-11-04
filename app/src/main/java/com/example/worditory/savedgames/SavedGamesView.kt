@@ -1,11 +1,10 @@
-package com.example.worditory.chooser.savedgames
+package com.example.worditory.savedgames
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,15 +22,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.worditory.SavedGames
-import com.example.worditory.game.GameModel
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.toBitmap
 import com.example.worditory.navigation.Screen
-import com.example.worditory.saved.savedGamesDataStore
 
 @Composable
-fun SavedGamesView(
+internal fun SavedGamesView(
     navController: NavController,
     playerAvatarId: Int,
     modifier: Modifier = Modifier
@@ -76,8 +73,4 @@ fun SavedGamesView(
             }
         }
     }
-}
-
-private fun navigateToSavedGame(navController: NavController, game: GameModel) {
-
 }

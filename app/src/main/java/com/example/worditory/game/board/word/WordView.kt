@@ -20,7 +20,7 @@ import com.example.worditory.R
 import kotlin.math.min
 
 @Composable
-fun WordView(viewModel: WordViewModel, modifier: Modifier = Modifier) {
+internal fun WordView(viewModel: WordViewModel, modifier: Modifier = Modifier) {
     val modelState = viewModel.modelStateFlow.collectAsState()
 
     val pathColor = colorResource(R.color.word_path)

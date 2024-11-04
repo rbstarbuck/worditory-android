@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 
 @Composable
-fun VerticalArrowsView(modifier: Modifier = Modifier) {
+internal fun VerticalArrowsView(modifier: Modifier = Modifier) {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         val color = colorResource(R.color.opponent_chooser_arrow)
         val fontSize = 18.sp
@@ -77,7 +77,7 @@ fun VerticalArrowsView(modifier: Modifier = Modifier) {
     }
 }
 
-fun Modifier.vertical() =
+private fun Modifier.vertical() =
     layout { measurable, constraints ->
         val placeable = measurable.measure(constraints)
         layout(placeable.height, placeable.width) {

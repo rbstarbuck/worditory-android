@@ -29,7 +29,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun AvatarChooserDialog(navController: NavController, modifier: Modifier = Modifier) {
+internal fun AvatarChooserDialog(navController: NavController, modifier: Modifier = Modifier) {
     val datastore = LocalContext.current.dataStore
 
     LazyVerticalGrid(

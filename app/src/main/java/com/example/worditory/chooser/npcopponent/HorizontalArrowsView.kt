@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 
 @Composable
-fun HorizontalArrowsView(modifier: Modifier = Modifier) {
+internal fun HorizontalArrowsView(modifier: Modifier = Modifier) {
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         val color = colorResource(R.color.opponent_chooser_arrow)
         val fontSize = 18.sp

@@ -3,7 +3,7 @@ package com.example.worditory.game.dict
 import java.io.BufferedReader
 import kotlin.math.absoluteValue
 
-object WordDictionary {
+internal object WordDictionary {
     private val wordFrequencies: List<WordFrequency>
     private val wordSet: Set<String>
     private val vowels: Set<String> = setOfNotNull("A", "E", "I", "O", "U")
@@ -31,16 +31,16 @@ object WordDictionary {
         wordSet = set
     }
 
-    val size: Int
+    internal val size: Int
         get() = wordFrequencies.size
 
-    fun init() = Unit
+    internal fun init() = Unit
 
-    fun isVowel(letter: String) = vowels.contains(letter)
+    internal fun isVowel(letter: String) = vowels.contains(letter)
 
-    fun contains(word: String) = wordSet.contains(word)
+    internal fun contains(word: String) = wordSet.contains(word)
 
-    fun search(word: String, previousResult: SearchResult): SearchResult {
+    internal fun search(word: String, previousResult: SearchResult): SearchResult {
         var frequency = -1
 
         val from = wordFrequencies.binarySearch(
@@ -65,7 +65,7 @@ object WordDictionary {
 
     private data class WordFrequency(val word: String, val frequency: Int)
 
-    data class SearchResult(
+    internal data class SearchResult(
         internal val from: Int = 0,
         internal val to: Int = wordFrequencies.size,
         val frequency: Int = -1

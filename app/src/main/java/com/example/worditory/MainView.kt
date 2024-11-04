@@ -22,19 +22,13 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.worditory.chooser.savedgames.SavedGamesView
+import com.example.worditory.savedgames.SavedGamesView
 import com.example.worditory.navigation.Screen
-import com.example.worditory.saved.savedGamesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @Composable
-fun MainView(navController: NavController) {
-    val savedGamesState =
-        LocalContext.current.savedGamesDataStore.data.collectAsState(
-            SavedGames.newBuilder().build()
-        )
-
+internal fun MainView(navController: NavController) {
     val playerAvatar: Flow<Int> = LocalContext.current.dataStore.data.map { preferences ->
         preferences[DataStoreKey.playerAvatar] ?: 0
     }

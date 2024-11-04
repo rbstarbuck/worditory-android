@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 
 @Composable
-fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifier) {
+internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifier) {
     val scoreState = viewModel.scoreStateFlow.collectAsState()
     val scoreToWinState = viewModel.scoreToWinStateFlow.collectAsState()
 

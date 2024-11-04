@@ -3,9 +3,9 @@ package com.example.worditory.game.board
 import com.example.worditory.game.board.tile.TileModel
 import com.example.worditory.game.board.tile.asCharCode
 
-class Board private constructor() {
+internal class Board private constructor() {
     companion object {
-        fun newModel(width: Int, height: Int): BoardModel {
+        internal fun newModel(width: Int, height: Int): BoardModel {
             val letterBag = LetterBag()
             val modelBuilder = BoardModel.newBuilder()
                 .setWidth(width)

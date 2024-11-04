@@ -3,7 +3,7 @@ package com.example.worditory.game.board
 import com.example.worditory.game.dict.WordDictionary
 import kotlin.random.Random
 
-class LetterBag {
+internal class LetterBag {
     private val letterCounts = mutableMapOf(
         "A" to 12,
         "B" to 2,
@@ -40,7 +40,7 @@ class LetterBag {
     private val vowelsTakenTracker = TakenTracker()
     private val consonantsTakenTracker = TakenTracker()
 
-    fun takeLetter(): String {
+    internal fun takeLetter(): String {
         if (!vowelsTakenTracker.canTake) return takeConsonant()
         if (!consonantsTakenTracker.canTake) return takeVowel()
 
@@ -76,7 +76,7 @@ class LetterBag {
         return consonant
     }
 
-    fun exchangeForVowel(oldLetter: String): String {
+    internal fun exchangeForVowel(oldLetter: String): String {
         if (vowelsInBag == 0) return exchangeForConsonant(oldLetter)
 
         val vowel = randomVowel()
@@ -93,7 +93,7 @@ class LetterBag {
         return vowel
     }
 
-    fun exchangeForConsonant(oldLetter: String): String {
+    internal fun exchangeForConsonant(oldLetter: String): String {
         if (consonantsInBag == 0) return exchangeForVowel(oldLetter)
 
         val consonant = randomConsonant()
@@ -110,7 +110,7 @@ class LetterBag {
         return consonant
     }
 
-    fun removeLetter(letter: String) {
+    internal fun removeLetter(letter: String) {
         letterCounts[letter] = letterCounts.getValue(letter) - 1
         --tilesInBag
         if (WordDictionary.isVowel(letter)) --vowelsInBag else --consonantsInBag
@@ -132,10 +132,10 @@ class LetterBag {
     private fun randomVowel(): String {
         var selection = Random.nextInt(vowelsInBag)
 
-        for (i in 0..<vowels.size) {
-            selection -= letterCounts.getValue(vowels[i])
+        for (i in 0..<Vowels.size) {
+            selection -= letterCounts.getValue(Vowels[i])
             if (selection < 0) {
-                return vowels[i]
+                return Vowels[i]
             }
         }
 
@@ -145,10 +145,10 @@ class LetterBag {
     private fun randomConsonant(): String {
         var selection = Random.nextInt(consonantsInBag)
 
-        for (i in 0..<consonants.size) {
-            selection -= letterCounts.getValue(consonants[i])
+        for (i in 0..<Consonants.size) {
+            selection -= letterCounts.getValue(Consonants[i])
             if (selection < 0) {
-                return consonants[i]
+                return Consonants[i]
             }
         }
 
@@ -156,8 +156,8 @@ class LetterBag {
     }
 
     companion object {
-        internal val vowels = listOf("A", "E", "I", "O", "U")
-        internal val consonants = listOf(
+        private val Vowels = listOf("A", "E", "I", "O", "U")
+        private val Consonants = listOf(
             "B",
             "C",
             "D",

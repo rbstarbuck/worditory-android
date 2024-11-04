@@ -33,7 +33,7 @@ import com.example.worditory.R
 import com.example.worditory.navigation.Screen.BoardSizeChooser
 
 @Composable
-fun NpcChooserView(
+internal fun NpcChooserView(
     navController: NavController,
     avatarIdPlayer1: Int,
     modifier: Modifier = Modifier

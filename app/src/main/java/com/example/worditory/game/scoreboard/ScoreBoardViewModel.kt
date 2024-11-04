@@ -15,30 +15,32 @@ class ScoreBoardViewModel(
     colorScheme: Tile.ColorScheme
 ): ViewModel() {
     private val _scoreToWinStateFlow = MutableStateFlow(initialScoreToWin)
-    val scoreToWinStateFlow = _scoreToWinStateFlow.asStateFlow()
-    val scoreToWin: Int
+    internal val scoreToWinStateFlow = _scoreToWinStateFlow.asStateFlow()
+    internal val scoreToWin: Int
         get() = scoreToWinStateFlow.value
 
-    val scorePlayer1 = PlayerScoreViewModel(
+    internal val scorePlayer1 = PlayerScoreViewModel(
         scoreToWinStateFlow,
         avatarIdPlayer1,
         colorScheme.player1
     )
-    val scorePlayer2 = PlayerScoreViewModel(
+
+    internal val scorePlayer2 = PlayerScoreViewModel(
         scoreToWinStateFlow,
         avatarIdPlayer2,
         colorScheme.player2
     )
-    val scoreToWinViewModel = ScoreToWinViewModel(scoreToWinStateFlow)
 
-    var score: Game.Score
+    internal val scoreToWinViewModel = ScoreToWinViewModel(scoreToWinStateFlow)
+
+    internal var score: Game.Score
         get() = Game.Score(scorePlayer1.score, scorePlayer2.score)
         set(value) {
             scorePlayer1.score = value.player1
             scorePlayer2.score = value.player2
         }
 
-    fun decrementScoreToWin(): Boolean {
+    internal fun decrementScoreToWin(): Boolean {
         if (scoreToWin > scorePlayer1.score + 1 && scoreToWin > scorePlayer2.score) {
             --_scoreToWinStateFlow.value
             return true

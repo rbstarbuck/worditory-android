@@ -23,7 +23,7 @@ import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.navigation.Screen.Game
 
 @Composable
-fun BoardSizeChooserView(
+internal fun BoardSizeChooserView(
     navController: NavController,
     playerAvatarId: Int,
     opponent: NpcModel,

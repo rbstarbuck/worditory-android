@@ -6,11 +6,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-class GameAgainstNpcViewModel(
+internal class GameAgainstNpcViewModel(
     model: GameModel,
     playerAvatarId: Int
 ): GameViewModel(model, playerAvatarId, model.opponent.avatar) {
-    val nonPlayerCharacter = NonPlayerCharacter(board, model.opponent)
+    private val nonPlayerCharacter = NonPlayerCharacter(board, model.opponent)
 
     init {
         if (!isPlayerTurn) {
@@ -28,7 +28,7 @@ class GameAgainstNpcViewModel(
         }
     }
 
-    fun playNpcWord() {
+    private fun playNpcWord() {
         val npcWord = nonPlayerCharacter.findWordToPlay()
         if (npcWord != null) {
             GlobalScope.launch {

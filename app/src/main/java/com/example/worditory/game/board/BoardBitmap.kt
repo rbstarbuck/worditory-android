@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.content.ContextCompat
 
-fun BoardViewModel.toBitmap(context: Context, size: Size): ImageBitmap {
+internal fun BoardViewModel.toBitmap(context: Context, size: Size): ImageBitmap {
     val drawScope = CanvasDrawScope()
     if (size.width == 0f || size.height == 0f) {
         return ImageBitmap(1, 1)

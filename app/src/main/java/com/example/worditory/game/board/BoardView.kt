@@ -17,7 +17,7 @@ import com.example.worditory.game.board.tile.TileView
 import com.example.worditory.game.board.word.WordView
 
 @Composable
-fun BoardView(
+internal fun BoardView(
     viewModel: BoardViewModel,
     modifier: Modifier = Modifier
 ) {

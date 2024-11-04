@@ -1,4 +1,4 @@
-package com.example.worditory.saved
+package com.example.worditory.savedgames
 
 import android.content.Context
 import androidx.datastore.core.DataStore

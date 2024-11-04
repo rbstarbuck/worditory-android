@@ -7,30 +7,30 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class WordViewModel(
-    val boardWidth: Int,
-    val boardHeight: Int,
-    val onWordChanged: () -> Unit,
+    internal val boardWidth: Int,
+    internal val boardHeight: Int,
+    private val onWordChanged: () -> Unit,
     model: WordModel = WordModel()
 ): ViewModel() {
     private val _modelStateFlow = MutableStateFlow(model)
-    val modelStateFlow = _modelStateFlow.asStateFlow()
-    var model: WordModel
+    internal val modelStateFlow = _modelStateFlow.asStateFlow()
+    internal var model: WordModel
         get() = modelStateFlow.value
         private set(value) {
             _modelStateFlow.value = value
         }
 
     private var _removedTiles = emptyList<TileViewModel>()
-    val removedTiles
+    internal val removedTiles
         get() = _removedTiles
 
     private var _drawPathTweenDurationMillis = 750
-    val drawPathTweenDurationMillis
+    internal val drawPathTweenDurationMillis
         get() = _drawPathTweenDurationMillis
 
     override fun toString(): String = model.toString()
 
-    suspend fun withDrawPathTweenDuration(
+    internal suspend fun withDrawPathTweenDuration(
         millis: Int,
         action: suspend (previousValue: Int) -> Unit)
     {
@@ -42,7 +42,7 @@ class WordViewModel(
         _drawPathTweenDurationMillis = previousDrawPathTweenDurationMillis
     }
 
-    fun onSelectTile(tile: TileViewModel, currentPlayer: Game.Player) {
+    internal fun onSelectTile(tile: TileViewModel, currentPlayer: Game.Player) {
         var didMutate = false
         var isSuperWord = model.isSuperWord
         val tiles = model.tiles
