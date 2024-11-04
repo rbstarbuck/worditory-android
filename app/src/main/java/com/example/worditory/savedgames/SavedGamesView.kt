@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.min
 import androidx.navigation.NavController
 import com.example.worditory.R
 import com.example.worditory.SavedGames
+import com.example.worditory.composable.BackHandler
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.toBitmap
@@ -113,10 +114,8 @@ internal fun SavedGamesView(
                         ),
                         contentPadding = PaddingValues(0.dp)
                     ) {
-                        val avatarVector = ImageVector.vectorResource(R.drawable.close_button)
-
                         Image(
-                            imageVector = avatarVector,
+                            imageVector = ImageVector.vectorResource(R.drawable.close_button),
                             contentDescription = stringResource(R.string.delete_saved_game)
                         )
                     }
@@ -147,10 +146,8 @@ internal fun SavedGamesView(
                             bottom = 0.dp
                         )
                     ) {
-                        val avatarVector = ImageVector.vectorResource(id = game.opponent.avatar)
-
                         Image(
-                            imageVector = avatarVector,
+                            imageVector = ImageVector.vectorResource(id = game.opponent.avatar),
                             contentDescription = stringResource(R.string.avatar)
                         )
                     }
@@ -159,6 +156,10 @@ internal fun SavedGamesView(
         }
 
         if (deleteGameState.value != 0L) {
+            BackHandler {
+                deleteGameStateFlow.value = 0
+            }
+            
             DeleteSavedGameDialog(
                 modifier = Modifier
                     .width(250.dp)

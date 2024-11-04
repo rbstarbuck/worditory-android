@@ -17,8 +17,11 @@ class ScoreBoardViewModel(
 ): ViewModel() {
     private val _scoreToWinStateFlow = MutableStateFlow(currentScoreToWin)
     internal val scoreToWinStateFlow = _scoreToWinStateFlow.asStateFlow()
-    val scoreToWin: Int
+    internal var scoreToWin: Int
         get() = scoreToWinStateFlow.value
+        set(value) {
+            _scoreToWinStateFlow.value = value
+        }
 
     internal val scorePlayer1 = PlayerScoreViewModel(
         scoreToWinStateFlow,
@@ -40,13 +43,4 @@ class ScoreBoardViewModel(
             scorePlayer1.score = value.player1
             scorePlayer2.score = value.player2
         }
-
-    internal fun decrementScoreToWin(): Boolean {
-        if (scoreToWin > scorePlayer1.score + 1 && scoreToWin > scorePlayer2.score) {
-            --_scoreToWinStateFlow.value
-            return true
-        } else {
-            return false
-        }
-    }
 }

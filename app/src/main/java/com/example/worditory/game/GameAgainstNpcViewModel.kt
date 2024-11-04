@@ -24,6 +24,7 @@ internal class GameAgainstNpcViewModel(
             isPlayerTurn = false
             if (gameOverState == GameOver.State.IN_PROGRESS) {
                 playNpcWord()
+                onWordPlayed()
                 return true
             }
         }
@@ -45,8 +46,6 @@ internal class GameAgainstNpcViewModel(
                 }
 
                 board.playWord(Game.Player.PLAYER_2)
-                updateScore()
-                isPlayerTurn = !checkForGameOver()
             }
         }
     }

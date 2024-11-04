@@ -88,8 +88,7 @@ abstract class GameViewModel(
             val wordString = board.word.toString()
             if (WordDictionary.contains(wordString)) {
                 board.playWord(Game.Player.PLAYER_1)
-                updateScore()
-                isPlayerTurn = !checkForGameOver()
+                onWordPlayed()
                 return true
             } else {
                 isNotAWord = true
@@ -98,16 +97,23 @@ abstract class GameViewModel(
         return false
     }
 
-    internal fun updateScore() {
-        scoreBoard.score = board.getScore()
-        scoreBoard.decrementScoreToWin()
+    protected fun onWordPlayed() {
+        updateScore()
+        isPlayerTurn = !checkForGameOver()
     }
 
-    protected fun checkForGameOver(): Boolean {
-        if (scoreBoard.score.player1 >= scoreBoard.scoreToWin) {
+    private fun updateScore() {
+        scoreBoard.score = board.getScore()
+        --scoreBoard.scoreToWin
+    }
+
+    private fun checkForGameOver(): Boolean {
+        val score = scoreBoard.score
+        val toWin = scoreBoard.scoreToWin
+        if (score.player1 >= toWin || score.player2 == 0) {
             gameOverState = GameOver.State.WIN
             return true
-        } else if (scoreBoard.score.player2 >= scoreBoard.scoreToWin) {
+        } else if (score.player2 >= toWin || score.player1 == 0) {
             gameOverState = GameOver.State.LOSE
             return true
         }

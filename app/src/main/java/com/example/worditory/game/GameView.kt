@@ -1,6 +1,5 @@
 package com.example.worditory.game
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,17 +18,12 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.worditory.R
-import com.example.worditory.SavedGames
 import com.example.worditory.composable.BackHandler
 import com.example.worditory.game.board.BoardView
 import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
 import com.example.worditory.game.winlose.GameOver
 import com.example.worditory.game.winlose.GameOverView
-import com.example.worditory.navigation.Screen
-import com.example.worditory.savedgames.savedGamesDataStore
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun GameView(
