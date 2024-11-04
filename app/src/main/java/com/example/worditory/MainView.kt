@@ -61,7 +61,11 @@ internal fun MainView(navController: NavController) {
 //                    }
 //                }
 
-                SavedGamesView(navController, playerAvatarId, Modifier.fillMaxWidth())
+                SavedGamesView(
+                    modifier = Modifier.fillMaxWidth(),
+                    navController = navController,
+                    playerAvatarId = playerAvatarId
+                )
 
                 FilledTonalButton(
                     modifier = Modifier.wrapContentSize(),
@@ -73,6 +77,5 @@ internal fun MainView(navController: NavController) {
                 }
             }
         }
-
     }
 }

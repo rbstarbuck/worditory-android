@@ -1,6 +1,7 @@
 package com.example.worditory.game
 
 import com.example.worditory.game.npc.NonPlayerCharacter
+import com.example.worditory.game.winlose.GameOver
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,11 +22,12 @@ internal class GameAgainstNpcViewModel(
     override fun onPlayButtonClick(): Boolean {
         if (super.onPlayButtonClick()) {
             isPlayerTurn = false
-            playNpcWord()
-            return true
-        } else {
-            return false
+            if (gameOverState == GameOver.State.IN_PROGRESS) {
+                playNpcWord()
+                return true
+            }
         }
+        return false
     }
 
     private fun playNpcWord() {
@@ -43,8 +45,8 @@ internal class GameAgainstNpcViewModel(
                 }
 
                 board.playWord(Game.Player.PLAYER_2)
-                isPlayerTurn = true
                 updateScore()
+                isPlayerTurn = !checkForGameOver()
             }
         }
     }

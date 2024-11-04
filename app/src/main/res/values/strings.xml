@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Worditory</string>
+    <string name="cancel">Cancel</string>
 
     <string name="is_not_a_word">ain\'t a word!</string>
 
@@ -13,4 +14,12 @@
     <string name="lightning">Lightning</string>
     <string name="rapid">Rapid</string>
     <string name="classic">Classic</string>
+
+    <string name="avatar">Avatar</string>
+    <string name="delete_saved_game">Delete saved game</string>
+    <string name="delete_saved_game_question">Delete saved game?</string>
+    <string name="delete">Delete</string>
+
+    <string name="you_win">You win!</string>
+    <string name="you_lose">You lose</string>
 </resources>

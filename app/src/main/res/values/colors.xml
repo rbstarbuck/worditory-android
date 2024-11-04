@@ -40,7 +40,16 @@
     <color name="chooser_grid_cell_border">#FF000000</color>
     <color name="chooser_button">#FFDDDDDD</color>
 
-    <color name = "board_chooser_grid_cell_text">#FF222222</color>
+    <color name="board_chooser_grid_cell_text">#FF222222</color>
+
+    <color name="close_button_background">#FFFF6B6B</color>
+    <color name="saved_game_avatar_background">#FFCCCCCC</color>
+    <color name="delete_saved_game_dialog_background">#FFEEEEEE</color>
+
+    <color name="game_over_lose_border">#FF0067A3</color>
+    <color name="game_over_win_border">#FFC7C002</color>
+    <color name="game_over_lose_background">#FF69C8FF</color>
+    <color name="game_over_win_background">#FFFFFA75</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

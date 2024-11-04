@@ -74,7 +74,7 @@ internal fun AvatarChooserDialog(navController: NavController, modifier: Modifie
 
                     Image(
                         imageVector = avatarVector,
-                        contentDescription = "Avatar"
+                        contentDescription = "Avatar" // TODO(Set avatar content description)
                     )
                 }
             }

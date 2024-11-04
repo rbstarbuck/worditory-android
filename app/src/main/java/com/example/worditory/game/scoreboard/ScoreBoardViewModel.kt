@@ -16,7 +16,7 @@ class ScoreBoardViewModel(
 ): ViewModel() {
     private val _scoreToWinStateFlow = MutableStateFlow(initialScoreToWin)
     internal val scoreToWinStateFlow = _scoreToWinStateFlow.asStateFlow()
-    internal val scoreToWin: Int
+    val scoreToWin: Int
         get() = scoreToWinStateFlow.value
 
     internal val scorePlayer1 = PlayerScoreViewModel(
