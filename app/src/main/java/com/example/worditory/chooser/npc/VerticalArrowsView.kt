@@ -19,7 +19,7 @@ import com.example.worditory.composable.vertical
 @Composable
 internal fun VerticalArrowsView(modifier: Modifier = Modifier) {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        val color = colorResource(R.color.opponent_chooser_arrow)
+        val color = colorResource(R.color.chooser_arrow)
         val fontSize = 18.sp
         val arrowSize = 15f
         val strokeWidth = 5f

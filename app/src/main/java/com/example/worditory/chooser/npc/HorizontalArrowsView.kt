@@ -17,7 +17,7 @@ import com.example.worditory.R
 @Composable
 internal fun HorizontalArrowsView(modifier: Modifier = Modifier) {
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
-        val color = colorResource(R.color.opponent_chooser_arrow)
+        val color = colorResource(R.color.chooser_arrow)
         val fontSize = 18.sp
         val arrowSize = 15f
         val strokeWidth = 5f

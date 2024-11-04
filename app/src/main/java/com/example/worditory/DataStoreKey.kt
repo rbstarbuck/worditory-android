@@ -31,7 +31,7 @@ internal fun Context.getGamesPlayed(): Flow<Int> {
 
 internal suspend fun Context.incrementGamesPlayed() {
     dataStore.edit { settings ->
-        settings[DataStoreKey.PlayerAvatarId] = (settings.get(DataStoreKey.PlayerAvatarId) ?: 0) + 1
+        settings[DataStoreKey.GamesPlayed] = (settings.get(DataStoreKey.GamesPlayed) ?: 0) + 1
     }
 }
 

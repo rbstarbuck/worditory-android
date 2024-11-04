@@ -12,8 +12,8 @@ import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
-import com.example.worditory.savedgames.addSavedGame
-import com.example.worditory.savedgames.removeSavedGame
+import com.example.worditory.saved.addSavedGame
+import com.example.worditory.saved.removeSavedGame
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

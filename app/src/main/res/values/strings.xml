@@ -2,6 +2,10 @@
     <string name="app_name">Worditory</string>
     <string name="cancel">Cancel</string>
 
+    <string name="played">Played</string>
+    <string name="won">Won</string>
+    <string name="win_pct">Win rate</string>
+
     <string name="is_not_a_word">ain\'t a word!</string>
 
     <string name="opponent">Opponent</string>

@@ -1,16 +1,13 @@
 package com.example.worditory
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,10 +19,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.worditory.savedgames.SavedGamesView
+import com.example.worditory.header.HeaderView
+import com.example.worditory.saved.SavedGamesView
 import com.example.worditory.navigation.Screen
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 @Composable
 internal fun MainView(navController: NavController) {
@@ -40,12 +36,14 @@ internal fun MainView(navController: NavController) {
     val avatarVector = ImageVector.vectorResource(id = playerAvatarId)
 
     Box(Modifier.fillMaxSize().background(colorResource(R.color.background))) {
-        OutlinedButton(
-            onClick = { navController.navigate(Screen.Avatar.route) },
-            modifier = Modifier.width(100.dp).height(100.dp)
-        ) {
-            Image(avatarVector, contentDescription = "Avatar")
-        }
+//        OutlinedButton(
+//            onClick = { navController.navigate(Screen.Avatar.route) },
+//            modifier = Modifier.width(100.dp).height(100.dp)
+//        ) {
+//            Image(avatarVector, contentDescription = "Avatar")
+//        }
+
+        HeaderView(navController, Modifier.fillMaxWidth().padding(20.dp))
 
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 

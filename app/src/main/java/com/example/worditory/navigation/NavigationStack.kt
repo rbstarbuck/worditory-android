@@ -27,7 +27,7 @@ import com.example.worditory.game.GameAgainstNpcViewModel
 import com.example.worditory.game.GameView
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.npc.NpcModel
-import com.example.worditory.savedgames.savedGamesDataStore
+import com.example.worditory.saved.savedGamesDataStore
 
 @Composable
 internal fun NavigationStack(navController: NavHostController) {

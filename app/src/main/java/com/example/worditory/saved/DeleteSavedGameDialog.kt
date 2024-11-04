@@ -1,4 +1,4 @@
-package com.example.worditory.savedgames
+package com.example.worditory.saved
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
