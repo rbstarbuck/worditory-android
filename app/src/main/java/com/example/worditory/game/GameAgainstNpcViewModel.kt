@@ -1,7 +1,7 @@
 package com.example.worditory.game
 
 import com.example.worditory.game.npc.NonPlayerCharacter
-import com.example.worditory.game.winlose.GameOver
+import com.example.worditory.game.gameover.GameOver
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -22,8 +22,8 @@ import com.example.worditory.composable.BackHandler
 import com.example.worditory.game.board.BoardView
 import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
-import com.example.worditory.game.winlose.GameOver
-import com.example.worditory.game.winlose.GameOverView
+import com.example.worditory.game.gameover.GameOver
+import com.example.worditory.game.gameover.GameOverView
 
 @Composable
 internal fun GameView(

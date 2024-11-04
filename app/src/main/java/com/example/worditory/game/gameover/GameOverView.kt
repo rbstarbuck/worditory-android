@@ -1,4 +1,4 @@
-package com.example.worditory.game.winlose
+package com.example.worditory.game.gameover
 
 import android.content.Context
 import androidx.compose.animation.core.animateFloatAsState

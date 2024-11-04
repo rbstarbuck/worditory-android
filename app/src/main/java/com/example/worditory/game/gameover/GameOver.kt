@@ -1,4 +1,4 @@
-package com.example.worditory.game.winlose
+package com.example.worditory.game.gameover
 
 internal class GameOver {
     enum class State {
