@@ -77,7 +77,7 @@ class Game private constructor() {
             avatar30
         )
 
-        fun newGame(
+        fun newModel(
             boardWidth: Int,
             boardHeight: Int,
             opponent: NpcModel,
@@ -85,7 +85,7 @@ class Game private constructor() {
         ): GameModel {
             return GameModel.newBuilder()
                 .setId(Random.nextLong())
-                .setBoard(Board.newBoard(boardWidth, boardHeight))
+                .setBoard(Board.newModel(boardWidth, boardHeight))
                 .setIsPlayerTurn(true)
                 .setOpponent(opponent)
                 .setColorScheme(colorScheme.model)

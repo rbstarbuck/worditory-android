@@ -9,15 +9,16 @@ import com.example.worditory.game.board.tile.TileModel
 import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordViewModel
 import com.example.worditory.game.dict.WordDictionary
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 class BoardViewModel(
     model: BoardModel,
-    val isPlayerTurnStateFlow: StateFlow<Boolean>,
     val colorScheme: Tile.ColorScheme,
-    onWordChanged: () -> Unit
+    val isPlayerTurnStateFlow: StateFlow<Boolean> = MutableStateFlow(false),
+    onWordChanged: () -> Unit = {}
 ): ViewModel() {
     val width = model.width
     val height = model.height

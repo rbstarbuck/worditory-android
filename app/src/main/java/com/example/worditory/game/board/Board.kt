@@ -4,7 +4,7 @@ import com.example.worditory.game.board.tile.TileModel
 
 class Board private constructor() {
     companion object {
-        fun newBoard(width: Int, height: Int): BoardModel {
+        fun newModel(width: Int, height: Int): BoardModel {
             val letterBag = LetterBag()
             val modelBuilder = BoardModel.newBuilder()
                 .setWidth(width)

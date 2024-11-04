@@ -109,7 +109,7 @@ fun NavigationStack(navController: NavHostController) {
 
             val viewModel = remember {
                 GameAgainstNpcViewModel(
-                    Game.newGame(width, height, opponent, Tile.ColorScheme.random()),
+                    Game.newModel(width, height, opponent, Tile.ColorScheme.random()),
                     playerAvatarId = avatar1
                 )
             }

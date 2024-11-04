@@ -38,8 +38,8 @@ abstract class GameViewModel(
 
     val board = BoardViewModel(
         model.board,
-        isPlayerTurnStateFlow,
         colorScheme,
+        isPlayerTurnStateFlow,
         onWordChanged = { isNotAWord = false }
     )
 

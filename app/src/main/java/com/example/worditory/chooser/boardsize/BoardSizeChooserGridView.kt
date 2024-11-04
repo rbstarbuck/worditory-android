@@ -23,8 +23,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
-import com.example.worditory.game.board.drawBoardToBitmap
+import com.example.worditory.game.board.Board
+import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
+import com.example.worditory.game.board.toBitmap
 
 @Composable
 fun BoardSizeChooserGridView(
@@ -38,7 +40,6 @@ fun BoardSizeChooserGridView(
 ) {
     val context = LocalContext.current
     val speedIcon = ImageVector.vectorResource(speedIconId)
-    val outlineColor = colorResource(R.color.chooser_grid_cell_border)
 
     BoxWithConstraints(
         modifier.clickable {
@@ -46,13 +47,8 @@ fun BoardSizeChooserGridView(
         }
     ) {
         Canvas(Modifier.fillMaxSize().clip(RoundedCornerShape(15.dp))) {
-            val boardBitmap = drawBoardToBitmap(
-                context,
-                size,
-                boardWidth,
-                boardHeight,
-                colorScheme,
-            )
+            val boardBitmap = BoardViewModel(Board.newModel(boardWidth, boardHeight), colorScheme)
+                .toBitmap(context, size)
 
             drawImage(boardBitmap)
         }

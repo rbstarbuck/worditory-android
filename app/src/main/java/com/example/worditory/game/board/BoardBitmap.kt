@@ -10,24 +10,8 @@ import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.content.ContextCompat
-import com.example.worditory.game.board.tile.Tile
-import kotlinx.coroutines.flow.MutableStateFlow
 
-fun drawBoardToBitmap(
-    context: Context,
-    size: Size,
-    boardWidth: Int,
-    boardHeight: Int,
-    colorScheme: Tile.ColorScheme
-): ImageBitmap {
-    return BoardViewModel(
-        Board.newBoard(boardWidth, boardHeight),
-        MutableStateFlow(false),
-        colorScheme,
-    ) { }.drawToBitmap(context, size)
-}
-
-fun BoardViewModel.drawToBitmap(context: Context, size: Size): ImageBitmap {
+fun BoardViewModel.toBitmap(context: Context, size: Size): ImageBitmap {
     val drawScope = CanvasDrawScope()
     if (size.width == 0f || size.height == 0f) {
         return ImageBitmap(1, 1)
