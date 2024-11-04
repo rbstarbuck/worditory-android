@@ -40,13 +40,23 @@ abstract class GameViewModel(
         colorScheme,
         onWordChanged = { isNotAWord = false }
     )
+
     val scoreBoard = ScoreBoardViewModel(
         initialScoreToWin = boardWidth * boardHeight,
         avatarIdPlayer1,
         avatarIdPlayer2,
         colorScheme
     )
+
     val playButton = PlayButtonViewModel(board.word.modelStateFlow, isNotAWordStateFlow)
+
+    val model: GameModel
+        get() = GameModel.newBuilder()
+            .setBoard(board.model)
+            .setOpponent(model.opponent)
+            .setColorScheme(colorScheme.model)
+            .setIsPlayerTurn(isPlayerTurn)
+            .build()
 
     init {
         scoreBoard.score = board.getScore()

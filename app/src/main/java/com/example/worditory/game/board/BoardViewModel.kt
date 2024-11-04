@@ -27,6 +27,13 @@ class BoardViewModel(
 
     var currentDragPoint = Offset.Zero
 
+    val model: BoardModel
+        get() = BoardModel.newBuilder()
+            .setWidth(width)
+            .setHeight(height)
+            .addAllTiles(tiles.map { it.model })
+            .build()
+
     init {
         tiles.forEach { tile ->
             letterBag.removeLetter(tile.letter)

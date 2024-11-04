@@ -10,7 +10,7 @@ class GameAgainstNpcViewModel(
     model: GameModel,
     playerAvatarId: Int
 ): GameViewModel(model, playerAvatarId, model.opponent.avatar) {
-    val nonPlayerCharacter = NonPlayerCharacter(board, Game.Player.PLAYER_2, model.opponent.spec)
+    val nonPlayerCharacter = NonPlayerCharacter(board, model.opponent)
 
     override fun onPlayButtonClick(): Boolean {
         if (super.onPlayButtonClick()) {

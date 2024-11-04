@@ -38,6 +38,14 @@ class TileViewModel(model: TileModel, val colorScheme: Tile.ColorScheme): ViewMo
     private val _letterVisibilityStateFlow = MutableStateFlow(true)
     val letterVisibilityStateFlow = _letterVisibilityStateFlow.asStateFlow()
 
+    val model: TileModel
+        get() = TileModel.newBuilder()
+            .setX(x)
+            .setY(y)
+            .setLetter(letter)
+            .setOwnership(ownership)
+            .build()
+
     override fun toString(): String = letter
 
     fun equals(other: TileViewModel): Boolean = x == other.x && y == other.y

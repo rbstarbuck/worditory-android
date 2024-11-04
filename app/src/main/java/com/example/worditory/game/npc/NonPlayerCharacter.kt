@@ -9,15 +9,14 @@ import java.security.InvalidParameterException
 
 class NonPlayerCharacter(
     val board: BoardViewModel,
-    val player: Game.Player,
-    val spec: NpcModel.Spec
+    val model: NpcModel
 ) {
     fun findWordToPlay(): WordModel? {
         var words = findAllWords()
 
         if (words.isEmpty()) return null
 
-        val skillLevelMultipliers = when (spec.overallSkillLevel) {
+        val skillLevelMultipliers = when (model.spec.overallSkillLevel) {
             NpcModel.Spec.OverallSkillLevel.BEGINNER -> Pair(0.55f, 0.7f)
             NpcModel.Spec.OverallSkillLevel.INTERMEDIATE -> Pair(0.7f, 0.85f)
             NpcModel.Spec.OverallSkillLevel.ADVANCED -> Pair(0.85f, 1.0f)
@@ -44,7 +43,7 @@ class NonPlayerCharacter(
             .subList(skillLevelFromIndex, skillLevelToIndex)
             .sortedBy { it.defenseOffenseScore }
 
-        return when(spec.defenseOffenseLevel) {
+        return when(model.spec.defenseOffenseLevel) {
             NpcModel.Spec.DefenseOffenseLevel.DEFENSIVE -> words.first().word
             NpcModel.Spec.DefenseOffenseLevel.BLENDED -> words[words.size / 2].word
             NpcModel.Spec.DefenseOffenseLevel.OFFENSIVE -> words.last().word
@@ -58,7 +57,7 @@ class NonPlayerCharacter(
         val wordScores = mutableListOf<WordScore>()
 
         for (tile in board.tiles) {
-            if (tile.isOwnedBy(player)) {
+            if (tile.isOwnedBy(Game.Player.PLAYER_2)) {
                 val word = WordModel(
                     tiles = listOf(tile),
                     isSuperWord = tile.isSuperOwned
@@ -85,7 +84,7 @@ class NonPlayerCharacter(
         wordScores: MutableList<WordScore>
     ) {
         for (tile in board.connectedTiles(previousWord.tiles.last())) {
-            if (previousWord.playerCanOwn(player, tile) && !tilesInWord.contains(tile)) {
+            if (previousWord.playerCanOwn(Game.Player.PLAYER_2, tile) && !tilesInWord.contains(tile)) {
                 val nextWordString = "${previousWordString}${tile.letter}"
                 val nextResult = WordDictionary.search(nextWordString, previousResult)
                 var nextWord: WordModel? = null
@@ -113,7 +112,7 @@ class NonPlayerCharacter(
     }
 
     private fun resultIsWithinVocabulary(result: WordDictionary.SearchResult): Boolean =
-        when (spec.vocabularyLevel) {
+        when (model.spec.vocabularyLevel) {
             NpcModel.Spec.VocabularyLevel.LOW -> result.frequency == 0
             NpcModel.Spec.VocabularyLevel.MEDIUM -> result.frequency <= 1
             NpcModel.Spec.VocabularyLevel.HIGH -> result.frequency <= 2
@@ -149,7 +148,7 @@ class NonPlayerCharacter(
         var defenseScore = 0
 
         for (tile in board.tiles) {
-            if (tile.isOwnedBy(player)) {
+            if (tile.isOwnedBy(Game.Player.PLAYER_2)) {
                 if (!tile.isSuperOwned && willBeSuperOwned(tile, tilesInWord)) {
                     defenseScore += 1
                 }
@@ -174,7 +173,9 @@ class NonPlayerCharacter(
     }
 
     private fun willBeSuperOwned(tile: TileViewModel, tilesInWord: Set<TileViewModel>) =
-        board.adjacentTiles(tile).all { it.isOwnedBy(player) || tilesInWord.contains(it) }
+        board.adjacentTiles(tile).all {
+            it.isOwnedBy(Game.Player.PLAYER_2) || tilesInWord.contains(it)
+        }
 
     private data class WordScore(
         val word: WordModel,

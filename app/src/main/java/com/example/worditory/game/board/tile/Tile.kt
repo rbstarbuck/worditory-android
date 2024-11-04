@@ -1,13 +1,19 @@
 package com.example.worditory.game.board.tile
 
-import com.example.worditory.game.board.tile.Tile.ColorScheme.Player.Companion.Colors
 import com.example.worditory.R
 import com.example.worditory.game.GameModel
+import com.example.worditory.game.board.tile.Tile.ColorScheme.Player.Companion.Colors
 import java.security.InvalidParameterException
 import kotlin.random.Random
 
 class Tile private constructor() {
     data class ColorScheme(val player1: Player, val player2: Player) {
+        val model: GameModel.ColorScheme
+            get() = GameModel.ColorScheme.newBuilder()
+                .setPlayer1(player1.model)
+                .setPlayer2(player2.model)
+                .build()
+
         companion object {
             fun random(): ColorScheme {
                 val index1 = Random.nextInt(until = Colors.size)
@@ -28,6 +34,17 @@ class Tile private constructor() {
         }
 
         data class Player(val owned: Int, val superOwned: Int) {
+            val model: GameModel.ColorScheme.Color
+                get() = when (this) {
+                    Purple -> GameModel.ColorScheme.Color.PURPLE
+                    Green -> GameModel.ColorScheme.Color.GREEN
+                    Pink -> GameModel.ColorScheme.Color.PINK
+                    Orange -> GameModel.ColorScheme.Color.ORANGE
+                    Blue -> GameModel.ColorScheme.Color.BLUE
+                    Yellow -> GameModel.ColorScheme.Color.YELLOW
+                    else -> throw InvalidParameterException("Unrecognized player color")
+                }
+
             companion object {
                 val Green = Player(
                     owned = R.color.player_green_light,
