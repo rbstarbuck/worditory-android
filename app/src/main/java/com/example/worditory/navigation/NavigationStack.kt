@@ -3,13 +3,22 @@ package com.example.worditory.navigation
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import com.example.worditory.MainView
+import com.example.worditory.R
+import com.example.worditory.SavedGames
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
 import com.example.worditory.chooser.npcopponent.NpcChooserView
@@ -18,6 +27,7 @@ import com.example.worditory.game.GameAgainstNpcViewModel
 import com.example.worditory.game.GameView
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.npc.NpcModel
+import com.example.worditory.saved.savedGamesDataStore
 
 @Composable
 fun NavigationStack(navController: NavHostController) {
@@ -105,6 +115,23 @@ fun NavigationStack(navController: NavHostController) {
             }
 
             GameView(viewModel, navController)
+        }
+
+        composable(route = Screen.SavedGame.route) { backStack ->
+            Box(Modifier.fillMaxSize().background(colorResource(R.color.background)))
+            val id = checkNotNull(backStack.arguments?.getString("id")?.toLong())
+            val avatar = checkNotNull(backStack.arguments?.getString("avatar")?.toInt())
+
+            val savedGamesState =
+                LocalContext.current.savedGamesDataStore.data.collectAsState(
+                    SavedGames.newBuilder().build()
+                )
+
+            val savedGame = savedGamesState.value.gamesList.find { it.id == id }
+            if (savedGame != null) {
+                val viewModel = remember { GameAgainstNpcViewModel(savedGame, avatar) }
+                GameView(viewModel, navController)
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
-package com.example.worditory
+package com.example.worditory.saved
 
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
+import com.example.worditory.SavedGames
 import java.io.InputStream
 import java.io.OutputStream
 

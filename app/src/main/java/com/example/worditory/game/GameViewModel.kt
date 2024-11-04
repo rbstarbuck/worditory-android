@@ -14,8 +14,10 @@ abstract class GameViewModel(
     avatarIdPlayer1: Int,
     avatarIdPlayer2: Int
 ): ViewModel() {
+    val id = model.id
     val boardWidth = model.board.width
     val boardHeight = model.board.height
+    val opponent = model.opponent
     val colorScheme = Tile.ColorScheme.from(model.colorScheme)
 
     private val _isPlayerTurnStateFlow = MutableStateFlow(model.isPlayerTurn)
@@ -52,8 +54,9 @@ abstract class GameViewModel(
 
     val model: GameModel
         get() = GameModel.newBuilder()
+            .setId(id)
             .setBoard(board.model)
-            .setOpponent(model.opponent)
+            .setOpponent(opponent)
             .setColorScheme(colorScheme.model)
             .setIsPlayerTurn(isPlayerTurn)
             .build()

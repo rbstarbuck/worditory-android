@@ -2,6 +2,7 @@ package com.example.worditory
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -19,11 +20,17 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.worditory.navigation.Screen
+import com.example.worditory.saved.savedGamesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @Composable
 fun MainView(navController: NavController) {
+    val savedGamesState =
+        LocalContext.current.savedGamesDataStore.data.collectAsState(
+            SavedGames.newBuilder().build()
+        )
+
     val playerAvatar: Flow<Int> = LocalContext.current.dataStore.data.map { preferences ->
         preferences[DataStoreKey.playerAvatar] ?: 0
     }
@@ -44,13 +51,25 @@ fun MainView(navController: NavController) {
         }
 
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            FilledTonalButton(
-                modifier = Modifier.wrapContentSize(),
-                onClick = {
-                    navController.navigate(Screen.NpcChooser.buildRoute(playerAvatarState.value))
+            Column {
+                for (savedGame in savedGamesState.value.gamesList) {
+                    OutlinedButton(onClick =  {
+                        navController.navigate(
+                            Screen.SavedGame.buildRoute(savedGame.id, playerAvatarId)
+                        )
+                    }) {
+                        Text("${savedGame.id}")
+                    }
                 }
-            ) {
-                Text("Play computer")
+
+                FilledTonalButton(
+                    modifier = Modifier.wrapContentSize(),
+                    onClick = {
+                        navController.navigate(Screen.NpcChooser.buildRoute(playerAvatarState.value))
+                    }
+                ) {
+                    Text("Play computer")
+                }
             }
         }
 

@@ -5,10 +5,11 @@ option java_package = "com.example.worditory.game";
 option java_multiple_files = true;
 
 message GameModel {
-  BoardModel board = 1;
-  bool is_player_turn = 2;
-  ColorScheme color_scheme = 3;
-  NpcModel opponent = 4;
+  int64 id = 1;
+  BoardModel board = 2;
+  bool is_player_turn = 3;
+  ColorScheme color_scheme = 4;
+  NpcModel opponent = 5;
 
   message ColorScheme {
     Color player1 = 1;

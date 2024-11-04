@@ -4,6 +4,7 @@ import com.example.worditory.R
 import com.example.worditory.game.board.Board
 import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.game.board.tile.Tile
+import kotlin.random.Random
 
 class Game private constructor() {
     enum class Player {
@@ -83,6 +84,7 @@ class Game private constructor() {
             colorScheme: Tile.ColorScheme
         ): GameModel {
             return GameModel.newBuilder()
+                .setId(Random.nextLong())
                 .setBoard(Board.newBoard(boardWidth, boardHeight))
                 .setIsPlayerTurn(true)
                 .setOpponent(opponent)

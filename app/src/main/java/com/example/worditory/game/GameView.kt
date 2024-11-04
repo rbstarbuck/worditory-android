@@ -1,5 +1,6 @@
 package com.example.worditory.game
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,24 +10,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.worditory.R
+import com.example.worditory.SavedGames
 import com.example.worditory.composable.BackHandler
 import com.example.worditory.game.board.BoardView
 import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
 import com.example.worditory.navigation.Screen
+import com.example.worditory.saved.savedGamesDataStore
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun GameView(viewModel: GameViewModel, navController: NavController) {
+    val context = LocalContext.current
+
     BackHandler {
-        navController.navigate(Screen.Main.route) {
-            popUpTo(Screen.Main.route) {
-                inclusive = true
-            }
-        }
+        exitGame(context, viewModel, navController)
     }
 
     Column(
@@ -47,6 +51,23 @@ fun GameView(viewModel: GameViewModel, navController: NavController) {
             Modifier.height(130.dp)
         ) {
             viewModel.onPlayButtonClick()
+        }
+    }
+}
+
+fun exitGame(context: Context, viewModel: GameViewModel, navController: NavController) {
+    GlobalScope.launch {
+        context.savedGamesDataStore.updateData { savedGames ->
+            SavedGames.newBuilder()
+                .addGames(viewModel.model)
+                .addAllGames(savedGames.gamesList.filter { it.id != viewModel.id })
+                .build()
+        }
+    }
+
+    navController.navigate(Screen.Main.route) {
+        popUpTo(Screen.Main.route) {
+            inclusive = true
         }
     }
 }

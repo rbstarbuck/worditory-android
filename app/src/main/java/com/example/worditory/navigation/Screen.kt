@@ -43,4 +43,12 @@ sealed class Screen(val route: String) {
                 .replace("{skill}", opponent.spec.overallSkillLevel.toString())
         }
     }
+
+    object SavedGame: Screen("game/{id}/{avatar}") {
+        fun buildRoute(id: Long, avatar: Int): String {
+            return route
+                .replace("{id}", id.toString())
+                .replace("{avatar}", avatar.toString())
+        }
+    }
 }
