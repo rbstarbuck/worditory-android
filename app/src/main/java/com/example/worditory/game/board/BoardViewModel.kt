@@ -7,6 +7,8 @@ import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileModel
 import com.example.worditory.game.board.tile.TileViewModel
+import com.example.worditory.game.board.tile.asCharCode
+import com.example.worditory.game.board.tile.asLetter
 import com.example.worditory.game.board.word.WordViewModel
 import com.example.worditory.game.dict.WordDictionary
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,7 +45,7 @@ class BoardViewModel(
                 val model = model.tilesList[y * width + x]
 
                 tilesData.add(TileViewModel(model, x, y, colorScheme))
-                letterBag.removeLetter(model.letter)
+                letterBag.removeLetter(model.letter.asLetter())
             }
         }
 

@@ -24,7 +24,7 @@ class TileViewModel(
             _ownershipStateFlow.value = value
         }
 
-    private val _letterStateFlow = MutableStateFlow(model.letter)
+    private val _letterStateFlow = MutableStateFlow(model.letter.asLetter())
     val letterStateFLow = _letterStateFlow.asStateFlow()
     var letter: String
         get() = letterStateFLow.value
@@ -42,7 +42,7 @@ class TileViewModel(
 
     val model: TileModel
         get() = TileModel.newBuilder()
-            .setLetter(letter)
+            .setLetter(letter.asCharCode())
             .setOwnership(ownership)
             .build()
 

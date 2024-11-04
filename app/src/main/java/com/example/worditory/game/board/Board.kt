@@ -1,6 +1,7 @@
 package com.example.worditory.game.board
 
 import com.example.worditory.game.board.tile.TileModel
+import com.example.worditory.game.board.tile.asCharCode
 
 class Board private constructor() {
     companion object {
@@ -21,7 +22,7 @@ class Board private constructor() {
 
                 for (x in 0..<width) {
                     val tile = TileModel.newBuilder()
-                        .setLetter(letterBag.takeLetter())
+                        .setLetter(letterBag.takeLetter().asCharCode())
                         .setOwnership(ownership)
                         .build()
                     modelBuilder.addTiles(tile)

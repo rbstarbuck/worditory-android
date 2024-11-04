@@ -95,3 +95,12 @@ class Tile private constructor() {
         }
     }
 }
+
+fun Int.asLetter(): String {
+    val letter = toChar().toString()
+    return if (letter == "Q") "Qu" else letter
+}
+
+fun String.asCharCode(): Int {
+    return first().toChar().code
+}
