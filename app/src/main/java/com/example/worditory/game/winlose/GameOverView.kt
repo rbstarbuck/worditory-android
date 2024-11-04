@@ -19,11 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.example.worditory.navigation.Screen
-import com.example.worditory.savedgames.removeSavedGame
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun GameOverView(

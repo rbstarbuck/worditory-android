@@ -39,15 +39,15 @@ internal fun AvatarChooserDialog(navController: NavController, modifier: Modifie
             .padding(vertical = 50.dp)
             .background(colorResource(R.color.avatar_chooser_grid_background))
     ) {
-        items(AvatarChooser.avatars.size) { item ->
-            val avatar = AvatarChooser.avatars[item]
+        items(AvatarChooser.Avatars.size) { item ->
+            val avatar = AvatarChooser.Avatars[item]
 
             Box(Modifier.padding(5.dp)) {
                 OutlinedButton(
                     onClick = {
                         GlobalScope.launch {
                             datastore.edit { settings ->
-                                settings[DataStoreKey.playerAvatar] = avatar
+                                settings[DataStoreKey.PlayerAvatar] = avatar
                             }
                         }
                         navController.popBackStack()

@@ -21,7 +21,7 @@ import com.example.worditory.R
 import com.example.worditory.SavedGames
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
-import com.example.worditory.chooser.npcopponent.NpcChooserView
+import com.example.worditory.chooser.npc.NpcChooserView
 import com.example.worditory.game.Game
 import com.example.worditory.game.GameAgainstNpcViewModel
 import com.example.worditory.game.GameView

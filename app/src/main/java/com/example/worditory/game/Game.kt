@@ -13,7 +13,7 @@ internal class Game private constructor() {
     }
 
     companion object {
-        internal val avatars = listOf(
+        internal val Avatars = listOf(
             R.drawable.avatar_1,
             R.drawable.avatar_2,
             R.drawable.avatar_3,

@@ -10,6 +10,6 @@ internal val Context.dataStore: DataStore<Preferences> by preferencesDataStore(n
 
 internal class DataStoreKey private constructor() {
     companion object {
-        val playerAvatar = intPreferencesKey("playerAvatar")
+        val PlayerAvatar = intPreferencesKey("playerAvatar")
     }
 }

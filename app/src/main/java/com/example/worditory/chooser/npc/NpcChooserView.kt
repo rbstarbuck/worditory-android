@@ -1,4 +1,4 @@
-package com.example.worditory.chooser.npcopponent
+package com.example.worditory.chooser.npc
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -68,8 +68,8 @@ internal fun NpcChooserView(
                     columns = GridCells.Fixed(3),
                     modifier = Modifier.padding(horizontal = 30.dp)
                 ) {
-                    items(NpcChooser.opponents.size) { item ->
-                        val opponent = NpcChooser.opponents[item]
+                    items(NpcChooser.Opponents.size) { item ->
+                        val opponent = NpcChooser.Opponents[item]
 
                         Box(Modifier.padding(5.dp)) {
                             OutlinedButton(
