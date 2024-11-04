@@ -1,9 +1,11 @@
 package com.example.worditory
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -16,9 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.worditory.chooser.savedgames.SavedGamesView
 import com.example.worditory.navigation.Screen
 import com.example.worditory.saved.savedGamesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -42,7 +46,7 @@ fun MainView(navController: NavController) {
     }
     val avatarVector = ImageVector.vectorResource(id = playerAvatarId)
 
-    Box(Modifier.fillMaxSize()) {
+    Box(Modifier.fillMaxSize().background(colorResource(R.color.background))) {
         OutlinedButton(
             onClick = { navController.navigate(Screen.Avatar.route) },
             modifier = Modifier.width(100.dp).height(100.dp)
@@ -51,16 +55,19 @@ fun MainView(navController: NavController) {
         }
 
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column {
-                for (savedGame in savedGamesState.value.gamesList) {
-                    OutlinedButton(onClick =  {
-                        navController.navigate(
-                            Screen.SavedGame.buildRoute(savedGame.id, playerAvatarId)
-                        )
-                    }) {
-                        Text("${savedGame.id}")
-                    }
-                }
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//                for (savedGame in savedGamesState.value.gamesList) {
+//                    OutlinedButton(onClick =  {
+//                        navController.navigate(
+//                            Screen.SavedGame.buildRoute(savedGame.id, playerAvatarId)
+//                        )
+//                    }) {
+//                        Text("${savedGame.id}")
+//                    }
+//                }
+
+                SavedGamesView(navController, playerAvatarId, Modifier.fillMaxWidth())
 
                 FilledTonalButton(
                     modifier = Modifier.wrapContentSize(),
