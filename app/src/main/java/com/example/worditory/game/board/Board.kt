@@ -21,8 +21,6 @@ class Board private constructor() {
 
                 for (x in 0..<width) {
                     val tile = TileModel.newBuilder()
-                        .setX(x)
-                        .setY(y)
                         .setLetter(letterBag.takeLetter())
                         .setOwnership(ownership)
                         .build()

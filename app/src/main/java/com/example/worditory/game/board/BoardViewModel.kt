@@ -22,7 +22,7 @@ class BoardViewModel(
 ): ViewModel() {
     val width = model.width
     val height = model.height
-    val tiles: List<TileViewModel> = model.tilesList.map { TileViewModel(it, colorScheme) }
+    val tiles: List<TileViewModel>
     val word = WordViewModel(width, height, onWordChanged)
     val letterBag = LetterBag()
 
@@ -36,9 +36,18 @@ class BoardViewModel(
             .build()
 
     init {
-        tiles.forEach { tile ->
-            letterBag.removeLetter(tile.letter)
+        val tilesData = mutableListOf<TileViewModel>()
+
+        for (y in 0..<height) {
+            for (x in 0..<width) {
+                val model = model.tilesList[y * width + x]
+
+                tilesData.add(TileViewModel(model, x, y, colorScheme))
+                letterBag.removeLetter(model.letter)
+            }
         }
+
+        tiles = tilesData
     }
 
     fun getScore(): Game.Score {

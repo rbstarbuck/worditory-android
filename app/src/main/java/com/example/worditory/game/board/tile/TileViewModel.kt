@@ -10,10 +10,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.security.InvalidParameterException
 
-class TileViewModel(model: TileModel, val colorScheme: Tile.ColorScheme): ViewModel() {
-    val x: Int = model.x
-    val y: Int = model.y
-
+class TileViewModel(
+    model: TileModel,
+    val x: Int,
+    val y: Int,
+    val colorScheme: Tile.ColorScheme
+): ViewModel() {
     private val _ownershipStateFlow = MutableStateFlow(model.ownership)
     val ownershipStateFlow = _ownershipStateFlow.asStateFlow()
     var ownership: TileModel.Ownership
@@ -40,8 +42,6 @@ class TileViewModel(model: TileModel, val colorScheme: Tile.ColorScheme): ViewMo
 
     val model: TileModel
         get() = TileModel.newBuilder()
-            .setX(x)
-            .setY(y)
             .setLetter(letter)
             .setOwnership(ownership)
             .build()
