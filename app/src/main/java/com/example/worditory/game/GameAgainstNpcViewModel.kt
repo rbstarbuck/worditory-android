@@ -1,7 +1,6 @@
 package com.example.worditory.game
 
 import com.example.worditory.game.board.GameModel
-import com.example.worditory.game.board.NpcModel
 import com.example.worditory.game.npc.NonPlayerCharacter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -10,10 +9,9 @@ import kotlin.random.Random
 
 class GameAgainstNpcViewModel(
     model: GameModel,
-    playerAvatarId: Int,
-    opponent: NpcModel
-): GameViewModel(model, playerAvatarId, opponent.avatar) {
-    val nonPlayerCharacter = NonPlayerCharacter(board, Game.Player.PLAYER_2, opponent.spec)
+    playerAvatarId: Int
+): GameViewModel(model, playerAvatarId, model.opponent.avatar) {
+    val nonPlayerCharacter = NonPlayerCharacter(board, Game.Player.PLAYER_2, model.opponent.spec)
 
     override fun onPlayButtonClick(): Boolean {
         if (super.onPlayButtonClick()) {

@@ -65,7 +65,7 @@ class BoardViewModel(
         val tileY = (boardHeightFloat * currentDragPoint.y / viewHeightFloat).toInt()
 
         if (tileX >= 0 && tileX < width && tileY >= 0 && tileY < height) {
-            val tile = tiles[tileY * height + tileX]
+            val tile = tiles[tileY * width + tileX]
 
             val tileDiameter = viewWidthFloat / boardWidthFloat
             val tileRadius = tileDiameter / 2f
@@ -180,6 +180,6 @@ class BoardViewModel(
 
     private fun addIfExists(x: Int, y: Int, list: MutableList<TileViewModel>) {
         if (x >= 0 && x < width && y >= 0 && y < height)
-            list.add(tiles[y * height + x])
+            list.add(tiles[y * width + x])
     }
 }

@@ -3,6 +3,7 @@ package com.example.worditory.game
 import com.example.worditory.R
 import com.example.worditory.game.board.Board
 import com.example.worditory.game.board.GameModel
+import com.example.worditory.game.board.NpcModel
 import com.example.worditory.game.board.tile.Tile
 import java.security.InvalidParameterException
 
@@ -77,10 +78,16 @@ class Game private constructor() {
             avatar30
         )
 
-        fun newGame(boardWidth: Int, boardHeight: Int, colorScheme: Tile.ColorScheme): GameModel {
+        fun newGame(
+            boardWidth: Int,
+            boardHeight: Int,
+            opponent: NpcModel,
+            colorScheme: Tile.ColorScheme
+        ): GameModel {
             return GameModel.newBuilder()
                 .setBoard(Board.newBoard(boardWidth, boardHeight))
                 .setIsPlayerTurn(true)
+                .setOpponent(opponent)
                 .setColorScheme(gameModelColorSchemeFromTileColorScheme(colorScheme))
                 .build()
         }
