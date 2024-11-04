@@ -9,6 +9,8 @@ import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.game.playbutton.PlayButtonViewModel
 import com.example.worditory.game.scoreboard.ScoreBoardViewModel
 import com.example.worditory.game.winlose.GameOver
+import com.example.worditory.incrementGamesPlayed
+import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
 import com.example.worditory.savedgames.addSavedGame
 import com.example.worditory.savedgames.removeSavedGame
@@ -122,10 +124,18 @@ abstract class GameViewModel(
     }
 
     internal fun exitGame(context: Context, navController: NavController) {
-        if (gameOverState == GameOver.State.IN_PROGRESS) {
-            GlobalScope.launch { context.addSavedGame(model) }
-        } else {
-            GlobalScope.launch { context.removeSavedGame(id) }
+        val currentGameOverState = gameOverState
+
+        GlobalScope.launch {
+            if (currentGameOverState == GameOver.State.IN_PROGRESS) {
+                context.addSavedGame(model)
+            } else {
+                context.removeSavedGame(id)
+                context.incrementGamesPlayed()
+                if (currentGameOverState == GameOver.State.WIN) {
+                    context.incrementGamesWon()
+                }
+            }
         }
 
         navController.navigate(Screen.Main.route) {

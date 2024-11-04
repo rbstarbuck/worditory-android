@@ -29,9 +29,8 @@ import kotlinx.coroutines.flow.map
 
 @Composable
 internal fun MainView(navController: NavController) {
-    val playerAvatar: Flow<Int> = LocalContext.current.dataStore.data.map { preferences ->
-        preferences[DataStoreKey.PlayerAvatar] ?: 0
-    }
+    val playerAvatar = LocalContext.current.getPlayerAvatarId()
+
     val playerAvatarState = playerAvatar.collectAsState(0)
     val playerAvatarId = if (playerAvatarState.value == 0) {
         R.drawable.avatar_placeholder

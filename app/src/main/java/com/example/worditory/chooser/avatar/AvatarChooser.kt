@@ -4,7 +4,7 @@ import com.example.worditory.R
 
 internal class AvatarChooser private constructor() {
     companion object {
-        val Avatars = listOf(
+        val AvatarIds = listOf(
             R.drawable.avatar_1,
             R.drawable.avatar_2,
             R.drawable.avatar_3,

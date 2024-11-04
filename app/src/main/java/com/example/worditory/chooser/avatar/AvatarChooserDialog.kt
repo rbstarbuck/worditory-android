@@ -20,17 +20,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.core.edit
 import androidx.navigation.NavController
-import com.example.worditory.DataStoreKey
 import com.example.worditory.R
-import com.example.worditory.dataStore
+import com.example.worditory.setPlayerAvatarId
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @Composable
 internal fun AvatarChooserDialog(navController: NavController, modifier: Modifier = Modifier) {
-    val datastore = LocalContext.current.dataStore
+    val context = LocalContext.current
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -39,17 +37,13 @@ internal fun AvatarChooserDialog(navController: NavController, modifier: Modifie
             .padding(vertical = 50.dp)
             .background(colorResource(R.color.avatar_chooser_grid_background))
     ) {
-        items(AvatarChooser.Avatars.size) { item ->
-            val avatar = AvatarChooser.Avatars[item]
+        items(AvatarChooser.AvatarIds.size) { item ->
+            val avatarId = AvatarChooser.AvatarIds[item]
 
             Box(Modifier.padding(5.dp)) {
                 OutlinedButton(
                     onClick = {
-                        GlobalScope.launch {
-                            datastore.edit { settings ->
-                                settings[DataStoreKey.PlayerAvatar] = avatar
-                            }
-                        }
+                        GlobalScope.launch { context.setPlayerAvatarId(avatarId) }
                         navController.popBackStack()
                     },
                     shape = RoundedCornerShape(15.dp),
@@ -70,7 +64,7 @@ internal fun AvatarChooserDialog(navController: NavController, modifier: Modifie
                         bottom = 0.dp
                     )
                 ) {
-                    val avatarVector = ImageVector.vectorResource(id = avatar)
+                    val avatarVector = ImageVector.vectorResource(id = avatarId)
 
                     Image(
                         imageVector = avatarVector,
