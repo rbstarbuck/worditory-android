@@ -1,6 +1,5 @@
 package com.example.worditory.game
 
-import com.example.worditory.game.board.GameModel
 import com.example.worditory.game.npc.NonPlayerCharacter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay

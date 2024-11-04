@@ -12,13 +12,12 @@ import androidx.navigation.compose.dialog
 import com.example.worditory.MainView
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
-import com.example.worditory.chooser.npcopponent.NpcChooser.*
 import com.example.worditory.chooser.npcopponent.NpcChooserView
 import com.example.worditory.game.Game
 import com.example.worditory.game.GameAgainstNpcViewModel
 import com.example.worditory.game.GameView
-import com.example.worditory.game.board.NpcModel
 import com.example.worditory.game.board.tile.Tile
+import com.example.worditory.game.npc.NpcModel
 
 @Composable
 fun NavigationStack(navController: NavHostController) {

@@ -2,7 +2,6 @@ package com.example.worditory.game.npc
 
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.BoardViewModel
-import com.example.worditory.game.board.NpcModel
 import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.dict.WordDictionary

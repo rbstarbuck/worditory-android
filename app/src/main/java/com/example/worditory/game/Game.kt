@@ -2,8 +2,7 @@ package com.example.worditory.game
 
 import com.example.worditory.R
 import com.example.worditory.game.board.Board
-import com.example.worditory.game.board.GameModel
-import com.example.worditory.game.board.NpcModel
+import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.game.board.tile.Tile
 import java.security.InvalidParameterException
 
@@ -118,3 +117,5 @@ class Game private constructor() {
 
     data class Score(val player1: Int, val player2: Int)
 }
+
+

@@ -1,7 +1,7 @@
 package com.example.worditory.chooser.npcopponent
 
 import com.example.worditory.R
-import com.example.worditory.game.board.NpcModel
+import com.example.worditory.game.npc.NpcModel
 
 class NpcChooser private constructor() {
     companion object {

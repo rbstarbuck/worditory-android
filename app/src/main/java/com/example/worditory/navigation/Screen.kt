@@ -1,6 +1,6 @@
 package com.example.worditory.navigation
 
-import com.example.worditory.game.board.NpcModel
+import com.example.worditory.game.npc.NpcModel
 
 sealed class Screen(val route: String) {
     object Main: Screen("main")

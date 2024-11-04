@@ -2,7 +2,6 @@ package com.example.worditory.game
 
 import androidx.lifecycle.ViewModel
 import com.example.worditory.game.board.BoardViewModel
-import com.example.worditory.game.board.GameModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.game.playbutton.PlayButtonViewModel

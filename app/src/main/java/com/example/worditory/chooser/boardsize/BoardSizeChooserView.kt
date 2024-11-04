@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.worditory.R
-import com.example.worditory.game.board.NpcModel
+import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.navigation.Screen.Game
 

@@ -2,7 +2,7 @@ package com.example.worditory.game.board.tile
 
 import com.example.worditory.game.board.tile.Tile.ColorScheme.Player.Companion.Colors
 import com.example.worditory.R
-import com.example.worditory.game.board.GameModel
+import com.example.worditory.game.GameModel
 import java.security.InvalidParameterException
 import kotlin.random.Random
 
