@@ -3,7 +3,6 @@ package com.example.worditory.game
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.example.worditory.SavedGames
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.dict.WordDictionary
@@ -13,7 +12,6 @@ import com.example.worditory.game.winlose.GameOver
 import com.example.worditory.navigation.Screen
 import com.example.worditory.savedgames.addSavedGame
 import com.example.worditory.savedgames.removeSavedGame
-import com.example.worditory.savedgames.savedGamesDataStore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -63,6 +61,7 @@ abstract class GameViewModel(
 
     internal val scoreBoard = ScoreBoardViewModel(
         initialScoreToWin = boardWidth * boardHeight,
+        currentScoreToWin = model.scoreToWin,
         avatarIdPlayer1,
         avatarIdPlayer2,
         colorScheme
@@ -77,6 +76,7 @@ abstract class GameViewModel(
             .setOpponent(opponent)
             .setColorScheme(colorScheme.model)
             .setIsPlayerTurn(isPlayerTurn)
+            .setScoreToWin(scoreBoard.scoreToWin)
             .build()
 
     init {
@@ -118,6 +118,8 @@ abstract class GameViewModel(
     internal fun exitGame(context: Context, navController: NavController) {
         if (gameOverState == GameOver.State.IN_PROGRESS) {
             GlobalScope.launch { context.addSavedGame(model) }
+        } else {
+            GlobalScope.launch { context.removeSavedGame(id) }
         }
 
         navController.navigate(Screen.Main.route) {

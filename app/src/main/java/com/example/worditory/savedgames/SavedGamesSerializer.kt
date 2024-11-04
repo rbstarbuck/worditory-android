@@ -39,7 +39,7 @@ suspend fun Context.addSavedGame(game: GameModel) {
     savedGamesDataStore.updateData { savedGames ->
         SavedGames.newBuilder()
             .addGames(game)
-            .addAllGames(savedGames.gamesList)
+            .addAllGames(savedGames.gamesList.filter { it.id != game.id })
             .build()
     }
 }

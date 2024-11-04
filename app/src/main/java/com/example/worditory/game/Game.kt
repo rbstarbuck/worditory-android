@@ -58,6 +58,7 @@ internal class Game private constructor() {
                 .setIsPlayerTurn(true)
                 .setOpponent(opponent)
                 .setColorScheme(colorScheme.model)
+                .setScoreToWin(boardWidth * boardHeight)
                 .build()
         }
     }

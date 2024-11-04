@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun GameOverView(
     navController: NavController,
-    gameId: Long,
     gameOverStateFlow: StateFlow<GameOver.State>,
     targetState: GameOver.State,
     imageVector: ImageVector,

@@ -10,11 +10,12 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ScoreBoardViewModel(
     initialScoreToWin: Int,
+    currentScoreToWin: Int,
     avatarIdPlayer1: Int,
     avatarIdPlayer2: Int,
     colorScheme: Tile.ColorScheme
 ): ViewModel() {
-    private val _scoreToWinStateFlow = MutableStateFlow(initialScoreToWin)
+    private val _scoreToWinStateFlow = MutableStateFlow(currentScoreToWin)
     internal val scoreToWinStateFlow = _scoreToWinStateFlow.asStateFlow()
     val scoreToWin: Int
         get() = scoreToWinStateFlow.value
@@ -31,7 +32,7 @@ class ScoreBoardViewModel(
         colorScheme.player2
     )
 
-    internal val scoreToWinViewModel = ScoreToWinViewModel(scoreToWinStateFlow)
+    internal val scoreToWinViewModel = ScoreToWinViewModel(initialScoreToWin, scoreToWinStateFlow)
 
     internal var score: Game.Score
         get() = Game.Score(scorePlayer1.score, scorePlayer2.score)

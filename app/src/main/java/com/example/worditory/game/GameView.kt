@@ -70,7 +70,6 @@ internal fun GameView(
 
         GameOverView(
             navController = navController,
-            gameId = viewModel.id,
             gameOverStateFlow = viewModel.gameOverStateFlow,
             targetState = GameOver.State.WIN,
             imageVector = ImageVector.vectorResource(R.drawable.game_over_win),
@@ -84,7 +83,6 @@ internal fun GameView(
 
         GameOverView(
             navController = navController,
-            gameId = viewModel.id,
             gameOverStateFlow = viewModel.gameOverStateFlow,
             targetState = GameOver.State.LOSE,
             imageVector = ImageVector.vectorResource(R.drawable.game_over_lose),

@@ -10,6 +10,7 @@ message GameModel {
   bool is_player_turn = 3;
   ColorScheme color_scheme = 4;
   NpcModel opponent = 5;
+  int32 score_to_win = 6;
 
   message ColorScheme {
     Color player1 = 1;
