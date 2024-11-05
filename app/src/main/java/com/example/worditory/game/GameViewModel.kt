@@ -9,6 +9,7 @@ import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.game.playbutton.PlayButtonViewModel
 import com.example.worditory.game.scoreboard.ScoreBoardViewModel
 import com.example.worditory.game.gameover.GameOver
+import com.example.worditory.game.menu.MenuViewModel
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
@@ -46,6 +47,14 @@ abstract class GameViewModel(
             _isNotAWordStateFlow.value = value
         }
 
+    private val _displayMenuStateFlow = MutableStateFlow(false)
+    internal val displayMenuStateFlow = _displayMenuStateFlow.asStateFlow()
+    private var displayMenu: Boolean
+        get() = displayMenuStateFlow.value
+        set(value) {
+            _displayMenuStateFlow.value = value
+        }
+
     private val _gameOverStateFlow = MutableStateFlow(GameOver.State.IN_PROGRESS)
     internal val gameOverStateFlow = _gameOverStateFlow.asStateFlow()
     internal var gameOverState: GameOver.State
@@ -69,7 +78,13 @@ abstract class GameViewModel(
         colorScheme
     )
 
-    internal val playButton = PlayButtonViewModel(board.word.modelStateFlow, isNotAWordStateFlow)
+    internal val menu = MenuViewModel(isPlayerTurnStateFlow)
+
+    internal val playButton = PlayButtonViewModel(
+        board.word.modelStateFlow,
+        isNotAWordStateFlow,
+        isPlayerTurnStateFlow
+    )
 
     internal val model: GameModel
         get() = GameModel.newBuilder()
@@ -125,6 +140,14 @@ abstract class GameViewModel(
         }
 
         return false
+    }
+
+    internal fun onMenuClick() {
+        displayMenu = true
+    }
+
+    internal fun dismissMenu() {
+        displayMenu = false
     }
 
     internal fun exitGame(context: Context, navController: NavController) {

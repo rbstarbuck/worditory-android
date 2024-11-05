@@ -1,15 +1,24 @@
 package com.example.worditory.game
 
+import android.widget.Space
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -24,6 +33,8 @@ import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.gameover.GameOverView
+import com.example.worditory.game.menu.MenuView
+import com.example.worditory.game.menu.MenuViewModel
 
 @Composable
 internal fun GameView(
@@ -32,6 +43,13 @@ internal fun GameView(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+
+    val displayMenuState = viewModel.displayMenuStateFlow.collectAsState()
+    val animatedMenuAlpha = animateFloatAsState(
+        targetValue = if (displayMenuState.value) 1f else 0f,
+        animationSpec = tween(500),
+        label = "menu"
+    )
 
     BackHandler {
         viewModel.exitGame(context, navController)
@@ -54,12 +72,30 @@ internal fun GameView(
             BoardView(viewModel.board, Modifier.fillMaxWidth())
 
             PlayButtonView(
-                viewModel.playButton,
-                viewModel.isPlayerTurnStateFlow,
-                Modifier.height(130.dp)
-            ) {
-                viewModel.onPlayButtonClick()
+                viewModel = viewModel.playButton,
+                modifier = Modifier.height(130.dp),
+                onMenuClick = {
+                    viewModel.onMenuClick()
+                },
+                onPlayClick =  {
+                    viewModel.onPlayButtonClick()
+                }
+            )
+        }
+
+        if (displayMenuState.value) {
+            BackHandler {
+                viewModel.dismissMenu()
             }
+
+            MenuView(
+                viewModel = viewModel.menu,
+                modifier = Modifier.alpha(animatedMenuAlpha.value),
+                onPassTurnClick = { },
+                onDisplayTutorialClick = { },
+                onExitGameClick = { viewModel.exitGame(context, navController) },
+                onDismiss = { viewModel.dismissMenu() }
+            )
         }
 
         GameOverView(

@@ -1,11 +1,18 @@
 package com.example.worditory.game.playbutton
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -13,8 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -23,44 +33,65 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 internal fun PlayButtonView(
     viewModel: PlayButtonViewModel,
-    isPlayerTurnStateFlow: StateFlow<Boolean>,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onPlayClick: () -> Unit,
+    onMenuClick: () -> Unit
 ) {
     Column(modifier.fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
         val wordState = viewModel.wordStateFlow.collectAsState()
-        val isPlayerTurnState = isPlayerTurnStateFlow.collectAsState()
+        val isPlayerTurnState = viewModel.isPlayerTurnStateFlow.collectAsState()
         val isNotAWordState = viewModel.isNotAWordStateFlow.collectAsState()
 
         val wordTextColor = colorResource(R.color.font_color_light)
 
         Spacer(Modifier.height(20.dp))
 
-        val buttonEnabled = isPlayerTurnState.value && !wordState.value.tiles.isEmpty()
-        val buttonStrokeColor =
-            if (buttonEnabled) {
-                colorResource(R.color.button_stroke)
-            } else {
-                colorResource(R.color.disabled_button_stroke)
-            }
-        OutlinedButton(
-            onClick = onClick,
-            enabled = buttonEnabled,
-            colors = ButtonColors(
-                containerColor = colorResource(R.color.button_container),
-                contentColor = colorResource(R.color.button_content),
-                disabledContainerColor = colorResource(R.color.disabled_button_container),
-                disabledContentColor = colorResource(R.color.disabled_button_content)
-            ),
-            border = BorderStroke(width = 2.dp, buttonStrokeColor),
-            contentPadding = PaddingValues(horizontal = 25.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Play", fontSize = 26.sp)
+            val playButtonEnabled = isPlayerTurnState.value && !wordState.value.tiles.isEmpty()
+            val playButtonStrokeColor =
+                if (playButtonEnabled) R.color.button_stroke else R.color.disabled_button_stroke
+
+            Spacer(Modifier.width(20.dp))
+
+            Image(
+                imageVector = ImageVector.vectorResource(R.drawable.menu),
+                contentDescription = stringResource(R.string.menu),
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(40.dp)
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onTap = { onMenuClick() }
+                        )
+                    }
+            )
+
+            Spacer(Modifier.weight(1f))
+
+            OutlinedButton(
+                onClick = onPlayClick,
+                enabled = playButtonEnabled,
+                colors = ButtonColors(
+                    containerColor = colorResource(R.color.button_container),
+                    contentColor = colorResource(R.color.button_content),
+                    disabledContainerColor = colorResource(R.color.disabled_button_container),
+                    disabledContentColor = colorResource(R.color.disabled_button_content)
+                ),
+                border = BorderStroke(width = 2.dp, colorResource(playButtonStrokeColor)),
+                contentPadding = PaddingValues(horizontal = 25.dp)
+            ) {
+                Text(text = stringResource(R.string.play), fontSize = 26.sp)
+            }
+
+            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.width(60.dp))
         }
 
         Spacer(Modifier.weight(0.75f))

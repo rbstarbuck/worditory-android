@@ -51,6 +51,9 @@
     <color name="saved_game_avatar_background">#FFCCCCCC</color>
     <color name="delete_saved_game_dialog_background">#FFEEEEEE</color>
 
+    <color name="game_menu_background">#FFEEEEEE</color>
+    <color name="game_menu_border">#FF666666</color>
+
     <color name="game_over_lose_border">#FF9E9E9E</color>
     <color name="game_over_win_border">#FFE3BD24</color>
     <color name="game_over_lose_background">#FFDBDBDB</color>
