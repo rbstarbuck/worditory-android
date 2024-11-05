@@ -106,7 +106,11 @@ abstract class GameViewModel(
 
     private fun updateScore() {
         scoreBoard.score = board.getScore()
-        --scoreBoard.scoreToWin
+        if (scoreBoard.score.player1 + 1 < scoreBoard.scoreToWin
+            && scoreBoard.score.player2 + 1 < scoreBoard.scoreToWin
+        ) {
+            --scoreBoard.scoreToWin
+        }
     }
 
     private fun checkForGameOver(): Boolean {

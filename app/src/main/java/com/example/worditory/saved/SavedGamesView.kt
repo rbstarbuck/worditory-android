@@ -136,7 +136,8 @@ internal fun SavedGamesView(
                     OutlinedButton(
                         onClick = {
                             navController.navigate(
-                                Screen.SavedGame.buildRoute(game.id, playerAvatarId))
+                                Screen.SavedGame.buildRoute(game.id, playerAvatarId)
+                            )
                         },
                         modifier = Modifier
                             .offset(itemWidth - avatarSize - padding, -padding)
