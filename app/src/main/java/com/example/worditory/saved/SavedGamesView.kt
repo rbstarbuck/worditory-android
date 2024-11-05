@@ -6,17 +6,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
@@ -64,11 +67,11 @@ internal fun SavedGamesView(
     val deleteGameState = deleteGameStateFlow.collectAsState()
 
     BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
-        val itemWidth = this.maxWidth / 2.5f
-        val padding = this.maxWidth / 30f
+        val itemWidth = this.maxWidth / 2.25f
+        val padding = this.maxWidth / 25f
         val clipRadius = 15.dp
-        val avatarSize = this.maxWidth / 8f
-        val closeButtonSize = min(this.maxWidth / 12f, 30.dp)
+        val avatarSize = this.maxWidth / 7f
+        val closeButtonSize = min(this.maxWidth / 10f, 30.dp)
         val closeButtonOffset = this.maxWidth / -60f
 
         if (savedGamesState.value.gamesList.size == 0) {
@@ -81,7 +84,11 @@ internal fun SavedGamesView(
             )
         }
 
-        LazyRow(verticalAlignment = Alignment.CenterVertically) {
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             items(savedGamesState.value.gamesList.size) { item ->
                 val game = savedGamesState.value.gamesList.get(item)
                 Box(Modifier
@@ -114,7 +121,7 @@ internal fun SavedGamesView(
                         modifier = Modifier
                             .size(closeButtonSize)
                             .offset(closeButtonOffset, closeButtonOffset),
-                        shape = RoundedCornerShape(clipRadius),
+                        shape = CircleShape,
                         colors = ButtonColors(
                             containerColor = colorResource(R.color.close_button_background),
                             contentColor = Color.White,
