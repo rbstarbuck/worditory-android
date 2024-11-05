@@ -28,14 +28,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.worditory.R
-import com.example.worditory.navigation.Screen.BoardSizeChooser
 
 @Composable
 internal fun NpcChooserView(
-    navController: NavController,
-    avatarIdPlayer1: Int,
+    viewModel: NpcChooserViewModel,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -74,9 +71,7 @@ internal fun NpcChooserView(
                         Box(Modifier.padding(5.dp)) {
                             OutlinedButton(
                                 onClick = {
-                                    navController.navigate(
-                                        BoardSizeChooser.buildRoute(avatarIdPlayer1, opponent)
-                                    )
+                                    viewModel.onNpcClick(opponent)
                                 },
                                 shape = RoundedCornerShape(15.dp),
                                 colors = ButtonColors(

@@ -33,13 +33,13 @@ import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.gameover.GameOverView
+import com.example.worditory.game.gameover.GameOverViewModel
 import com.example.worditory.game.menu.MenuView
 import com.example.worditory.game.menu.MenuViewModel
 
 @Composable
 internal fun GameView(
     viewModel: GameViewModel,
-    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -52,7 +52,7 @@ internal fun GameView(
     )
 
     BackHandler {
-        viewModel.exitGame(context, navController)
+        viewModel.exitGame(context)
     }
 
     Box(modifier) {
@@ -93,35 +93,31 @@ internal fun GameView(
                 modifier = Modifier.alpha(animatedMenuAlpha.value),
                 onPassTurnClick = { },
                 onDisplayTutorialClick = { },
-                onExitGameClick = { viewModel.exitGame(context, navController) },
+                onExitGameClick = { viewModel.exitGame(context) },
                 onDismiss = { viewModel.dismissMenu() }
             )
         }
 
         GameOverView(
-            navController = navController,
-            gameOverStateFlow = viewModel.gameOverStateFlow,
-            targetState = GameOver.State.WIN,
+            viewModel = viewModel.gameOverWin,
+            modifier = Modifier.fillMaxSize(),
             imageVector = ImageVector.vectorResource(R.drawable.game_over_win),
             strokeColor = colorResource(R.color.game_over_win_border),
             backgroundColor = colorResource(R.color.game_over_win_background),
             contentDescription = stringResource(R.string.you_win),
-            modifier = Modifier.fillMaxSize()
-        ) { context, navController ->
-            viewModel.exitGame(context, navController)
+        ) { context ->
+            viewModel.exitGame(context)
         }
 
         GameOverView(
-            navController = navController,
-            gameOverStateFlow = viewModel.gameOverStateFlow,
-            targetState = GameOver.State.LOSE,
+            viewModel = viewModel.gameOverLose,
+            modifier = Modifier.fillMaxSize(),
             imageVector = ImageVector.vectorResource(R.drawable.game_over_lose),
             strokeColor = colorResource(R.color.game_over_lose_border),
             backgroundColor = colorResource(R.color.game_over_lose_background),
-            contentDescription = stringResource(R.string.you_lose),
-            modifier = Modifier.fillMaxSize()
-        ) { context, navController ->
-            viewModel.exitGame(context, navController)
+            contentDescription = stringResource(R.string.you_lose)
+        ) { context ->
+            viewModel.exitGame(context)
         }
     }
 }

@@ -8,8 +8,8 @@ import com.example.worditory.game.dict.WordDictionary
 import java.security.InvalidParameterException
 
 class NonPlayerCharacter(
-    private val board: BoardViewModel,
-    private val model: NpcModel
+    private val model: NpcModel,
+    private val board: BoardViewModel
 ) {
     internal fun findWordToPlay(): WordModel? {
         var words = findAllWords()

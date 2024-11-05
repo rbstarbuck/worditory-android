@@ -23,22 +23,20 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 internal fun GameOverView(
-    navController: NavController,
-    gameOverStateFlow: StateFlow<GameOver.State>,
-    targetState: GameOver.State,
+    viewModel: GameOverViewModel,
+    modifier: Modifier = Modifier,
     imageVector: ImageVector,
     strokeColor: Color,
     backgroundColor: Color,
     contentDescription: String,
-    modifier: Modifier = Modifier,
-    onGameOver: (Context, NavController) -> Unit
+    onGameOver: (Context) -> Unit
 ) {
-    val gameOverState = gameOverStateFlow.collectAsState()
+    val gameOverState = viewModel.gameOverStateFlow.collectAsState()
 
     val context = LocalContext.current
 
     val animatedScale = animateFloatAsState(
-        targetValue = if (gameOverState.value == targetState) 1f else 0f,
+        targetValue = if (gameOverState.value == viewModel.targetState) 1f else 0f,
         animationSpec = tween(500),
         label = "scale"
     )
@@ -47,7 +45,7 @@ internal fun GameOverView(
         val size = this.maxWidth * 0.8f * animatedScale.value
 
         OutlinedButton(
-            onClick = { onGameOver(context, navController) },
+            onClick = { onGameOver(context) },
             modifier = Modifier.size(size),
             shape = RoundedCornerShape(size / 2f),
             colors = ButtonColors(

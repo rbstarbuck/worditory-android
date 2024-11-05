@@ -1,5 +1,7 @@
 package com.example.worditory.game
 
+import android.content.Context
+import androidx.navigation.NavController
 import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.gameover.GameOver
 import kotlinx.coroutines.GlobalScope
@@ -9,9 +11,10 @@ import kotlin.random.Random
 
 internal class GameAgainstNpcViewModel(
     model: GameModel,
-    playerAvatarId: Int
-): GameViewModel(model, playerAvatarId, model.opponent.avatar) {
-    private val nonPlayerCharacter = NonPlayerCharacter(board, model.opponent)
+    context: Context,
+    navController: NavController
+): GameViewModel(model, context, navController) {
+    private val nonPlayerCharacter = NonPlayerCharacter(model.opponent, board)
 
     init {
         if (!isPlayerTurn) {

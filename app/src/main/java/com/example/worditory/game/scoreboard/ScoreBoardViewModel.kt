@@ -5,14 +5,15 @@ import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.scoreboard.player.PlayerScoreViewModel
 import com.example.worditory.game.scoreboard.scoretowin.ScoreToWinViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class ScoreBoardViewModel(
     initialScoreToWin: Int,
     currentScoreToWin: Int,
-    avatarIdPlayer1: Int,
-    avatarIdPlayer2: Int,
+    avatarIdPlayer1: Flow<Int>,
+    avatarIdPlayer2: Flow<Int>,
     colorScheme: Tile.ColorScheme
 ): ViewModel() {
     private val _scoreToWinStateFlow = MutableStateFlow(currentScoreToWin)

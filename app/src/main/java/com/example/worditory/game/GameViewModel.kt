@@ -9,7 +9,9 @@ import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.game.playbutton.PlayButtonViewModel
 import com.example.worditory.game.scoreboard.ScoreBoardViewModel
 import com.example.worditory.game.gameover.GameOver
+import com.example.worditory.game.gameover.GameOverViewModel
 import com.example.worditory.game.menu.MenuViewModel
+import com.example.worditory.getPlayerAvatarId
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
@@ -19,11 +21,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.Flow
 
 abstract class GameViewModel(
     model: GameModel,
-    avatarIdPlayer1: Int,
-    avatarIdPlayer2: Int
+    context: Context,
+    val navController: NavController
 ): ViewModel() {
     internal val id = model.id
     internal val boardWidth = model.board.width
@@ -73,8 +76,8 @@ abstract class GameViewModel(
     internal val scoreBoard = ScoreBoardViewModel(
         initialScoreToWin = boardWidth * boardHeight,
         currentScoreToWin = model.scoreToWin,
-        avatarIdPlayer1,
-        avatarIdPlayer2,
+        context.getPlayerAvatarId(),
+        MutableStateFlow(model.opponent.avatar),
         colorScheme
     )
 
@@ -84,6 +87,18 @@ abstract class GameViewModel(
         board.word.modelStateFlow,
         isNotAWordStateFlow,
         isPlayerTurnStateFlow
+    )
+
+    internal val gameOverWin = GameOverViewModel(
+        navController = navController,
+        gameOverStateFlow = gameOverStateFlow,
+        targetState = GameOver.State.WIN
+    )
+
+    internal val gameOverLose = GameOverViewModel(
+        navController = navController,
+        gameOverStateFlow = gameOverStateFlow,
+        targetState = GameOver.State.LOSE
     )
 
     internal val model: GameModel
@@ -150,7 +165,7 @@ abstract class GameViewModel(
         displayMenu = false
     }
 
-    internal fun exitGame(context: Context, navController: NavController) {
+    internal fun exitGame(context: Context) {
         val currentGameOverState = gameOverState
 
         GlobalScope.launch {

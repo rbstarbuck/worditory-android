@@ -26,16 +26,13 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.header.HeaderView
-import com.example.worditory.navigation.Screen
 import com.example.worditory.saved.DeleteSavedGameDialog
 import com.example.worditory.saved.SavedGamesView
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-internal fun MainView(navController: NavController, modifier: Modifier = Modifier) {
+internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     val getPlayerId = remember { context.getPlayerAvatarId() }
@@ -46,16 +43,14 @@ internal fun MainView(navController: NavController, modifier: Modifier = Modifie
         playerAvatarIdState.value
     }
 
-    val avatarChooserEnabledStateFlow = remember { MutableStateFlow(false) }
-    val avatarChooserEnabledState = avatarChooserEnabledStateFlow.collectAsState()
+    val avatarChooserEnabledState = viewModel.avatarChooserEnabledStateFlow.collectAsState()
     val avatarChooserAnimatedAlpha = animateFloatAsState(
         targetValue = if (avatarChooserEnabledState.value) 1f else 0f,
         animationSpec = tween(500),
         label = "avatarChooserAlpha"
     )
 
-    val deleteSavedGameIdStateFlow = remember { MutableStateFlow(0L) }
-    val deleteSavedGameIdState = deleteSavedGameIdStateFlow.collectAsState()
+    val deleteSavedGameIdState = viewModel.deleteSavedGameIdStateFlow.collectAsState()
     val deleteSavedGameAnimatedAlpha = animateFloatAsState(
         targetValue = if (deleteSavedGameIdState.value == 0L) 0f else 1f,
         animationSpec = tween(500),
@@ -72,22 +67,19 @@ internal fun MainView(navController: NavController, modifier: Modifier = Modifie
         ) {
 
             HeaderView(Modifier.fillMaxWidth().padding(20.dp)) {
-                avatarChooserEnabledStateFlow.value = true
+                viewModel.avatarChooserEnabled = true
             }
 
             SavedGamesView(
                 modifier = Modifier.fillMaxWidth(),
-                navController = navController,
-                playerAvatarId = playerAvatarId,
+                viewModel = viewModel.savedGames,
                 onClick = { gameId ->
-                    deleteSavedGameIdStateFlow.value = gameId
+                    viewModel.deleteSavedGameId = gameId
                 }
             )
 
             OutlinedButton(
-                onClick = {
-                    navController.navigate(Screen.NpcChooser.buildRoute(playerAvatarId))
-                },
+                onClick = { viewModel.onPlayGameClicked() },
                 colors = ButtonColors(
                     containerColor = colorResource(R.color.header_counter_background),
                     contentColor = Color.White,
@@ -113,7 +105,7 @@ internal fun MainView(navController: NavController, modifier: Modifier = Modifie
 
         if (avatarChooserEnabledState.value) {
             AvatarChooserDialog(Modifier.alpha(avatarChooserAnimatedAlpha.value)) {
-                avatarChooserEnabledStateFlow.value = false
+                viewModel.avatarChooserEnabled = false
             }
         }
 
@@ -122,7 +114,7 @@ internal fun MainView(navController: NavController, modifier: Modifier = Modifie
                 modifier = Modifier.alpha(deleteSavedGameAnimatedAlpha.value),
                 gameId = deleteSavedGameIdState.value
             ) {
-                deleteSavedGameIdStateFlow.value = 0L
+                viewModel.deleteSavedGameId = 0L
             }
         }
     }

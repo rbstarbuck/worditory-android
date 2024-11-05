@@ -16,17 +16,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.worditory.R
-import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.game.board.tile.Tile
-import com.example.worditory.navigation.Screen.Game
 
 @Composable
 internal fun BoardSizeChooserView(
-    navController: NavController,
-    playerAvatarId: Int,
-    opponent: NpcModel,
+    viewModel: BoardSizeChooserViewModel,
     modifier: Modifier = Modifier
 ) {
     Box(Modifier.fillMaxSize().background(colorResource(R.color.background))) {
@@ -64,9 +59,7 @@ internal fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1.25f)
                 ) {
-                    navController.navigate(
-                        Game.buildRoute(width = 5, height = 4, playerAvatarId, opponent)
-                    )
+                    viewModel.onBoardSizeClick(boardWidth = 5, boardHeight = 4)
                 }
 
                 Spacer(Modifier.weight(0.2f))
@@ -88,9 +81,7 @@ internal fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1f)
                 ) {
-                    navController.navigate(
-                        Game.buildRoute(width = 5, height = 5, playerAvatarId, opponent)
-                    )
+                    viewModel.onBoardSizeClick(boardWidth = 5, boardHeight = 5)
                 }
             }
 
@@ -112,9 +103,7 @@ internal fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1f)
                 ) {
-                    navController.navigate(
-                        Game.buildRoute(width = 5, height = 5, playerAvatarId, opponent)
-                    )
+                    viewModel.onBoardSizeClick(boardWidth = 6, boardHeight = 6)
                 }
 
                 Spacer(Modifier.weight(0.2f))
@@ -136,9 +125,7 @@ internal fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1.4f)
                 ) {
-                    navController.navigate(
-                        Game.buildRoute(width = 7, height = 5, playerAvatarId, opponent)
-                    )
+                    viewModel.onBoardSizeClick(boardWidth = 7, boardHeight = 5)
                 }
             }
 
@@ -160,9 +147,7 @@ internal fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1.3333f)
                 ) {
-                    navController.navigate(
-                        Game.buildRoute(width = 8, height = 6, playerAvatarId, opponent)
-                    )
+                    viewModel.onBoardSizeClick(boardWidth = 8, boardHeight = 6)
                 }
 
                 Spacer(Modifier.weight(0.2f))
@@ -184,9 +169,7 @@ internal fun BoardSizeChooserView(
                     ),
                     modifier = Modifier.weight(1f).aspectRatio(1f)
                 ) {
-                    navController.navigate(
-                        Game.buildRoute(width = 8, height = 8, playerAvatarId, opponent)
-                    )
+                    viewModel.onBoardSizeClick(boardWidth = 8, boardHeight = 8)
                 }
             }
 

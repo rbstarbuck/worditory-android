@@ -39,19 +39,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.worditory.R
 import com.example.worditory.SavedGames
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.toBitmap
-import com.example.worditory.navigation.Screen
 
 @Composable
 internal fun SavedGamesView(
+    viewModel: SavedGamesViewModel,
     modifier: Modifier = Modifier,
-    navController: NavController,
-    playerAvatarId: Int,
     onClick: (Long) -> Unit
 ) {
     val context = LocalContext.current
@@ -67,7 +64,7 @@ internal fun SavedGamesView(
         val closeButtonSize = min(this.maxWidth / 10f, 30.dp)
         val closeButtonOffset = this.maxWidth / -60f
 
-        if (savedGamesState.value.gamesList.size == 0) {
+        if (savedGamesState.value.gamesList.isEmpty()) {
             Text(
                 text = stringResource(R.string.no_saved_games),
                 color = colorResource(R.color.font_color_light),
@@ -90,11 +87,7 @@ internal fun SavedGamesView(
                     .aspectRatio(game.board.width.toFloat() / game.board.height.toFloat())
                     .pointerInput(Unit) {
                         detectTapGestures(
-                            onTap = {
-                                navController.navigate(
-                                    Screen.SavedGame.buildRoute(game.id, playerAvatarId)
-                                )
-                            }
+                            onTap = { viewModel.onSavedGameClick(game.id) }
                         )
                     }
                 ) {
@@ -134,11 +127,7 @@ internal fun SavedGamesView(
                     }
 
                     OutlinedButton(
-                        onClick = {
-                            navController.navigate(
-                                Screen.SavedGame.buildRoute(game.id, playerAvatarId)
-                            )
-                        },
+                        onClick = { viewModel.onSavedGameClick(game.id) },
                         modifier = Modifier
                             .offset(itemWidth - avatarSize - padding, -padding)
                             .size(width = avatarSize, height = avatarSize),

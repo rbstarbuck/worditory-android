@@ -37,16 +37,17 @@ import com.example.worditory.R
 internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifier) {
     val scoreState = viewModel.scoreStateFlow.collectAsState()
     val scoreToWinState = viewModel.scoreToWinStateFlow.collectAsState()
+    val avatarIdState = viewModel.avatarId.collectAsState(0)
 
     val outlineColor = colorResource(R.color.background)
     val indicatorColor = colorResource(viewModel.colorScheme.superOwned)
     val indicatorBackgroundColor = colorResource(R.color.indicator_background)
     val avatarBackgroundColor = colorResource(viewModel.colorScheme.owned)
 
-    val avatarId = if (viewModel.avatarId == 0) {
+    val avatarId = if (avatarIdState.value == 0) {
         R.drawable.avatar_placeholder
     } else {
-        viewModel.avatarId
+        avatarIdState.value
     }
     val avatarVector = ImageVector.vectorResource(avatarId)
     val avatarPainter = rememberVectorPainter(avatarVector)
