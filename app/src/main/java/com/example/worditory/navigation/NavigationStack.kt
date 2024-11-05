@@ -40,29 +40,13 @@ internal fun NavigationStack(navController: NavHostController) {
             AvatarChooserDialog(navController)
         }
 
-        composable(
-            route = Screen.NpcChooser.route,
-            enterTransition = {
-                slideInHorizontally(tween(500), initialOffsetX = { it })
-            },
-            exitTransition = {
-                slideOutHorizontally(tween(500), targetOffsetX = { -it })
-            }
-        ) { backStack ->
+        composable(route = Screen.NpcChooser.route) { backStack ->
             val avatar = checkNotNull(backStack.arguments?.getString("avatar1")?.toInt())
 
             NpcChooserView(navController, avatar)
         }
 
-        composable(
-            route = Screen.BoardSizeChooser.route,
-            enterTransition = {
-                slideInHorizontally(tween(500), initialOffsetX = { it })
-            },
-            exitTransition = {
-                slideOutHorizontally(tween(500), targetOffsetX = { -it })
-            }
-        ) { backStack ->
+        composable(route = Screen.BoardSizeChooser.route) { backStack ->
             val avatar1 = checkNotNull(backStack.arguments?.getString("avatar1")?.toInt())
             val avatar2 = checkNotNull(backStack.arguments?.getString("avatar2")?.toInt())
             val vocab = checkNotNull(backStack.arguments?.getString("vocab"))
@@ -81,15 +65,7 @@ internal fun NavigationStack(navController: NavHostController) {
             BoardSizeChooserView(navController, avatar1, opponent)
         }
 
-        composable(
-            route = Screen.Game.route,
-            enterTransition = {
-                slideInHorizontally(tween(500), initialOffsetX = { it })
-            },
-            exitTransition = {
-                slideOutHorizontally(tween(500), targetOffsetX = { -it })
-            }
-        ) { backStack ->
+        composable(route = Screen.Game.route) { backStack ->
             val width = checkNotNull(backStack.arguments?.getString("width")?.toInt())
             val height = checkNotNull(backStack.arguments?.getString("height")?.toInt())
             val avatar1 = checkNotNull(backStack.arguments?.getString("avatar1")?.toInt())
