@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -33,8 +34,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.worditory.R
 import com.example.worditory.SavedGames
@@ -66,6 +70,16 @@ internal fun SavedGamesView(
         val avatarSize = this.maxWidth / 8f
         val closeButtonSize = min(this.maxWidth / 12f, 30.dp)
         val closeButtonOffset = this.maxWidth / -60f
+
+        if (savedGamesState.value.gamesList.size == 0) {
+            Text(
+                text = stringResource(R.string.no_saved_games),
+                color = colorResource(R.color.font_color_light),
+                fontSize = 20.sp,
+                fontStyle = FontStyle.Italic,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
         LazyRow(verticalAlignment = Alignment.CenterVertically) {
             items(savedGamesState.value.gamesList.size) { item ->
