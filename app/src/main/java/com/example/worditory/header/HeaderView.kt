@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -55,8 +56,8 @@ fun HeaderView(navController: NavController, modifier: Modifier = Modifier) {
         val width = this.maxWidth
         val strokeWidth = width / 40f
         val cornerRadius = width / 10f
-        val counterFontSizeLarge = (width.value / 14f).sp
-        val counterFontSizeSmall = (width.value / 20f).sp
+        val counterFontSizeLarge = (width.value / 14f / LocalDensity.current.fontScale).sp
+        val counterFontSizeSmall = (width.value / 25f / LocalDensity.current.fontScale).sp
 
         OutlinedButton(
             onClick = { navController.navigate(Screen.Avatar.route) },
@@ -108,7 +109,8 @@ fun HeaderView(navController: NavController, modifier: Modifier = Modifier) {
                 border = BorderStroke(
                     width = strokeWidth,
                     color = colorResource(R.color.header_background)
-                )
+                ),
+                contentPadding = PaddingValues(0.dp)
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -117,13 +119,15 @@ fun HeaderView(navController: NavController, modifier: Modifier = Modifier) {
                     Text(
                         text = gamesPlayedState.value.toString(),
                         color = colorResource(R.color.header_counter_text),
-                        fontSize = counterFontSizeLarge
+                        fontSize = counterFontSizeLarge,
+                        maxLines = 1
                     )
 
                     Text(
                         text = stringResource(R.string.played),
                         color = colorResource(R.color.header_counter_text),
-                        fontSize = counterFontSizeSmall
+                        fontSize = counterFontSizeSmall,
+                        maxLines = 1
                     )
                 }
             }
@@ -143,7 +147,8 @@ fun HeaderView(navController: NavController, modifier: Modifier = Modifier) {
                 border = BorderStroke(
                     width = strokeWidth,
                     color = colorResource(R.color.header_background)
-                )
+                ),
+                contentPadding = PaddingValues(0.dp)
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -152,13 +157,15 @@ fun HeaderView(navController: NavController, modifier: Modifier = Modifier) {
                     Text(
                         text = gamesWonState.value.toString(),
                         color = colorResource(R.color.header_counter_text),
-                        fontSize = counterFontSizeLarge
+                        fontSize = counterFontSizeLarge,
+                        maxLines = 1
                     )
 
                     Text(
                         text = stringResource(R.string.won),
                         color = colorResource(R.color.header_counter_text),
-                        fontSize = counterFontSizeSmall
+                        fontSize = counterFontSizeSmall,
+                        maxLines = 1
                     )
                 }
             }
@@ -183,7 +190,8 @@ fun HeaderView(navController: NavController, modifier: Modifier = Modifier) {
                 border = BorderStroke(
                     width = strokeWidth,
                     color = colorResource(R.color.header_background)
-                )
+                ),
+                contentPadding = PaddingValues(0.dp)
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -192,13 +200,15 @@ fun HeaderView(navController: NavController, modifier: Modifier = Modifier) {
                     Text(
                         text = winPercentage,
                         color = colorResource(R.color.header_counter_text),
-                        fontSize = counterFontSizeLarge
+                        fontSize = counterFontSizeLarge,
+                        maxLines = 1
                     )
 
                     Text(
                         text = stringResource(R.string.win_pct),
                         color = colorResource(R.color.header_counter_text),
-                        fontSize = counterFontSizeSmall
+                        fontSize = counterFontSizeSmall,
+                        maxLines = 1
                     )
                 }
             }
