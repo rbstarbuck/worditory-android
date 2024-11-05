@@ -1,5 +1,7 @@
 package com.example.worditory.saved
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -29,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -45,7 +48,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.worditory.R
 import com.example.worditory.SavedGames
-import com.example.worditory.composable.BackHandler
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.toBitmap
@@ -65,6 +67,11 @@ internal fun SavedGamesView(
 
     val deleteGameStateFlow = remember { MutableStateFlow(0L) }
     val deleteGameState = deleteGameStateFlow.collectAsState()
+    val deleteGameAnimatedAlpha = animateFloatAsState(
+        targetValue = if (deleteGameState.value == 0L) 0f else 1f,
+        animationSpec = tween(500),
+        label = "scale"
+    )
 
     BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
         val itemWidth = this.maxWidth / 2.25f
@@ -177,19 +184,16 @@ internal fun SavedGamesView(
         }
 
         if (deleteGameState.value != 0L) {
-            BackHandler {
-                deleteGameStateFlow.value = 0
-            }
-
             DeleteSavedGameDialog(
                 modifier = Modifier
+                    .alpha(deleteGameAnimatedAlpha.value)
                     .width(250.dp)
                     .height(100.dp)
                     .background(colorResource(R.color.delete_saved_game_dialog_background))
                     .border(width = 2.dp, color = colorResource(R.color.font_color_dark)),
                 gameId = deleteGameState.value
             ) {
-                deleteGameStateFlow.value = 0
+                deleteGameStateFlow.value = 0L
             }
         }
     }

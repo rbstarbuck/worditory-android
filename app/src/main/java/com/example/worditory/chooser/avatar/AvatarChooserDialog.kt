@@ -20,15 +20,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.worditory.R
+import com.example.worditory.composable.BackHandler
 import com.example.worditory.setPlayerAvatarId
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun AvatarChooserDialog(navController: NavController, modifier: Modifier = Modifier) {
+internal fun AvatarChooserDialog(
+    modifier: Modifier = Modifier,
+    dismiss: () -> Unit
+) {
     val context = LocalContext.current
+
+    BackHandler { dismiss() }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -44,7 +49,7 @@ internal fun AvatarChooserDialog(navController: NavController, modifier: Modifie
                 OutlinedButton(
                     onClick = {
                         GlobalScope.launch { context.setPlayerAvatarId(avatarId) }
-                        navController.popBackStack()
+                        dismiss()
                     },
                     shape = RoundedCornerShape(15.dp),
                     colors = ButtonColors(

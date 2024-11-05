@@ -29,16 +29,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.worditory.getGamesPlayed
 import com.example.worditory.getGamesWon
 import com.example.worditory.R
 import com.example.worditory.getPlayerAvatarId
-import com.example.worditory.navigation.Screen
 import kotlin.math.roundToInt
 
 @Composable
-fun HeaderView(navController: NavController, modifier: Modifier = Modifier) {
+fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
     val avatarState = LocalContext.current.getPlayerAvatarId().collectAsState(0)
     val gamesPlayedState = LocalContext.current.getGamesPlayed().collectAsState(0)
     val gamesWonState = LocalContext.current.getGamesWon().collectAsState(0)
@@ -60,7 +58,7 @@ fun HeaderView(navController: NavController, modifier: Modifier = Modifier) {
         val counterFontSizeSmall = (width.value / 25f / LocalDensity.current.fontScale).sp
 
         OutlinedButton(
-            onClick = { navController.navigate(Screen.Avatar.route) },
+            onClick = { onAvatarClick() },
             modifier = Modifier
                 .width(width / 2f)
                 .height(width / 2f),

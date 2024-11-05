@@ -1,8 +1,5 @@
 package com.example.worditory.navigation
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +12,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.dialog
 import com.example.worditory.MainView
 import com.example.worditory.R
 import com.example.worditory.SavedGames
-import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
 import com.example.worditory.chooser.npc.NpcChooserView
 import com.example.worditory.game.Game
@@ -34,10 +29,6 @@ internal fun NavigationStack(navController: NavHostController) {
     NavHost(navController, startDestination = Screen.Main.route) {
         composable(route = Screen.Main.route) {
             MainView(navController)
-        }
-
-        dialog(route = Screen.Avatar.route) {
-            AvatarChooserDialog(navController)
         }
 
         composable(route = Screen.NpcChooser.route) { backStack ->

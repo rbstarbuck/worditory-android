@@ -5,8 +5,6 @@ import com.example.worditory.game.npc.NpcModel
 internal sealed class Screen(val route: String) {
     internal object Main: Screen("main")
 
-    internal object Avatar: Screen("avatar")
-
     internal object NpcChooser: Screen("npcChooser/{avatar1}") {
         fun buildRoute(avatarIdPlayer1: Int): String {
             return route.replace("{avatar1}", avatarIdPlayer1.toString())

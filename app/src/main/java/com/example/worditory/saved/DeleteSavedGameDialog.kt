@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
+import com.example.worditory.composable.BackHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -25,6 +26,8 @@ internal fun DeleteSavedGameDialog(
     dismiss: () -> Unit
 ) {
     val context = LocalContext.current
+
+    BackHandler { dismiss() }
 
     Column(
         modifier,
