@@ -5,14 +5,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -32,6 +30,7 @@ import androidx.navigation.NavController
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.header.HeaderView
 import com.example.worditory.navigation.Screen
+import com.example.worditory.saved.DeleteSavedGameDialog
 import com.example.worditory.saved.SavedGamesView
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -52,10 +51,18 @@ internal fun MainView(navController: NavController, modifier: Modifier = Modifie
     val avatarChooserAnimatedAlpha = animateFloatAsState(
         targetValue = if (avatarChooserEnabledState.value) 1f else 0f,
         animationSpec = tween(500),
-        label = "offset"
+        label = "avatarChooserAlpha"
     )
 
-    BoxWithConstraints(modifier = modifier, contentAlignment = Alignment.Center) {
+    val deleteSavedGameIdStateFlow = remember { MutableStateFlow(0L) }
+    val deleteSavedGameIdState = deleteSavedGameIdStateFlow.collectAsState()
+    val deleteSavedGameAnimatedAlpha = animateFloatAsState(
+        targetValue = if (deleteSavedGameIdState.value == 0L) 0f else 1f,
+        animationSpec = tween(500),
+        label = "deleteSavedGameAlpha"
+    )
+
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -71,7 +78,10 @@ internal fun MainView(navController: NavController, modifier: Modifier = Modifie
             SavedGamesView(
                 modifier = Modifier.fillMaxWidth(),
                 navController = navController,
-                playerAvatarId = playerAvatarId
+                playerAvatarId = playerAvatarId,
+                onClick = { gameId ->
+                    deleteSavedGameIdStateFlow.value = gameId
+                }
             )
 
             OutlinedButton(
@@ -102,13 +112,17 @@ internal fun MainView(navController: NavController, modifier: Modifier = Modifie
         }
 
         if (avatarChooserEnabledState.value) {
-            AvatarChooserDialog(
-                modifier = Modifier
-                    .alpha(avatarChooserAnimatedAlpha.value)
-                    .width(this.maxWidth * 0.8f)
-                    .height(this.maxHeight * 0.9f)
-            ) {
+            AvatarChooserDialog(Modifier.alpha(avatarChooserAnimatedAlpha.value)) {
                 avatarChooserEnabledStateFlow.value = false
+            }
+        }
+
+        if (deleteSavedGameIdState.value != 0L) {
+            DeleteSavedGameDialog(
+                modifier = Modifier.alpha(deleteSavedGameAnimatedAlpha.value),
+                gameId = deleteSavedGameIdState.value
+            ) {
+                deleteSavedGameIdStateFlow.value = 0L
             }
         }
     }

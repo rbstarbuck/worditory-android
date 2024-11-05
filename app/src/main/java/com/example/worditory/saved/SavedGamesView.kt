@@ -1,12 +1,8 @@
 package com.example.worditory.saved
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +11,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,7 +26,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -52,26 +46,18 @@ import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.toBitmap
 import com.example.worditory.navigation.Screen
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 internal fun SavedGamesView(
     modifier: Modifier = Modifier,
     navController: NavController,
-    playerAvatarId: Int
+    playerAvatarId: Int,
+    onClick: (Long) -> Unit
 ) {
     val context = LocalContext.current
 
     val savedGamesData = remember { context.savedGamesDataStore.data }
     val savedGamesState = savedGamesData.collectAsState(SavedGames.newBuilder().build())
-
-    val deleteGameStateFlow = remember { MutableStateFlow(0L) }
-    val deleteGameState = deleteGameStateFlow.collectAsState()
-    val deleteGameAnimatedAlpha = animateFloatAsState(
-        targetValue = if (deleteGameState.value == 0L) 0f else 1f,
-        animationSpec = tween(500),
-        label = "scale"
-    )
 
     BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
         val itemWidth = this.maxWidth / 2.25f
@@ -124,7 +110,7 @@ internal fun SavedGamesView(
                     }
 
                     OutlinedButton(
-                        onClick = { deleteGameStateFlow.value = game.id },
+                        onClick = { onClick(game.id) },
                         modifier = Modifier
                             .size(closeButtonSize)
                             .offset(closeButtonOffset, closeButtonOffset),
@@ -180,20 +166,6 @@ internal fun SavedGamesView(
                         )
                     }
                 }
-            }
-        }
-
-        if (deleteGameState.value != 0L) {
-            DeleteSavedGameDialog(
-                modifier = Modifier
-                    .alpha(deleteGameAnimatedAlpha.value)
-                    .width(250.dp)
-                    .height(100.dp)
-                    .background(colorResource(R.color.delete_saved_game_dialog_background))
-                    .border(width = 2.dp, color = colorResource(R.color.font_color_dark)),
-                gameId = deleteGameState.value
-            ) {
-                deleteGameStateFlow.value = 0L
             }
         }
     }
