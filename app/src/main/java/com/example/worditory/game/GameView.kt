@@ -29,6 +29,9 @@ import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
 import com.example.worditory.game.gameover.GameOverView
 import com.example.worditory.game.menu.MenuView
+import com.example.worditory.game.tutorial.ComposableCoordinates
+import com.example.worditory.game.tutorial.TutorialSegmentView
+import com.example.worditory.game.tutorial.TutorialView
 
 @Composable
 internal fun GameView(
@@ -114,5 +117,11 @@ internal fun GameView(
         ) { context ->
             viewModel.onExitGame(context)
         }
+
+        TutorialSegmentView(ComposableCoordinates.MenuButton)
+        TutorialSegmentView(ComposableCoordinates.PlayerScore)
+        TutorialSegmentView(ComposableCoordinates.PlayButton)
+        TutorialSegmentView(ComposableCoordinates.Board)
+        TutorialSegmentView(ComposableCoordinates.ScoreToWin)
     }
 }

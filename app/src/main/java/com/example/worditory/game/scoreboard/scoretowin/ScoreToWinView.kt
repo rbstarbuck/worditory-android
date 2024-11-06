@@ -28,6 +28,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
+import com.example.worditory.composable.saveCoordinates
+import com.example.worditory.game.tutorial.ComposableCoordinates
 
 @Composable
 internal fun ScoreToWinView(viewModel: ScoreToWinViewModel, modifier: Modifier = Modifier) {
@@ -35,6 +37,7 @@ internal fun ScoreToWinView(viewModel: ScoreToWinViewModel, modifier: Modifier =
         modifier
             .aspectRatio(1f)
             .background(colorResource(R.color.score_to_win_background))
+            .saveCoordinates(ComposableCoordinates.ScoreToWin)
     ) {
         val scoreToWinState = viewModel.scoreToWinStateFlow.collectAsState()
 

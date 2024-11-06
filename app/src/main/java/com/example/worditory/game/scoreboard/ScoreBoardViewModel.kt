@@ -27,13 +27,15 @@ class ScoreBoardViewModel(
     internal val scorePlayer1 = PlayerScoreViewModel(
         scoreToWinStateFlow,
         avatarIdPlayer1,
-        colorScheme.player1
+        colorScheme.player1,
+        isPlayer1 = true
     )
 
     internal val scorePlayer2 = PlayerScoreViewModel(
         scoreToWinStateFlow,
         avatarIdPlayer2,
-        colorScheme.player2
+        colorScheme.player2,
+        isPlayer1 = false
     )
 
     internal val scoreToWinViewModel = ScoreToWinViewModel(initialScoreToWin, scoreToWinStateFlow)

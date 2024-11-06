@@ -12,15 +12,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import com.example.worditory.composable.saveCoordinates
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.TileView
 import com.example.worditory.game.board.word.WordView
+import com.example.worditory.game.tutorial.ComposableCoordinates
 
 @Composable
-internal fun BoardView(
-    viewModel: BoardViewModel,
-    modifier: Modifier = Modifier
-) {
+internal fun BoardView(viewModel: BoardViewModel, modifier: Modifier = Modifier) {
     val isPlayerTurnState = viewModel.isPlayerTurnStateFlow.collectAsState()
 
     val aspectRatio = viewModel.width.toFloat() / viewModel.height.toFloat()
@@ -28,7 +27,7 @@ internal fun BoardView(
     Box(
         modifier
             .aspectRatio(aspectRatio)
-            .background(Color.White)
+            .saveCoordinates(ComposableCoordinates.Board)
             .pointerInput(key1 = Unit) {
                 detectDragGestures(
                     onDragStart = { startPoint ->

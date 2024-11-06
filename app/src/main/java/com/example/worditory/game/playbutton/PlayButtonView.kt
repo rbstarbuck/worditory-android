@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -33,6 +31,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
+import com.example.worditory.composable.saveCoordinates
+import com.example.worditory.game.tutorial.ComposableCoordinates
 
 @Composable
 internal fun PlayButtonView(
@@ -66,6 +66,7 @@ internal fun PlayButtonView(
                 modifier = Modifier
                     .width(36.dp)
                     .height(36.dp)
+                    .saveCoordinates(ComposableCoordinates.MenuButton)
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onTap = { onMenuClick() }
@@ -77,6 +78,7 @@ internal fun PlayButtonView(
 
             OutlinedButton(
                 onClick = onPlayClick,
+                modifier = Modifier.saveCoordinates(ComposableCoordinates.PlayButton),
                 enabled = playButtonEnabled,
                 colors = ButtonColors(
                     containerColor = colorResource(R.color.button_container),
