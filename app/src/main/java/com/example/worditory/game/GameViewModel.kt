@@ -18,15 +18,15 @@ import com.example.worditory.navigation.Screen
 import com.example.worditory.saved.addSavedGame
 import com.example.worditory.saved.removeSavedGame
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.concurrent.Flow
 
 abstract class GameViewModel(
     model: GameModel,
-    context: Context,
-    val navController: NavController
+    val navController: NavController,
+    playerAvatarIdFlow: Flow<Int>
 ): ViewModel() {
     internal val id = model.id
     internal val boardWidth = model.board.width
@@ -66,6 +66,14 @@ abstract class GameViewModel(
             _gameOverStateFlow.value = value
         }
 
+    internal val scoreBoard = ScoreBoardViewModel(
+        initialScoreToWin = boardWidth * boardHeight,
+        currentScoreToWin = model.scoreToWin,
+        playerAvatarIdFlow,
+        MutableStateFlow(model.opponent.avatar),
+        colorScheme
+    )
+
     internal val board = BoardViewModel(
         model.board,
         colorScheme,
@@ -73,21 +81,13 @@ abstract class GameViewModel(
         onWordChanged = { isNotAWord = false }
     )
 
-    internal val scoreBoard = ScoreBoardViewModel(
-        initialScoreToWin = boardWidth * boardHeight,
-        currentScoreToWin = model.scoreToWin,
-        context.getPlayerAvatarId(),
-        MutableStateFlow(model.opponent.avatar),
-        colorScheme
-    )
-
-    internal val menu = MenuViewModel(isPlayerTurnStateFlow)
-
     internal val playButton = PlayButtonViewModel(
         board.word.modelStateFlow,
         isNotAWordStateFlow,
         isPlayerTurnStateFlow
     )
+
+    internal val menu = MenuViewModel(isPlayerTurnStateFlow)
 
     internal val gameOverWin = GameOverViewModel(
         navController = navController,
@@ -134,6 +134,36 @@ abstract class GameViewModel(
         isPlayerTurn = !checkForGameOver()
     }
 
+    internal fun onMenuClick() {
+        displayMenu = true
+    }
+
+    internal fun onDismissMenu() {
+        displayMenu = false
+    }
+
+    internal fun onExitGame(context: Context) {
+        val currentGameOverState = gameOverState
+
+        GlobalScope.launch {
+            if (currentGameOverState == GameOver.State.IN_PROGRESS) {
+                context.addSavedGame(model)
+            } else {
+                context.removeSavedGame(id)
+                context.incrementGamesPlayed()
+                if (currentGameOverState == GameOver.State.WIN) {
+                    context.incrementGamesWon()
+                }
+            }
+        }
+
+        navController.navigate(Screen.Main.route) {
+            popUpTo(Screen.Main.route) {
+                inclusive = true
+            }
+        }
+    }
+
     private fun updateScore() {
         scoreBoard.score = board.getScore()
         if (scoreBoard.score.player1 + 1 < scoreBoard.scoreToWin
@@ -155,35 +185,5 @@ abstract class GameViewModel(
         }
 
         return false
-    }
-
-    internal fun onMenuClick() {
-        displayMenu = true
-    }
-
-    internal fun dismissMenu() {
-        displayMenu = false
-    }
-
-    internal fun exitGame(context: Context) {
-        val currentGameOverState = gameOverState
-
-        GlobalScope.launch {
-            if (currentGameOverState == GameOver.State.IN_PROGRESS) {
-                context.addSavedGame(model)
-            } else {
-                context.removeSavedGame(id)
-                context.incrementGamesPlayed()
-                if (currentGameOverState == GameOver.State.WIN) {
-                    context.incrementGamesWon()
-                }
-            }
-        }
-
-        navController.navigate(Screen.Main.route) {
-            popUpTo(Screen.Main.route) {
-                inclusive = true
-            }
-        }
     }
 }

@@ -6,14 +6,15 @@ import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.gameover.GameOver
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 internal class GameAgainstNpcViewModel(
     model: GameModel,
-    context: Context,
-    navController: NavController
-): GameViewModel(model, context, navController) {
+    navController: NavController,
+    playerAvatarIdFlow: Flow<Int>
+): GameViewModel(model, navController, playerAvatarIdFlow) {
     private val nonPlayerCharacter = NonPlayerCharacter(model.opponent, board)
 
     init {

@@ -25,6 +25,7 @@ import com.example.worditory.game.GameAgainstNpcViewModel
 import com.example.worditory.game.GameView
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.npc.NpcModel
+import com.example.worditory.getPlayerAvatarId
 import com.example.worditory.saved.savedGamesDataStore
 
 @Composable
@@ -98,7 +99,8 @@ internal fun NavigationStack(navController: NavHostController) {
             val id = (backStack.arguments?.getString("id")?.toLong())
 
             val context = LocalContext.current
-            val savedGamesState = context.savedGamesDataStore.data.collectAsState(
+            val savedGamesDataStore = remember { context.savedGamesDataStore }
+            val savedGamesState = savedGamesDataStore.data.collectAsState(
                 SavedGames.newBuilder().build()
             )
             val savedGame = savedGamesState.value.gamesList.find { it.id == id }
@@ -107,11 +109,11 @@ internal fun NavigationStack(navController: NavHostController) {
                 val viewModel = remember {
                     GameAgainstNpcViewModel(
                         model = savedGame,
-                        context = context,
-                        navController = navController
+                        navController = navController,
+                        playerAvatarIdFlow = context.getPlayerAvatarId()
                     )
                 }
-                
+
                 GameView(viewModel)
             } else {
                 // TODO(error handling when saved game not found)

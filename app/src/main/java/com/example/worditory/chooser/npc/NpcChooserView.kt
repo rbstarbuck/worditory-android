@@ -31,10 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 
 @Composable
-internal fun NpcChooserView(
-    viewModel: NpcChooserViewModel,
-    modifier: Modifier = Modifier
-) {
+internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.background(colorResource(R.color.background)).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally

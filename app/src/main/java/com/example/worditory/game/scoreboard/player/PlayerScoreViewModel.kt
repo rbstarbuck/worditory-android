@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class PlayerScoreViewModel(
+internal class PlayerScoreViewModel(
     internal val scoreToWinStateFlow: StateFlow<Int>,
     internal val avatarId: Flow<Int>,
     internal val colorScheme: Tile.ColorScheme.Player
