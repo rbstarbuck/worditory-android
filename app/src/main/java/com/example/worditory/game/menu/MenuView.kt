@@ -56,7 +56,7 @@ fun MenuView(
             modifier = Modifier
                 .background(colorResource(R.color.game_menu_background))
                 .border(width = 2.dp, color = colorResource(R.color.game_menu_border))
-                .padding(vertical = this.maxWidth * 0.1f)
+                .padding(vertical = this.maxWidth * 0.05f)
                 .width(this.maxWidth * 0.8f)
                 .pointerInput(Unit) {
                     detectTapGestures(
@@ -112,7 +112,6 @@ fun MenuView(
                 modifier = Modifier
                     .width(buttonWidth)
                     .padding(vertical = buttonPaddingVertical),
-                enabled = isPlayerTurnState.value,
                 colors = ButtonColors(
                     containerColor = colorResource(R.color.button_container),
                     contentColor = colorResource(R.color.button_content),
