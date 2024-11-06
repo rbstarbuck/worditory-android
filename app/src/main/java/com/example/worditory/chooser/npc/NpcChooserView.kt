@@ -29,6 +29,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
+import com.example.worditory.resourceid.getResourceId
 
 @Composable
 internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier = Modifier) {
@@ -88,7 +89,8 @@ internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier =
                                     bottom = 0.dp
                                 )
                             ) {
-                                val avatarVector = ImageVector.vectorResource(id = opponent.avatar)
+                                val avatarResId = getResourceId(opponent.avatar)
+                                val avatarVector = ImageVector.vectorResource(avatarResId)
 
                                 Image(
                                     imageVector = avatarVector,

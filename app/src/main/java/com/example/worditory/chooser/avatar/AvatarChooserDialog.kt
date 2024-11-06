@@ -25,6 +25,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.worditory.R
 import com.example.worditory.composable.BackHandler
+import com.example.worditory.resourceid.getResourceId
 import com.example.worditory.setPlayerAvatarId
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -61,13 +62,13 @@ internal fun AvatarChooserDialog(
                     )
                 }
         ) {
-            items(AvatarChooser.AvatarIds.size) { item ->
-                val avatarId = AvatarChooser.AvatarIds[item]
+            items(AvatarChooser.PersistedPlayerAvatarIds.size) { item ->
+                val persistedAvatarId = AvatarChooser.PersistedPlayerAvatarIds[item]
 
                 Box(Modifier.padding(5.dp)) {
                     OutlinedButton(
                         onClick = {
-                            GlobalScope.launch { context.setPlayerAvatarId(avatarId) }
+                            GlobalScope.launch { context.setPlayerAvatarId(persistedAvatarId) }
                             onDismiss()
                         },
                         shape = RoundedCornerShape(15.dp),
@@ -88,7 +89,8 @@ internal fun AvatarChooserDialog(
                             bottom = 0.dp
                         )
                     ) {
-                        val avatarVector = ImageVector.vectorResource(id = avatarId)
+                        val avatarResId = getResourceId(persistedAvatarId)
+                        val avatarVector = ImageVector.vectorResource(avatarResId)
 
                         Image(
                             imageVector = avatarVector,

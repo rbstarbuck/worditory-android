@@ -33,6 +33,7 @@ import com.example.worditory.getGamesPlayed
 import com.example.worditory.getGamesWon
 import com.example.worditory.R
 import com.example.worditory.getPlayerAvatarId
+import com.example.worditory.resourceid.getResourceId
 import kotlin.math.roundToInt
 
 @Composable
@@ -48,7 +49,7 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
             .toString() + "%"
     }
 
-    val avatarId = if (avatarState.value == 0) R.drawable.avatar_placeholder else avatarState.value
+    val avatarResId = getResourceId(avatarState.value)
 
     BoxWithConstraints(modifier, contentAlignment = Alignment.TopCenter) {
         val width = this.maxWidth
@@ -81,7 +82,7 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
             )
         ) {
             Image(
-                imageVector = ImageVector.vectorResource(avatarId),
+                imageVector = ImageVector.vectorResource(avatarResId),
                 contentDescription = stringResource(R.string.avatar)
             )
         }

@@ -64,8 +64,8 @@ internal fun PlayButtonView(
                 imageVector = ImageVector.vectorResource(R.drawable.menu),
                 contentDescription = stringResource(R.string.menu),
                 modifier = Modifier
-                    .width(40.dp)
-                    .height(40.dp)
+                    .width(36.dp)
+                    .height(36.dp)
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onTap = { onMenuClick() }
@@ -91,7 +91,7 @@ internal fun PlayButtonView(
             }
 
             Spacer(Modifier.weight(1f))
-            Spacer(Modifier.width(60.dp))
+            Spacer(Modifier.width(56.dp))
         }
 
         Spacer(Modifier.weight(0.75f))

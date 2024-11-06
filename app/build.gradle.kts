@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.protobuf)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -64,6 +65,8 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.protobuf.java)
     implementation(libs.protobuf.kotlin)
+    implementation(libs.firebase.analytics)
+    implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

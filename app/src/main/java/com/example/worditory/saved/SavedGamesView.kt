@@ -44,6 +44,7 @@ import com.example.worditory.SavedGames
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.toBitmap
+import com.example.worditory.resourceid.getResourceId
 
 @Composable
 internal fun SavedGamesView(
@@ -149,8 +150,9 @@ internal fun SavedGamesView(
                             bottom = 0.dp
                         )
                     ) {
+                        val avatarResId = getResourceId(game.opponent.avatar)
                         Image(
-                            imageVector = ImageVector.vectorResource(id = game.opponent.avatar),
+                            imageVector = ImageVector.vectorResource(avatarResId),
                             contentDescription = stringResource(R.string.avatar)
                         )
                     }

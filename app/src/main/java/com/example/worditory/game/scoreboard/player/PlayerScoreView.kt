@@ -32,6 +32,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
+import com.example.worditory.resourceid.getResourceId
 
 @Composable
 internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifier) {
@@ -39,18 +40,14 @@ internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier
     val scoreToWinState = viewModel.scoreToWinStateFlow.collectAsState()
     val avatarIdState = viewModel.avatarId.collectAsState(0)
 
+    val avatarResId = getResourceId(avatarIdState.value)
+    val avatarVector = ImageVector.vectorResource(avatarResId)
+    val avatarPainter = rememberVectorPainter(avatarVector)
+
     val outlineColor = colorResource(R.color.background)
     val indicatorColor = colorResource(viewModel.colorScheme.superOwned)
     val indicatorBackgroundColor = colorResource(R.color.indicator_background)
     val avatarBackgroundColor = colorResource(viewModel.colorScheme.owned)
-
-    val avatarId = if (avatarIdState.value == 0) {
-        R.drawable.avatar_placeholder
-    } else {
-        avatarIdState.value
-    }
-    val avatarVector = ImageVector.vectorResource(avatarId)
-    val avatarPainter = rememberVectorPainter(avatarVector)
 
     val scoreAnimator = animateFloatAsState(
         targetValue = scoreState.value.toFloat(),

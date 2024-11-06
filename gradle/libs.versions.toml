@@ -12,6 +12,8 @@ activityCompose = "1.9.3"
 composeBom = "2024.10.01"
 navigation = "2.8.3"
 protobufPlugin = "0.9.4"
+google-services = "4.4.2"
+firebase = "33.5.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -20,6 +22,8 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
 protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
 protobuf-kotlin = { module = "com.google.protobuf:protobuf-kotlin", version.ref = "protobuf" }
+firebase-bom= { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -40,4 +44,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 

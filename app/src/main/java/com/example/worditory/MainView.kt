@@ -33,16 +33,6 @@ import com.example.worditory.saved.SavedGamesView
 
 @Composable
 internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-
-    val getPlayerId = remember { context.getPlayerAvatarId() }
-    val playerAvatarIdState = getPlayerId.collectAsState(0)
-    val playerAvatarId = if (playerAvatarIdState.value == 0) {
-        R.drawable.avatar_placeholder
-    } else {
-        playerAvatarIdState.value
-    }
-
     val avatarChooserEnabledState = viewModel.avatarChooserEnabledStateFlow.collectAsState()
     val avatarChooserAnimatedAlpha = animateFloatAsState(
         targetValue = if (avatarChooserEnabledState.value) 1f else 0f,
