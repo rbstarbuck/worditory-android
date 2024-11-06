@@ -51,7 +51,7 @@ class BoardViewModel(
         tiles = tilesData
     }
 
-    internal fun getScore(): Game.Score {
+    internal fun computeScore(): Game.Score {
         var scorePlayer1 = 0
         var scorePlayer2 = 0
 
