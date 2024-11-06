@@ -121,7 +121,9 @@ class BoardViewModel(
     internal fun playWord(player: Game.Player) {
         updateOwnershipsForWord(player)
         updateLettersForWord()
-        word.onSelectTile(word.model.tiles.first(), player)
+        if (!word.model.tiles.isEmpty()) {
+            word.onSelectTile(word.model.tiles.first(), player)
+        }
     }
 
     private fun updateOwnershipsForWord(player: Game.Player) {

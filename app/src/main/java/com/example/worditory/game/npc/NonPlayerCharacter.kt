@@ -11,10 +11,10 @@ class NonPlayerCharacter(
     private val model: NpcModel,
     private val board: BoardViewModel
 ) {
-    internal fun findWordToPlay(): WordModel? {
+    internal fun findWordToPlay(): WordModel {
         var words = findAllWords()
 
-        if (words.isEmpty()) return null
+        if (words.isEmpty()) return WordModel()
 
         val skillLevelMultipliers = when (model.spec.overallSkillLevel) {
             NpcModel.Spec.OverallSkillLevel.BEGINNER -> Pair(0.55f, 0.7f)

@@ -84,7 +84,9 @@ internal fun GameView(
             MenuView(
                 viewModel = viewModel.menu,
                 modifier = Modifier.alpha(animatedMenuAlpha.value),
-                onPassTurnClick = { },
+                onPassTurnClick = {
+                    viewModel.onPassTurn()
+                },
                 onDisplayTutorialClick = { },
                 onExitGameClick = { viewModel.onExitGame(context) },
                 onDismiss = { viewModel.onDismissMenu() }

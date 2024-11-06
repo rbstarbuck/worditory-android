@@ -34,23 +34,27 @@ internal class GameAgainstNpcViewModel(
         return false
     }
 
+    override fun onPassTurn() {
+        super.onPassTurn()
+        playNpcWord()
+    }
+
     private fun playNpcWord() {
         val npcWord = nonPlayerCharacter.findWordToPlay()
-        if (npcWord != null) {
-            GlobalScope.launch {
-                delay(Random.nextLong(from = 2000L, until = 3500L))
 
-                board.word.withDrawPathTweenDuration(millis = npcWord.tiles.size * 350) {
-                    for (tile in npcWord.tiles) {
-                        board.word.onSelectTile(tile, Game.Player.PLAYER_2)
-                    }
+        GlobalScope.launch {
+            delay(Random.nextLong(from = 1500L, until = 2500L))
 
-                    delay(4000L)
+            board.word.withDrawPathTweenDuration(millis = npcWord.tiles.size * 350) {
+                for (tile in npcWord.tiles) {
+                    board.word.onSelectTile(tile, Game.Player.PLAYER_2)
                 }
 
-                board.playWord(Game.Player.PLAYER_2)
-                onWordPlayed()
+                delay(4000L)
             }
+
+            board.playWord(Game.Player.PLAYER_2)
+            onWordPlayed()
         }
     }
 }

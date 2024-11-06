@@ -16,7 +16,7 @@ class WordViewModel(
     internal val modelStateFlow = _modelStateFlow.asStateFlow()
     internal var model: WordModel
         get() = modelStateFlow.value
-        private set(value) {
+        set(value) {
             _modelStateFlow.value = value
         }
 

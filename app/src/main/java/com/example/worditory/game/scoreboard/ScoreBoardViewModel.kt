@@ -44,4 +44,8 @@ class ScoreBoardViewModel(
             scorePlayer1.score = value.player1
             scorePlayer2.score = value.player2
         }
+
+    internal fun decrementScoreToWin() {
+        if (score.player1 + 1 < scoreToWin && score.player2 + 1 < scoreToWin) --scoreToWin
+    }
 }

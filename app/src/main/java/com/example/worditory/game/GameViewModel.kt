@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
+import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.game.playbutton.PlayButtonViewModel
 import com.example.worditory.game.scoreboard.ScoreBoardViewModel
@@ -129,8 +130,15 @@ abstract class GameViewModel(
     }
 
     protected fun onWordPlayed() {
-        updateScore()
+        scoreBoard.score = board.computeScore()
+        scoreBoard.decrementScoreToWin()
         isPlayerTurn = !checkForGameOver()
+    }
+
+    internal open fun onPassTurn() {
+        board.word.model = WordModel()
+        scoreBoard.decrementScoreToWin()
+        isPlayerTurn = !isPlayerTurn
     }
 
     internal fun onMenuClick() {
@@ -160,15 +168,6 @@ abstract class GameViewModel(
             popUpTo(Screen.Main.route) {
                 inclusive = true
             }
-        }
-    }
-
-    private fun updateScore() {
-        scoreBoard.score = board.computeScore()
-        if (scoreBoard.score.player1 + 1 < scoreBoard.scoreToWin
-            && scoreBoard.score.player2 + 1 < scoreBoard.scoreToWin
-        ) {
-            --scoreBoard.scoreToWin
         }
     }
 
