@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "629556850373",
+    "project_id": "worditory",
+    "storage_bucket": "worditory.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629556850373:android:ba28e49f50e208a447caac",
+        "android_client_info": {
+          "package_name": "com.example.worditory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkwY-xAYNmaMv2UJwjpyr2-n6NKa4zxnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
