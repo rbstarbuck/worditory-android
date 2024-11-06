@@ -12,12 +12,10 @@ internal class Board private constructor() {
                 .setHeight(height)
 
             for (y in 0..<height) {
-                val ownership = if (y == 0) {
-                    TileModel.Ownership.OWNED_PLAYER_2
-                } else if (y == height - 1) {
-                    TileModel.Ownership.OWNED_PLAYER_1
-                } else {
-                    TileModel.Ownership.UNOWNED
+                val ownership = when (y) {
+                    0 -> TileModel.Ownership.OWNED_PLAYER_2
+                    height - 1 -> TileModel.Ownership.OWNED_PLAYER_1
+                    else -> TileModel.Ownership.UNOWNED
                 }
 
                 for (x in 0..<width) {

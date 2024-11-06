@@ -87,8 +87,8 @@ internal fun NavigationStack(navController: NavHostController) {
             val viewModel = remember {
                 GameAgainstNpcViewModel(
                     model = Game.newModel(width, height, opponent, Tile.ColorScheme.random()),
-                    context = context,
-                    navController = navController
+                    navController = navController,
+                    playerAvatarIdFlow = context.getPlayerAvatarId()
                 )
             }
 

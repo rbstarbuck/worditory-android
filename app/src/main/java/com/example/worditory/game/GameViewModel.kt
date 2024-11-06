@@ -11,7 +11,6 @@ import com.example.worditory.game.scoreboard.ScoreBoardViewModel
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.gameover.GameOverViewModel
 import com.example.worditory.game.menu.MenuViewModel
-import com.example.worditory.getPlayerAvatarId
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
@@ -112,7 +111,7 @@ abstract class GameViewModel(
             .build()
 
     init {
-        scoreBoard.score = board.getScore()
+        scoreBoard.score = board.computeScore()
     }
 
     internal open fun onPlayButtonClick(): Boolean {
@@ -165,7 +164,7 @@ abstract class GameViewModel(
     }
 
     private fun updateScore() {
-        scoreBoard.score = board.getScore()
+        scoreBoard.score = board.computeScore()
         if (scoreBoard.score.player1 + 1 < scoreBoard.scoreToWin
             && scoreBoard.score.player2 + 1 < scoreBoard.scoreToWin
         ) {
