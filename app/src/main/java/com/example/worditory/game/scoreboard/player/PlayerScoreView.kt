@@ -33,7 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 import com.example.worditory.composable.saveCoordinates
-import com.example.worditory.game.tutorial.ComposableCoordinates
+import com.example.worditory.composable.Coordinates
 import com.example.worditory.resourceid.getResourceId
 
 @Composable
@@ -151,7 +151,7 @@ internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier
                 .width(this.maxWidth)
                 .wrapContentHeight(Alignment.Bottom)
                 .wrapContentWidth(Alignment.CenterHorizontally)
-                .saveCoordinates(ComposableCoordinates.PlayerScore, viewModel.isPlayer1),
+                .saveCoordinates(Coordinates.PlayerScore, viewModel.isPlayer1),
             fontSize = fontSize.sp,
             fontWeight = FontWeight.Bold
         )

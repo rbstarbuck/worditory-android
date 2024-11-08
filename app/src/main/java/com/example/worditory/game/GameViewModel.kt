@@ -12,6 +12,7 @@ import com.example.worditory.game.scoreboard.ScoreBoardViewModel
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.gameover.GameOverViewModel
 import com.example.worditory.game.menu.MenuViewModel
+import com.example.worditory.game.tutorial.TutorialViewModel
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
@@ -100,6 +101,8 @@ abstract class GameViewModel(
         gameOverStateFlow = gameOverStateFlow,
         targetState = GameOver.State.LOSE
     )
+
+    internal val tutorial = TutorialViewModel()
 
     internal val model: GameModel
         get() = GameModel.newBuilder()

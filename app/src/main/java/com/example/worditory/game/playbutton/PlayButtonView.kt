@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 import com.example.worditory.composable.saveCoordinates
-import com.example.worditory.game.tutorial.ComposableCoordinates
+import com.example.worditory.composable.Coordinates
 
 @Composable
 internal fun PlayButtonView(
@@ -66,7 +66,7 @@ internal fun PlayButtonView(
                 modifier = Modifier
                     .width(36.dp)
                     .height(36.dp)
-                    .saveCoordinates(ComposableCoordinates.MenuButton)
+                    .saveCoordinates(Coordinates.MenuButton)
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onTap = { onMenuClick() }
@@ -78,7 +78,7 @@ internal fun PlayButtonView(
 
             OutlinedButton(
                 onClick = onPlayClick,
-                modifier = Modifier.saveCoordinates(ComposableCoordinates.PlayButton),
+                modifier = Modifier.saveCoordinates(Coordinates.PlayButton),
                 enabled = playButtonEnabled,
                 colors = ButtonColors(
                     containerColor = colorResource(R.color.button_container),

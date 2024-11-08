@@ -1,9 +1,9 @@
-package com.example.worditory.game.tutorial
+package com.example.worditory.composable
 
 import androidx.compose.ui.layout.LayoutCoordinates
 import kotlinx.coroutines.flow.MutableStateFlow
 
-internal object ComposableCoordinates {
+internal object Coordinates {
     internal val ScoreToWin = MutableStateFlow<LayoutCoordinates?>(null)
     internal val PlayerScore = MutableStateFlow<LayoutCoordinates?>(null)
     internal val Board = MutableStateFlow<LayoutCoordinates?>(null)

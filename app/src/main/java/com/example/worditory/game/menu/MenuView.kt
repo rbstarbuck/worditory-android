@@ -100,7 +100,7 @@ fun MenuView(
                 ),
                 border = BorderStroke(width = 2.dp, color = colorResource(R.color.button_stroke))
             ) {
-                Text(text = stringResource(R.string.show_tutorial), fontSize = fontSize)
+                Text(text = stringResource(R.string.game_rules), fontSize = fontSize)
             }
 
             OutlinedButton(

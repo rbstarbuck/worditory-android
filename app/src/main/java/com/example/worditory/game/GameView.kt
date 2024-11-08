@@ -1,7 +1,6 @@
 package com.example.worditory.game
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -29,8 +27,6 @@ import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
 import com.example.worditory.game.gameover.GameOverView
 import com.example.worditory.game.menu.MenuView
-import com.example.worditory.game.tutorial.ComposableCoordinates
-import com.example.worditory.game.tutorial.TutorialSegmentView
 import com.example.worditory.game.tutorial.TutorialView
 
 @Composable
@@ -87,10 +83,8 @@ internal fun GameView(
             MenuView(
                 viewModel = viewModel.menu,
                 modifier = Modifier.alpha(animatedMenuAlpha.value),
-                onPassTurnClick = {
-                    viewModel.onPassTurn()
-                },
-                onDisplayTutorialClick = { },
+                onPassTurnClick = { viewModel.onPassTurn() },
+                onDisplayTutorialClick = { viewModel.tutorial.enabled = true },
                 onExitGameClick = { viewModel.onExitGame(context) },
                 onDismiss = { viewModel.onDismissMenu() }
             )
@@ -118,10 +112,6 @@ internal fun GameView(
             viewModel.onExitGame(context)
         }
 
-        TutorialSegmentView(ComposableCoordinates.MenuButton)
-        TutorialSegmentView(ComposableCoordinates.PlayerScore)
-        TutorialSegmentView(ComposableCoordinates.PlayButton)
-        TutorialSegmentView(ComposableCoordinates.Board)
-        TutorialSegmentView(ComposableCoordinates.ScoreToWin)
+        TutorialView(viewModel.tutorial)
     }
 }
