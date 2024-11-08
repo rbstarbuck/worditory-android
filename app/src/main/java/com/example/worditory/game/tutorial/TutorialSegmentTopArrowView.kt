@@ -48,27 +48,29 @@ internal fun TutorialSegmentTopArrowView(
     viewModel: TutorialSegmentViewModel,
     modifier: Modifier = Modifier,
     text: String,
+    onBackClick: () -> Unit,
     onNextClick: () -> Unit
 ) {
+    val enabledStateFlow = viewModel.enabledStateFlow.collectAsState()
+    val enabled = enabledStateFlow.value
+
     val composableCoordinatesState = viewModel.composableCoordinatesStateFlow.collectAsState()
     val composableCoordinates = composableCoordinatesState.value
 
-    if (composableCoordinates != null) {
-        val context = LocalContext.current
+    val animatedAlpha = animateFloatAsState(
+        targetValue = if (enabled) 1f else 0f,
+        animationSpec = tween(500),
+        label = "alpha"
+    )
 
-        val enabledStateFlow = viewModel.enabledStateFlow.collectAsState()
+    if (enabled && composableCoordinates != null) {
+        val context = LocalContext.current
 
         val textBounds = remember { mutableStateOf(Rect.Zero) }
 
         val composableBounds = composableCoordinates.boundsInRoot()
         val centerX = composableBounds.center.x
         val centerY = composableBounds.bottom
-
-        val animatedAlpha = animateFloatAsState(
-            targetValue = if (enabledStateFlow.value) 1f else 0f,
-            animationSpec = tween(500),
-            label = "alpha"
-        )
 
         BoxWithConstraints(modifier
             .fillMaxSize()
@@ -125,12 +127,10 @@ internal fun TutorialSegmentTopArrowView(
 
                 Spacer(Modifier.height(10.dp))
 
-                Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.next),
-                    contentDescription = stringResource(R.string.next),
-                    modifier = Modifier
-                        .height(40.dp)
-                        .height(40.dp)
+                TutorialSegmentNavigationView(
+                    modifier = Modifier.fillMaxWidth(),
+                    onBackClick = onBackClick,
+                    onNextClick = onNextClick
                 )
             }
         }

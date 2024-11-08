@@ -17,26 +17,37 @@ import kotlin.math.sqrt
 
 class BoardViewModel(
     model: BoardModel,
-    colorScheme: Tile.ColorScheme,
+    val colorScheme: Tile.ColorScheme,
     internal val isPlayerTurnStateFlow: StateFlow<Boolean> = MutableStateFlow(false),
     onWordChanged: () -> Unit = {}
 ): ViewModel() {
     internal val width = model.width
     internal val height = model.height
-    internal val tiles: List<TileViewModel>
+
+    internal lateinit var tiles: List<TileViewModel>
+        private set
+
     internal val word = WordViewModel(width, height, onWordChanged)
+
     private val letterBag = LetterBag()
 
     private var currentDragPoint = Offset.Zero
 
-    internal val model: BoardModel
+    internal var model: BoardModel
         get() = BoardModel.newBuilder()
             .setWidth(width)
             .setHeight(height)
             .addAllTiles(tiles.map { it.model })
             .build()
+        set(value) {
+            setModel(value)
+        }
 
     init {
+        setModel(model)
+    }
+
+    private fun setModel(model: BoardModel) {
         val tilesData = mutableListOf<TileViewModel>()
 
         for (y in 0..<height) {
