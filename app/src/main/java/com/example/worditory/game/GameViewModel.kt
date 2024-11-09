@@ -3,6 +3,7 @@ package com.example.worditory.game
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
@@ -14,11 +15,14 @@ import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.gameover.GameOverViewModel
 import com.example.worditory.game.menu.MenuViewModel
 import com.example.worditory.game.tutorial.TutorialViewModel
+import com.example.worditory.hasShownTutorial
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
 import com.example.worditory.saved.addSavedGame
 import com.example.worditory.saved.removeSavedGame
+import com.example.worditory.setHasShownTutorial
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -171,6 +175,14 @@ abstract class GameViewModel(
             popUpTo(Screen.Main.route) {
                 inclusive = true
             }
+        }
+    }
+
+    internal fun showTutorial(context: Context) {
+        viewModelScope.launch {
+            context.setHasShownTutorial()
+            delay(500L)
+            tutorial.enabled = true
         }
     }
 

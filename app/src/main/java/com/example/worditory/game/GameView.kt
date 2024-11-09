@@ -20,6 +20,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import com.example.worditory.R
 import com.example.worditory.composable.BackHandler
 import com.example.worditory.game.board.BoardView
@@ -28,6 +29,7 @@ import com.example.worditory.game.scoreboard.ScoreBoardView
 import com.example.worditory.game.gameover.GameOverView
 import com.example.worditory.game.menu.MenuView
 import com.example.worditory.game.tutorial.TutorialView
+import com.example.worditory.hasShownTutorial
 
 @Composable
 internal fun GameView(
@@ -35,6 +37,8 @@ internal fun GameView(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+
+    val hasShownTutorial = context.hasShownTutorial().collectAsState(true)
 
     val displayMenuState = viewModel.displayMenuStateFlow.collectAsState()
     val animatedMenuAlpha = animateFloatAsState(
@@ -113,5 +117,9 @@ internal fun GameView(
         }
 
         TutorialView(viewModel.tutorial)
+
+        if (!hasShownTutorial.value) {
+            viewModel.showTutorial(context)
+        }
     }
 }

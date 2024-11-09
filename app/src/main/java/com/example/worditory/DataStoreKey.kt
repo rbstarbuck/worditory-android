@@ -3,6 +3,7 @@ package com.example.worditory
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -47,10 +48,23 @@ internal suspend fun Context.incrementGamesWon() {
     }
 }
 
+internal fun Context.hasShownTutorial(): Flow<Boolean> {
+    return dataStore.data.map { preferences ->
+        preferences[DataStoreKey.HasShownTutorial] ?: false
+    }
+}
+
+internal suspend fun Context.setHasShownTutorial() {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.HasShownTutorial] = true
+    }
+}
+
 internal class DataStoreKey private constructor() {
     companion object {
         internal val PlayerAvatarId = intPreferencesKey("playerAvatar")
         internal val GamesPlayed = intPreferencesKey("gamesPlayed")
         internal val GamesWon = intPreferencesKey("gamesWon")
+        internal val HasShownTutorial = booleanPreferencesKey("hasShowTutorial")
     }
 }
