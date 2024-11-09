@@ -11,6 +11,7 @@
 /.kotlin/errors
 .DS_Store
 /app/release
+/app/google-services.json
 /build
 /captures
 .externalNativeBuild
