@@ -14,9 +14,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import com.example.worditory.R
 import com.example.worditory.composable.Coordinates
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun TutorialView(
