@@ -7,9 +7,10 @@ import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.dict.WordDictionary
 import java.security.InvalidParameterException
 
-class NonPlayerCharacter(
+internal class NonPlayerCharacter(
     private val model: NpcModel,
-    private val board: BoardViewModel
+    private val board: BoardViewModel,
+    private val player: Game.Player = Game.Player.PLAYER_2
 ) {
     internal fun findWordToPlay(): WordModel {
         var words = findAllWords()
@@ -57,7 +58,7 @@ class NonPlayerCharacter(
         val wordScores = mutableListOf<WordScore>()
 
         for (tile in board.tiles) {
-            if (tile.isOwnedBy(Game.Player.PLAYER_2)) {
+            if (tile.isOwnedBy(player)) {
                 val word = WordModel(
                     tiles = listOf(tile),
                     isSuperWord = tile.isSuperOwned
@@ -84,7 +85,7 @@ class NonPlayerCharacter(
         wordScores: MutableList<WordScore>
     ) {
         for (tile in board.connectedTiles(previousWord.tiles.last())) {
-            if (previousWord.playerCanOwn(Game.Player.PLAYER_2, tile) && !tilesInWord.contains(tile)) {
+            if (previousWord.playerCanOwn(player, tile) && !tilesInWord.contains(tile)) {
                 val nextWordString = "${previousWordString}${tile.letter}"
                 val nextResult = WordDictionary.search(nextWordString, previousResult)
                 var nextWord: WordModel? = null
@@ -148,7 +149,7 @@ class NonPlayerCharacter(
         var defenseScore = 0
 
         for (tile in board.tiles) {
-            if (tile.isOwnedBy(Game.Player.PLAYER_2)) {
+            if (tile.isOwnedBy(player)) {
                 if (!tile.isSuperOwned && willBeSuperOwned(tile, tilesInWord)) {
                     defenseScore += 1
                 }
@@ -174,7 +175,7 @@ class NonPlayerCharacter(
 
     private fun willBeSuperOwned(tile: TileViewModel, tilesInWord: Set<TileViewModel>) =
         board.adjacentTiles(tile).all {
-            it.isOwnedBy(Game.Player.PLAYER_2) || tilesInWord.contains(it)
+            it.isOwnedBy(player) || tilesInWord.contains(it)
         }
 
     private data class WordScore(

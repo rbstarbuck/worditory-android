@@ -14,7 +14,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import com.example.worditory.R
 import com.example.worditory.composable.Coordinates
-import com.example.worditory.game.board.BoardViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun TutorialView(
@@ -31,121 +33,76 @@ internal fun TutorialView(
     )
 
     if (enabled && Coordinates.AreAllSet) {
-        Box(modifier
-            .fillMaxSize()
-            .alpha(animatedAlpha.value)
-            .pointerInput(Unit) { // swallow gestures to prevent game play during tutorial
-                detectTapGestures(
-                    onTap = {},
-                    onPress = {}
-                )
-                detectDragGestures(
-                    onDragStart = {},
-                    onDrag = { _, _ -> },
-                    onDragEnd = {}
-                )
-            }
+        Box(
+            modifier
+                .fillMaxSize()
+                .alpha(animatedAlpha.value)
+                .pointerInput(Unit) { // swallow gestures to prevent game play during tutorial
+                    detectTapGestures(
+                        onTap = {},
+                        onPress = {}
+                    )
+                    detectDragGestures(
+                        onDragStart = {},
+                        onDrag = { _, _ -> },
+                        onDragEnd = {}
+                    )
+                }
         ) {
             TutorialSegmentCenterView(
                 viewModel = viewModel.tutorialSegment1,
                 text = stringResource(R.string.tutorial_text_1),
-                onBackClick = {
-                    viewModel.onExit()
-                },
-                onNextClick = {
-                    viewModel.tutorialSegment1.enabled = false
-                    viewModel.tutorialSegment2.enabled = true
-                }
+                onBackClick = { viewModel.onPreviousSegment() },
+                onNextClick = { viewModel.onNextSegment() }
             )
 
             TutorialSegmentCenterView(
                 viewModel = viewModel.tutorialSegment2,
                 text = stringResource(R.string.tutorial_text_2),
-                onBackClick = {
-                    viewModel.tutorialSegment2.enabled = false
-                    viewModel.tutorialSegment1.enabled = true
-                },
-                onNextClick = {
-                    viewModel.tutorialSegment2.enabled = false
-                    viewModel.tutorialSegment3.enabled = true
-                }
+                onBackClick = { viewModel.onPreviousSegment() },
+                onNextClick = { viewModel.onNextSegment() }
             )
 
             TutorialSegmentBottomArrowView(
                 viewModel = viewModel.tutorialSegment3,
                 text = stringResource(R.string.tutorial_text_3),
-                onBackClick = {
-                    viewModel.tutorialSegment3.enabled = false
-                    viewModel.tutorialSegment2.enabled = true
-                },
-                onNextClick = {
-                    viewModel.tutorialSegment3.enabled = false
-                    viewModel.tutorialSegment4.enabled = true
-                }
+                onBackClick = { viewModel.onPreviousSegment() },
+                onNextClick = { viewModel.onNextSegment() }
             )
 
             TutorialSegmentCenterView(
                 viewModel = viewModel.tutorialSegment4,
                 text = stringResource(R.string.tutorial_text_4),
-                onBackClick = {
-                    viewModel.tutorialSegment4.enabled = false
-                    viewModel.tutorialSegment3.enabled = true
-                },
-                onNextClick = {
-                    viewModel.tutorialSegment4.enabled = false
-                    viewModel.tutorialSegment5.enabled = true
-                }
+                onBackClick = { viewModel.onPreviousSegment() },
+                onNextClick = { viewModel.onNextSegment() }
             )
 
             TutorialSegmentBottomLeftArrowView(
                 viewModel = viewModel.tutorialSegment5,
                 text = stringResource(R.string.tutorial_text_5),
-                onBackClick = {
-                    viewModel.tutorialSegment5.enabled = false
-                    viewModel.tutorialSegment4.enabled = true
-                },
-                onNextClick = {
-                    viewModel.tutorialSegment5.enabled = false
-                    viewModel.tutorialSegment6.enabled = true
-                }
+                onBackClick = { viewModel.onPreviousSegment() },
+                onNextClick = { viewModel.onNextSegment() }
             )
 
             TutorialSegmentTopArrowView(
                 viewModel = viewModel.tutorialSegment6,
                 text = stringResource(R.string.tutorial_text_6),
-                onBackClick = {
-                    viewModel.tutorialSegment6.enabled = false
-                    viewModel.tutorialSegment5.enabled = true
-                },
-                onNextClick = {
-                    viewModel.tutorialSegment6.enabled = false
-                    viewModel.tutorialSegment7.enabled = true
-                }
+                onBackClick = { viewModel.onPreviousSegment() },
+                onNextClick = { viewModel.onNextSegment() }
             )
 
             TutorialSegmentTopArrowView(
                 viewModel = viewModel.tutorialSegment7,
                 text = stringResource(R.string.tutorial_text_7),
-                onBackClick = {
-                    viewModel.tutorialSegment7.enabled = false
-                    viewModel.tutorialSegment6.enabled = true
-                },
-                onNextClick = {
-                    viewModel.tutorialSegment7.enabled = false
-                    viewModel.tutorialSegment8.enabled = true
-                }
+                onBackClick = { viewModel.onPreviousSegment() },
+                onNextClick = { viewModel.onNextSegment() }
             )
 
             TutorialSegmentBottomLeftArrowView(
                 viewModel = viewModel.tutorialSegment8,
                 text = stringResource(R.string.tutorial_text_8),
-                onBackClick = {
-                    viewModel.tutorialSegment8.enabled = false
-                    viewModel.tutorialSegment7.enabled = true
-                },
-                onNextClick = {
-                    viewModel.onExit()
-                }
+                onBackClick = { viewModel.onPreviousSegment() },
+                onNextClick = { viewModel.onNextSegment() }
             )
         }
     }

@@ -7,6 +7,7 @@ import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileModel
 import com.example.worditory.game.board.tile.TileViewModel
+import com.example.worditory.game.board.tile.asCharCode
 import com.example.worditory.game.board.tile.asLetter
 import com.example.worditory.game.board.word.WordViewModel
 import com.example.worditory.game.dict.WordDictionary
@@ -23,12 +24,8 @@ class BoardViewModel(
 ): ViewModel() {
     internal val width = model.width
     internal val height = model.height
-
-    internal lateinit var tiles: List<TileViewModel>
-        private set
-
+    internal val tiles: List<TileViewModel>
     internal val word = WordViewModel(width, height, onWordChanged)
-
     private val letterBag = LetterBag()
 
     private var currentDragPoint = Offset.Zero
@@ -40,26 +37,42 @@ class BoardViewModel(
             .addAllTiles(tiles.map { it.model })
             .build()
         set(value) {
-            setModel(value)
+            restoreModel(value)
         }
 
     init {
-        setModel(model)
-    }
+        val tileModel = TileModel.newBuilder()
+            .setOwnership(TileModel.Ownership.UNOWNED)
+            .setLetter(" ".asCharCode())
+            .build()
 
-    private fun setModel(model: BoardModel) {
-        val tilesData = mutableListOf<TileViewModel>()
-
-        for (y in 0..<height) {
-            for (x in 0..<width) {
-                val model = model.tilesList[y * width + x]
-
-                tilesData.add(TileViewModel(model, x, y, colorScheme))
-                letterBag.removeLetter(model.letter.asLetter())
-            }
+        val tilesData = Array(width * height) { item ->
+            TileViewModel(
+                model = tileModel,
+                x = item % width,
+                y = item / width,
+                colorScheme = colorScheme
+            )
         }
 
-        tiles = tilesData
+        tiles = tilesData.toList()
+
+        restoreModel(model)
+    }
+
+    internal fun restoreModel(model: BoardModel) {
+        assert(model.tilesList.size == tiles.size)
+
+        for (i in 0..<model.tilesList.size) {
+            val model = model.tilesList[i]
+            val letter = model.letter.asLetter()
+            if (letter != tiles[i].letter) {
+                tiles[i].letter = letter
+            }
+            tiles[i].ownership = model.ownership
+        }
+
+        updateSuperOwnerships()
     }
 
     internal fun computeScore(): Game.Score {
@@ -149,6 +162,10 @@ class BoardViewModel(
             }
         }
 
+        updateSuperOwnerships()
+    }
+
+    private fun updateSuperOwnerships() {
         for (tile in tiles) {
             if (tile.isOwnedBy(Game.Player.PLAYER_1)) {
                 tile.ownership =

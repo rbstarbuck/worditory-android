@@ -102,7 +102,7 @@ abstract class GameViewModel(
         targetState = GameOver.State.LOSE
     )
 
-    internal val tutorial = TutorialViewModel(board)
+    internal val tutorial = TutorialViewModel(board, scoreBoard)
 
     internal val model: GameModel
         get() = GameModel.newBuilder()
