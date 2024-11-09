@@ -26,7 +26,12 @@ internal class TutorialViewModel(
         get() = enabledStateFlow.value
         set(value) {
             if (value != enabled) {
-                if (value) boardModel = board.model else board.model = boardModel
+                if (value) {
+                    boardModel = board.model
+                    board.word.model = WordModel()
+                } else {
+                    board.model = boardModel
+                }
                 _enabledStateFlow.value = value
                 tutorialSegment1.enabled = value
             }
