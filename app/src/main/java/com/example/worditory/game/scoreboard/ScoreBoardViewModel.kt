@@ -1,13 +1,16 @@
 package com.example.worditory.game.scoreboard
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.scoreboard.player.PlayerScoreViewModel
 import com.example.worditory.game.scoreboard.scoretowin.ScoreToWinViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class ScoreBoardViewModel(
     initialScoreToWin: Int,
@@ -22,23 +25,38 @@ class ScoreBoardViewModel(
         get() = scoreToWinStateFlow.value
         set(value) {
             _scoreToWinStateFlow.value = value
+            viewModelScope.launch {
+                delay(500L)
+                previousScoreToWin = value
+            }
+        }
+
+    private val _previousScoreToWinStateFlow = MutableStateFlow(currentScoreToWin)
+    private val previousScoreToWinStateFlow = _previousScoreToWinStateFlow.asStateFlow()
+    private var previousScoreToWin: Int
+        get() = previousScoreToWinStateFlow.value
+        set(value) {
+            _previousScoreToWinStateFlow.value = value
         }
 
     internal val scorePlayer1 = PlayerScoreViewModel(
-        scoreToWinStateFlow,
+        previousScoreToWinStateFlow,
         avatarIdPlayer1,
         colorScheme.player1,
         isPlayer1 = true
     )
 
     internal val scorePlayer2 = PlayerScoreViewModel(
-        scoreToWinStateFlow,
+        previousScoreToWinStateFlow,
         avatarIdPlayer2,
         colorScheme.player2,
         isPlayer1 = false
     )
 
-    internal val scoreToWinViewModel = ScoreToWinViewModel(initialScoreToWin, scoreToWinStateFlow)
+    internal val scoreToWinViewModel = ScoreToWinViewModel(
+        initialScoreToWin,
+        previousScoreToWinStateFlow
+    )
 
     internal var score: Game.Score
         get() = Game.Score(scorePlayer1.score, scorePlayer2.score)

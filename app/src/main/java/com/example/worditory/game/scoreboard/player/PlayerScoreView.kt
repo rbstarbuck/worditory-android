@@ -1,7 +1,10 @@
 package com.example.worditory.game.scoreboard.player
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -14,6 +17,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,14 +35,18 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import com.example.worditory.R
 import com.example.worditory.composable.saveCoordinates
 import com.example.worditory.composable.Coordinates
 import com.example.worditory.resourceid.getResourceId
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifier) {
     val scoreState = viewModel.scoreStateFlow.collectAsState()
+    val previousScoreState = viewModel.previousScoreStateFlow.collectAsState()
     val scoreToWinState = viewModel.scoreToWinStateFlow.collectAsState()
     val avatarIdState = viewModel.avatarId.collectAsState(0)
 
@@ -52,7 +60,7 @@ internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier
     val avatarBackgroundColor = colorResource(viewModel.colorScheme.owned)
 
     val scoreAnimator = animateFloatAsState(
-        targetValue = scoreState.value.toFloat(),
+        targetValue = previousScoreState.value.toFloat(),
         animationSpec = tween(750),
         label = "score"
     )
@@ -62,6 +70,7 @@ internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier
         animationSpec = tween(750),
         label = "scoreToWin"
     )
+
 
     BoxWithConstraints(modifier.aspectRatio(1f)) {
         Canvas(modifier.aspectRatio(1f)) {
@@ -141,19 +150,26 @@ internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier
         }
 
         val fontColor = colorResource(R.color.font_color_dark)
-        val fontSize = this.maxWidth.value * 0.25f / LocalDensity.current.fontScale
+        val maxWidth = this.maxWidth
+        val fontSize = maxWidth.value * 0.25f / LocalDensity.current.fontScale
 
-        Text(
-            text = scoreState.value.toString(),
-            color = fontColor,
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(this.maxWidth)
-                .wrapContentHeight(Alignment.Bottom)
-                .wrapContentWidth(Alignment.CenterHorizontally)
-                .saveCoordinates(Coordinates.PlayerScore, viewModel.isPlayer1),
-            fontSize = fontSize.sp,
-            fontWeight = FontWeight.Bold
-        )
+        AnimatedVisibility(
+            visible = previousScoreState.value == scoreState.value,
+            enter = fadeIn(tween(500)),
+            exit = fadeOut(tween(500))
+        ) {
+            Text(
+                text = previousScoreState.value.toString(),
+                color = fontColor,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(maxWidth)
+                    .wrapContentHeight(Alignment.Bottom)
+                    .wrapContentWidth(Alignment.CenterHorizontally)
+                    .saveCoordinates(Coordinates.PlayerScore, viewModel.isPlayer1),
+                fontSize = fontSize.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
