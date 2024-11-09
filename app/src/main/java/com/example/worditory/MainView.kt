@@ -94,13 +94,17 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         }
 
         if (avatarChooserEnabledState.value) {
-            AvatarChooserDialog(Modifier.alpha(avatarChooserAnimatedAlpha.value)) {
+            AvatarChooserDialog(
+                viewModel = viewModel.avatarChooser,
+                modifier = Modifier.alpha(avatarChooserAnimatedAlpha.value)
+            ) {
                 viewModel.avatarChooserEnabled = false
             }
         }
 
         if (deleteSavedGameIdState.value != 0L) {
             DeleteSavedGameDialog(
+                viewModel = viewModel.deleteSavedGame,
                 modifier = Modifier.alpha(deleteSavedGameAnimatedAlpha.value),
                 gameId = deleteSavedGameIdState.value
             ) {

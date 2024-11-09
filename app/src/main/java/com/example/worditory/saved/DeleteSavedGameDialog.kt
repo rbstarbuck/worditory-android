@@ -23,11 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 import com.example.worditory.composable.BackHandler
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun DeleteSavedGameDialog(
+    viewModel: DeleteSavedGameViewModel,
     modifier: Modifier = Modifier,
     gameId: Long,
     onDismiss: () -> Unit
@@ -67,7 +66,7 @@ internal fun DeleteSavedGameDialog(
             Row {
                 FilledTonalButton(
                     onClick = {
-                        GlobalScope.launch { context.removeSavedGame(gameId) }
+                        viewModel.deleteSavedGame(gameId, context)
                         onDismiss()
                     }
                 ) {

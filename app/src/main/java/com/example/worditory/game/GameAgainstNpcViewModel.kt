@@ -1,10 +1,9 @@
 package com.example.worditory.game
 
-import android.content.Context
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.gameover.GameOver
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -42,7 +41,7 @@ internal class GameAgainstNpcViewModel(
     private fun playNpcWord() {
         val npcWord = nonPlayerCharacter.findWordToPlay()
 
-        GlobalScope.launch {
+        viewModelScope.launch {
             delay(Random.nextLong(from = 1500L, until = 2500L))
 
             board.word.withDrawPathTweenDuration(millis = npcWord.tiles.size * 350) {

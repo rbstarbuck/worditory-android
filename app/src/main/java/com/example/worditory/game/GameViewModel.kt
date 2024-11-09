@@ -2,6 +2,7 @@ package com.example.worditory.game
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
@@ -18,7 +19,6 @@ import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
 import com.example.worditory.saved.addSavedGame
 import com.example.worditory.saved.removeSavedGame
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -155,7 +155,7 @@ abstract class GameViewModel(
     internal fun onExitGame(context: Context) {
         val currentGameOverState = gameOverState
 
-        GlobalScope.launch {
+        viewModelScope.launch {
             if (currentGameOverState == GameOver.State.IN_PROGRESS) {
                 context.addSavedGame(model)
             } else {

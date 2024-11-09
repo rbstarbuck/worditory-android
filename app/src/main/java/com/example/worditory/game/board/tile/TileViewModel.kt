@@ -1,9 +1,9 @@
 package com.example.worditory.game.board.tile
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.worditory.game.Game
 import com.example.worditory.R
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,7 +29,7 @@ class TileViewModel(
     internal var letter: String
         get() = letterStateFLow.value
         set(value) {
-            GlobalScope.launch {
+            viewModelScope.launch {
                 _letterVisibilityStateFlow.value = false
                 delay(500L)
                 _letterStateFlow.value = value

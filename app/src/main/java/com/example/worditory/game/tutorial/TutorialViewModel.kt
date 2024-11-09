@@ -1,6 +1,7 @@
 package com.example.worditory.game.tutorial
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.worditory.composable.Coordinates
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.BoardViewModel
@@ -8,7 +9,6 @@ import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.game.scoreboard.ScoreBoardViewModel
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -127,7 +127,7 @@ internal class TutorialViewModel(
 
     private fun displayExampleWord(onComplete: () -> Unit) {
         exampleWord = exampleWordNpc.findWordToPlay()
-        GlobalScope.launch {
+        viewModelScope.launch {
             delay(500)
             board.word.model = exampleWord
             delay(2500)
@@ -141,7 +141,7 @@ internal class TutorialViewModel(
 
     internal fun playExampleWord(onComplete: () -> Unit) {
         currentScore = board.computeScore()
-        GlobalScope.launch {
+        viewModelScope.launch {
             delay(500)
             board.playWord(Game.Player.PLAYER_1)
             delay(2500)
@@ -155,7 +155,7 @@ internal class TutorialViewModel(
     }
 
     private fun updatePlayerScore(onComplete: () -> Unit) {
-        GlobalScope.launch {
+        viewModelScope.launch {
             delay(500)
             scoreBoard.score = board.computeScore()
             delay(1500)
@@ -169,7 +169,7 @@ internal class TutorialViewModel(
 
     private fun decrementScoreToWin(onComplete: () -> Unit) {
         currentScoreToWin = scoreBoard.scoreToWin
-        GlobalScope.launch {
+        viewModelScope.launch {
             delay(500)
             scoreBoard.decrementScoreToWin()
             delay(1500)

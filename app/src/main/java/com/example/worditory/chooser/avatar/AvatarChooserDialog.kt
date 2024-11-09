@@ -26,12 +26,10 @@ import androidx.compose.ui.unit.dp
 import com.example.worditory.R
 import com.example.worditory.composable.BackHandler
 import com.example.worditory.resourceid.getResourceId
-import com.example.worditory.setPlayerAvatarId
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun AvatarChooserDialog(
+    viewModel: AvatarChooserViewModel,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
@@ -68,7 +66,7 @@ internal fun AvatarChooserDialog(
                 Box(Modifier.padding(5.dp)) {
                     OutlinedButton(
                         onClick = {
-                            GlobalScope.launch { context.setPlayerAvatarId(persistedAvatarId) }
+                            viewModel.setPlayerAvatarId(persistedAvatarId, context)
                             onDismiss()
                         },
                         shape = RoundedCornerShape(15.dp),
