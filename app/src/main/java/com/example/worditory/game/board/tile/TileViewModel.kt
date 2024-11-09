@@ -22,6 +22,18 @@ class TileViewModel(
         get() = ownershipStateFlow.value
         set(value) {
             _ownershipStateFlow.value = value
+            viewModelScope.launch {
+                delay(500L)
+                previousOwnership = value
+            }
+        }
+
+    private val _previousOwnershipStateFlow = MutableStateFlow(TileModel.Ownership.UNOWNED)
+    internal val previousOwnershipStateFlow = _previousOwnershipStateFlow.asStateFlow()
+    internal var previousOwnership: TileModel.Ownership
+        get() = previousOwnershipStateFlow.value
+        set(value) {
+            _previousOwnershipStateFlow.value = value
         }
 
     private val _letterStateFlow = MutableStateFlow(model.letter.asLetter())
@@ -29,12 +41,21 @@ class TileViewModel(
     internal var letter: String
         get() = letterStateFLow.value
         set(value) {
+            _letterStateFlow.value = value
+            _letterVisibilityStateFlow.value = false
             viewModelScope.launch {
-                _letterVisibilityStateFlow.value = false
                 delay(500L)
-                _letterStateFlow.value = value
+                previousLetter = value
                 _letterVisibilityStateFlow.value = true
             }
+        }
+
+    private val _previousLetterStateFlow = MutableStateFlow(" ")
+    internal val previousLetterStateFlow = _previousLetterStateFlow.asStateFlow()
+    internal var previousLetter: String
+        get() = previousLetterStateFlow.value
+        set(value) {
+            _previousLetterStateFlow.value = value
         }
 
     private val _letterVisibilityStateFlow = MutableStateFlow(true)
