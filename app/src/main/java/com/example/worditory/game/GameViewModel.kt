@@ -1,9 +1,12 @@
 package com.example.worditory.game
 
 import android.content.Context
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.worditory.badge.NewBadgesToDisplay
 import com.example.worditory.game.audio.AudioPlayer
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
@@ -19,6 +22,8 @@ import com.example.worditory.game.tutorial.TutorialViewModel
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
+import com.example.worditory.R
+import com.example.worditory.badge.NewBadgesToDisplay.Badge
 import com.example.worditory.saved.addSavedGame
 import com.example.worditory.saved.removeSavedGame
 import com.example.worditory.setHasShownTutorial
@@ -138,12 +143,33 @@ abstract class GameViewModel(
             if (wordFrequency != null) {
                 if (wordFrequency == 3) {
                     viewModelScope.launch { context.setObscureWord(wordString) }
+                    NewBadgesToDisplay.add(
+                        Badge(
+                            imageVectorId = R.drawable.badge_played_obscure_word,
+                            dialogTextId = R.string.badge_dialog_played_obscure_word,
+                            contentDescriptionId = R.string.badge_description_played_obscure_word
+                        )
+                    )
                 }
                 if (wordString.contains("Q")) {
                     viewModelScope.launch { context.setQWord(wordString) }
+                    NewBadgesToDisplay.add(
+                        Badge(
+                            imageVectorId = R.drawable.badge_played_q_word,
+                            dialogTextId = R.string.badge_dialog_played_q_word,
+                            contentDescriptionId = R.string.badge_description_played_q_word
+                        )
+                    )
                 }
                 if (wordString.contains("Z")) {
                     viewModelScope.launch { context.setZWord(wordString) }
+                    NewBadgesToDisplay.add(
+                        Badge(
+                            imageVectorId = R.drawable.badge_played_z_word,
+                            dialogTextId = R.string.badge_dialog_played_z_word,
+                            contentDescriptionId = R.string.badge_description_played_z_word
+                        )
+                    )
                 }
 
                 AudioPlayer.wordPlayed(wordString.length)
@@ -243,10 +269,31 @@ abstract class GameViewModel(
     internal open fun setBadgesOnGameWon(context: Context) {
         if (boardWidth == 5 && boardHeight == 4 || boardWidth == 5 && boardHeight == 5) {
             viewModelScope.launch { context.setWonLightning() }
+            NewBadgesToDisplay.add(
+                Badge(
+                    imageVectorId = R.drawable.badge_won_lightning,
+                    dialogTextId = R.string.badge_dialog_won_lightning,
+                    contentDescriptionId = R.string.badge_description_won_lightning
+                )
+            )
         } else if (boardWidth == 6 && boardHeight == 6 || boardWidth == 7 && boardHeight == 5) {
             viewModelScope.launch { context.setWonRapid() }
+            NewBadgesToDisplay.add(
+                Badge(
+                    imageVectorId = R.drawable.badge_won_rapid,
+                    dialogTextId = R.string.badge_dialog_won_rapid,
+                    contentDescriptionId = R.string.badge_description_won_rapid
+                )
+            )
         } else if (boardWidth == 8) {
             viewModelScope.launch { context.setWonClassic() }
+            NewBadgesToDisplay.add(
+                Badge(
+                    imageVectorId = R.drawable.badge_won_classic,
+                    dialogTextId = R.string.badge_dialog_won_classic,
+                    contentDescriptionId = R.string.badge_description_won_classic
+                )
+            )
         }
     }
 }

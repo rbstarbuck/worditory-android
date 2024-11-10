@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,11 +36,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
+import com.example.worditory.game.npc.BeatenOpponents
+import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.ADVANCED
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.BEGINNER
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.INTERMEDIATE
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.SUPER_ADVANCED
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.UNRECOGNIZED
+import com.example.worditory.game.npc.beatenOpponents
+import com.example.worditory.game.npc.beatenOpponentsDataStore
 import com.example.worditory.resourceid.getResourceId
 import com.example.worditory.wonAgainstAdvanced
 import com.example.worditory.wonAgainstBeginner
@@ -51,6 +58,11 @@ internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier =
     val wonAgainstBeginnerState = context.wonAgainstBeginner().collectAsState(false)
     val wonAgainstIntermediateState = context.wonAgainstIntermediate().collectAsState(false)
     val wonAgainstAdvancedState = context.wonAgainstAdvanced().collectAsState(false)
+
+    val beatenOpponentsState = context.beatenOpponentsDataStore.data.collectAsState(
+        BeatenOpponents.newBuilder().build()
+    )
+    val beatenOpponents = beatenOpponentsState.value.opponentsList.toSet()
 
     Column(
         modifier = modifier.background(colorResource(R.color.background)).fillMaxSize(),
@@ -94,7 +106,7 @@ internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier =
                                 throw InvalidParameterException("Unrecognized overall skill level")
                         }
 
-                        Box(Modifier.padding(5.dp)) {
+                        BoxWithConstraints(Modifier.padding(5.dp)) {
                             OutlinedButton(
                                 onClick = {
                                     viewModel.onNpcClick(opponent)
@@ -132,6 +144,19 @@ internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier =
                                             setToSaturation(0f)
                                         })
                                     }
+                                )
+                            }
+
+                            if (beatenOpponents.contains(opponent.spec)) {
+                                Image(
+                                    imageVector = ImageVector.vectorResource(R.drawable.beaten),
+                                    contentDescription = stringResource(R.string.opponent_beaten),
+                                    modifier = Modifier
+                                        .size(this.maxWidth * 0.3f)
+                                        .offset(
+                                            x = this.maxWidth * 0.75f,
+                                            y = this.maxWidth * 0.75f
+                                        )
                                 )
                             }
                         }

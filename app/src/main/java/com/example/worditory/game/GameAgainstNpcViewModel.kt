@@ -3,10 +3,18 @@ package com.example.worditory.game
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.worditory.R
+import com.example.worditory.badge.NewBadgesToDisplay
+import com.example.worditory.badge.NewBadgesToDisplay.Badge
 import com.example.worditory.game.audio.AudioPlayer
 import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.gameover.GameOver
-import com.example.worditory.game.npc.NpcModel
+import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.ADVANCED
+import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.BEGINNER
+import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.INTERMEDIATE
+import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.SUPER_ADVANCED
+import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.UNRECOGNIZED
+import com.example.worditory.game.npc.addBeatenOpponent
 import com.example.worditory.setWonAgainsIntermediate
 import com.example.worditory.setWonAgainstAdvanced
 import com.example.worditory.setWonAgainstBeginner
@@ -14,6 +22,7 @@ import com.example.worditory.setWonAgainstSuperAdvanced
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.security.InvalidParameterException
 import kotlin.random.Random
 
 internal class GameAgainstNpcViewModel(
@@ -49,18 +58,52 @@ internal class GameAgainstNpcViewModel(
     override fun setBadgesOnGameWon(context: Context) {
         super.setBadgesOnGameWon(context)
 
-        if (opponent.spec.overallSkillLevel == NpcModel.Spec.OverallSkillLevel.BEGINNER) {
-            viewModelScope.launch { context.setWonAgainstBeginner() }
-        } else if (
-            opponent.spec.overallSkillLevel == NpcModel.Spec.OverallSkillLevel.INTERMEDIATE
-        ) {
-            viewModelScope.launch { context.setWonAgainsIntermediate() }
-        } else if (opponent.spec.overallSkillLevel == NpcModel.Spec.OverallSkillLevel.ADVANCED) {
-            viewModelScope.launch { context.setWonAgainstAdvanced() }
-        } else if (
-            opponent.spec.overallSkillLevel == NpcModel.Spec.OverallSkillLevel.SUPER_ADVANCED
-        ) {
-            viewModelScope.launch { context.setWonAgainstSuperAdvanced() }
+        viewModelScope.launch {
+            when (opponent.spec.overallSkillLevel) {
+                BEGINNER -> {
+                    viewModelScope.launch { context.setWonAgainstBeginner() }
+                    NewBadgesToDisplay.add(
+                        Badge(
+                            imageVectorId = R.drawable.badge_won_against_beginner,
+                            dialogTextId = R.string.badge_dialog_won_against_beginner,
+                            contentDescriptionId = R.string.badge_description_won_against_beginner
+                        )
+                    )
+                }
+                INTERMEDIATE -> {
+                    viewModelScope.launch { context.setWonAgainsIntermediate() }
+                    NewBadgesToDisplay.add(
+                        Badge(
+                            imageVectorId = R.drawable.badge_won_against_intermediate,
+                            dialogTextId = R.string.badge_dialog_won_against_intermediate,
+                            contentDescriptionId = R.string.badge_description_won_against_intermediate
+                        )
+                    )
+                }
+                ADVANCED -> {
+                    viewModelScope.launch { context.setWonAgainstAdvanced() }
+                    NewBadgesToDisplay.add(
+                        Badge(
+                            imageVectorId = R.drawable.badge_won_against_advanced,
+                            dialogTextId = R.string.badge_dialog_won_against_advanced,
+                            contentDescriptionId = R.string.badge_description_won_against_advanced
+                        )
+                    )
+                }
+                SUPER_ADVANCED -> {
+                    viewModelScope.launch { context.setWonAgainstSuperAdvanced() }
+                    NewBadgesToDisplay.add(
+                        Badge(
+                            imageVectorId = R.drawable.badge_won_against_super_advanced,
+                            dialogTextId = R.string.badge_dialog_won_against_super_advanced,
+                            contentDescriptionId = R.string.badge_description_won_against_super_advanced
+                        )
+                    )
+                }
+                UNRECOGNIZED -> throw InvalidParameterException("Unrecognized overall skill level")
+            }
+
+            context.addBeatenOpponent(opponent.spec)
         }
     }
 

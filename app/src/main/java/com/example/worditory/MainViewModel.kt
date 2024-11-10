@@ -3,6 +3,7 @@ package com.example.worditory
 import android.content.Context
 import androidx.navigation.NavController
 import com.example.worditory.badge.BadgesRowViewModel
+import com.example.worditory.badge.NewBadgesViewModel
 import com.example.worditory.chooser.avatar.AvatarChooserViewModel
 import com.example.worditory.navigation.Screen
 import com.example.worditory.saved.DeleteSavedGameViewModel
@@ -32,6 +33,8 @@ class MainViewModel(private val navController: NavController, context: Context) 
         }
 
     internal val badgesRow = BadgesRowViewModel(context)
+
+    internal val newBadges = NewBadgesViewModel()
 
     internal fun onPlayGameClicked() {
         navController.navigate(Screen.NpcChooser.route)

@@ -6,6 +6,9 @@
     <string name="won">Won</string>
     <string name="win_pct">Win rate</string>
 
+    <string name="you_earned_a_new_badge">You earned a new badge!</string>
+    <string name="you_earned_new_badges">You earned new badges!</string>
+
     <string name="badge_description_won_against_beginner">Won against beginner badge</string>
     <string name="badge_dialog_won_against_beginner">You won against a beginner opponent!</string>
     <string name="badge_description_won_against_intermediate">Won against intermediate badge</string>
@@ -51,6 +54,7 @@
     <string name="offensive">Offensive</string>
     <string name="easy">Easy</string>
     <string name="hard">Hard</string>
+    <string name="opponent_beaten">Opponent beaten</string>
 
     <string name="board_size">Board size</string>
     <string name="lightning">Lightning</string>

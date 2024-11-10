@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.badge.BadgesDialogView
 import com.example.worditory.badge.BadgesRowView
+import com.example.worditory.badge.NewBadgesView
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.header.HeaderView
 import com.example.worditory.saved.DeleteSavedGameDialog
@@ -190,5 +191,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 viewModel.deleteSavedGameId = 0L
             }
         }
+
+        NewBadgesView(viewModel.newBadges)
     }
 }
