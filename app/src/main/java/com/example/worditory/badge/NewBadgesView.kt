@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +23,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -31,23 +31,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import com.example.worditory.R
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun NewBadgesView(viewModel: NewBadgesViewModel, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
     val enabledState = viewModel.enabledStateFlow.collectAsState()
 
     val badges = remember { NewBadgesToDisplay.consume() }
+    val displayedBadgesState = context.displayedBadgesDataStore.data.collectAsState(
+        DisplayedBadges.newBuilder().build()
+    )
+    val displayedBadges = displayedBadgesState.value.badgeIdsList.toSet()
+    val badgesToDisplay = badges.filter { !displayedBadges.contains(it.id) }
 
     val backgroundColor = colorResource(R.color.badges_background)
 
-    if (enabledState.value && badges.isNotEmpty()) {
+    if (enabledState.value && badgesToDisplay.isNotEmpty()) {
         BoxWithConstraints(
             modifier = modifier
                 .fillMaxSize()
                 .pointerInput(Unit) {
                     detectTapGestures(
-                        onTap = { viewModel.enabled = false }
+                        onTap = {
+                            viewModel.enabled = false
+                            viewModel.viewModelScope.launch {
+                                context.addAllDisplayedBadges(badges)
+                            }
+                        }
                     )
                 },
             contentAlignment = Alignment.Center,
@@ -82,7 +96,7 @@ internal fun NewBadgesView(viewModel: NewBadgesViewModel, modifier: Modifier = M
                         fontWeight = FontWeight.Bold
                     )
 
-                    for (badge in badges) {
+                    for (badge in badgesToDisplay) {
 
                         Spacer(Modifier.height(padding))
 

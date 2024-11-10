@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.R
+import com.example.worditory.badge.Badge
 import com.example.worditory.badge.NewBadgesToDisplay
-import com.example.worditory.badge.NewBadgesToDisplay.Badge
 import com.example.worditory.game.audio.AudioPlayer
 import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.gameover.GameOver
@@ -62,43 +62,19 @@ internal class GameAgainstNpcViewModel(
             when (opponent.spec.overallSkillLevel) {
                 BEGINNER -> {
                     viewModelScope.launch { context.setWonAgainstBeginner() }
-                    NewBadgesToDisplay.add(
-                        Badge(
-                            imageVectorId = R.drawable.badge_won_against_beginner,
-                            dialogTextId = R.string.badge_dialog_won_against_beginner,
-                            contentDescriptionId = R.string.badge_description_won_against_beginner
-                        )
-                    )
+                    NewBadgesToDisplay.add(Badge.WonAgainstBeginner)
                 }
                 INTERMEDIATE -> {
                     viewModelScope.launch { context.setWonAgainsIntermediate() }
-                    NewBadgesToDisplay.add(
-                        Badge(
-                            imageVectorId = R.drawable.badge_won_against_intermediate,
-                            dialogTextId = R.string.badge_dialog_won_against_intermediate,
-                            contentDescriptionId = R.string.badge_description_won_against_intermediate
-                        )
-                    )
+                    NewBadgesToDisplay.add(Badge.WonAgainstIntermediate)
                 }
                 ADVANCED -> {
                     viewModelScope.launch { context.setWonAgainstAdvanced() }
-                    NewBadgesToDisplay.add(
-                        Badge(
-                            imageVectorId = R.drawable.badge_won_against_advanced,
-                            dialogTextId = R.string.badge_dialog_won_against_advanced,
-                            contentDescriptionId = R.string.badge_description_won_against_advanced
-                        )
-                    )
+                    NewBadgesToDisplay.add(Badge.WonAgainstAdvanced)
                 }
                 SUPER_ADVANCED -> {
                     viewModelScope.launch { context.setWonAgainstSuperAdvanced() }
-                    NewBadgesToDisplay.add(
-                        Badge(
-                            imageVectorId = R.drawable.badge_won_against_super_advanced,
-                            dialogTextId = R.string.badge_dialog_won_against_super_advanced,
-                            contentDescriptionId = R.string.badge_description_won_against_super_advanced
-                        )
-                    )
+                    NewBadgesToDisplay.add(Badge.WonAgainstSuperAdvanced)
                 }
                 UNRECOGNIZED -> throw InvalidParameterException("Unrecognized overall skill level")
             }
