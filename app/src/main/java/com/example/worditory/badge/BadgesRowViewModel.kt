@@ -11,27 +11,40 @@ import com.example.worditory.wonAgainstSuperAdvanced
 import com.example.worditory.wonClassic
 import com.example.worditory.wonLightning
 import com.example.worditory.wonRapid
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
 internal class BadgesRowViewModel(context: Context): ViewModel() {
     internal val wonAgainstBeginner = BadgeViewModel(
         composableCoordinates = Coordinates.BadgeWonAgainstBeginner,
         showBadgePredicate = {
-            context.wonAgainstBeginner()
+            context.wonAgainstBeginner().combine(context.wonAgainstIntermediate()) { a, b ->
+                a && !b
+            }.combine(context.wonAgainstAdvanced()) { a, b ->
+                a && !b
+            }.combine(context.wonAgainstSuperAdvanced()) { a, b ->
+                a && !b
+            }
         }
     )
 
     internal val wonAgainstIntermediate = BadgeViewModel(
         composableCoordinates = Coordinates.BadgeWonAgainstIntermediate,
         showBadgePredicate = {
-            context.wonAgainstIntermediate()
+            context.wonAgainstIntermediate().combine(context.wonAgainstAdvanced()) { a, b ->
+                a && !b
+            }.combine(context.wonAgainstSuperAdvanced()) { a, b ->
+                a && !b
+            }
         }
     )
 
     internal val wonAgainstAdvanced = BadgeViewModel(
         composableCoordinates = Coordinates.BadgeWonAgainstAdvanced,
         showBadgePredicate = {
-            context.wonAgainstAdvanced()
+            context.wonAgainstAdvanced().combine(context.wonAgainstSuperAdvanced()) { a, b ->
+                a && !b
+            }
         }
     )
 
