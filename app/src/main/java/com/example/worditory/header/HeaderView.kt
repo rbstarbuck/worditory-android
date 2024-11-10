@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,10 +40,13 @@ import kotlin.math.roundToInt
 
 @Composable
 fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
-    val avatarState = LocalContext.current.getPlayerAvatarId().collectAsState(0)
-    val gamesPlayedState = LocalContext.current.getGamesPlayed().collectAsState(0)
-    val gamesWonState = LocalContext.current.getGamesWon().collectAsState(0)
-    val winRateState = LocalContext.current.getWinRate().collectAsState(null)
+    val context = LocalContext.current
+
+    val avatarState = remember { context.getPlayerAvatarId() }.collectAsState(0)
+    val gamesPlayedState = remember { context.getGamesPlayed() }.collectAsState(0)
+    val gamesWonState = remember { context.getGamesWon() }.collectAsState(0)
+    val winRateState = remember { context.getWinRate() }.collectAsState(null)
+
     val winRate = winRateState.value
     val winPercentage = if (winRate == null) {
         "--"
