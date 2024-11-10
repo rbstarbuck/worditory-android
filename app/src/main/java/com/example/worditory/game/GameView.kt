@@ -20,7 +20,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
 import com.example.worditory.R
 import com.example.worditory.composable.BackHandler
 import com.example.worditory.game.board.BoardView

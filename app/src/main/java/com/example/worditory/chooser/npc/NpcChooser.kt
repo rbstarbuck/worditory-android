@@ -1,6 +1,5 @@
 package com.example.worditory.chooser.npc
 
-import com.example.worditory.R
 import com.example.worditory.game.npc.NpcModel
 
 internal class NpcChooser private constructor() {

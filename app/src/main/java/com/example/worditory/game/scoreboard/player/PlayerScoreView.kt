@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,13 +34,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import com.example.worditory.R
 import com.example.worditory.composable.saveCoordinates
 import com.example.worditory.composable.Coordinates
 import com.example.worditory.resourceid.getResourceId
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifier) {

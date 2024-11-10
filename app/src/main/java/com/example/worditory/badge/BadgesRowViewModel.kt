@@ -1,7 +1,6 @@
 package com.example.worditory.badge
 
 import android.content.Context
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import com.example.worditory.composable.Coordinates
 import com.example.worditory.getWinRate
@@ -12,7 +11,6 @@ import com.example.worditory.wonAgainstSuperAdvanced
 import com.example.worditory.wonClassic
 import com.example.worditory.wonLightning
 import com.example.worditory.wonRapid
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 internal class BadgesRowViewModel(context: Context): ViewModel() {

@@ -1,7 +1,6 @@
 package com.example.worditory
 
 import android.content.Context
-import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import com.example.worditory.badge.BadgesRowViewModel
 import com.example.worditory.chooser.avatar.AvatarChooserViewModel

@@ -2,7 +2,6 @@ package com.example.worditory.game.hint
 
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.BoardViewModel
-import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.npc.NpcModel
 

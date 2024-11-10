@@ -124,7 +124,7 @@ internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier =
 
                                 Image(
                                     imageVector = avatarVector,
-                                    contentDescription = "Avatar",
+                                    contentDescription = stringResource(R.string.avatar),
                                     colorFilter = if (enabled) {
                                         null
                                     } else {
