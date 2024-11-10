@@ -25,6 +25,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.worditory.badge.BadgeDialogView
 import com.example.worditory.badge.BadgesDialogView
 import com.example.worditory.badge.BadgesRowView
 import com.example.worditory.badge.NewBadgesView
@@ -102,76 +103,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             }
         }
 
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.wonAgainstBeginner.dialog,
-            dialogText = stringResource(R.string.badge_dialog_won_against_beginner)
-        )
-
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.wonAgainstIntermediate.dialog,
-            dialogText = stringResource(R.string.badge_dialog_won_against_intermediate)
-        )
-
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.wonAgainstAdvanced.dialog,
-            dialogText = stringResource(R.string.badge_dialog_won_against_advanced)
-        )
-
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.wonAgainstSuperAdvanced.dialog,
-            dialogText = stringResource(R.string.badge_dialog_won_against_super_advanced)
-        )
-
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.wonLightning.dialog,
-            dialogText = stringResource(R.string.badge_dialog_won_lightning)
-        )
-
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.wonRapid.dialog,
-            dialogText = stringResource(R.string.badge_dialog_won_rapid)
-        )
-
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.wonClassic.dialog,
-            dialogText = stringResource(R.string.badge_dialog_won_classic)
-        )
-
-        val obscureWordState = LocalContext.current.obscureWord().collectAsState("")
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.playedObscureWord.dialog,
-            dialogText = stringResource(R.string.badge_dialog_played_obscure_word) +
-                    " " + obscureWordState.value
-        )
-
-        val qWordState = LocalContext.current.qWord().collectAsState("")
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.playedQWord.dialog,
-            dialogText = stringResource(R.string.badge_dialog_played_q_word) +
-                    " " + qWordState.value
-        )
-
-        val zWordState = LocalContext.current.zWord().collectAsState("")
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.playedZWord.dialog,
-            dialogText = stringResource(R.string.badge_dialog_played_z_word) +
-                    " " + qWordState.value
-        )
-
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.won50Percent.dialog,
-            dialogText = stringResource(R.string.badge_dialog_won_50_percent)
-        )
-
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.won70Percent.dialog,
-            dialogText = stringResource(R.string.badge_dialog_won_70_percent)
-        )
-
-        BadgesDialogView(
-            viewModel = viewModel.badgesRow.won100Percent.dialog,
-            dialogText = stringResource(R.string.badge_dialog_won_100_percent)
-        )
+        BadgesDialogView(viewModel.badgesRow)
 
         if (avatarChooserEnabledState.value) {
             AvatarChooserDialog(

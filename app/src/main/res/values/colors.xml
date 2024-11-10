@@ -4,7 +4,7 @@
     <color name="font_color_light">#FFFFFFFF</color>
     <color name="font_color_dark">#FF363636</color>
 
-    <color name="badges_background">#FFEEEEEE</color>
+    <color name="badges_background">#FFCCCCCC</color>
 
     <color name="player_green_light">#FFA9F56E</color>
     <color name="player_green_dark">#FF78D433</color>

@@ -1,4 +1,4 @@
-package com.example.worditory.game.audio
+package com.example.worditory.audio
 
 import android.content.Context
 import android.media.MediaPlayer
@@ -40,9 +40,7 @@ internal object AudioPlayer {
 
     internal fun gameOn() {
         if (enabled) {
-            GlobalScope.launch {
-                gameOn.start()
-            }
+            gameOn.start()
         }
     }
 
@@ -65,17 +63,13 @@ internal object AudioPlayer {
 
     internal fun gameOverWin() {
         if (enabled) {
-            GlobalScope.launch {
-                gameOverWin.start()
-            }
+            gameOverWin.start()
         }
     }
 
     internal fun gameOverLose() {
         if (enabled) {
-            GlobalScope.launch {
-                gameOverLose.start()
-            }
+            gameOverLose.start()
         }
     }
 }

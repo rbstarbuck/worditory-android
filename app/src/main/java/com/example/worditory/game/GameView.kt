@@ -78,23 +78,6 @@ internal fun GameView(
             )
         }
 
-        if (displayMenuState.value) {
-            BackHandler {
-                viewModel.onDismissMenu()
-            }
-
-            MenuView(
-                viewModel = viewModel.menu,
-                modifier = Modifier.alpha(animatedMenuAlpha.value),
-                onSound = { enabled -> viewModel.onSound(enabled, context) },
-                onHint = { viewModel.onHint() },
-                onPassTurnClick = { viewModel.onPassTurn(context) },
-                onDisplayTutorialClick = { viewModel.onTutorial() },
-                onExitGameClick = { viewModel.onExitGame(context) },
-                onDismiss = { viewModel.onDismissMenu() }
-            )
-        }
-
         GameOverView(
             viewModel = viewModel.gameOverWin,
             modifier = Modifier.fillMaxSize(),
@@ -121,6 +104,23 @@ internal fun GameView(
 
         if (!hasShownTutorial.value) {
             viewModel.showTutorial(context)
+        }
+
+        if (displayMenuState.value) {
+            BackHandler {
+                viewModel.onDismissMenu()
+            }
+
+            MenuView(
+                viewModel = viewModel.menu,
+                modifier = Modifier.alpha(animatedMenuAlpha.value),
+                onSound = { enabled -> viewModel.onSound(enabled, context) },
+                onHint = { viewModel.onHint() },
+                onPassTurnClick = { viewModel.onPassTurn(context) },
+                onDisplayTutorialClick = { viewModel.onTutorial() },
+                onExitGameClick = { viewModel.onExitGame(context) },
+                onDismiss = { viewModel.onDismissMenu() }
+            )
         }
     }
 }

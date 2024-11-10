@@ -37,13 +37,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 import com.example.worditory.game.npc.BeatenOpponents
-import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.ADVANCED
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.BEGINNER
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.INTERMEDIATE
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.SUPER_ADVANCED
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.UNRECOGNIZED
-import com.example.worditory.game.npc.beatenOpponents
 import com.example.worditory.game.npc.beatenOpponentsDataStore
 import com.example.worditory.resourceid.getResourceId
 import com.example.worditory.wonAgainstAdvanced

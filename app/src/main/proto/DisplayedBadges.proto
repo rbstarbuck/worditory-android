@@ -1,0 +1,7 @@
+syntax = "proto3";
+option java_package = "com.example.worditory.badge";
+option java_multiple_files = true;
+
+message DisplayedBadges {
+  repeated int32 badgeIds = 1;
+}
