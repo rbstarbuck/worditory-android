@@ -7,10 +7,13 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -66,13 +69,23 @@ internal fun SavedGamesView(
         val closeButtonOffset = this.maxWidth / -60f
 
         if (savedGamesState.value.gamesList.isEmpty()) {
-            Text(
-                text = stringResource(R.string.no_saved_games),
-                color = colorResource(R.color.font_color_light),
-                fontSize = 20.sp,
-                fontStyle = FontStyle.Italic,
-                fontWeight = FontWeight.Bold
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.saved_game),
+                    contentDescription = stringResource(R.string.saved_games),
+                    modifier = Modifier.size(75.dp)
+                )
+
+                Spacer(Modifier.height(10.dp))
+
+                Text(
+                    text = stringResource(R.string.no_saved_games),
+                    color = colorResource(R.color.font_color_light),
+                    fontSize = 20.sp,
+                    fontStyle = FontStyle.Italic,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
 
         LazyRow(
