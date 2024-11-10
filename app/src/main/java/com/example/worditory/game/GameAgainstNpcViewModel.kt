@@ -3,6 +3,7 @@ package com.example.worditory.game
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.worditory.game.audio.AudioPlayer
 import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.gameover.GameOver
 import kotlinx.coroutines.delay
@@ -53,6 +54,7 @@ internal class GameAgainstNpcViewModel(
                 delay(4000L)
             }
 
+            AudioPlayer.wordPlayed(npcWord.tiles.size)
             board.playWord(Game.Player.PLAYER_2)
             onWordPlayed()
         }

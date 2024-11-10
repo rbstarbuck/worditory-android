@@ -12,11 +12,8 @@ import kotlinx.coroutines.flow.map
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-internal fun Context.getPlayerAvatarId(): Flow<Int> {
-    return dataStore.data.map { preferences ->
-        preferences[DataStoreKey.PlayerAvatarId] ?: 0
-    }
-}
+internal fun Context.getPlayerAvatarId(): Flow<Int> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.PlayerAvatarId] ?: 0 }
 
 internal suspend fun Context.setPlayerAvatarId(avatarId: Int) {
     dataStore.edit { settings ->
@@ -24,11 +21,8 @@ internal suspend fun Context.setPlayerAvatarId(avatarId: Int) {
     }
 }
 
-internal fun Context.getGamesPlayed(): Flow<Int> {
-    return dataStore.data.map { preferences ->
-        preferences[DataStoreKey.GamesPlayed] ?: 0
-    }
-}
+internal fun Context.getGamesPlayed(): Flow<Int> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.GamesPlayed] ?: 0 }
 
 internal suspend fun Context.incrementGamesPlayed() {
     dataStore.edit { settings ->
@@ -36,11 +30,8 @@ internal suspend fun Context.incrementGamesPlayed() {
     }
 }
 
-internal fun Context.getGamesWon(): Flow<Int> {
-    return dataStore.data.map { preferences ->
-        preferences[DataStoreKey.GamesWon] ?: 0
-    }
-}
+internal fun Context.getGamesWon(): Flow<Int> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.GamesWon] ?: 0 }
 
 internal suspend fun Context.incrementGamesWon() {
     dataStore.edit { settings ->
@@ -48,15 +39,21 @@ internal suspend fun Context.incrementGamesWon() {
     }
 }
 
-internal fun Context.hasShownTutorial(): Flow<Boolean> {
-    return dataStore.data.map { preferences ->
-        preferences[DataStoreKey.HasShownTutorial] ?: false
-    }
-}
+internal fun Context.hasShownTutorial(): Flow<Boolean> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.HasShownTutorial] == true }
 
 internal suspend fun Context.setHasShownTutorial() {
     dataStore.edit { settings ->
         settings[DataStoreKey.HasShownTutorial] = true
+    }
+}
+
+internal fun Context.soundEnabled(): Flow<Boolean> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.SoundEnabled] != false }
+
+internal suspend fun Context.setSoundEnabled(enabled: Boolean) {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.SoundEnabled] = enabled
     }
 }
 
@@ -66,5 +63,6 @@ internal class DataStoreKey private constructor() {
         internal val GamesPlayed = intPreferencesKey("gamesPlayed")
         internal val GamesWon = intPreferencesKey("gamesWon")
         internal val HasShownTutorial = booleanPreferencesKey("hasShowTutorial")
+        internal val SoundEnabled = booleanPreferencesKey("soundEnabled")
     }
 }

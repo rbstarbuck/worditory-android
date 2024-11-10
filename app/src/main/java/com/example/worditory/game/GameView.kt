@@ -87,8 +87,10 @@ internal fun GameView(
             MenuView(
                 viewModel = viewModel.menu,
                 modifier = Modifier.alpha(animatedMenuAlpha.value),
+                onSound = { enabled -> viewModel.onSound(enabled, context) },
+                onHint = { viewModel.onHint() },
                 onPassTurnClick = { viewModel.onPassTurn() },
-                onDisplayTutorialClick = { viewModel.tutorial.enabled = true },
+                onDisplayTutorialClick = { viewModel.onTutorial() },
                 onExitGameClick = { viewModel.onExitGame(context) },
                 onDismiss = { viewModel.onDismissMenu() }
             )

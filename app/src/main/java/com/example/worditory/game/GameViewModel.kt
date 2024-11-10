@@ -3,8 +3,8 @@ package com.example.worditory.game
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.worditory.game.audio.AudioPlayer
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.word.WordModel
@@ -13,9 +13,9 @@ import com.example.worditory.game.playbutton.PlayButtonViewModel
 import com.example.worditory.game.scoreboard.ScoreBoardViewModel
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.gameover.GameOverViewModel
+import com.example.worditory.game.hint.HintMaker
 import com.example.worditory.game.menu.MenuViewModel
 import com.example.worditory.game.tutorial.TutorialViewModel
-import com.example.worditory.hasShownTutorial
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
@@ -94,6 +94,8 @@ abstract class GameViewModel(
 
     internal val menu = MenuViewModel(isPlayerTurnStateFlow)
 
+    internal val hint = HintMaker(board)
+
     internal val gameOverWin = GameOverViewModel(
         navController = navController,
         gameOverStateFlow = gameOverStateFlow,
@@ -120,12 +122,14 @@ abstract class GameViewModel(
 
     init {
         scoreBoard.score = board.computeScore()
+        AudioPlayer.gameOn()
     }
 
     internal open fun onPlayButtonClick(): Boolean {
         if (isPlayerTurn) {
             val wordString = board.word.toString()
             if (WordDictionary.contains(wordString)) {
+                AudioPlayer.wordPlayed(wordString.length)
                 board.playWord(Game.Player.PLAYER_1)
                 onWordPlayed()
                 return true
@@ -142,18 +146,34 @@ abstract class GameViewModel(
         isPlayerTurn = !checkForGameOver()
     }
 
-    internal open fun onPassTurn() {
-        board.word.model = WordModel()
-        scoreBoard.decrementScoreToWin()
-        isPlayerTurn = !isPlayerTurn
-    }
-
     internal fun onMenuClick() {
         displayMenu = true
     }
 
     internal fun onDismissMenu() {
         displayMenu = false
+    }
+
+    internal fun onSound(enabled: Boolean, context: Context) {
+        AudioPlayer.setEnabled(enabled, context)
+    }
+
+    internal fun onHint() {
+        board.word.model = WordModel()
+        viewModelScope.launch {
+            delay(500L)
+            board.word.model = hint.hint()
+        }
+    }
+
+    internal open fun onPassTurn() {
+        board.word.model = WordModel()
+        scoreBoard.decrementScoreToWin()
+        isPlayerTurn = !isPlayerTurn
+    }
+
+    internal fun onTutorial() {
+        tutorial.enabled = true
     }
 
     internal fun onExitGame(context: Context) {
@@ -191,9 +211,11 @@ abstract class GameViewModel(
         val toWin = scoreBoard.scoreToWin
         if (score.player1 >= toWin || score.player2 == 0) {
             gameOverState = GameOver.State.WIN
+            AudioPlayer.gameOverWin()
             return true
         } else if (score.player2 >= toWin || score.player1 == 0) {
             gameOverState = GameOver.State.LOSE
+            AudioPlayer.gameOverLose()
             return true
         }
 

@@ -17,25 +17,38 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
+import com.example.worditory.soundEnabled
 
 @Composable
 fun MenuView(
     viewModel: MenuViewModel,
     modifier: Modifier = Modifier,
+    onSound: (Boolean) -> Unit,
+    onHint: () -> Unit,
     onPassTurnClick: () -> Unit,
     onDisplayTutorialClick: () -> Unit,
     onExitGameClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val isPlayerTurnState = viewModel.isPlayerTurnStateFlow.collectAsState()
+    val context = LocalContext.current
 
-    val passButtonStrokeColor =
+    val isPlayerTurnState = viewModel.isPlayerTurnStateFlow.collectAsState()
+    val soundEnabledState = context.soundEnabled().collectAsState(true)
+
+    val strokeColor =
         if (isPlayerTurnState.value) R.color.button_stroke else R.color.disabled_button_stroke
+    val soundText = stringResource(R.string.sound) + " " +
+        if (soundEnabledState.value) {
+            stringResource(R.string.on)
+        } else {
+            stringResource(R.string.off)
+        }
 
     BoxWithConstraints(
         modifier = modifier
@@ -66,6 +79,44 @@ fun MenuView(
         ) {
             OutlinedButton(
                 onClick = {
+                    onSound(!soundEnabledState.value)
+                },
+                modifier = Modifier
+                    .width(buttonWidth)
+                    .padding(vertical = buttonPaddingVertical),
+                colors = ButtonColors(
+                    containerColor = colorResource(R.color.button_container),
+                    contentColor = colorResource(R.color.button_content),
+                    disabledContainerColor = colorResource(R.color.disabled_button_container),
+                    disabledContentColor = colorResource(R.color.disabled_button_content)
+                ),
+                border = BorderStroke(width = 2.dp, color = colorResource(R.color.button_stroke))
+            ) {
+                Text(text = soundText, fontSize = fontSize)
+            }
+
+            OutlinedButton(
+                onClick = {
+                    onHint()
+                    onDismiss()
+                },
+                modifier = Modifier
+                    .width(buttonWidth)
+                    .padding(vertical = buttonPaddingVertical),
+                enabled = isPlayerTurnState.value,
+                colors = ButtonColors(
+                    containerColor = colorResource(R.color.button_container),
+                    contentColor = colorResource(R.color.button_content),
+                    disabledContainerColor = colorResource(R.color.disabled_button_container),
+                    disabledContentColor = colorResource(R.color.disabled_button_content)
+                ),
+                border = BorderStroke(width = 2.dp, color = colorResource(strokeColor))
+            ) {
+                Text(text = stringResource(R.string.give_me_a_hint), fontSize = fontSize)
+            }
+
+            OutlinedButton(
+                onClick = {
                     onPassTurnClick()
                     onDismiss()
                 },
@@ -79,7 +130,7 @@ fun MenuView(
                     disabledContainerColor = colorResource(R.color.disabled_button_container),
                     disabledContentColor = colorResource(R.color.disabled_button_content)
                 ),
-                border = BorderStroke(width = 2.dp, color = colorResource(passButtonStrokeColor))
+                border = BorderStroke(width = 2.dp, color = colorResource(strokeColor))
             ) {
                 Text(text = stringResource(R.string.pass_turn), fontSize = fontSize)
             }
@@ -121,7 +172,6 @@ fun MenuView(
             ) {
                 Text(text = stringResource(R.string.exit_game), fontSize = fontSize)
             }
-
         }
     }
 }

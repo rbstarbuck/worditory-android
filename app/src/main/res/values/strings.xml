@@ -7,6 +7,10 @@
     <string name="win_pct">Win rate</string>
 
     <string name="menu">Menu</string>
+    <string name="sound">Sound:</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="give_me_a_hint">Give me a hint!</string>
     <string name="pass_turn">Pass turn</string>
     <string name="game_rules">Game rules</string>
     <string name="exit_game">Save and exit</string>

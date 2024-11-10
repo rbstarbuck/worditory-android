@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
+import com.example.worditory.game.audio.AudioPlayer
 import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.navigation.NavigationStack
 import com.example.worditory.ui.theme.WorditoryTheme
@@ -15,6 +16,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             WorditoryTheme {
                 WordDictionary.init()
+                AudioPlayer.init(this)
 
                 val navController = rememberNavController()
 
