@@ -16,16 +16,16 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.worditory.badge.BadgesDialogsView
+import com.example.worditory.badge.BadgesRowView
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.header.HeaderView
 import com.example.worditory.saved.DeleteSavedGameDialog
@@ -56,8 +56,15 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            HeaderView(Modifier.fillMaxWidth().padding(20.dp)) {
-                viewModel.avatarChooserEnabled = true
+            Column {
+                HeaderView(Modifier.fillMaxWidth().padding(20.dp)) {
+                    viewModel.avatarChooserEnabled = true
+                }
+
+                BadgesRowView(
+                    viewModel = viewModel.badgesRow,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
 
             SavedGamesView(
@@ -92,6 +99,56 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 )
             }
         }
+
+        BadgesDialogsView(
+            viewModel = viewModel.badgesRow.wonAgainstBeginner.dialog,
+            dialogText = stringResource(R.string.badge_dialog_won_against_beginner)
+        )
+
+        BadgesDialogsView(
+            viewModel = viewModel.badgesRow.wonAgainstIntermediate.dialog,
+            dialogText = stringResource(R.string.badge_dialog_won_against_intermediate)
+        )
+
+        BadgesDialogsView(
+            viewModel = viewModel.badgesRow.wonAgainstAdvanced.dialog,
+            dialogText = stringResource(R.string.badge_dialog_won_against_advanced)
+        )
+
+        BadgesDialogsView(
+            viewModel = viewModel.badgesRow.wonAgainstSuperAdvanced.dialog,
+            dialogText = stringResource(R.string.badge_dialog_won_against_super_advanced)
+        )
+
+        BadgesDialogsView(
+            viewModel = viewModel.badgesRow.wonLightning.dialog,
+            dialogText = stringResource(R.string.badge_dialog_won_lightning)
+        )
+
+        BadgesDialogsView(
+            viewModel = viewModel.badgesRow.wonRapid.dialog,
+            dialogText = stringResource(R.string.badge_dialog_won_rapid)
+        )
+
+        BadgesDialogsView(
+            viewModel = viewModel.badgesRow.wonClassic.dialog,
+            dialogText = stringResource(R.string.badge_dialog_won_classic)
+        )
+
+        BadgesDialogsView(
+            viewModel = viewModel.badgesRow.won50Percent.dialog,
+            dialogText = stringResource(R.string.badge_dialog_won_50_percent)
+        )
+
+        BadgesDialogsView(
+            viewModel = viewModel.badgesRow.won70Percent.dialog,
+            dialogText = stringResource(R.string.badge_dialog_won_70_percent)
+        )
+
+        BadgesDialogsView(
+            viewModel = viewModel.badgesRow.won100Percent.dialog,
+            dialogText = stringResource(R.string.badge_dialog_won_100_percent)
+        )
 
         if (avatarChooserEnabledState.value) {
             AvatarChooserDialog(

@@ -4,6 +4,8 @@
     <color name="font_color_light">#FFFFFFFF</color>
     <color name="font_color_dark">#FF363636</color>
 
+    <color name="badges_background">#FFEEEEEE</color>
+
     <color name="player_green_light">#FFA9F56E</color>
     <color name="player_green_dark">#FF78D433</color>
     <color name="player_purple_light">#FFDE93ED</color>
@@ -44,6 +46,7 @@
     <color name="chooser_arrow">#FFFFFFFF</color>
     <color name="chooser_grid_cell_border">#FF000000</color>
     <color name="chooser_button">#FFDDDDDD</color>
+    <color name="chooser_button_disabled">#FFBBBBBB</color>
 
     <color name="board_chooser_grid_cell_text">#FF222222</color>
 

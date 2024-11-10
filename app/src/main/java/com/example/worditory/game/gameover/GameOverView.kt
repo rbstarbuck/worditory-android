@@ -46,19 +46,13 @@ internal fun GameOverView(
 
     if (gameOverState.value == viewModel.targetState) {
         BoxWithConstraints(
-            modifier = modifier
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = { onGameOver(context) }
-                    )
-                },
+            modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             val size = this.maxWidth * 0.6f * animatedScale.value
 
             OutlinedButton(
-                onClick = {},
+                onClick = { onGameOver(context) },
                 modifier = Modifier.size(size),
                 shape = RoundedCornerShape(size / 2f),
                 colors = ButtonColors(

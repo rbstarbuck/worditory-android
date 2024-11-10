@@ -6,6 +6,27 @@
     <string name="won">Won</string>
     <string name="win_pct">Win rate</string>
 
+    <string name="badge_description_won_against_beginner">Won against beginner badge</string>
+    <string name="badge_dialog_won_against_beginner">You won against a beginner opponent!</string>
+    <string name="badge_description_won_against_intermediate">Won against intermediate badge</string>
+    <string name="badge_dialog_won_against_intermediate">You won against an intermediate opponent!</string>
+    <string name="badge_description_won_against_advanced">Won against advanced badge</string>
+    <string name="badge_dialog_won_against_advanced">You won against an advanced opponent!</string>
+    <string name="badge_description_won_against_super_advanced">Won against super advanced badge</string>
+    <string name="badge_dialog_won_against_super_advanced">You won against a super advanced opponent!</string>
+    <string name="badge_description_won_lightning">Won lightning badge</string>
+    <string name="badge_dialog_won_lightning">You won a lightning game!</string>
+    <string name="badge_description_won_rapid">Won rapid badge</string>
+    <string name="badge_dialog_won_rapid">You won a rapid game!</string>
+    <string name="badge_description_won_classic">Won classic badge</string>
+    <string name="badge_dialog_won_classic">You won a classic game!</string>
+    <string name="badge_description_won_50_percent">50% badge</string>
+    <string name="badge_dialog_won_50_percent">You\'ve won 50% of your games!</string>
+    <string name="badge_description_won_70_percent">70% badge</string>
+    <string name="badge_dialog_won_70_percent">You\'ve won 70% of your games!</string>
+    <string name="badge_description_won_100_percent">100% badge</string>
+    <string name="badge_dialog_won_100_percent">You\'ve won 100% of your games!</string>
+
     <string name="menu">Menu</string>
     <string name="sound">Sound:</string>
     <string name="on">On</string>
@@ -47,7 +68,7 @@
     <string name="tutorial_text_2">Make words by connecting tiles. The first letter of the word must be from a tile that you own.</string>
     <string name="tutorial_text_3">After playing, you own any unowned tiles in the word. Opponent\'s tiles become unowned.</string>
     <string name="tutorial_text_4">If you own all tiles next to a tile you own, it will be \"super owned\" (darker in color). You can only play into your opponent\'s super owned tiles with a word that starts in one of your super owned tiles.</string>
-    <string name="tutorial_text_5">If you can\'t play a word you can select \"Pass turn\" from the game menu.</string>
+    <string name="tutorial_text_5">If you can\'t play a word, you can get a hint or pass your turn from the game menu.</string>
     <string name="tutorial_text_6">Your score is equal to the number of tiles you own.</string>
     <string name="tutorial_text_7">You win when your score reaches the \"score to win\", which ticks down by one after each turn.</string>
     <string name="tutorial_text_8">Click \"Game rules\" in the menu to come back to this tutorial.</string>

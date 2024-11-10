@@ -19,20 +19,39 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
+import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.ADVANCED
+import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.BEGINNER
+import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.INTERMEDIATE
+import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.SUPER_ADVANCED
+import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.UNRECOGNIZED
 import com.example.worditory.resourceid.getResourceId
+import com.example.worditory.wonAgainstAdvanced
+import com.example.worditory.wonAgainstBeginner
+import com.example.worditory.wonAgainstIntermediate
+import java.security.InvalidParameterException
 
 @Composable
 internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
+    val wonAgainstBeginnerState = context.wonAgainstBeginner().collectAsState(false)
+    val wonAgainstIntermediateState = context.wonAgainstIntermediate().collectAsState(false)
+    val wonAgainstAdvancedState = context.wonAgainstAdvanced().collectAsState(false)
+
     Column(
         modifier = modifier.background(colorResource(R.color.background)).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -66,16 +85,27 @@ internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier =
                     items(NpcChooser.Opponents.size) { item ->
                         val opponent = NpcChooser.Opponents[item]
 
+                        val enabled = when (opponent.spec.overallSkillLevel)  {
+                            BEGINNER -> true
+                            INTERMEDIATE -> wonAgainstBeginnerState.value
+                            ADVANCED -> wonAgainstIntermediateState.value
+                            SUPER_ADVANCED -> wonAgainstAdvancedState.value
+                            UNRECOGNIZED ->
+                                throw InvalidParameterException("Unrecognized overall skill level")
+                        }
+
                         Box(Modifier.padding(5.dp)) {
                             OutlinedButton(
                                 onClick = {
                                     viewModel.onNpcClick(opponent)
                                 },
+                                enabled = enabled,
                                 shape = RoundedCornerShape(15.dp),
                                 colors = ButtonColors(
                                     containerColor = colorResource(R.color.chooser_button),
                                     contentColor = Color.White,
-                                    disabledContainerColor = Color.White,
+                                    disabledContainerColor =
+                                        colorResource(R.color.chooser_button_disabled),
                                     disabledContentColor = Color.White
                                 ),
                                 border = BorderStroke(
@@ -94,7 +124,14 @@ internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier =
 
                                 Image(
                                     imageVector = avatarVector,
-                                    contentDescription = "Avatar"
+                                    contentDescription = "Avatar",
+                                    colorFilter = if (enabled) {
+                                        null
+                                    } else {
+                                        ColorFilter.colorMatrix(ColorMatrix().apply {
+                                            setToSaturation(0f)
+                                        })
+                                    }
                                 )
                             }
                         }

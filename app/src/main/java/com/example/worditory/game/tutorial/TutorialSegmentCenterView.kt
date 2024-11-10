@@ -42,7 +42,7 @@ internal fun TutorialSegmentCenterView(
     modifier: Modifier = Modifier,
     text: String,
     onBackClick: () -> Unit,
-    onNextClick: () -> Unit
+    onNextClick: (() -> Unit)? = null
 ) {
     val enabledStateFlow = viewModel.enabledStateFlow.collectAsState()
     val enabled = enabledStateFlow.value
@@ -58,8 +58,6 @@ internal fun TutorialSegmentCenterView(
 
     if (enabled && composableCoordinates != null) {
         val context = LocalContext.current
-
-        val enabledStateFlow = viewModel.enabledStateFlow.collectAsState()
 
         val textBounds = remember { mutableStateOf(Rect.Zero) }
         
@@ -96,11 +94,6 @@ internal fun TutorialSegmentCenterView(
                             topLeft = bounds.topLeft - Offset(padding, padding),
                             bottomRight = bounds.bottomRight + Offset(padding, padding)
                         )
-                    }
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onTap = { onNextClick() }
-                        )
                     },
                 horizontalAlignment = Alignment.End
             ) {
@@ -110,10 +103,10 @@ internal fun TutorialSegmentCenterView(
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(Modifier.height(10.dp))
-
                 TutorialSegmentNavigationView(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 15.dp),
                     onBackClick = onBackClick,
                     onNextClick = onNextClick
                 )

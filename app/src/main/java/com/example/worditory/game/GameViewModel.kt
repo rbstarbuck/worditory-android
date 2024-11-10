@@ -22,6 +22,9 @@ import com.example.worditory.navigation.Screen
 import com.example.worditory.saved.addSavedGame
 import com.example.worditory.saved.removeSavedGame
 import com.example.worditory.setHasShownTutorial
+import com.example.worditory.setWonClassic
+import com.example.worditory.setWonLightning
+import com.example.worditory.setWonRapid
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -125,13 +128,13 @@ abstract class GameViewModel(
         AudioPlayer.gameOn()
     }
 
-    internal open fun onPlayButtonClick(): Boolean {
+    internal open fun onPlayButtonClick(context: Context): Boolean {
         if (isPlayerTurn) {
             val wordString = board.word.toString()
             if (WordDictionary.contains(wordString)) {
                 AudioPlayer.wordPlayed(wordString.length)
                 board.playWord(Game.Player.PLAYER_1)
-                onWordPlayed()
+                onWordPlayed(context)
                 return true
             } else {
                 isNotAWord = true
@@ -140,10 +143,10 @@ abstract class GameViewModel(
         return false
     }
 
-    protected fun onWordPlayed() {
+    protected fun onWordPlayed(context: Context) {
         scoreBoard.score = board.computeScore()
         scoreBoard.decrementScoreToWin()
-        isPlayerTurn = !checkForGameOver()
+        isPlayerTurn = !checkForGameOver(context)
     }
 
     internal fun onMenuClick() {
@@ -166,7 +169,7 @@ abstract class GameViewModel(
         }
     }
 
-    internal open fun onPassTurn() {
+    internal open fun onPassTurn(context: Context) {
         board.word.model = WordModel()
         scoreBoard.decrementScoreToWin()
         isPlayerTurn = !isPlayerTurn
@@ -206,12 +209,13 @@ abstract class GameViewModel(
         }
     }
 
-    private fun checkForGameOver(): Boolean {
+    private fun checkForGameOver(context: Context): Boolean {
         val score = scoreBoard.score
         val toWin = scoreBoard.scoreToWin
         if (score.player1 >= toWin || score.player2 == 0) {
             gameOverState = GameOver.State.WIN
             AudioPlayer.gameOverWin()
+            setBadgesOnGameWon(context)
             return true
         } else if (score.player2 >= toWin || score.player1 == 0) {
             gameOverState = GameOver.State.LOSE
@@ -220,5 +224,15 @@ abstract class GameViewModel(
         }
 
         return false
+    }
+
+    internal open fun setBadgesOnGameWon(context: Context) {
+        if (boardWidth == 5 && boardHeight == 4 || boardWidth == 5 && boardHeight == 5) {
+            viewModelScope.launch { context.setWonLightning() }
+        } else if (boardWidth == 6 && boardHeight == 6 || boardWidth == 7 && boardHeight == 5) {
+            viewModelScope.launch { context.setWonRapid() }
+        } else if (boardWidth == 8) {
+            viewModelScope.launch { context.setWonClassic() }
+        }
     }
 }

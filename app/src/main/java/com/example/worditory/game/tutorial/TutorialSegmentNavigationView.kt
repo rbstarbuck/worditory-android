@@ -19,37 +19,39 @@ import com.example.worditory.composable.BackHandler
 fun TutorialSegmentNavigationView(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
+    onNextClick: (() -> Unit)? = null,
 ) {
     BackHandler { onBackClick() }
 
-    Row(modifier) {
-        Image(
-            imageVector = ImageVector.vectorResource(R.drawable.back),
-            contentDescription = stringResource(R.string.back),
-            modifier = Modifier
-                .height(40.dp)
-                .height(40.dp)
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = { onBackClick() }
-                    )
-                }
-        )
+    if (onNextClick != null) {
+        Row(modifier) {
+            Image(
+                imageVector = ImageVector.vectorResource(R.drawable.back),
+                contentDescription = stringResource(R.string.back),
+                modifier = Modifier
+                    .height(40.dp)
+                    .height(40.dp)
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onTap = { onBackClick() }
+                        )
+                    }
+            )
 
-        Spacer(Modifier.weight(1f))
+            Spacer(Modifier.weight(1f))
 
-        Image(
-            imageVector = ImageVector.vectorResource(R.drawable.next),
-            contentDescription = stringResource(R.string.next),
-            modifier = Modifier
-                .height(40.dp)
-                .height(40.dp)
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = { onNextClick() }
-                    )
-                }
-        )
+            Image(
+                imageVector = ImageVector.vectorResource(R.drawable.next),
+                contentDescription = stringResource(R.string.next),
+                modifier = Modifier
+                    .height(40.dp)
+                    .height(40.dp)
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onTap = { onNextClick() }
+                        )
+                    }
+            )
+        }
     }
 }

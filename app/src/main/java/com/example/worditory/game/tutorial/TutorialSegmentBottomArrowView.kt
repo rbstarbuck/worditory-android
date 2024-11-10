@@ -24,6 +24,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
@@ -40,7 +41,7 @@ internal fun TutorialSegmentBottomArrowView(
     modifier: Modifier = Modifier,
     text: String,
     onBackClick: () -> Unit,
-    onNextClick: () -> Unit
+    onNextClick: (() -> Unit)? = null
 ) {
     val enabledStateFlow = viewModel.enabledStateFlow.collectAsState()
     val enabled = enabledStateFlow.value
@@ -114,10 +115,10 @@ internal fun TutorialSegmentBottomArrowView(
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(Modifier.height(10.dp))
-
                 TutorialSegmentNavigationView(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 15.dp),
                     onBackClick = onBackClick,
                     onNextClick = onNextClick
                 )

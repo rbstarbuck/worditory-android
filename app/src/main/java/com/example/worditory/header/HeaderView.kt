@@ -33,6 +33,7 @@ import com.example.worditory.getGamesPlayed
 import com.example.worditory.getGamesWon
 import com.example.worditory.R
 import com.example.worditory.getPlayerAvatarId
+import com.example.worditory.getWinRate
 import com.example.worditory.resourceid.getResourceId
 import kotlin.math.roundToInt
 
@@ -41,12 +42,12 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
     val avatarState = LocalContext.current.getPlayerAvatarId().collectAsState(0)
     val gamesPlayedState = LocalContext.current.getGamesPlayed().collectAsState(0)
     val gamesWonState = LocalContext.current.getGamesWon().collectAsState(0)
-    val winPercentage = if (gamesPlayedState.value == 0) {
+    val winRateState = LocalContext.current.getWinRate().collectAsState(null)
+    val winRate = winRateState.value
+    val winPercentage = if (winRate == null) {
         "--"
     } else {
-        (gamesWonState.value.toFloat() / gamesPlayedState.value.toFloat() * 100f)
-            .roundToInt()
-            .toString() + "%"
+        (winRate * 100f).roundToInt().toString() + "%"
     }
 
     val avatarResId = getResourceId(avatarState.value)

@@ -28,6 +28,7 @@ message NpcModel {
       BEGINNER = 0;
       INTERMEDIATE = 1;
       ADVANCED = 2;
+      SUPER_ADVANCED = 3;
     }
   }
 }

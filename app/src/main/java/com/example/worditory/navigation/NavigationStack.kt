@@ -32,7 +32,8 @@ import com.example.worditory.saved.savedGamesDataStore
 internal fun NavigationStack(navController: NavHostController) {
     NavHost(navController, startDestination = Screen.Main.route) {
         composable(route = Screen.Main.route) {
-            val viewModel = remember { MainViewModel(navController) }
+            val context = LocalContext.current
+            val viewModel = remember { MainViewModel(navController, context) }
 
             MainView(viewModel)
         }
@@ -87,6 +88,7 @@ internal fun NavigationStack(navController: NavHostController) {
             val viewModel = remember {
                 GameAgainstNpcViewModel(
                     model = Game.newModel(width, height, opponent, Tile.ColorScheme.random()),
+                    context = context,
                     navController = navController,
                     playerAvatarIdFlow = context.getPlayerAvatarId()
                 )
@@ -109,6 +111,7 @@ internal fun NavigationStack(navController: NavHostController) {
                 val viewModel = remember {
                     GameAgainstNpcViewModel(
                         model = savedGame,
+                        context = context,
                         navController = navController,
                         playerAvatarIdFlow = context.getPlayerAvatarId()
                     )

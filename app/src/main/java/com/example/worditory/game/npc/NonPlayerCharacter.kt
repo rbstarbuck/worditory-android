@@ -18,9 +18,10 @@ internal class NonPlayerCharacter(
         if (words.isEmpty()) return WordModel()
 
         val skillLevelMultipliers = when (model.spec.overallSkillLevel) {
-            NpcModel.Spec.OverallSkillLevel.BEGINNER -> Pair(0.25f, 0.5f)
-            NpcModel.Spec.OverallSkillLevel.INTERMEDIATE -> Pair(0.5f, 0.75f)
-            NpcModel.Spec.OverallSkillLevel.ADVANCED -> Pair(0.75f, 1.0f)
+            NpcModel.Spec.OverallSkillLevel.BEGINNER -> Pair(0.2f, 0.4f)
+            NpcModel.Spec.OverallSkillLevel.INTERMEDIATE -> Pair(0.4f, 0.6f)
+            NpcModel.Spec.OverallSkillLevel.ADVANCED -> Pair(0.6f, 0.8f)
+            NpcModel.Spec.OverallSkillLevel.SUPER_ADVANCED -> Pair(0.8f, 1.0f)
             NpcModel.Spec.OverallSkillLevel.UNRECOGNIZED -> throw InvalidParameterException(
                 "Unrecognized overall skill level"
             )
