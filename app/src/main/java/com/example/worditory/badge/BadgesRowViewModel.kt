@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.worditory.composable.Coordinates
 import com.example.worditory.getWinRate
+import com.example.worditory.obscureWord
+import com.example.worditory.qWord
 import com.example.worditory.wonAgainstAdvanced
 import com.example.worditory.wonAgainstBeginner
 import com.example.worditory.wonAgainstIntermediate
@@ -11,6 +13,7 @@ import com.example.worditory.wonAgainstSuperAdvanced
 import com.example.worditory.wonClassic
 import com.example.worditory.wonLightning
 import com.example.worditory.wonRapid
+import com.example.worditory.zWord
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
@@ -73,6 +76,27 @@ internal class BadgesRowViewModel(context: Context): ViewModel() {
         composableCoordinates = Coordinates.BadgeWonClassic,
         showBadgePredicate = {
             context.wonClassic()
+        }
+    )
+
+    internal val playedObscureWord = BadgeViewModel(
+        composableCoordinates = Coordinates.BadgePlayedObscureWord,
+        showBadgePredicate = {
+            context.obscureWord().map { it != null }
+        }
+    )
+
+    internal val playedQWord = BadgeViewModel(
+        composableCoordinates = Coordinates.BadgePlayedQWord,
+        showBadgePredicate = {
+            context.qWord().map { it != null }
+        }
+    )
+
+    internal val playedZWord = BadgeViewModel(
+        composableCoordinates = Coordinates.BadgePlayedZWord,
+        showBadgePredicate = {
+            context.zWord().map { it != null }
         }
     )
 

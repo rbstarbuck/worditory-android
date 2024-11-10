@@ -22,9 +22,12 @@ import com.example.worditory.navigation.Screen
 import com.example.worditory.saved.addSavedGame
 import com.example.worditory.saved.removeSavedGame
 import com.example.worditory.setHasShownTutorial
+import com.example.worditory.setObscureWord
+import com.example.worditory.setQWord
 import com.example.worditory.setWonClassic
 import com.example.worditory.setWonLightning
 import com.example.worditory.setWonRapid
+import com.example.worditory.setZWord
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -131,7 +134,18 @@ abstract class GameViewModel(
     internal open fun onPlayButtonClick(context: Context): Boolean {
         if (isPlayerTurn) {
             val wordString = board.word.toString()
-            if (WordDictionary.contains(wordString)) {
+            val wordFrequency = WordDictionary.frequency(wordString)
+            if (wordFrequency != null) {
+                if (wordFrequency == 3) {
+                    viewModelScope.launch { context.setObscureWord(wordString) }
+                }
+                if (wordString.contains("Q")) {
+                    viewModelScope.launch { context.setQWord(wordString) }
+                }
+                if (wordString.contains("Z")) {
+                    viewModelScope.launch { context.setZWord(wordString) }
+                }
+
                 AudioPlayer.wordPlayed(wordString.length)
                 board.playWord(Game.Player.PLAYER_1)
                 onWordPlayed(context)

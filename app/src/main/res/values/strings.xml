@@ -26,6 +26,12 @@
     <string name="badge_dialog_won_70_percent">You\'ve won 70% of your games!</string>
     <string name="badge_description_won_100_percent">100% badge</string>
     <string name="badge_dialog_won_100_percent">You\'ve won 100% of your games!</string>
+    <string name="badge_description_played_obscure_word">Played obscure word badge</string>
+    <string name="badge_dialog_played_obscure_word">You\'ve played the obscure word</string>
+    <string name="badge_description_played_q_word">Played Q word badge</string>
+    <string name="badge_dialog_played_q_word">You\'ve played the \'Q\' word</string>
+    <string name="badge_description_played_z_word">Played Z word badge</string>
+    <string name="badge_dialog_played_z_word">You\'ve played the \'Z\' word</string>
 
     <string name="menu">Menu</string>
     <string name="sound">Sound:</string>

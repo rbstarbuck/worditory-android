@@ -52,52 +52,62 @@ internal fun BadgesRowView(viewModel: BadgesRowViewModel, modifier: Modifier = M
 
             BadgeView(
                 viewModel = viewModel.wonAgainstSuperAdvanced,
-                imageVector =
-                    ImageVector.vectorResource(R.drawable.badge_won_against_super_advanced),
-                contentDescription =
-                    stringResource(R.string.badge_description_won_against_super_advanced)
+                imageVector = ImageVector.vectorResource(R.drawable.badge_won_against_super_advanced),
+                contentDescription = stringResource(R.string.badge_description_won_against_super_advanced)
             )
 
             BadgeView(
                 viewModel = viewModel.wonLightning,
                 imageVector = ImageVector.vectorResource(R.drawable.badge_won_lightning),
-                contentDescription =
-                stringResource(R.string.badge_description_won_lightning)
+                contentDescription = stringResource(R.string.badge_description_won_lightning)
             )
 
             BadgeView(
                 viewModel = viewModel.wonRapid,
                 imageVector = ImageVector.vectorResource(R.drawable.badge_won_rapid),
-                contentDescription =
-                stringResource(R.string.badge_description_won_rapid)
+                contentDescription = stringResource(R.string.badge_description_won_rapid)
             )
 
             BadgeView(
                 viewModel = viewModel.wonClassic,
                 imageVector = ImageVector.vectorResource(R.drawable.badge_won_classic),
-                contentDescription =
-                stringResource(R.string.badge_description_won_classic)
+                contentDescription = stringResource(R.string.badge_description_won_classic)
+            )
+
+            BadgeView(
+                viewModel = viewModel.playedObscureWord,
+                imageVector = ImageVector.vectorResource(R.drawable.badge_played_obscure_word),
+                contentDescription = stringResource(R.string.badge_description_played_obscure_word)
+            )
+
+            BadgeView(
+                viewModel = viewModel.playedQWord,
+                imageVector = ImageVector.vectorResource(R.drawable.badge_played_q_word),
+                contentDescription = stringResource(R.string.badge_description_played_q_word)
+            )
+
+            BadgeView(
+                viewModel = viewModel.playedZWord,
+                imageVector = ImageVector.vectorResource(R.drawable.badge_played_z_word),
+                contentDescription = stringResource(R.string.badge_description_played_z_word)
             )
 
             BadgeView(
                 viewModel = viewModel.won50Percent,
                 imageVector = ImageVector.vectorResource(R.drawable.badge_won_50_percent),
-                contentDescription =
-                stringResource(R.string.badge_description_won_50_percent)
+                contentDescription = stringResource(R.string.badge_description_won_50_percent)
             )
 
             BadgeView(
                 viewModel = viewModel.won70Percent,
                 imageVector = ImageVector.vectorResource(R.drawable.badge_won_70_percent),
-                contentDescription =
-                stringResource(R.string.badge_description_won_70_percent)
+                contentDescription = stringResource(R.string.badge_description_won_70_percent)
             )
 
             BadgeView(
                 viewModel = viewModel.won100Percent,
                 imageVector = ImageVector.vectorResource(R.drawable.badge_won_100_percent),
-                contentDescription =
-                stringResource(R.string.badge_description_won_100_percent)
+                contentDescription = stringResource(R.string.badge_description_won_100_percent)
             )
         }
 

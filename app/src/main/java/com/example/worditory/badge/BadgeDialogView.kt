@@ -7,7 +7,7 @@ import com.example.worditory.game.tutorial.TutorialSegmentTopArrowView
 import com.example.worditory.game.tutorial.TutorialSegmentViewModel
 
 @Composable
-fun BadgesDialogsView(
+fun BadgesDialogView(
     viewModel: TutorialSegmentViewModel,
     modifier: Modifier = Modifier,
     dialogText: String

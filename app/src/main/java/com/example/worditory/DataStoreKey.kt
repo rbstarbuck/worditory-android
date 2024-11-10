@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -130,6 +131,32 @@ internal suspend fun Context.setWonClassic() {
     }
 }
 
+internal fun Context.obscureWord(): Flow<String?> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.ObscureWord] }
+
+internal suspend fun Context.setObscureWord(word: String) {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.ObscureWord] = word
+    }
+}
+
+internal fun Context.qWord(): Flow<String?> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.QWord] }
+
+internal suspend fun Context.setQWord(word: String) {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.QWord] = word
+    }
+}
+
+internal fun Context.zWord(): Flow<String?> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.ZWord] }
+
+internal suspend fun Context.setZWord(word: String) {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.ZWord] = word
+    }
+}
 
 internal class DataStoreKey private constructor() {
     companion object {
@@ -145,5 +172,8 @@ internal class DataStoreKey private constructor() {
         internal val WonLightning = booleanPreferencesKey("wonLightning")
         internal val WonRapid = booleanPreferencesKey("wonRapid")
         internal val WonClassic = booleanPreferencesKey("wonClassic")
+        internal val ObscureWord = stringPreferencesKey("obscureWord")
+        internal val QWord = stringPreferencesKey("qWord")
+        internal val ZWord = stringPreferencesKey("zWord")
     }
 }

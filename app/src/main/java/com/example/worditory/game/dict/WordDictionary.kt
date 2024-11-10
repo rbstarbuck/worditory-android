@@ -5,12 +5,12 @@ import kotlin.math.absoluteValue
 
 internal object WordDictionary {
     private val wordFrequencies: List<WordFrequency>
-    private val wordSet: Set<String>
+    private val wordMap: Map<String, Int>
     private val vowels: Set<String> = setOfNotNull("A", "E", "I", "O", "U")
 
     init {
         val frequencies = mutableListOf<WordFrequency>()
-        val set = mutableSetOf<String>()
+        val map = mutableMapOf<String, Int>()
 
         val reader =
             this::class.java
@@ -24,11 +24,11 @@ internal object WordDictionary {
             val word = parts[0]
             val freq = parts[1].toInt()
             frequencies.add(WordFrequency(word, freq))
-            set.add(word)
+            map[word] = freq
         }
 
         wordFrequencies = frequencies
-        wordSet = set
+        wordMap = map
     }
 
     internal val size: Int
@@ -38,7 +38,9 @@ internal object WordDictionary {
 
     internal fun isVowel(letter: String) = vowels.contains(letter)
 
-    internal fun contains(word: String) = wordSet.contains(word)
+    internal fun contains(word: String) = wordMap.contains(word)
+
+    internal fun frequency(word: String) = wordMap[word]
 
     internal fun search(word: String, previousResult: SearchResult): SearchResult {
         var frequency = -1

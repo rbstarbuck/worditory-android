@@ -9,6 +9,7 @@ internal object Coordinates {
     internal val Board = MutableStateFlow<LayoutCoordinates?>(null)
     internal val PlayButton = MutableStateFlow<LayoutCoordinates?>(null)
     internal val MenuButton = MutableStateFlow<LayoutCoordinates?>(null)
+
     internal val BadgeWonAgainstBeginner = MutableStateFlow<LayoutCoordinates?>(null)
     internal val BadgeWonAgainstIntermediate = MutableStateFlow<LayoutCoordinates?>(null)
     internal val BadgeWonAgainstAdvanced = MutableStateFlow<LayoutCoordinates?>(null)
@@ -19,6 +20,9 @@ internal object Coordinates {
     internal val BadgeWon50Percent = MutableStateFlow<LayoutCoordinates?>(null)
     internal val BadgeWon70Percent = MutableStateFlow<LayoutCoordinates?>(null)
     internal val BadgeWon100Percent = MutableStateFlow<LayoutCoordinates?>(null)
+    internal val BadgePlayedObscureWord = MutableStateFlow<LayoutCoordinates?>(null)
+    internal val BadgePlayedQWord = MutableStateFlow<LayoutCoordinates?>(null)
+    internal val BadgePlayedZWord = MutableStateFlow<LayoutCoordinates?>(null)
 
     internal val AreAllSet: Boolean
         get() = ScoreToWin.value != null
