@@ -31,6 +31,19 @@ android {
             )
         }
     }
+    flavorDimensions += "version"
+    productFlavors {
+        create("free") {
+            dimension = "version"
+            applicationIdSuffix = ".free"
+            versionNameSuffix = "-free"
+        }
+        create("live") {
+            dimension = "version"
+            applicationIdSuffix = ".live"
+            versionNameSuffix = "-live"
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
