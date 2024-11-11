@@ -51,7 +51,7 @@ internal class TutorialViewModel(
             .setSpec(NpcModel.Spec.newBuilder()
                 .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.LOW)
                 .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.OFFENSIVE)
-                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.ADVANCED)
+                .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.SUPER_ADVANCED)
                 .build())
             .setAvatar(0)
             .build(),

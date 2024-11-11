@@ -42,7 +42,7 @@
     <string name="badge_description_played_7_letter_word">Played 7-letter word badge</string>
     <string name="badge_dialog_played_7_letter_word">You played a 7-letter word</string>
     <string name="badge_description_played_8_letter_word">Played 8-letter word badge</string>
-    <string name="badge_dialog_played_8_letter_word">You played a 8-letter word</string>
+    <string name="badge_dialog_played_8_letter_word">You played an 8-letter word</string>
 
     <string name="menu">Menu</string>
     <string name="sound">Sound:</string>

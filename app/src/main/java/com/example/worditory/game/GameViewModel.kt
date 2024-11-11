@@ -141,47 +141,9 @@ abstract class GameViewModel(
     internal open fun onPlayButtonClick(context: Context): Boolean {
         if (isPlayerTurn) {
             val wordString = board.word.toString()
-            val wordFrequency = WordDictionary.frequency(wordString)
-            if (wordFrequency != null) {
-                if (wordFrequency == 3) {
-                    viewModelScope.launch { context.setObscureWord(wordString) }
-                    NewBadgesToDisplay.add(Badge.PlayedObscureWord)
-                }
-                if (wordString.contains("Q")) {
-                    viewModelScope.launch { context.setQWord(wordString) }
-                    NewBadgesToDisplay.add(Badge.PlayedQWord)
-                }
-                if (wordString.contains("Z")) {
-                    viewModelScope.launch { context.setZWord(wordString) }
-                    NewBadgesToDisplay.add(Badge.PlayedZWord)
-                }
-                if (wordString.length == 5) {
-                    viewModelScope.launch { context.setPlayed5LetterWord(wordString) }
-                    NewBadgesToDisplay.add(Badge.Played5LetterWord)
-                } else if (wordString.length == 6) {
-                    viewModelScope.launch {
-                        context.setPlayed6LetterWord(wordString)
-                        context.addDisplayedBadge(Badge.Played5LetterWord)
-                    }
-                    NewBadgesToDisplay.add(Badge.Played6LetterWord)
-                } else if (wordString.length == 7) {
-                    viewModelScope.launch {
-                        context.setPlayed7LetterWord(wordString)
-                        context.addDisplayedBadge(Badge.Played5LetterWord)
-                        context.addDisplayedBadge(Badge.Played6LetterWord)
-                    }
-                    NewBadgesToDisplay.add(Badge.Played7LetterWord)
-                } else if (wordString.length > 7) {
-                    viewModelScope.launch {
-                        context.setPlayed8LetterWord(wordString)
-                        context.addDisplayedBadge(Badge.Played5LetterWord)
-                        context.addDisplayedBadge(Badge.Played6LetterWord)
-                        context.addDisplayedBadge(Badge.Played7LetterWord)
-                    }
-                    NewBadgesToDisplay.add(Badge.Played8LetterWord)
-                }
-
+            if (WordDictionary.contains(wordString)) {
                 AudioPlayer.wordPlayed(wordString.length)
+                setBadgesOnWordPlayed(wordString, context)
                 board.playWord(Game.Player.PLAYER_1)
                 onWordPlayed(context)
                 return true
@@ -273,6 +235,49 @@ abstract class GameViewModel(
         }
 
         return false
+    }
+
+    internal fun setBadgesOnWordPlayed(word: String, context: Context) {
+        val wordFrequency = WordDictionary.frequency(word)
+        if (wordFrequency != null) {
+            if (wordFrequency == 3) {
+                viewModelScope.launch { context.setObscureWord(word) }
+                NewBadgesToDisplay.add(Badge.PlayedObscureWord)
+            }
+            if (word.contains("Q")) {
+                viewModelScope.launch { context.setQWord(word) }
+                NewBadgesToDisplay.add(Badge.PlayedQWord)
+            }
+            if (word.contains("Z")) {
+                viewModelScope.launch { context.setZWord(word) }
+                NewBadgesToDisplay.add(Badge.PlayedZWord)
+            }
+            if (word.length == 5) {
+                viewModelScope.launch { context.setPlayed5LetterWord(word) }
+                NewBadgesToDisplay.add(Badge.Played5LetterWord)
+            } else if (word.length == 6) {
+                viewModelScope.launch {
+                    context.setPlayed6LetterWord(word)
+                    context.addDisplayedBadge(Badge.Played5LetterWord)
+                }
+                NewBadgesToDisplay.add(Badge.Played6LetterWord)
+            } else if (word.length == 7) {
+                viewModelScope.launch {
+                    context.setPlayed7LetterWord(word)
+                    context.addDisplayedBadge(Badge.Played5LetterWord)
+                    context.addDisplayedBadge(Badge.Played6LetterWord)
+                }
+                NewBadgesToDisplay.add(Badge.Played7LetterWord)
+            } else if (word.length > 7) {
+                viewModelScope.launch {
+                    context.setPlayed8LetterWord(word)
+                    context.addDisplayedBadge(Badge.Played5LetterWord)
+                    context.addDisplayedBadge(Badge.Played6LetterWord)
+                    context.addDisplayedBadge(Badge.Played7LetterWord)
+                }
+                NewBadgesToDisplay.add(Badge.Played8LetterWord)
+            }
+        }
     }
 
     internal open fun setBadgesOnGameWon(context: Context) {

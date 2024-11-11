@@ -21,28 +21,6 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 NavigationStack(navController)
-//                AvatarChooserView(navController)
-
-//                val npcSpec = NonPlayerCharacter.Spec(
-//                    NonPlayerCharacter.Spec.VocabularyLevel.MEDIUM,
-//                    NonPlayerCharacter.Spec.DefenseOffenseLevel.BLENDED,
-//                    NonPlayerCharacter.Spec.OverallSkillLevel.ADVANCED
-//                )
-//
-//                val gameViewModel = GameAgainstNpcViewModel(
-//                    boardWidth = 6,
-//                    boardHeight = 6,
-//                    avatarIdPlayer1 = R.drawable.avatar_1,
-//                    avatarIdPlayer2 = R.drawable.npc_monkey,
-//                    spec = npcSpec
-//                )
-//
-//                Box(Modifier.fillMaxSize().background(colorResource(R.color.background))) {
-//                    NpcChooserView {
-//
-//                    }
-//                }
-//                GameView(gameViewModel)
             }
         }
     }
