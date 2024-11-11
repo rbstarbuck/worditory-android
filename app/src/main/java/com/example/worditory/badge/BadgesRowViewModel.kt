@@ -140,7 +140,7 @@ internal class BadgesRowViewModel(context: Context): ViewModel() {
     )
 
     internal val played6LetterWord = BadgeViewModel(
-        composableCoordinates = Coordinates.BadgePlayed5LetterWord,
+        composableCoordinates = Coordinates.BadgePlayed6LetterWord,
         showBadgePredicate = {
             context.played6LetterWord()
                 .combine(context.played7LetterWord()) { a, b ->
@@ -152,7 +152,7 @@ internal class BadgesRowViewModel(context: Context): ViewModel() {
     )
 
     internal val played7LetterWord = BadgeViewModel(
-        composableCoordinates = Coordinates.BadgePlayed5LetterWord,
+        composableCoordinates = Coordinates.BadgePlayed7LetterWord,
         showBadgePredicate = {
             context.played7LetterWord()
                 .combine(context.played8LetterWord()) { a, b ->
@@ -162,7 +162,7 @@ internal class BadgesRowViewModel(context: Context): ViewModel() {
     )
 
     internal val played8LetterWord = BadgeViewModel(
-        composableCoordinates = Coordinates.BadgePlayed5LetterWord,
+        composableCoordinates = Coordinates.BadgePlayed8LetterWord,
         showBadgePredicate = {
             context.played7LetterWord().map { it != null }
         }
