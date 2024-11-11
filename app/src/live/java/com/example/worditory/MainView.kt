@@ -24,7 +24,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.worditory.R
 import com.example.worditory.badge.BadgesDialogView
 import com.example.worditory.badge.BadgesRowView
 import com.example.worditory.badge.NewBadgesView
@@ -101,6 +100,30 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             ) {
                 Text(
                     text = stringResource(R.string.play),
+                    color = colorResource(R.color.font_color_dark),
+                    fontSize = 36.sp
+                )
+            }
+
+            OutlinedButton(
+                onClick = { viewModel.onLivePlayButtonClicked() },
+                colors = ButtonColors(
+                    containerColor = colorResource(R.color.header_counter_background),
+                    contentColor = Color.White,
+                    disabledContainerColor = Color.White,
+                    disabledContentColor = Color.White
+                ),
+                border = BorderStroke(
+                    width = 3.dp,
+                    color = colorResource(R.color.header_background)
+                ),
+                contentPadding = PaddingValues(
+                    horizontal = 30.dp,
+                    vertical = 10.dp
+                )
+            ) {
+                Text(
+                    text = "Play Live",
                     color = colorResource(R.color.font_color_dark),
                     fontSize = 36.sp
                 )

@@ -31,6 +31,8 @@ import com.example.worditory.saved.savedGamesDataStore
 @Composable
 internal fun NavigationStack(navController: NavHostController) {
     NavHost(navController, startDestination = Screen.Main.route) {
+        flavorStack()
+
         composable(route = Screen.Main.route) {
             val context = LocalContext.current
             val viewModel = remember { MainViewModel(navController, context) }
@@ -52,11 +54,16 @@ internal fun NavigationStack(navController: NavHostController) {
 
             val opponent = NpcModel.newBuilder()
                 .setAvatar(avatar)
-                .setSpec(NpcModel.Spec.newBuilder()
-                    .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.valueOf(vocab))
-                    .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.valueOf(offense))
-                    .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.valueOf(skill))
-                    .build()
+                .setSpec(
+                    NpcModel.Spec.newBuilder()
+                        .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.valueOf(vocab))
+                        .setDefenseOffenseLevel(
+                            NpcModel.Spec.DefenseOffenseLevel.valueOf(
+                                offense
+                            )
+                        )
+                        .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.valueOf(skill))
+                        .build()
                 ).build()
 
             val viewModel = remember {
@@ -76,11 +83,16 @@ internal fun NavigationStack(navController: NavHostController) {
 
             val opponent = NpcModel.newBuilder()
                 .setAvatar(avatar)
-                .setSpec(NpcModel.Spec.newBuilder()
-                    .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.valueOf(vocab))
-                    .setDefenseOffenseLevel(NpcModel.Spec.DefenseOffenseLevel.valueOf(offense))
-                    .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.valueOf(skill))
-                    .build()
+                .setSpec(
+                    NpcModel.Spec.newBuilder()
+                        .setVocabularyLevel(NpcModel.Spec.VocabularyLevel.valueOf(vocab))
+                        .setDefenseOffenseLevel(
+                            NpcModel.Spec.DefenseOffenseLevel.valueOf(
+                                offense
+                            )
+                        )
+                        .setOverallSkillLevel(NpcModel.Spec.OverallSkillLevel.valueOf(skill))
+                        .build()
                 ).build()
 
             val context = LocalContext.current

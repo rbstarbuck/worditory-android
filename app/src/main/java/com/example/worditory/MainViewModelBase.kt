@@ -11,7 +11,7 @@ import com.example.worditory.saved.SavedGamesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class MainViewModel(private val navController: NavController, context: Context) {
+internal abstract class MainViewModelBase(protected val navController: NavController, context: Context) {
     internal val savedGames = SavedGamesViewModel(navController)
     internal val avatarChooser = AvatarChooserViewModel()
     internal val deleteSavedGame = DeleteSavedGameViewModel()

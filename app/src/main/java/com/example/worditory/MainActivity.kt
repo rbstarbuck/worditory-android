@@ -19,7 +19,6 @@ class MainActivity : ComponentActivity() {
                 AudioPlayer.init(this)
 
                 val navController = rememberNavController()
-
                 NavigationStack(navController)
             }
         }

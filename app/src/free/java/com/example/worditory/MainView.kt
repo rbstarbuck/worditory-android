@@ -59,7 +59,10 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         ) {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("This is the FREE version!")
+                Text(
+                    text = "This is the FREE version!",
+                    color = Color.White
+                )
 
                 HeaderView(Modifier.fillMaxWidth().padding(20.dp)) {
                     viewModel.avatarChooserEnabled = true

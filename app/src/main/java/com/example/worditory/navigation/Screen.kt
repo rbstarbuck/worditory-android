@@ -2,7 +2,7 @@ package com.example.worditory.navigation
 
 import com.example.worditory.game.npc.NpcModel
 
-internal sealed class Screen(val route: String) {
+internal abstract class Screen protected constructor(val route: String) {
     internal object Main: Screen("main")
 
     internal object NpcChooser: Screen("npcChooser")
