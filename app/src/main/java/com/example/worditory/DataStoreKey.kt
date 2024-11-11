@@ -158,6 +158,42 @@ internal suspend fun Context.setZWord(word: String) {
     }
 }
 
+internal fun Context.played5LetterWord(): Flow<String?> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.Played5Letter] }
+
+internal suspend fun Context.setPlayed5LetterWord(word: String) {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.Played5Letter] = word
+    }
+}
+
+internal fun Context.played6LetterWord(): Flow<String?> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.Played6Letter] }
+
+internal suspend fun Context.setPlayed6LetterWord(word: String) {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.Played6Letter] = word
+    }
+}
+
+internal fun Context.played7LetterWord(): Flow<String?> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.Played7Letter] }
+
+internal suspend fun Context.setPlayed7LetterWord(word: String) {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.Played7Letter] = word
+    }
+}
+
+internal fun Context.played8LetterWord(): Flow<String?> =
+    dataStore.data.map { preferences -> preferences[DataStoreKey.Played8Letter] }
+
+internal suspend fun Context.setPlayed8LetterWord(word: String) {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.Played8Letter] = word
+    }
+}
+
 internal class DataStoreKey private constructor() {
     companion object {
         internal val PlayerAvatarId = intPreferencesKey("playerAvatar")
@@ -175,5 +211,10 @@ internal class DataStoreKey private constructor() {
         internal val ObscureWord = stringPreferencesKey("obscureWord")
         internal val QWord = stringPreferencesKey("qWord")
         internal val ZWord = stringPreferencesKey("zWord")
+        internal val Played5Letter = stringPreferencesKey("played5Letter")
+        internal val Played6Letter = stringPreferencesKey("played6Letter")
+        internal val Played7Letter = stringPreferencesKey("played7Letter")
+        internal val Played8Letter = stringPreferencesKey("played8Letter")
+
     }
 }

@@ -58,7 +58,7 @@ internal fun NewBadgesView(viewModel: NewBadgesViewModel, modifier: Modifier = M
     val displayedBadges = displayedBadgesState.value.badgeIdsList.toSet()
     val badgesToDisplay = badges.filter { !displayedBadges.contains(it.id) }
 
-    val backgroundColor = colorResource(R.color.badges_background)
+    val backgroundColor = colorResource(R.color.new_badges_background)
 
     if (badgesToDisplay.isNotEmpty()) {
         BoxWithConstraints(

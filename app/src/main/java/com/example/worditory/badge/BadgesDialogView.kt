@@ -6,6 +6,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.worditory.R
 import com.example.worditory.obscureWord
+import com.example.worditory.played5LetterWord
+import com.example.worditory.played6LetterWord
+import com.example.worditory.played7LetterWord
+import com.example.worditory.played8LetterWord
 import com.example.worditory.qWord
 import com.example.worditory.zWord
 
@@ -46,25 +50,53 @@ internal fun BadgesDialogView(viewModel: BadgesRowViewModel) {
         dialogText = stringResource(R.string.badge_dialog_won_classic)
     )
 
-    val obscureWordState = LocalContext.current.obscureWord().collectAsState("")
+    val played5LetterWordState = LocalContext.current.played5LetterWord().collectAsState(null)
+    BadgeDialogView(
+        viewModel = viewModel.played5LetterWord.dialog,
+        dialogText = stringResource(R.string.badge_dialog_played_5_letter_word) + ": " +
+                played5LetterWordState.value
+    )
+
+    val played6LetterWordState = LocalContext.current.played6LetterWord().collectAsState(null)
+    BadgeDialogView(
+        viewModel = viewModel.played6LetterWord.dialog,
+        dialogText = stringResource(R.string.badge_dialog_played_6_letter_word) + ": " +
+                played6LetterWordState.value
+    )
+
+    val played7LetterWordState = LocalContext.current.played7LetterWord().collectAsState(null)
+    BadgeDialogView(
+        viewModel = viewModel.played7LetterWord.dialog,
+        dialogText = stringResource(R.string.badge_dialog_played_7_letter_word) + ": " +
+                played7LetterWordState.value
+    )
+
+    val played8LetterWordState = LocalContext.current.played8LetterWord().collectAsState(null)
+    BadgeDialogView(
+        viewModel = viewModel.played8LetterWord.dialog,
+        dialogText = stringResource(R.string.badge_dialog_played_8_letter_word) + ": " +
+                played8LetterWordState.value
+    )
+
+    val obscureWordState = LocalContext.current.obscureWord().collectAsState(null)
     BadgeDialogView(
         viewModel = viewModel.playedObscureWord.dialog,
         dialogText = stringResource(R.string.badge_dialog_played_obscure_word) +
-                " " + obscureWordState.value
+                ": " + obscureWordState.value
     )
 
-    val qWordState = LocalContext.current.qWord().collectAsState("")
+    val qWordState = LocalContext.current.qWord().collectAsState(null)
     BadgeDialogView(
         viewModel = viewModel.playedQWord.dialog,
         dialogText = stringResource(R.string.badge_dialog_played_q_word) +
-                " " + qWordState.value
+                ": " + qWordState.value
     )
 
-    val zWordState = LocalContext.current.zWord().collectAsState("")
+    val zWordState = LocalContext.current.zWord().collectAsState(null)
     BadgeDialogView(
         viewModel = viewModel.playedZWord.dialog,
         dialogText = stringResource(R.string.badge_dialog_played_z_word) +
-                " " + zWordState.value
+                ": " + zWordState.value
     )
 
     BadgeDialogView(

@@ -99,21 +99,31 @@ internal open class Badge private constructor(
         contentDescriptionId = R.string.badge_description_won_100_percent
     )
 
-    companion object {
-        internal val AllBadges = listOf(
-            WonAgainstBeginner,
-            WonAgainstIntermediate,
-            WonAgainstAdvanced,
-            WonAgainstSuperAdvanced,
-            WonLightning,
-            WonRapid,
-            WonClassic,
-            PlayedObscureWord,
-            PlayedQWord,
-            PlayedZWord,
-            Won50Percent,
-            Won70Percent,
-            Won100Percent
-        )
-    }
+    internal object Played5LetterWord: Badge(
+        id = 13,
+        imageVectorId = R.drawable.badge_5_letter,
+        dialogTextId = R.string.badge_dialog_played_5_letter_word,
+        contentDescriptionId = R.string.badge_description_played_5_letter_word
+    )
+
+    internal object Played6LetterWord: Badge(
+        id = 14,
+        imageVectorId = R.drawable.badge_played_6,
+        dialogTextId = R.string.badge_dialog_played_6_letter_word,
+        contentDescriptionId = R.string.badge_description_played_6_letter_word
+    )
+
+    internal object Played7LetterWord: Badge(
+        id = 15,
+        imageVectorId = R.drawable.badge_played_7,
+        dialogTextId = R.string.badge_dialog_played_7_letter_word,
+        contentDescriptionId = R.string.badge_description_played_7_letter_word
+    )
+
+    internal object Played8LetterWord: Badge(
+        id = 16,
+        imageVectorId = R.drawable.badge_played_8,
+        dialogTextId = R.string.badge_dialog_played_8_letter_word,
+        contentDescriptionId = R.string.badge_description_played_8_letter_word
+    )
 }

@@ -23,6 +23,10 @@ internal object Coordinates {
     internal val BadgePlayedObscureWord = MutableStateFlow<LayoutCoordinates?>(null)
     internal val BadgePlayedQWord = MutableStateFlow<LayoutCoordinates?>(null)
     internal val BadgePlayedZWord = MutableStateFlow<LayoutCoordinates?>(null)
+    internal val BadgePlayed5LetterWord = MutableStateFlow<LayoutCoordinates?>(null)
+    internal val BadgePlayed6LetterWord = MutableStateFlow<LayoutCoordinates?>(null)
+    internal val BadgePlayed7LetterWord = MutableStateFlow<LayoutCoordinates?>(null)
+    internal val BadgePlayed8LetterWord = MutableStateFlow<LayoutCoordinates?>(null)
 
     internal val AreAllSet: Boolean
         get() = ScoreToWin.value != null

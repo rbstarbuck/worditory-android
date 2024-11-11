@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModel
 import com.example.worditory.composable.Coordinates
 import com.example.worditory.getWinRate
 import com.example.worditory.obscureWord
+import com.example.worditory.played5LetterWord
+import com.example.worditory.played6LetterWord
+import com.example.worditory.played7LetterWord
+import com.example.worditory.played8LetterWord
 import com.example.worditory.qWord
 import com.example.worditory.wonAgainstAdvanced
 import com.example.worditory.wonAgainstBeginner
@@ -118,6 +122,49 @@ internal class BadgesRowViewModel(context: Context): ViewModel() {
         composableCoordinates = Coordinates.BadgeWon100Percent,
         showBadgePredicate = {
             context.getWinRate().map { it != null && it >= 1f }
+        }
+    )
+
+    internal val played5LetterWord = BadgeViewModel(
+        composableCoordinates = Coordinates.BadgePlayed5LetterWord,
+        showBadgePredicate = {
+            context.played5LetterWord()
+                .combine(context.played6LetterWord()) { a, b ->
+                    a != null && b == null
+                }.combine(context.played7LetterWord()) { a, b ->
+                    a && b == null
+                }.combine(context.played8LetterWord()) { a, b ->
+                    a && b == null
+                }
+        }
+    )
+
+    internal val played6LetterWord = BadgeViewModel(
+        composableCoordinates = Coordinates.BadgePlayed5LetterWord,
+        showBadgePredicate = {
+            context.played6LetterWord()
+                .combine(context.played7LetterWord()) { a, b ->
+                    a != null && b == null
+                }.combine(context.played8LetterWord()) { a, b ->
+                    a && b == null
+                }
+        }
+    )
+
+    internal val played7LetterWord = BadgeViewModel(
+        composableCoordinates = Coordinates.BadgePlayed5LetterWord,
+        showBadgePredicate = {
+            context.played7LetterWord()
+                .combine(context.played8LetterWord()) { a, b ->
+                    a != null && b == null
+                }
+        }
+    )
+
+    internal val played8LetterWord = BadgeViewModel(
+        composableCoordinates = Coordinates.BadgePlayed5LetterWord,
+        showBadgePredicate = {
+            context.played7LetterWord().map { it != null }
         }
     )
 }

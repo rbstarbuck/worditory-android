@@ -21,10 +21,15 @@ import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
 import com.example.worditory.badge.Badge
+import com.example.worditory.badge.addDisplayedBadge
 import com.example.worditory.saved.addSavedGame
 import com.example.worditory.saved.removeSavedGame
 import com.example.worditory.setHasShownTutorial
 import com.example.worditory.setObscureWord
+import com.example.worditory.setPlayed5LetterWord
+import com.example.worditory.setPlayed6LetterWord
+import com.example.worditory.setPlayed7LetterWord
+import com.example.worditory.setPlayed8LetterWord
 import com.example.worditory.setQWord
 import com.example.worditory.setWonClassic
 import com.example.worditory.setWonLightning
@@ -149,6 +154,31 @@ abstract class GameViewModel(
                 if (wordString.contains("Z")) {
                     viewModelScope.launch { context.setZWord(wordString) }
                     NewBadgesToDisplay.add(Badge.PlayedZWord)
+                }
+                if (wordString.length == 5) {
+                    viewModelScope.launch { context.setPlayed5LetterWord(wordString) }
+                    NewBadgesToDisplay.add(Badge.Played5LetterWord)
+                } else if (wordString.length == 6) {
+                    viewModelScope.launch {
+                        context.setPlayed6LetterWord(wordString)
+                        context.addDisplayedBadge(Badge.Played5LetterWord)
+                    }
+                    NewBadgesToDisplay.add(Badge.Played6LetterWord)
+                } else if (wordString.length == 7) {
+                    viewModelScope.launch {
+                        context.setPlayed7LetterWord(wordString)
+                        context.addDisplayedBadge(Badge.Played5LetterWord)
+                        context.addDisplayedBadge(Badge.Played6LetterWord)
+                    }
+                    NewBadgesToDisplay.add(Badge.Played7LetterWord)
+                } else if (wordString.length > 7) {
+                    viewModelScope.launch {
+                        context.setPlayed8LetterWord(wordString)
+                        context.addDisplayedBadge(Badge.Played5LetterWord)
+                        context.addDisplayedBadge(Badge.Played6LetterWord)
+                        context.addDisplayedBadge(Badge.Played7LetterWord)
+                    }
+                    NewBadgesToDisplay.add(Badge.Played8LetterWord)
                 }
 
                 AudioPlayer.wordPlayed(wordString.length)

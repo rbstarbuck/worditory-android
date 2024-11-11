@@ -30,11 +30,19 @@
     <string name="badge_description_won_100_percent">100% badge</string>
     <string name="badge_dialog_won_100_percent">You\'ve won 100% of your games!</string>
     <string name="badge_description_played_obscure_word">Played obscure word badge</string>
-    <string name="badge_dialog_played_obscure_word">You\'ve played the obscure word</string>
+    <string name="badge_dialog_played_obscure_word">You played an obscure word</string>
     <string name="badge_description_played_q_word">Played Q word badge</string>
-    <string name="badge_dialog_played_q_word">You\'ve played the \'Q\' word</string>
+    <string name="badge_dialog_played_q_word">You played a \'Q\' word</string>
     <string name="badge_description_played_z_word">Played Z word badge</string>
-    <string name="badge_dialog_played_z_word">You\'ve played the \'Z\' word</string>
+    <string name="badge_dialog_played_z_word">You played a \'Z\' word</string>
+    <string name="badge_description_played_5_letter_word">Played 5-letter word badge</string>
+    <string name="badge_dialog_played_5_letter_word">You played a 5-letter word</string>
+    <string name="badge_description_played_6_letter_word">Played 6-letter word badge</string>
+    <string name="badge_dialog_played_6_letter_word">You played a 6-letter word</string>
+    <string name="badge_description_played_7_letter_word">Played 7-letter word badge</string>
+    <string name="badge_dialog_played_7_letter_word">You played a 7-letter word</string>
+    <string name="badge_description_played_8_letter_word">Played 8-letter word badge</string>
+    <string name="badge_dialog_played_8_letter_word">You played a 8-letter word</string>
 
     <string name="menu">Menu</string>
     <string name="sound">Sound:</string>

@@ -70,6 +70,26 @@ internal fun BadgesRowView(viewModel: BadgesRowViewModel, modifier: Modifier = M
             )
 
             BadgeView(
+                viewModel = viewModel.played5LetterWord,
+                badge = Badge.Played5LetterWord
+            )
+
+            BadgeView(
+                viewModel = viewModel.played6LetterWord,
+                badge = Badge.Played6LetterWord
+            )
+
+            BadgeView(
+                viewModel = viewModel.played7LetterWord,
+                badge = Badge.Played7LetterWord
+            )
+
+            BadgeView(
+                viewModel = viewModel.played8LetterWord,
+                badge = Badge.Played8LetterWord
+            )
+
+            BadgeView(
                 viewModel = viewModel.playedQWord,
                 badge = Badge.PlayedQWord
             )
