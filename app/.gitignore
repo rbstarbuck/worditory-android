@@ -1,4 +1,6 @@
 /build
 /release
+/free/release
+/live/release
 /src/free/google-services.json
 /src/live/google-services.json
