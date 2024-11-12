@@ -15,7 +15,6 @@ import androidx.navigation.compose.composable
 import com.example.worditory.MainView
 import com.example.worditory.MainViewModel
 import com.example.worditory.R
-import com.example.worditory.SavedGames
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
 import com.example.worditory.chooser.boardsize.BoardSizeChooserViewModel
 import com.example.worditory.chooser.npc.NpcChooserView
@@ -26,6 +25,7 @@ import com.example.worditory.game.GameView
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.getPlayerAvatarId
+import com.example.worditory.saved.SavedGames
 import com.example.worditory.saved.savedGamesDataStore
 
 @Composable
