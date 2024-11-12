@@ -60,12 +60,15 @@ android {
         protoc {
             artifact = "com.google.protobuf:protoc:4.28.3"
         }
-
         generateProtoTasks {
             all().forEach { task ->
                 task.builtins {
-                    id("java")
-                    id("kotlin")
+                    id("java") {
+                        option("lite")
+                    }
+                    id("kotlin") {
+                        option("lite")
+                    }
                 }
             }
         }
@@ -76,9 +79,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.datastore.preferences)
-    implementation(libs.protobuf.java)
-    implementation(libs.protobuf.kotlin)
+    implementation(libs.protobuf.kotlin.lite)
     implementation(libs.firebase.analytics)
+    "liveImplementation"(libs.firebase.database)
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
