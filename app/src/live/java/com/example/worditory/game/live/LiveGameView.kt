@@ -8,11 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import com.example.worditory.R
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Composable
 internal fun LiveGameView(viewModel: LiveGameViewModel) {
+    val auth = Firebase.auth
     Box(
         modifier = Modifier
             .background(colorResource(R.color.background))
@@ -20,7 +22,7 @@ internal fun LiveGameView(viewModel: LiveGameViewModel) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = stringResource(R.string.test_text),
+            text = "Current user email = ${auth.currentUser?.email} and name = ${auth.currentUser?.displayName}",
             color = colorResource(R.color.test_text)
         )
     }

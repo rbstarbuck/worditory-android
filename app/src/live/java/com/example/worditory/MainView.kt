@@ -24,6 +24,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.worditory.auth.AuthenticationView
 import com.example.worditory.badge.BadgesDialogView
 import com.example.worditory.badge.BadgesRowView
 import com.example.worditory.badge.NewBadgesView
@@ -106,7 +107,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             }
 
             OutlinedButton(
-                onClick = { viewModel.onLivePlayButtonClicked() },
+                onClick = { viewModel.signIn() },
                 colors = ButtonColors(
                     containerColor = colorResource(R.color.header_counter_background),
                     contentColor = Color.White,
@@ -152,5 +153,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         }
 
         NewBadgesView(viewModel.newBadges)
+
+        AuthenticationView(viewModel.authentication)
     }
 }

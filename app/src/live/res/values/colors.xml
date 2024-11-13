@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="test_text">#FFFFFFFF</color>
+    <color name="sign_in_background">#FFDDDDDD</color>
+    <color name="textfield_placeholder">#FFBBBBBB</color>
+    <color name="error_message_text">#FFFF0000</color>
+    <color name="link_text">#FF0000FF</color>
 </resources>
