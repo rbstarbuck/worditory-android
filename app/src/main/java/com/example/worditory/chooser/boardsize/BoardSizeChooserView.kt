@@ -21,7 +21,7 @@ import com.example.worditory.game.board.tile.Tile
 
 @Composable
 internal fun BoardSizeChooserView(
-    viewModel: BoardSizeChooserViewModel,
+    viewModel: BoardSizeChooserViewModelBase,
     modifier: Modifier = Modifier
 ) {
     Box(Modifier.fillMaxSize().background(colorResource(R.color.background))) {

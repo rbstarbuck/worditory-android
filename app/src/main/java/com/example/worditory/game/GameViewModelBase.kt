@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class GameViewModel(
+abstract class GameViewModelBase(
     model: GameModel,
     val navController: NavController,
     playerAvatarIdFlow: Flow<Int>

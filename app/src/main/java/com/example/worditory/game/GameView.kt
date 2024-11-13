@@ -32,7 +32,7 @@ import com.example.worditory.hasShownTutorial
 
 @Composable
 internal fun GameView(
-    viewModel: GameViewModel,
+    viewModel: GameViewModelBase,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current

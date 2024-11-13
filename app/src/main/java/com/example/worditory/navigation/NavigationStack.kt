@@ -16,11 +16,11 @@ import com.example.worditory.MainView
 import com.example.worditory.MainViewModel
 import com.example.worditory.R
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
-import com.example.worditory.chooser.boardsize.BoardSizeChooserViewModel
+import com.example.worditory.chooser.boardsize.NpcBoardSizeChooserViewModel
 import com.example.worditory.chooser.npc.NpcChooserView
 import com.example.worditory.chooser.npc.NpcChooserViewModel
 import com.example.worditory.game.Game
-import com.example.worditory.game.GameAgainstNpcViewModel
+import com.example.worditory.game.NpcGameViewModel
 import com.example.worditory.game.GameView
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.npc.NpcModel
@@ -67,7 +67,7 @@ internal fun NavigationStack(navController: NavHostController) {
                 ).build()
 
             val viewModel = remember {
-                BoardSizeChooserViewModel(navController, opponent)
+                NpcBoardSizeChooserViewModel(navController, opponent)
             }
 
             BoardSizeChooserView(viewModel)
@@ -98,7 +98,7 @@ internal fun NavigationStack(navController: NavHostController) {
             val context = LocalContext.current
 
             val viewModel = remember {
-                GameAgainstNpcViewModel(
+                NpcGameViewModel(
                     model = Game.newModel(width, height, opponent, Tile.ColorScheme.random()),
                     context = context,
                     navController = navController,
@@ -121,7 +121,7 @@ internal fun NavigationStack(navController: NavHostController) {
 
             if (savedGame != null) {
                 val viewModel = remember {
-                    GameAgainstNpcViewModel(
+                    NpcGameViewModel(
                         model = savedGame,
                         context = context,
                         navController = navController,

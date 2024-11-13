@@ -6,8 +6,8 @@ import androidx.navigation.NavController
 import com.example.worditory.badge.Badge
 import com.example.worditory.badge.NewBadgesToDisplay
 import com.example.worditory.audio.AudioPlayer
-import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.gameover.GameOver
+import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.ADVANCED
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.BEGINNER
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.INTERMEDIATE
@@ -24,12 +24,12 @@ import kotlinx.coroutines.launch
 import java.security.InvalidParameterException
 import kotlin.random.Random
 
-internal class GameAgainstNpcViewModel(
+internal class NpcGameViewModel(
     model: GameModel,
     context: Context,
     navController: NavController,
     playerAvatarIdFlow: Flow<Int>
-): GameViewModel(model, navController, playerAvatarIdFlow) {
+): GameViewModelBase(model, navController, playerAvatarIdFlow) {
     private val nonPlayerCharacter = NonPlayerCharacter(model.opponent, board)
 
     init {
