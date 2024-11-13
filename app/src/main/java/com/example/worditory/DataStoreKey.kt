@@ -11,7 +11,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+internal val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 internal fun Context.getPlayerAvatarId(): Flow<Int> =
     dataStore.data.map { preferences -> preferences[DataStoreKey.PlayerAvatarId] ?: 0 }

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 internal open class FeatureFlags private constructor(val key: String) {
 
     internal object BoardSizes: FeatureFlags("EnableBoardSizes") {
-        internal val value: StateFlow<EnabledBoardSizes>
+        internal val get: StateFlow<EnabledBoardSizes>
             get() {
                 val mutableStateFlow = MutableStateFlow<EnabledBoardSizes>(
                     EnabledBoardSizes(false, false, false, false, false, false)

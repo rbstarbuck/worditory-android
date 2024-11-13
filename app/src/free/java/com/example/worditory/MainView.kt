@@ -27,6 +27,7 @@ import com.example.worditory.badge.NewBadgesView
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.header.HeaderView
+import com.example.worditory.promo.LivePromotionView
 import com.example.worditory.saved.DeleteSavedGameDialog
 import com.example.worditory.saved.SavedGamesView
 
@@ -116,5 +117,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         }
 
         NewBadgesView(viewModel.newBadges)
+
+        LivePromotionView(viewModel.livePromo)
     }
 }

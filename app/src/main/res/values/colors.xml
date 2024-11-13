@@ -3,6 +3,7 @@
     <color name="background">#FF44444D</color>
     <color name="font_color_light">#FFFFFFFF</color>
     <color name="font_color_dark">#FF363636</color>
+    <color name="link_text">#FF0000FF</color>
 
     <color name="badges_background">#FFDDDDDD</color>
     <color name="new_badges_background">#FFDDDDDD</color>
