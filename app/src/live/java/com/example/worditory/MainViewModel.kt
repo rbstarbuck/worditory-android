@@ -3,7 +3,7 @@ package com.example.worditory
 import android.content.Context
 import androidx.navigation.NavController
 import com.example.worditory.auth.AuthenticationViewModel
-import com.example.worditory.navigation.ScreenLive
+import com.example.worditory.navigation.LiveScreen
 
 internal class MainViewModel(
     navController: NavController,
@@ -16,6 +16,6 @@ internal class MainViewModel(
     }
 
     internal fun onPlayLiveGameClick() {
-        navController.navigate(ScreenLive.BoardSizeChooser.route)
+        navController.navigate(LiveScreen.BoardSizeChooser.route)
     }
 }

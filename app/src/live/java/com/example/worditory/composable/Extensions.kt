@@ -1,4 +1,4 @@
-package com.example.worditory.auth.composable
+package com.example.worditory.composable
 
 import android.content.Context
 import android.content.ContextWrapper

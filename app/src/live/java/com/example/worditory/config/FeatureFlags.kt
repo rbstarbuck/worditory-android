@@ -45,7 +45,7 @@ internal open class FeatureFlags private constructor(val key: String) {
         internal fun init() {
             val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
             val configSettings = remoteConfigSettings {
-                minimumFetchIntervalInSeconds = 3600
+                minimumFetchIntervalInSeconds = 3000
             }
             remoteConfig.setConfigSettingsAsync(configSettings)
             remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)

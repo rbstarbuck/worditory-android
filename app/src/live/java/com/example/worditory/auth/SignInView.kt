@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
-import com.example.worditory.auth.composable.WorditoryTextField
+import com.example.worditory.composable.WorditoryTextField
 import com.example.worditory.composable.WorditoryOutlinedButton
 
 @Composable

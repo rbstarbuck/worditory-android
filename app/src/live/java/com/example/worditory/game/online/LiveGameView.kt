@@ -1,4 +1,4 @@
-package com.example.worditory.game.live
+package com.example.worditory.game.online
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
