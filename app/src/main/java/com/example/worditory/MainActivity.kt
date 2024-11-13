@@ -9,7 +9,7 @@ import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.navigation.NavigationStack
 import com.example.worditory.ui.theme.WorditoryTheme
 
-internal abstract class MainActivityBase : ComponentActivity() {
+internal abstract class MainActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
