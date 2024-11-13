@@ -9,13 +9,13 @@ internal class MainViewModel(
     navController: NavController,
     context: Context
 ): MainViewModelBase(navController, context) {
-    internal val authentication = AuthenticationViewModel { playLiveGame() }
+    internal val authentication = AuthenticationViewModel { onPlayLiveGameClick() }
 
     internal fun signIn() {
         authentication.enabled = true
     }
 
-    internal fun playLiveGame() {
-        navController.navigate(ScreenLive.LiveGame.route)
+    internal fun onPlayLiveGameClick() {
+        navController.navigate(ScreenLive.BoardSizeChooser.route)
     }
 }

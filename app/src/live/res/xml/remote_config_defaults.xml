@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+  <entry>
+    <key>EnableBoardSizes</key>
+    <value>{"size5x4":false,"size5x5":false,"size7x5":false,"size6x6":true,"size8x6":false,"size8x8":false}</value>
+  </entry>
+</defaults>

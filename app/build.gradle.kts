@@ -90,6 +90,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.config)
     implementation(platform(libs.firebase.bom))
+    implementation(libs.google.gson)
     implementation(libs.protobuf.kotlin.lite)
     "liveImplementation"(libs.firebase.auth)
     "liveImplementation"(libs.firebase.database)

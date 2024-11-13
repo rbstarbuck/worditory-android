@@ -67,6 +67,7 @@
     <string name="lightning">Lightning</string>
     <string name="rapid">Rapid</string>
     <string name="classic">Classic</string>
+    <string name="coming_soon">Coming soon!</string>
 
     <string name="avatar">Avatar</string>
     <string name="delete_saved_game">Delete saved game</string>
