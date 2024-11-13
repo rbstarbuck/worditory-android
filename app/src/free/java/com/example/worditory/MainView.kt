@@ -2,7 +2,6 @@ package com.example.worditory
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,8 +10,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,11 +21,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.worditory.R
 import com.example.worditory.badge.BadgesDialogView
 import com.example.worditory.badge.BadgesRowView
 import com.example.worditory.badge.NewBadgesView
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
+import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.header.HeaderView
 import com.example.worditory.saved.DeleteSavedGameDialog
 import com.example.worditory.saved.SavedGamesView
@@ -82,18 +79,8 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 }
             )
 
-            OutlinedButton(
+            WorditoryOutlinedButton(
                 onClick = { viewModel.onPlayGameClicked() },
-                colors = ButtonColors(
-                    containerColor = colorResource(R.color.header_counter_background),
-                    contentColor = Color.White,
-                    disabledContainerColor = Color.White,
-                    disabledContentColor = Color.White
-                ),
-                border = BorderStroke(
-                    width = 3.dp,
-                    color = colorResource(R.color.header_background)
-                ),
                 contentPadding = PaddingValues(
                     horizontal = 30.dp,
                     vertical = 10.dp

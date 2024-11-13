@@ -2,7 +2,6 @@ package com.example.worditory
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,8 +10,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,6 +26,7 @@ import com.example.worditory.badge.BadgesDialogView
 import com.example.worditory.badge.BadgesRowView
 import com.example.worditory.badge.NewBadgesView
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
+import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.header.HeaderView
 import com.example.worditory.saved.DeleteSavedGameDialog
 import com.example.worditory.saved.SavedGamesView
@@ -64,7 +62,10 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                     color = Color.White
                 )
 
-                HeaderView(Modifier.fillMaxWidth().padding(20.dp)) {
+                HeaderView(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)) {
                     viewModel.avatarChooserEnabled = true
                 }
 
@@ -82,51 +83,25 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 }
             )
 
-            OutlinedButton(
-                onClick = { viewModel.onPlayGameClicked() },
-                colors = ButtonColors(
-                    containerColor = colorResource(R.color.header_counter_background),
-                    contentColor = Color.White,
-                    disabledContainerColor = Color.White,
-                    disabledContentColor = Color.White
-                ),
-                border = BorderStroke(
-                    width = 3.dp,
-                    color = colorResource(R.color.header_background)
-                ),
-                contentPadding = PaddingValues(
-                    horizontal = 30.dp,
-                    vertical = 10.dp
-                )
-            ) {
-                Text(
-                    text = stringResource(R.string.play),
-                    color = colorResource(R.color.font_color_dark),
-                    fontSize = 36.sp
-                )
-            }
-
-            OutlinedButton(
+            WorditoryOutlinedButton(
                 onClick = { viewModel.signIn() },
-                colors = ButtonColors(
-                    containerColor = colorResource(R.color.header_counter_background),
-                    contentColor = Color.White,
-                    disabledContainerColor = Color.White,
-                    disabledContentColor = Color.White
-                ),
-                border = BorderStroke(
-                    width = 3.dp,
-                    color = colorResource(R.color.header_background)
-                ),
-                contentPadding = PaddingValues(
-                    horizontal = 30.dp,
-                    vertical = 10.dp
-                )
+                contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
             ) {
                 Text(
                     text = "Play Live",
                     color = colorResource(R.color.font_color_dark),
-                    fontSize = 36.sp
+                    fontSize = 30.sp
+                )
+            }
+
+            WorditoryOutlinedButton(
+                onClick = { viewModel.onPlayGameClicked() },
+                contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.play_against_computer),
+                    color = colorResource(R.color.font_color_dark),
+                    fontSize = 18.sp
                 )
             }
         }

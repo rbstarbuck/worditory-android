@@ -1,6 +1,5 @@
 package com.example.worditory.game.playbutton
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
@@ -11,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 import com.example.worditory.composable.saveCoordinates
 import com.example.worditory.composable.Coordinates
+import com.example.worditory.composable.WorditoryOutlinedButton
 
 @Composable
 internal fun PlayButtonView(
@@ -55,8 +53,6 @@ internal fun PlayButtonView(
             verticalAlignment = Alignment.CenterVertically
         ) {
             val playButtonEnabled = isPlayerTurnState.value && !wordState.value.tiles.isEmpty()
-            val playButtonStrokeColor =
-                if (playButtonEnabled) R.color.button_stroke else R.color.disabled_button_stroke
 
             Spacer(Modifier.width(20.dp))
 
@@ -76,17 +72,10 @@ internal fun PlayButtonView(
 
             Spacer(Modifier.weight(1f))
 
-            OutlinedButton(
+            WorditoryOutlinedButton(
                 onClick = onPlayClick,
                 modifier = Modifier.saveCoordinates(Coordinates.PlayButton),
                 enabled = playButtonEnabled,
-                colors = ButtonColors(
-                    containerColor = colorResource(R.color.button_container),
-                    contentColor = colorResource(R.color.button_content),
-                    disabledContainerColor = colorResource(R.color.disabled_button_container),
-                    disabledContentColor = colorResource(R.color.disabled_button_content)
-                ),
-                border = BorderStroke(width = 2.dp, colorResource(playButtonStrokeColor)),
                 contentPadding = PaddingValues(horizontal = 25.dp)
             ) {
                 Text(text = stringResource(R.string.play), fontSize = 26.sp)

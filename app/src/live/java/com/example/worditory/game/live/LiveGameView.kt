@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import com.example.worditory.R
 import com.google.firebase.Firebase
@@ -23,7 +24,7 @@ internal fun LiveGameView(viewModel: LiveGameViewModel) {
     ) {
         Text(
             text = "Current user email = ${auth.currentUser?.email} and name = ${auth.currentUser?.displayName}",
-            color = colorResource(R.color.test_text)
+            color = Color.White
         )
     }
 }
