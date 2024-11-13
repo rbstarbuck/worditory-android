@@ -39,6 +39,7 @@ androidx-credentials = { group = "androidx.credentials", name = "credentials", v
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+firebase-config = { group = "com.google.firebase", name = "firebase-config" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database" }
 google-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-play-services" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

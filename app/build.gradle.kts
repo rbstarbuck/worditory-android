@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation)
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.config)
     implementation(platform(libs.firebase.bom))
     implementation(libs.protobuf.kotlin.lite)
     "liveImplementation"(libs.firebase.auth)
