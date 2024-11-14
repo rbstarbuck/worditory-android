@@ -28,7 +28,7 @@ import com.example.worditory.composable.BackHandler
 internal fun DeleteSavedGameDialog(
     viewModel: DeleteSavedGameViewModel,
     modifier: Modifier = Modifier,
-    gameId: Long,
+    gameId: String,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current

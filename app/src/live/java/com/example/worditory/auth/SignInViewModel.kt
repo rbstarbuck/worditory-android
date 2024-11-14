@@ -3,7 +3,7 @@ package com.example.worditory.auth
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.worditory.R
-import com.example.worditory.composable.getActivity
+import com.example.worditory.getActivity
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException

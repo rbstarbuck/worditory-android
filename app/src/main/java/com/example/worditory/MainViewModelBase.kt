@@ -24,9 +24,9 @@ internal abstract class MainViewModelBase(protected val navController: NavContro
             _avatarChooserEnabledStateFlow.value = value
         }
 
-    private val _deleteSavedGameIdStateFlow =  MutableStateFlow(0L)
+    private val _deleteSavedGameIdStateFlow =  MutableStateFlow("")
     internal val deleteSavedGameIdStateFlow = _deleteSavedGameIdStateFlow.asStateFlow()
-    internal var deleteSavedGameId: Long
+    internal var deleteSavedGameId: String
         get() = deleteSavedGameIdStateFlow.value
         set(value) {
             _deleteSavedGameIdStateFlow.value = value

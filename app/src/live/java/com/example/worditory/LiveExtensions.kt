@@ -1,4 +1,4 @@
-package com.example.worditory.composable
+package com.example.worditory
 
 import android.content.Context
 import android.content.ContextWrapper

@@ -42,7 +42,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
 
     val deleteSavedGameIdState = viewModel.deleteSavedGameIdStateFlow.collectAsState()
     val deleteSavedGameAnimatedAlpha = animateFloatAsState(
-        targetValue = if (deleteSavedGameIdState.value == 0L) 0f else 1f,
+        targetValue = if (deleteSavedGameIdState.value == "") 0f else 1f,
         animationSpec = tween(500),
         label = "deleteSavedGameAlpha"
     )
@@ -106,13 +106,13 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             }
         }
 
-        if (deleteSavedGameIdState.value != 0L) {
+        if (deleteSavedGameIdState.value != "") {
             DeleteSavedGameDialog(
                 viewModel = viewModel.deleteSavedGame,
                 modifier = Modifier.alpha(deleteSavedGameAnimatedAlpha.value),
                 gameId = deleteSavedGameIdState.value
             ) {
-                viewModel.deleteSavedGameId = 0L
+                viewModel.deleteSavedGameId = ""
             }
         }
 

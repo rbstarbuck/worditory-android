@@ -4,6 +4,7 @@ import com.example.worditory.R
 import com.example.worditory.game.board.Board
 import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.game.board.tile.Tile
+import com.example.worditory.generateKey
 import kotlin.random.Random
 
 internal class Game private constructor() {
@@ -18,7 +19,7 @@ internal class Game private constructor() {
             boardHeight: Int,
             colorScheme: Tile.ColorScheme
         ) = GameModel.newBuilder()
-            .setId(Random.nextLong())
+            .setId(generateKey())
             .setBoard(Board.newModel(boardWidth, boardHeight))
             .setIsPlayerTurn(true)
             .setColorScheme(colorScheme.model)

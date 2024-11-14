@@ -1,0 +1,9 @@
+syntax = "proto3";
+import "GameModel.proto";
+import "NpcModel.proto";
+option java_package = "com.example.worditory.game";
+option java_multiple_files = true;
+
+message LiveGameModel {
+  GameModel game = 1;
+}

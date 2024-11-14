@@ -52,7 +52,7 @@ import com.example.worditory.resourceid.getResourceId
 internal fun SavedGamesView(
     viewModel: SavedGamesViewModel,
     modifier: Modifier = Modifier,
-    onClick: (Long) -> Unit
+    onClick: (String) -> Unit
 ) {
     val context = LocalContext.current
 

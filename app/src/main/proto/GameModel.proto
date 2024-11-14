@@ -4,7 +4,7 @@ option java_package = "com.example.worditory.game";
 option java_multiple_files = true;
 
 message GameModel {
-  int64 id = 1;
+  string id = 1;
   BoardModel board = 2;
   bool is_player_turn = 3;
   ColorScheme color_scheme = 4;

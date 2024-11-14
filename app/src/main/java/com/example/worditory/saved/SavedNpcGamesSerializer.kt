@@ -26,7 +26,7 @@ val Context.savedNpcGamesDataStore: DataStore<SavedNpcGames> by dataStore(
     serializer = SavedNpcGamesSerializer()
 )
 
-suspend fun Context.removeSavedNpcGame(gameId: Long) {
+suspend fun Context.removeSavedNpcGame(gameId: String) {
     savedNpcGamesDataStore.updateData { savedGames ->
         SavedNpcGames.newBuilder()
             .addAllGames(savedGames.gamesList.filter { it.game.id != gameId })

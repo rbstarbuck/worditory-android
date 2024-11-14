@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class GameViewModelBase(
+internal abstract class GameViewModelBase(
     model: GameModel,
     val navController: NavController,
     player1AvatarIdFlow: Flow<Int>,
@@ -149,7 +149,11 @@ abstract class GameViewModelBase(
         return false
     }
 
-    internal open fun onExitGame(context: Context) {
+    internal abstract fun saveGame(context: Context)
+
+    internal fun onExitGame(context: Context) {
+        saveGame(context)
+
         navController.navigate(Screen.Main.route) {
             popUpTo(Screen.Main.route) {
                 inclusive = true

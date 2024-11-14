@@ -112,7 +112,7 @@ internal fun NavigationStack(navController: NavHostController) {
         }
 
         composable(route = Screen.SavedGame.route) { backStack ->
-            val id = (backStack.arguments?.getString("id")?.toLong())
+            val id = backStack.arguments?.getString("id")
 
             val context = LocalContext.current
             val savedGamesDataStore = remember { context.savedNpcGamesDataStore }

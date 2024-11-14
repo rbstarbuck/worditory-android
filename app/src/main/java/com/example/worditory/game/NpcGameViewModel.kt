@@ -29,12 +29,14 @@ import java.security.InvalidParameterException
 import kotlin.random.Random
 
 internal class NpcGameViewModel(
-    val npcModel: NpcGameModel,
+    npcModel: NpcGameModel,
     context: Context,
     navController: NavController,
     player1AvatarIdFlow: Flow<Int>,
     player2AvatarIdFlow: Flow<Int>
 ): GameViewModelBase(npcModel.game, navController, player1AvatarIdFlow, player2AvatarIdFlow) {
+    private val opponent = npcModel.opponent
+
     private val nonPlayerCharacter = NonPlayerCharacter(npcModel.opponent, board)
 
     init {
@@ -42,6 +44,12 @@ internal class NpcGameViewModel(
             playNpcWord(context)
         }
     }
+
+    val npcModel: NpcGameModel
+        get() = NpcGameModel.newBuilder()
+            .setGame(model)
+            .setOpponent(opponent)
+            .build()
 
     override fun onPlayButtonClick(context: Context): Boolean {
         if (super.onPlayButtonClick(context)) {
@@ -63,7 +71,7 @@ internal class NpcGameViewModel(
         super.setBadgesOnGameWon(context)
 
         viewModelScope.launch {
-            when (npcModel.opponent.spec.overallSkillLevel) {
+            when (opponent.spec.overallSkillLevel) {
                 BEGINNER -> {
                     viewModelScope.launch { context.setWonAgainstBeginner() }
                     NewBadgesToDisplay.add(Badge.WonAgainstBeginner)
@@ -83,25 +91,7 @@ internal class NpcGameViewModel(
                 UNRECOGNIZED -> throw InvalidParameterException("Unrecognized overall skill level")
             }
 
-            context.addBeatenOpponent(npcModel.opponent.spec)
-        }
-    }
-
-    override fun onExitGame(context: Context) {
-        super.onExitGame(context)
-
-        val currentGameOverState = gameOverState
-
-        viewModelScope.launch {
-            if (currentGameOverState == GameOver.State.IN_PROGRESS) {
-                context.addSavedNpcGame(npcModel)
-            } else {
-                context.removeSavedNpcGame(id)
-                context.incrementGamesPlayed()
-                if (currentGameOverState == GameOver.State.WIN) {
-                    context.incrementGamesWon()
-                }
-            }
+            context.addBeatenOpponent(opponent.spec)
         }
     }
 
@@ -122,6 +112,22 @@ internal class NpcGameViewModel(
             AudioPlayer.wordPlayed(npcWord.tiles.size)
             board.playWord(Game.Player.PLAYER_2)
             onWordPlayed(context)
+        }
+    }
+
+    override fun saveGame(context: Context) {
+        val currentGameOverState = gameOverState
+
+        viewModelScope.launch {
+            if (currentGameOverState == GameOver.State.IN_PROGRESS) {
+                context.addSavedNpcGame(npcModel)
+            } else {
+                context.removeSavedNpcGame(id)
+                context.incrementGamesPlayed()
+                if (currentGameOverState == GameOver.State.WIN) {
+                    context.incrementGamesWon()
+                }
+            }
         }
     }
 }

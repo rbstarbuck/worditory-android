@@ -36,8 +36,8 @@ internal abstract class Screen protected constructor(val route: String) {
     }
 
     internal object SavedGame: Screen("game/{id}") {
-        fun buildRoute(id: Long): String {
-            return route.replace("{id}", id.toString())
+        fun buildRoute(id: String): String {
+            return route.replace("{id}", id)
         }
     }
 }
