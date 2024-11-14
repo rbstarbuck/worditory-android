@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 internal class NpcBoardSizeChooserViewModel(
-    private val navController: NavController,
+    navController: NavController,
     private val opponent: NpcModel,
-): BoardSizeChooserViewModelBase() {
+): BoardSizeChooserViewModelBase(navController) {
     override val enabledSizesStateFlow: StateFlow<EnabledBoardSizes> =
         MutableStateFlow(EnabledBoardSizes(true, true, true, true, true, true))
 

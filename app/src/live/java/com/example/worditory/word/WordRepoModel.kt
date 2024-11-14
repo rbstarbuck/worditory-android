@@ -1,7 +1,16 @@
 package com.example.worditory.word
 
-data class WordRepoModel(val playedWords: List<PlayedWordRepoModel>, val count: Int)
+data class WordRepoModel(
+    val playedWords: List<PlayedWordRepoModel>? = null,
+    val count: Int? = null
+)
 
-data class PlayedWordRepoModel(val timestamp: Long, val tiles: List<WordTileRepoModel>)
+data class PlayedWordRepoModel(
+    val timestamp: Long? = null,
+    val tiles: List<WordTileRepoModel>? = null
+)
 
-data class WordTileRepoModel(val index: Int, val replacementLetter: Int)
+data class WordTileRepoModel(
+    val index: Int? = null,
+    val replacementLetter: Int? = null
+)

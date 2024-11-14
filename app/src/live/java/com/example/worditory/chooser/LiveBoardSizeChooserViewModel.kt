@@ -1,12 +1,16 @@
 package com.example.worditory.chooser
 
+import androidx.navigation.NavController
 import com.example.worditory.chooser.boardsize.BoardSizeChooserViewModelBase
 import com.example.worditory.config.FeatureFlags
 
-internal class OnlineBoardSizeChooserViewModel: BoardSizeChooserViewModelBase() {
+internal class LiveBoardSizeChooserViewModel(
+    navController: NavController
+): BoardSizeChooserViewModelBase(navController) {
     override val enabledSizesStateFlow = FeatureFlags.BoardSizes.get
 
     override fun onBoardSizeClick(boardWidth: Int, boardHeight: Int) {
-        TODO("Not yet implemented")
+        val gameType = "size${boardWidth}x${boardHeight}"
+
     }
 }
