@@ -17,13 +17,9 @@ import com.example.worditory.game.gameover.GameOverViewModel
 import com.example.worditory.game.hint.HintMaker
 import com.example.worditory.game.menu.MenuViewModel
 import com.example.worditory.game.tutorial.TutorialViewModel
-import com.example.worditory.incrementGamesPlayed
-import com.example.worditory.incrementGamesWon
 import com.example.worditory.navigation.Screen
 import com.example.worditory.badge.Badge
 import com.example.worditory.badge.addDisplayedBadge
-import com.example.worditory.saved.addSavedGame
-import com.example.worditory.saved.removeSavedGame
 import com.example.worditory.setHasShownTutorial
 import com.example.worditory.setObscureWord
 import com.example.worditory.setPlayed5LetterWord
@@ -44,12 +40,12 @@ import kotlinx.coroutines.launch
 abstract class GameViewModelBase(
     model: GameModel,
     val navController: NavController,
-    playerAvatarIdFlow: Flow<Int>
+    player1AvatarIdFlow: Flow<Int>,
+    player2AvatarIdFlow: Flow<Int>
 ): ViewModel() {
     internal val id = model.id
     internal val boardWidth = model.board.width
     internal val boardHeight = model.board.height
-    internal val opponent = model.opponent
     internal val colorScheme = Tile.ColorScheme.from(model.colorScheme)
 
     private val _isPlayerTurnStateFlow = MutableStateFlow(model.isPlayerTurn)
@@ -87,8 +83,8 @@ abstract class GameViewModelBase(
     internal val scoreBoard = ScoreBoardViewModel(
         initialScoreToWin = boardWidth * boardHeight,
         currentScoreToWin = model.scoreToWin,
-        playerAvatarIdFlow,
-        MutableStateFlow(model.opponent.avatar),
+        player1AvatarIdFlow,
+        player2AvatarIdFlow,
         colorScheme
     )
 
@@ -127,7 +123,6 @@ abstract class GameViewModelBase(
         get() = GameModel.newBuilder()
             .setId(id)
             .setBoard(board.model)
-            .setOpponent(opponent)
             .setColorScheme(colorScheme.model)
             .setIsPlayerTurn(isPlayerTurn)
             .setScoreToWin(scoreBoard.scoreToWin)
@@ -152,6 +147,14 @@ abstract class GameViewModelBase(
             }
         }
         return false
+    }
+
+    internal open fun onExitGame(context: Context) {
+        navController.navigate(Screen.Main.route) {
+            popUpTo(Screen.Main.route) {
+                inclusive = true
+            }
+        }
     }
 
     protected fun onWordPlayed(context: Context) {
@@ -188,28 +191,6 @@ abstract class GameViewModelBase(
 
     internal fun onTutorial() {
         tutorial.enabled = true
-    }
-
-    internal fun onExitGame(context: Context) {
-        val currentGameOverState = gameOverState
-
-        viewModelScope.launch {
-            if (currentGameOverState == GameOver.State.IN_PROGRESS) {
-                context.addSavedGame(model)
-            } else {
-                context.removeSavedGame(id)
-                context.incrementGamesPlayed()
-                if (currentGameOverState == GameOver.State.WIN) {
-                    context.incrementGamesWon()
-                }
-            }
-        }
-
-        navController.navigate(Screen.Main.route) {
-            popUpTo(Screen.Main.route) {
-                inclusive = true
-            }
-        }
     }
 
     internal fun showTutorial(context: Context) {

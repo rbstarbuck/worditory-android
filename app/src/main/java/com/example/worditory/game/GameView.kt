@@ -57,8 +57,9 @@ internal fun GameView(
                 .background(colorResource(R.color.background)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ScoreBoardView(viewModel.scoreBoard,
-                Modifier
+            ScoreBoardView(
+                viewModel = viewModel.scoreBoard,
+                modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f))
 

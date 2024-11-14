@@ -25,8 +25,9 @@ import com.example.worditory.game.GameView
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.getPlayerAvatarId
-import com.example.worditory.saved.SavedGames
-import com.example.worditory.saved.savedGamesDataStore
+import com.example.worditory.saved.SavedNpcGames
+import com.example.worditory.saved.savedNpcGamesDataStore
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 internal fun NavigationStack(navController: NavHostController) {
@@ -99,10 +100,11 @@ internal fun NavigationStack(navController: NavHostController) {
 
             val viewModel = remember {
                 NpcGameViewModel(
-                    model = Game.newModel(width, height, opponent, Tile.ColorScheme.random()),
+                    npcModel = Game.newNpcModel(width, height, opponent, Tile.ColorScheme.random()),
                     context = context,
                     navController = navController,
-                    playerAvatarIdFlow = context.getPlayerAvatarId()
+                    player1AvatarIdFlow = context.getPlayerAvatarId(),
+                    player2AvatarIdFlow = MutableStateFlow(opponent.avatar)
                 )
             }
 
@@ -113,19 +115,20 @@ internal fun NavigationStack(navController: NavHostController) {
             val id = (backStack.arguments?.getString("id")?.toLong())
 
             val context = LocalContext.current
-            val savedGamesDataStore = remember { context.savedGamesDataStore }
+            val savedGamesDataStore = remember { context.savedNpcGamesDataStore }
             val savedGamesState = savedGamesDataStore.data.collectAsState(
-                SavedGames.newBuilder().build()
+                SavedNpcGames.newBuilder().build()
             )
-            val savedGame = savedGamesState.value.gamesList.find { it.id == id }
+            val savedNpcGame = savedGamesState.value.gamesList.find { it.game.id == id }
 
-            if (savedGame != null) {
+            if (savedNpcGame != null) {
                 val viewModel = remember {
                     NpcGameViewModel(
-                        model = savedGame,
+                        npcModel = savedNpcGame,
                         context = context,
                         navController = navController,
-                        playerAvatarIdFlow = context.getPlayerAvatarId()
+                        player1AvatarIdFlow = context.getPlayerAvatarId(),
+                        player2AvatarIdFlow = MutableStateFlow(savedNpcGame.opponent.avatar)
                     )
                 }
 

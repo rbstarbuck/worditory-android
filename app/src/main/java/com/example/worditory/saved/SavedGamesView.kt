@@ -56,8 +56,8 @@ internal fun SavedGamesView(
 ) {
     val context = LocalContext.current
 
-    val savedGamesData = remember { context.savedGamesDataStore.data }
-    val savedGamesState = savedGamesData.collectAsState(SavedGames.newBuilder().build())
+    val savedNpcGamesData = remember { context.savedNpcGamesDataStore.data }
+    val savedNpcGamesState = savedNpcGamesData.collectAsState(SavedNpcGames.newBuilder().build())
 
     BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
         val itemWidth = this.maxWidth / 2.25f
@@ -67,7 +67,7 @@ internal fun SavedGamesView(
         val closeButtonSize = min(this.maxWidth / 10f, 30.dp)
         val closeButtonOffset = this.maxWidth / -60f
 
-        if (savedGamesState.value.gamesList.isEmpty()) {
+        if (savedNpcGamesState.value.gamesList.isEmpty()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
                     imageVector = ImageVector.vectorResource(R.drawable.saved_game),
@@ -92,15 +92,15 @@ internal fun SavedGamesView(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            items(savedGamesState.value.gamesList.size) { item ->
-                val game = savedGamesState.value.gamesList.get(item)
+            items(savedNpcGamesState.value.gamesList.size) { item ->
+                val npcGame = savedNpcGamesState.value.gamesList.get(item)
                 Box(Modifier
                     .width(itemWidth)
                     .padding(padding)
-                    .aspectRatio(game.board.width.toFloat() / game.board.height.toFloat())
+                    .aspectRatio(npcGame.game.board.width.toFloat() / npcGame.game.board.height.toFloat())
                     .pointerInput(Unit) {
                         detectTapGestures(
-                            onTap = { viewModel.onSavedGameClick(game.id) }
+                            onTap = { viewModel.onSavedGameClick(npcGame.game.id) }
                         )
                     }
                 ) {
@@ -109,14 +109,17 @@ internal fun SavedGamesView(
                         .clip(RoundedCornerShape(clipRadius))
                     ) {
                         val board =
-                            BoardViewModel(game.board, Tile.ColorScheme.from(game.colorScheme))
+                            BoardViewModel(
+                                model = npcGame.game.board,
+                                colorScheme = Tile.ColorScheme.from(npcGame.game.colorScheme)
+                            )
                         val image = board.toBitmap(context, this.size)
 
                         drawImage(image)
                     }
 
                     OutlinedButton(
-                        onClick = { onClick(game.id) },
+                        onClick = { onClick(npcGame.game.id) },
                         modifier = Modifier
                             .size(closeButtonSize)
                             .offset(closeButtonOffset, closeButtonOffset),
@@ -140,7 +143,7 @@ internal fun SavedGamesView(
                     }
 
                     OutlinedButton(
-                        onClick = { viewModel.onSavedGameClick(game.id) },
+                        onClick = { viewModel.onSavedGameClick(npcGame.game.id) },
                         modifier = Modifier
                             .offset(itemWidth - avatarSize - padding, -padding)
                             .size(width = avatarSize, height = avatarSize),
@@ -162,7 +165,7 @@ internal fun SavedGamesView(
                             bottom = 0.dp
                         )
                     ) {
-                        val avatarResId = getResourceId(game.opponent.avatar)
+                        val avatarResId = getResourceId(npcGame.opponent.avatar)
                         Image(
                             imageVector = ImageVector.vectorResource(avatarResId),
                             contentDescription = stringResource(R.string.avatar)

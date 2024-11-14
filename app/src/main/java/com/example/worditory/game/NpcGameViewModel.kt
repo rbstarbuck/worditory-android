@@ -14,6 +14,10 @@ import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.INTERMEDIA
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.SUPER_ADVANCED
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.UNRECOGNIZED
 import com.example.worditory.game.npc.addBeatenOpponent
+import com.example.worditory.incrementGamesPlayed
+import com.example.worditory.incrementGamesWon
+import com.example.worditory.saved.addSavedNpcGame
+import com.example.worditory.saved.removeSavedNpcGame
 import com.example.worditory.setWonAgainsIntermediate
 import com.example.worditory.setWonAgainstAdvanced
 import com.example.worditory.setWonAgainstBeginner
@@ -25,12 +29,13 @@ import java.security.InvalidParameterException
 import kotlin.random.Random
 
 internal class NpcGameViewModel(
-    model: GameModel,
+    val npcModel: NpcGameModel,
     context: Context,
     navController: NavController,
-    playerAvatarIdFlow: Flow<Int>
-): GameViewModelBase(model, navController, playerAvatarIdFlow) {
-    private val nonPlayerCharacter = NonPlayerCharacter(model.opponent, board)
+    player1AvatarIdFlow: Flow<Int>,
+    player2AvatarIdFlow: Flow<Int>
+): GameViewModelBase(npcModel.game, navController, player1AvatarIdFlow, player2AvatarIdFlow) {
+    private val nonPlayerCharacter = NonPlayerCharacter(npcModel.opponent, board)
 
     init {
         if (!isPlayerTurn) {
@@ -58,7 +63,7 @@ internal class NpcGameViewModel(
         super.setBadgesOnGameWon(context)
 
         viewModelScope.launch {
-            when (opponent.spec.overallSkillLevel) {
+            when (npcModel.opponent.spec.overallSkillLevel) {
                 BEGINNER -> {
                     viewModelScope.launch { context.setWonAgainstBeginner() }
                     NewBadgesToDisplay.add(Badge.WonAgainstBeginner)
@@ -78,7 +83,25 @@ internal class NpcGameViewModel(
                 UNRECOGNIZED -> throw InvalidParameterException("Unrecognized overall skill level")
             }
 
-            context.addBeatenOpponent(opponent.spec)
+            context.addBeatenOpponent(npcModel.opponent.spec)
+        }
+    }
+
+    override fun onExitGame(context: Context) {
+        super.onExitGame(context)
+
+        val currentGameOverState = gameOverState
+
+        viewModelScope.launch {
+            if (currentGameOverState == GameOver.State.IN_PROGRESS) {
+                context.addSavedNpcGame(npcModel)
+            } else {
+                context.removeSavedNpcGame(id)
+                context.incrementGamesPlayed()
+                if (currentGameOverState == GameOver.State.WIN) {
+                    context.incrementGamesWon()
+                }
+            }
         }
     }
 

@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 internal class DeleteSavedGameViewModel: ViewModel() {
     internal fun deleteSavedGame(gameId: Long, context: Context) {
         viewModelScope.launch {
-            context.removeSavedGame(gameId)
+            context.removeSavedNpcGame(gameId)
         }
     }
 }
