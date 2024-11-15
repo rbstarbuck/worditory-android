@@ -138,12 +138,12 @@ internal abstract class GameViewModelBase(
             val wordString = board.word.toString()
 
             if (WordDictionary.contains(wordString)) {
+                isPlayerTurn = false
                 board.updateLettersForWord()
                 board.updateOwnershipsForWord(Game.Player.PLAYER_1)
                 board.playWord(Game.Player.PLAYER_1)
                 setBadgesOnWordPlayed(wordString, context)
                 updateScoreboard()
-                isPlayerTurn = false
                 if (gameOverState == GameOver.State.WIN) {
                     setBadgesOnGameWon(context)
                 }

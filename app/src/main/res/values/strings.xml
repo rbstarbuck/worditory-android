@@ -74,7 +74,7 @@
     <string name="delete_saved_game_question">Delete saved game?</string>
     <string name="delete">Delete</string>
     <string name="saved_games">Saved games</string>
-    <string name="no_saved_games">No saved games</string>
+    <string name="no_saved_games">No in-progress games</string>
 
     <string name="you_win">You win!</string>
     <string name="you_lose">You lose</string>
