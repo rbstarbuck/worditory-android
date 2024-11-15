@@ -148,6 +148,8 @@ internal class TutorialViewModel(
         currentScore = board.computeScore()
         viewModelScope.launch {
             delay(500)
+            board.updateLettersForWord()
+            board.updateOwnershipsForWord(Game.Player.PLAYER_1)
             board.playWord(Game.Player.PLAYER_1)
             delay(2500)
             onComplete()

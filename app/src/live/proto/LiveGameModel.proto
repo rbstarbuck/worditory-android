@@ -6,4 +6,6 @@ option java_multiple_files = true;
 
 message LiveGameModel {
   GameModel game = 1;
+  bool is_player_1 = 2;
+  int32 played_word_count = 3;
 }

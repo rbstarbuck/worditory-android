@@ -101,7 +101,6 @@ internal fun NavigationStack(navController: NavHostController) {
             val viewModel = remember {
                 NpcGameViewModel(
                     npcModel = Game.newNpcModel(width, height, opponent),
-                    context = context,
                     navController = navController,
                     player1AvatarIdFlow = context.getPlayerAvatarId(),
                     player2AvatarIdFlow = MutableStateFlow(opponent.avatar)
@@ -125,7 +124,6 @@ internal fun NavigationStack(navController: NavHostController) {
                 val viewModel = remember {
                     NpcGameViewModel(
                         npcModel = savedNpcGame,
-                        context = context,
                         navController = navController,
                         player1AvatarIdFlow = context.getPlayerAvatarId(),
                         player2AvatarIdFlow = MutableStateFlow(savedNpcGame.opponent.avatar)

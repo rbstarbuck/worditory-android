@@ -13,7 +13,7 @@ internal class LiveGame: Game() {
             colorScheme: Tile.ColorScheme = Tile.ColorScheme.random()
         ): LiveGameModel {
             val boardSize = checkNotNull(match.game.gameType).boardSize()
-            val isPlayerTurn = match.userID == match.game.player1
+            val isPlayer1 = match.userID == match.game.player1
 
             val tiles = mutableListOf<TileModel>()
             for (y in 0..<boardSize.height) {
@@ -24,7 +24,11 @@ internal class LiveGame: Game() {
                 }
 
                 for (x in 0..<boardSize.width) {
-                    val index = y * boardSize.width + x
+                    val index = if (isPlayer1) {
+                        y * boardSize.width + x
+                    } else {
+                        (boardSize.width * boardSize.height) - (y * boardSize.width + x) - 1
+                    }
                     val tile = TileModel.newBuilder()
                         .setLetter(checkNotNull(match.board.startingTiles)[index])
                         .setOwnership(ownership)
@@ -35,11 +39,13 @@ internal class LiveGame: Game() {
             }
 
             return LiveGameModel.newBuilder()
+                .setIsPlayer1(match.isPlayer1)
+                .setPlayedWordCount(0)
                 .setGame(GameModel.newBuilder()
                     .setId(match.gameId)
                     .setColorScheme(colorScheme.model)
                     .setScoreToWin(boardSize.width * boardSize.height)
-                    .setIsPlayerTurn(isPlayerTurn)
+                    .setIsPlayerTurn(isPlayer1)
                     .setBoard(BoardModel.newBuilder()
                         .setWidth(boardSize.width)
                         .setHeight(boardSize.height)

@@ -30,18 +30,16 @@ import kotlin.random.Random
 
 internal class NpcGameViewModel(
     npcModel: NpcGameModel,
-    context: Context,
     navController: NavController,
     player1AvatarIdFlow: Flow<Int>,
     player2AvatarIdFlow: Flow<Int>
 ): GameViewModelBase(npcModel.game, navController, player1AvatarIdFlow, player2AvatarIdFlow) {
     private val opponent = npcModel.opponent
-
     private val nonPlayerCharacter = NonPlayerCharacter(npcModel.opponent, board)
 
     init {
         if (!isPlayerTurn) {
-            playNpcWord(context)
+            playNpcWord()
         }
     }
 
@@ -53,9 +51,8 @@ internal class NpcGameViewModel(
 
     override fun onPlayButtonClick(context: Context): Boolean {
         if (super.onPlayButtonClick(context)) {
-            isPlayerTurn = false
             if (gameOverState == GameOver.State.IN_PROGRESS) {
-                playNpcWord(context)
+                playNpcWord()
                 return true
             }
         }
@@ -64,7 +61,7 @@ internal class NpcGameViewModel(
 
     override fun onPassTurn(context: Context) {
         super.onPassTurn(context)
-        playNpcWord(context)
+        playNpcWord()
     }
 
     override fun setBadgesOnGameWon(context: Context) {
@@ -95,7 +92,7 @@ internal class NpcGameViewModel(
         }
     }
 
-    private fun playNpcWord(context: Context) {
+    private fun playNpcWord() {
         val npcWord = nonPlayerCharacter.findWordToPlay()
 
         viewModelScope.launch {
@@ -109,9 +106,10 @@ internal class NpcGameViewModel(
                 delay(4000L)
             }
 
-            AudioPlayer.wordPlayed(npcWord.tiles.size)
+            board.updateLettersForWord()
+            board.updateOwnershipsForWord(Game.Player.PLAYER_2)
             board.playWord(Game.Player.PLAYER_2)
-            onWordPlayed(context)
+            onWordPlayed()
         }
     }
 

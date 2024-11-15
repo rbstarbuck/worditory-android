@@ -3,6 +3,7 @@ package com.example.worditory.game.board
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.ViewModel
+import com.example.worditory.audio.AudioPlayer
 import com.example.worditory.game.Game
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileModel
@@ -26,7 +27,7 @@ class BoardViewModel(
     internal val height = model.height
     internal val tiles: List<TileViewModel>
     internal val word = WordViewModel(width, height, onWordChanged)
-    private val letterBag = LetterBag()
+    internal val letterBag = LetterBag()
 
     private var currentDragPoint = Offset.Zero
 
@@ -143,14 +144,13 @@ class BoardViewModel(
     }
 
     internal fun playWord(player: Game.Player) {
-        updateOwnershipsForWord(player)
-        updateLettersForWord()
+        AudioPlayer.wordPlayed(word.model.tiles.size)
         if (!word.model.tiles.isEmpty()) {
             word.onSelectTile(word.model.tiles.first(), player)
         }
     }
 
-    private fun updateOwnershipsForWord(player: Game.Player) {
+    internal fun updateOwnershipsForWord(player: Game.Player) {
         for (tile in word.model.tiles) {
             if (tile.isUnowned) {
                 tile.ownership = when (player) {
@@ -186,7 +186,7 @@ class BoardViewModel(
         }
     }
 
-    private fun updateLettersForWord() {
+    internal fun updateLettersForWord() {
         for (tile in word.model.tiles) {
             val previousLetter = tile.letter
             val connectedTiles = connectedTiles(tile)

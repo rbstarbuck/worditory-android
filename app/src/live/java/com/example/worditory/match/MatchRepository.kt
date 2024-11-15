@@ -78,7 +78,13 @@ internal object MatchRepository {
 
             Tasks.whenAll(gameTask, boardTask)
                 .addOnSuccessListener {
-                    onSuccess(OnMatchSuccess(gameId, userId, game, board))
+                    onSuccess(OnMatchSuccess(
+                        gameId = gameId,
+                        userID = userId,
+                        isPlayer1 = true,
+                        game = game,
+                        board = board
+                    ))
                 }.addOnFailureListener {
                     onFailure(OnMatchFailure(Reason.DATABASE_WRITE_ERROR, gameId))
                 }
@@ -114,7 +120,13 @@ internal object MatchRepository {
                     .child(gameId)
                     .child(DbKey.Games.PLAYER_2)
                     .setValue(userId)
-                onSuccess(OnMatchSuccess(gameId, userId, game.copy(player2 = userId), board))
+                onSuccess(OnMatchSuccess(
+                    gameId = gameId,
+                    userID = userId,
+                    isPlayer1 = false,
+                    game = game.copy(player2 = userId),
+                    board = board
+                ))
             }
         }
     }
@@ -135,6 +147,7 @@ internal object MatchRepository {
 internal class OnMatchSuccess(
     internal val gameId: String,
     internal val userID: String,
+    internal val isPlayer1: Boolean,
     internal val game: GameRepoModel,
     internal val board: BoardRepoModel,
 )
