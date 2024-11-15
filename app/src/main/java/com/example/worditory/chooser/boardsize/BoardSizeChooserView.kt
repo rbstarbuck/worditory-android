@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,8 @@ internal fun BoardSizeChooserView(
     viewModel: BoardSizeChooserViewModelBase,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     val enabledBoardSizesState = viewModel.enabledSizesStateFlow.collectAsState()
 
     Box(Modifier.fillMaxSize().background(colorResource(R.color.background))) {
@@ -63,7 +66,7 @@ internal fun BoardSizeChooserView(
                     enabled = enabledBoardSizesState.value.size5x4,
                     modifier = Modifier.weight(1f).aspectRatio(1.25f)
                 ) {
-                    viewModel.onBoardSizeClick(boardWidth = 5, boardHeight = 4)
+                    viewModel.onBoardSizeClick(boardWidth = 5, boardHeight = 4, context)
                 }
 
                 Spacer(Modifier.weight(0.2f))
@@ -86,7 +89,7 @@ internal fun BoardSizeChooserView(
                     enabled = enabledBoardSizesState.value.size5x5,
                     modifier = Modifier.weight(1f).aspectRatio(1f)
                 ) {
-                    viewModel.onBoardSizeClick(boardWidth = 5, boardHeight = 5)
+                    viewModel.onBoardSizeClick(boardWidth = 5, boardHeight = 5, context)
                 }
             }
 
@@ -109,7 +112,7 @@ internal fun BoardSizeChooserView(
                     enabled = enabledBoardSizesState.value.size6x6,
                     modifier = Modifier.weight(1f).aspectRatio(1f)
                 ) {
-                    viewModel.onBoardSizeClick(boardWidth = 6, boardHeight = 6)
+                    viewModel.onBoardSizeClick(boardWidth = 6, boardHeight = 6, context)
                 }
 
                 Spacer(Modifier.weight(0.2f))
@@ -132,7 +135,7 @@ internal fun BoardSizeChooserView(
                     enabled = enabledBoardSizesState.value.size7x5,
                     modifier = Modifier.weight(1f).aspectRatio(1.4f)
                 ) {
-                    viewModel.onBoardSizeClick(boardWidth = 7, boardHeight = 5)
+                    viewModel.onBoardSizeClick(boardWidth = 7, boardHeight = 5, context)
                 }
             }
 
@@ -155,7 +158,7 @@ internal fun BoardSizeChooserView(
                     enabled = enabledBoardSizesState.value.size8x6,
                     modifier = Modifier.weight(1f).aspectRatio(1.3333f)
                 ) {
-                    viewModel.onBoardSizeClick(boardWidth = 8, boardHeight = 6)
+                    viewModel.onBoardSizeClick(boardWidth = 8, boardHeight = 6, context)
                 }
 
                 Spacer(Modifier.weight(0.2f))
@@ -178,7 +181,7 @@ internal fun BoardSizeChooserView(
                     enabled = enabledBoardSizesState.value.size8x8,
                     modifier = Modifier.weight(1f).aspectRatio(1f)
                 ) {
-                    viewModel.onBoardSizeClick(boardWidth = 8, boardHeight = 8)
+                    viewModel.onBoardSizeClick(boardWidth = 8, boardHeight = 8, context)
                 }
             }
 

@@ -7,7 +7,7 @@ import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.generateKey
 import kotlin.random.Random
 
-internal class Game private constructor() {
+internal open class Game protected constructor() {
     internal enum class Player {
         PLAYER_1,
         PLAYER_2
@@ -17,7 +17,7 @@ internal class Game private constructor() {
         internal fun newModel(
             boardWidth: Int,
             boardHeight: Int,
-            colorScheme: Tile.ColorScheme
+            colorScheme: Tile.ColorScheme = Tile.ColorScheme.random()
         ) = GameModel.newBuilder()
             .setId(generateKey())
             .setBoard(Board.newModel(boardWidth, boardHeight))
@@ -30,7 +30,7 @@ internal class Game private constructor() {
             boardWidth: Int,
             boardHeight: Int,
             opponent: NpcModel,
-            colorScheme: Tile.ColorScheme
+            colorScheme: Tile.ColorScheme = Tile.ColorScheme.random()
         ) = NpcGameModel.newBuilder()
             .setGame(newModel(boardWidth, boardHeight, colorScheme))
             .setOpponent(opponent)

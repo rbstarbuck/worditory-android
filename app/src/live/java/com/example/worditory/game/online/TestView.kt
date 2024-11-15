@@ -14,7 +14,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 @Composable
-internal fun LiveGameView(viewModel: LiveGameViewModel) {
+internal fun TestView(viewModel: TestViewModel) {
     val auth = Firebase.auth
     Box(
         modifier = Modifier

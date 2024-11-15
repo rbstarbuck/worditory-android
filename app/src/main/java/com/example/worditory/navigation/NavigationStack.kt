@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 internal fun NavigationStack(navController: NavHostController) {
     NavHost(navController, startDestination = Screen.Main.route) {
-        flavorStack()
+        flavorStack(navController)
 
         composable(route = Screen.Main.route) {
             val context = LocalContext.current
@@ -100,7 +100,7 @@ internal fun NavigationStack(navController: NavHostController) {
 
             val viewModel = remember {
                 NpcGameViewModel(
-                    npcModel = Game.newNpcModel(width, height, opponent, Tile.ColorScheme.random()),
+                    npcModel = Game.newNpcModel(width, height, opponent),
                     context = context,
                     navController = navController,
                     player1AvatarIdFlow = context.getPlayerAvatarId(),

@@ -10,7 +10,6 @@ internal class LiveGameViewModel(
     player1AvatarIsFlow: Flow<Int>,
     player2AvatarIdFlow: Flow<Int>
 ): GameViewModelBase(liveModel.game, navController, player1AvatarIsFlow, player2AvatarIdFlow) {
-
     override fun onPlayButtonClick(context: Context): Boolean {
 
 

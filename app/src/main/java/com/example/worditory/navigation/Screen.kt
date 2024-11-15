@@ -10,13 +10,11 @@ internal abstract class Screen protected constructor(val route: String) {
     internal object BoardSizeChooser: Screen(
         "boardSizeChooser/{avatar}/{vocab}/{offense}/{skill}"
     ) {
-        fun buildRoute(opponent: NpcModel): String {
-            return route
-                .replace("{avatar}", opponent.avatar.toString())
-                .replace("{vocab}", opponent.spec.vocabularyLevel.toString())
-                .replace("{offense}", opponent.spec.defenseOffenseLevel.toString())
-                .replace("{skill}", opponent.spec.overallSkillLevel.toString())
-        }
+        fun buildRoute(opponent: NpcModel): String = route
+            .replace("{avatar}", opponent.avatar.toString())
+            .replace("{vocab}", opponent.spec.vocabularyLevel.toString())
+            .replace("{offense}", opponent.spec.defenseOffenseLevel.toString())
+            .replace("{skill}", opponent.spec.overallSkillLevel.toString())
     }
 
     internal object Game: Screen("game/{width}/{height}/{avatar}/{vocab}/{offense}/{skill}") {
@@ -24,20 +22,16 @@ internal abstract class Screen protected constructor(val route: String) {
             width: Int,
             height: Int,
             opponent: NpcModel
-        ): String {
-            return route
-                .replace("{width}", width.toString())
-                .replace("{height}", height.toString())
-                .replace("{avatar}", opponent.avatar.toString())
-                .replace("{vocab}", opponent.spec.vocabularyLevel.toString())
-                .replace("{offense}", opponent.spec.defenseOffenseLevel.toString())
-                .replace("{skill}", opponent.spec.overallSkillLevel.toString())
-        }
+        ): String = route
+            .replace("{width}", width.toString())
+            .replace("{height}", height.toString())
+            .replace("{avatar}", opponent.avatar.toString())
+            .replace("{vocab}", opponent.spec.vocabularyLevel.toString())
+            .replace("{offense}", opponent.spec.defenseOffenseLevel.toString())
+            .replace("{skill}", opponent.spec.overallSkillLevel.toString())
     }
 
     internal object SavedGame: Screen("game/{id}") {
-        fun buildRoute(id: String): String {
-            return route.replace("{id}", id)
-        }
+        fun buildRoute(id: String): String = route.replace("{id}", id)
     }
 }

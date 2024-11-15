@@ -1,5 +1,6 @@
 package com.example.worditory.chooser.boardsize
 
+import android.content.Context
 import androidx.navigation.NavController
 import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.navigation.Screen
@@ -13,7 +14,7 @@ internal class NpcBoardSizeChooserViewModel(
     override val enabledSizesStateFlow: StateFlow<EnabledBoardSizes> =
         MutableStateFlow(EnabledBoardSizes(true, true, true, true, true, true))
 
-    override fun onBoardSizeClick(boardWidth: Int, boardHeight: Int) {
+    override fun onBoardSizeClick(boardWidth: Int, boardHeight: Int, context: Context) {
         navController.navigate(
             Screen.Game.buildRoute(boardWidth, boardHeight, opponent)
         )
