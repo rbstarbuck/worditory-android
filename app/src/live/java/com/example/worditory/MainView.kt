@@ -78,7 +78,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             SavedGamesView(
                 modifier = Modifier.fillMaxWidth(),
                 viewModel = viewModel.savedGames,
-                onClick = { gameId ->
+                onDeleteClick = { gameId ->
                     viewModel.deleteSavedGameId = gameId
                 }
             )
