@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.badge.Badge
 import com.example.worditory.badge.NewBadgesToDisplay
-import com.example.worditory.audio.AudioPlayer
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.ADVANCED
@@ -109,7 +108,8 @@ internal class NpcGameViewModel(
             board.updateLettersForWord()
             board.updateOwnershipsForWord(Game.Player.PLAYER_2)
             board.playWord(Game.Player.PLAYER_2)
-            onWordPlayed()
+            updateScoreboard()
+            isPlayerTurn = !checkForGameOver()
         }
     }
 

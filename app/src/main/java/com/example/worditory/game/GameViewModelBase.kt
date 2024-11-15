@@ -135,7 +135,6 @@ internal abstract class GameViewModelBase(
 
     internal open fun onPlayButtonClick(context: Context): Boolean {
         if (isPlayerTurn) {
-            isPlayerTurn = false
             val wordString = board.word.toString()
 
             if (WordDictionary.contains(wordString)) {
@@ -143,7 +142,8 @@ internal abstract class GameViewModelBase(
                 board.updateOwnershipsForWord(Game.Player.PLAYER_1)
                 board.playWord(Game.Player.PLAYER_1)
                 setBadgesOnWordPlayed(wordString, context)
-                onWordPlayed()
+                updateScoreboard()
+                isPlayerTurn = false
                 if (gameOverState == GameOver.State.WIN) {
                     setBadgesOnGameWon(context)
                 }
@@ -168,10 +168,9 @@ internal abstract class GameViewModelBase(
         }
     }
 
-    protected fun onWordPlayed() {
+    protected fun updateScoreboard() {
         scoreBoard.score = board.computeScore()
         scoreBoard.decrementScoreToWin()
-        isPlayerTurn = !checkForGameOver()
     }
 
     internal fun onMenuClick() {
@@ -212,7 +211,7 @@ internal abstract class GameViewModelBase(
         }
     }
 
-    private fun checkForGameOver(): Boolean {
+    protected fun checkForGameOver(): Boolean {
         val score = scoreBoard.score
         val toWin = scoreBoard.scoreToWin
         if (score.player1 >= toWin || score.player2 == 0) {

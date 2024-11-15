@@ -67,10 +67,14 @@ class BoardViewModel(
         for (i in 0..<model.tilesList.size) {
             val model = model.tilesList[i]
             val letter = model.letter.asLetter()
-            if (letter != tiles[i].letter) {
-                tiles[i].letter = letter
+            val tile = tiles[i]
+
+            if (tile.letter != letter) {
+                tile.letter = letter
             }
-            tiles[i].ownership = model.ownership
+            tile.ownership = model.ownership
+
+            letterBag.removeLetter(letter)
         }
 
         updateSuperOwnerships()

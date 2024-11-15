@@ -37,7 +37,11 @@ internal class LiveGameViewModel(
     init {
         WordRepository.listenForLatestWord(
             gameId = id,
-            onNewWord = { onNewWord(it) },
+            onNewWord = { word ->
+                if (word.index!! >= playedWordCount) {
+                    onNewWord(word)
+                }
+            },
             onError = {}
         )
     }
@@ -58,41 +62,37 @@ internal class LiveGameViewModel(
     }
 
     private fun onNewWord(word: PlayedWordRepoModel) {
-        if (word.index!! >= playedWordCount) {
-            val tiles = checkNotNull(word.tiles)
+        ++playedWordCount
+        board.word.model = WordModel()
 
-            ++playedWordCount
-            board.word.model = WordModel()
-
-            viewModelScope.launch {
-                board.word.withDrawPathTweenDuration(millis = tiles.size * 350) {
-                    for (repoTile in tiles) {
-                        val tile = board.tiles[repoTile.index!!]
-                        board.word.onSelectTile(tile, Game.Player.PLAYER_1)
-                    }
+        viewModelScope.launch {
+            board.word.withDrawPathTweenDuration(millis = word.tiles!!.size * 350) {
+                for (repoTile in word.tiles) {
+                    val tile = board.tiles[flipTileIndex(repoTile.index!!)]
+                    board.word.onSelectTile(tile, Game.Player.PLAYER_2)
                 }
 
-                for (repoTile in tiles) {
-                    val tileIndex = if (isPlayer1) {
-                        repoTile.index
-                    } else {
-                        board.width * board.height - repoTile.index!! - 1
-                    }
-                    val tile = board.tiles[repoTile.index!!]
-                    val newLetter = repoTile.newLetter!!.asLetter()
-
-                    tile.letter = newLetter
-                    board.letterBag.exchangeForLetter(
-                        oldLetter = tile.letter,
-                        newLetter = newLetter
-                    )
-                }
-
-                board.updateOwnershipsForWord(Game.Player.PLAYER_1)
-                board.playWord(Game.Player.PLAYER_1)
-                onWordPlayed()
+                delay(word.tiles.size * 350L + 1000L)
             }
 
+            for (repoTile in word.tiles) {
+                val tile = board.tiles[flipTileIndex(repoTile.index!!)]
+                val newLetter = repoTile.newLetter!!.asLetter()
+
+                board.letterBag.exchangeForLetter(
+                    oldLetter = tile.letter,
+                    newLetter = newLetter
+                )
+                tile.letter = newLetter
+            }
+
+            board.updateOwnershipsForWord(Game.Player.PLAYER_2)
+            board.playWord(Game.Player.PLAYER_2)
+            updateScoreboard()
+            isPlayerTurn = !checkForGameOver()
         }
+
     }
+
+    fun flipTileIndex(index: Int) = board.width * board.height - index - 1
 }

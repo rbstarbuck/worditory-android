@@ -40,7 +40,7 @@ internal fun NavGraphBuilder.flavorStack(navController: NavController) {
         val avatar1 = context.getPlayerAvatarId()
         val avatar2 = MutableStateFlow(0)
 
-        val viewModel = LiveGameViewModel(savedGame, navController, avatar1, avatar2)
+        val viewModel = remember { LiveGameViewModel(savedGame, navController, avatar1, avatar2) }
 
         GameView(viewModel)
     }

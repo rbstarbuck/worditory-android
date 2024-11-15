@@ -78,7 +78,7 @@ internal class LetterBag {
 
     internal fun exchangeForLetter(oldLetter: String, newLetter: String) {
         letterCounts[oldLetter] = letterCounts.getValue(oldLetter) - 1
-        letterCounts[newLetter] = letterCounts.getValue(newLetter) - 1
+        letterCounts[newLetter] = letterCounts.getValue(newLetter) + 1
 
         if (WordDictionary.isVowel(oldLetter)) --vowelsInBag else --consonantsInBag
         if (WordDictionary.isVowel(newLetter)) ++vowelsInBag else ++consonantsInBag
