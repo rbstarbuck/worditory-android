@@ -2,14 +2,19 @@ package com.example.worditory.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.worditory.R
 import com.example.worditory.getActivity
+import com.example.worditory.getPlayerAvatarId
+import com.example.worditory.user.UserRepository
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 internal class SignUpViewModel(
     private val auth: FirebaseAuth,
@@ -33,12 +38,18 @@ internal class SignUpViewModel(
         auth.createUserWithEmailAndPassword(emailStateFlow.value, passwordStateFlow.value)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
-                    val changeRequest = UserProfileChangeRequest.Builder()
-                        .setDisplayName(displayNameStateFlow.value)
-                        .build()
-                    checkNotNull(auth.currentUser)
-                        .updateProfile(changeRequest)
-                        .addOnCompleteListener(activity) { task -> onAuthenticated() }
+                    viewModelScope.launch {
+                        val avatarId = context.getPlayerAvatarId().first()
+                        val changeRequest = UserProfileChangeRequest.Builder()
+                            .setDisplayName(displayNameStateFlow.value)
+                            .build()
+                        auth.currentUser!!
+                            .updateProfile(changeRequest)
+                            .addOnCompleteListener(activity) { task ->
+                                UserRepository.saveCurrentUser(avatarId = avatarId)
+                                onAuthenticated()
+                            }
+                    }
                 } else if (task.exception is FirebaseAuthUserCollisionException){
                     errorMessage = context.getString(R.string.email_not_available)
                 } else if (task.exception is FirebaseNetworkException) {

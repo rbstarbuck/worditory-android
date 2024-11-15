@@ -1,10 +1,17 @@
 package com.example.worditory.database
 
 internal object DbKey {
+    const val USERS = "users"
     const val GAMES = "games"
     const val BOARDS = "boards"
     const val MATCHES = "matches"
     const val WORDS = "words"
+
+    internal object Users {
+        const val EMAIL = "email"
+        const val DISPLAY_NAME = "displayName"
+        const val AVATAR_ID = "avatarId"
+    }
 
     internal object Games {
         const val GAME_TYPE = "gameType"

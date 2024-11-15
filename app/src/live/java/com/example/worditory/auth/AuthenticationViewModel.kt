@@ -1,12 +1,15 @@
 package com.example.worditory.auth
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-internal class AuthenticationViewModel(private val onAuthenticated: () -> Unit): ViewModel() {
+internal class AuthenticationViewModel(
+    private val onAuthenticated: () -> Unit
+): ViewModel() {
     private val auth = Firebase.auth
 
     internal val signIn = SignInViewModel(auth, onAuthenticated)
