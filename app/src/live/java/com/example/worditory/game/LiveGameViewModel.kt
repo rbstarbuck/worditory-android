@@ -8,6 +8,7 @@ import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.saved.addSavedLiveGame
+import com.example.worditory.user.UserRepoModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -24,6 +25,7 @@ internal class LiveGameViewModel(
     private var playedWordCount = liveModel.playedWordCount
     private var isPlayer1 = liveModel.isPlayer1
     private val latestWordListener: WordRepository.LatestWordListener
+    private val opponentListener: GameRepository.UserListener
 
     private val liveModel: LiveGameModel
         get() = LiveGameModel.newBuilder()
@@ -46,6 +48,7 @@ internal class LiveGameViewModel(
         if (liveModel.opponent != null) {
             scoreBoard.scorePlayer2.avatarId.value
         }
+
         latestWordListener = WordRepository.listenForLatestWord(
             gameId = id,
             onNewWord = { word ->
@@ -53,7 +56,14 @@ internal class LiveGameViewModel(
                     onNewWord(word)
                 }
             },
-            onError = {}
+            onError = {} // TODO(handle errors)
+        )
+
+        opponentListener = GameRepository.listenForOpponent(
+            gameId = id,
+            opponent = if (isPlayer1) Game.Player.PLAYER_2 else Game.Player.PLAYER_1,
+            onOpponentChange = { onOpponentChange(it) },
+            onError = {} // TODO(handle errors)
         )
     }
 
@@ -104,9 +114,17 @@ internal class LiveGameViewModel(
         }
     }
 
+    private fun onOpponentChange(opponent: UserRepoModel) {
+        if (opponent.avatarId != null) {
+            scoreBoard.scorePlayer2.avatarId.value = opponent.avatarId
+        }
+    }
+
     override fun onExitGame(context: Context) {
         super.onExitGame(context)
-        WordRepository.removeListener(id, latestWordListener)
+
+        WordRepository.removeListener(latestWordListener)
+        GameRepository.removeListener(opponentListener)
     }
 
     fun flipTileIndex(index: Int) = board.width * board.height - index - 1

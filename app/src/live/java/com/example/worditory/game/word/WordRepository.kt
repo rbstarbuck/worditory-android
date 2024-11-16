@@ -39,7 +39,7 @@ internal object WordRepository {
         onNewWord: (PlayedWordRepoModel) -> Unit,
         onError: (OnFailure) -> Unit
     ): LatestWordListener {
-        val listener = LatestWordListener(onNewWord, onError)
+        val listener = LatestWordListener(gameId, onNewWord, onError)
 
         database
             .child(DbKey.WORDS)
@@ -50,15 +50,16 @@ internal object WordRepository {
         return listener
     }
 
-    internal fun removeListener(gameId: String, listener: LatestWordListener) {
+    internal fun removeListener(listener: LatestWordListener) {
         database
             .child(DbKey.WORDS)
-            .child(gameId)
+            .child(listener.gameId)
             .child(DbKey.Words.PLAYED_WORDS)
             .removeEventListener(listener)
     }
 
     internal class LatestWordListener(
+        internal val gameId: String,
         private val onNewWord: (PlayedWordRepoModel) -> Unit,
         private val onError: (OnFailure) -> Unit
     ): ChildEventListener {
