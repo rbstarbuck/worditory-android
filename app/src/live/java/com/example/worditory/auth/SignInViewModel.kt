@@ -2,13 +2,16 @@ package com.example.worditory.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.worditory.R
 import com.example.worditory.getActivity
+import com.example.worditory.setPlayerDisplayName
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 internal class SignInViewModel(
     private val auth: FirebaseAuth,
@@ -31,6 +34,9 @@ internal class SignInViewModel(
         auth.signInWithEmailAndPassword(emailStateFlow.value, passwordStateFlow.value)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
+                    viewModelScope.launch {
+                        context.setPlayerDisplayName(auth.currentUser!!.displayName!!)
+                    }
                     onAuthenticated()
                 } else if (task.exception is FirebaseAuthInvalidCredentialsException) {
                     errorMessage = context.getString(R.string.incorrect_email_or_password)
