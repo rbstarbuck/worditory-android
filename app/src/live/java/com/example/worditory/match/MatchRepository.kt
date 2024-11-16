@@ -9,6 +9,7 @@ import com.example.worditory.game.GameRepoModel
 import com.example.worditory.game.board.LetterBag
 import com.example.worditory.game.board.tile.asCharCode
 import com.example.worditory.match.OnMatchFailure.Reason
+import com.example.worditory.user.UserRepoModel
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -44,7 +45,7 @@ internal object MatchRepository {
                     createGame(gameId, gameType, onSuccess, onFailure)
                     currentData.value = MatchRepoModel(gameId, userId)
                 } else {
-                    loadGame(checkNotNull(match.gameId), onSuccess, onFailure)
+                    loadGame(match.gameId!!, match.userId!!, onSuccess, onFailure)
                     currentData.value = MatchRepoModel("", "")
                 }
 
@@ -83,7 +84,8 @@ internal object MatchRepository {
                         userID = userId,
                         isPlayer1 = true,
                         game = game,
-                        board = board
+                        board = board,
+                        opponent = null
                     ))
                 }.addOnFailureListener {
                     onFailure(OnMatchFailure(Reason.DATABASE_WRITE_ERROR, gameId))
@@ -93,18 +95,23 @@ internal object MatchRepository {
 
     private fun loadGame(
         gameId: String,
+        opponentUserId: String,
         onSuccess: (OnMatchSuccess) -> Unit,
         onFailure: (OnMatchFailure) -> Unit
     ) {
         val gameTask = database.child(DbKey.GAMES).child(gameId).get()
         val boardTask = database.child(DbKey.BOARDS).child(gameId).get()
+        val opponentTask = database.child(DbKey.USERS).child(opponentUserId).get()
 
-        Tasks.whenAllComplete(gameTask, boardTask).addOnCompleteListener { taskList ->
+        Tasks.whenAllComplete(gameTask, boardTask, opponentTask).addOnCompleteListener { taskList ->
             val gameSnapshot = taskList.result[0].result as DataSnapshot
             val game = gameSnapshot.getValue(GameRepoModel::class.java)
 
             val boardSnapshot = taskList.result[1].result as DataSnapshot
             val board = boardSnapshot.getValue(BoardRepoModel::class.java)
+
+            val opponentSnapshot = taskList.result[2].result as DataSnapshot
+            val opponent = opponentSnapshot.getValue(UserRepoModel::class.java)
 
             val userId = auth.currentUser?.uid
 
@@ -125,7 +132,8 @@ internal object MatchRepository {
                     userID = userId,
                     isPlayer1 = false,
                     game = game.copy(player2 = userId),
-                    board = board
+                    board = board,
+                    opponent = opponent
                 ))
             }
         }
@@ -150,6 +158,7 @@ internal class OnMatchSuccess(
     internal val isPlayer1: Boolean,
     internal val game: GameRepoModel,
     internal val board: BoardRepoModel,
+    internal val opponent: UserRepoModel?
 )
 
 internal class OnMatchFailure(

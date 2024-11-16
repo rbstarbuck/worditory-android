@@ -12,7 +12,9 @@ import com.example.worditory.game.LiveGameViewModel
 import com.example.worditory.game.online.TestView
 import com.example.worditory.game.online.TestViewModel
 import com.example.worditory.getPlayerAvatarId
+import com.example.worditory.mutableStateIn
 import com.example.worditory.saved.savedLiveGamesDataStore
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -37,10 +39,13 @@ internal fun NavGraphBuilder.flavorStack(navController: NavController) {
             savedLiveGames.first().gamesList.filter { it.game.id == gameId }.first()
         }
 
-        val avatar1 = context.getPlayerAvatarId()
-        val avatar2 = MutableStateFlow(0)
-
-        val viewModel = remember { LiveGameViewModel(savedGame, navController, avatar1, avatar2) }
+        val viewModel = remember {
+            LiveGameViewModel(
+                liveModel = savedGame,
+                navController = navController,
+                context = context
+            )
+        }
 
         GameView(viewModel)
     }

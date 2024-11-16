@@ -22,11 +22,12 @@ import com.example.worditory.chooser.npc.NpcChooserViewModel
 import com.example.worditory.game.Game
 import com.example.worditory.game.NpcGameViewModel
 import com.example.worditory.game.GameView
-import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.npc.NpcModel
 import com.example.worditory.getPlayerAvatarId
+import com.example.worditory.mutableStateIn
 import com.example.worditory.saved.SavedNpcGames
 import com.example.worditory.saved.savedNpcGamesDataStore
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -102,8 +103,7 @@ internal fun NavigationStack(navController: NavHostController) {
                 NpcGameViewModel(
                     npcModel = Game.newNpcModel(width, height, opponent),
                     navController = navController,
-                    player1AvatarIdFlow = context.getPlayerAvatarId(),
-                    player2AvatarIdFlow = MutableStateFlow(opponent.avatar)
+                    context = context
                 )
             }
 
@@ -125,8 +125,7 @@ internal fun NavigationStack(navController: NavHostController) {
                     NpcGameViewModel(
                         npcModel = savedNpcGame,
                         navController = navController,
-                        player1AvatarIdFlow = context.getPlayerAvatarId(),
-                        player2AvatarIdFlow = MutableStateFlow(savedNpcGame.opponent.avatar)
+                        context = context
                     )
                 }
 

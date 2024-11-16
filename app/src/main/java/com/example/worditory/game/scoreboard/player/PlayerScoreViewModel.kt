@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 internal class PlayerScoreViewModel(
     internal val scoreToWinStateFlow: StateFlow<Int>,
-    internal val avatarId: Flow<Int>,
+    internal val avatarId: MutableStateFlow<Int>,
     internal val colorScheme: Tile.ColorScheme.Player,
     internal val isPlayer1: Boolean
 ) : ViewModel() {

@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 class ScoreBoardViewModel(
     initialScoreToWin: Int,
     currentScoreToWin: Int,
-    avatarIdPlayer1: Flow<Int>,
-    avatarIdPlayer2: Flow<Int>,
+    avatarIdPlayer1: MutableStateFlow<Int>,
+    avatarIdPlayer2: MutableStateFlow<Int>,
     colorScheme: Tile.ColorScheme
 ): ViewModel() {
     private val _scoreToWinStateFlow = MutableStateFlow(currentScoreToWin)

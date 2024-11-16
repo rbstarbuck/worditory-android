@@ -23,7 +23,6 @@ internal class LiveBoardSizeChooserViewModel(
 
     override fun onBoardSizeClick(boardWidth: Int, boardHeight: Int, context: Context) {
         val gameType = "size${boardWidth}x${boardHeight}"
-        val savedLiveGamesData = context.savedLiveGamesDataStore.data
 
         MatchRepository.makeMatch(
             gameType = gameType,

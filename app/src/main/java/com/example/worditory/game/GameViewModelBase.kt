@@ -20,6 +20,8 @@ import com.example.worditory.game.tutorial.TutorialViewModel
 import com.example.worditory.navigation.Screen
 import com.example.worditory.badge.Badge
 import com.example.worditory.badge.addDisplayedBadge
+import com.example.worditory.getPlayerAvatarId
+import com.example.worditory.mutableStateIn
 import com.example.worditory.setHasShownTutorial
 import com.example.worditory.setObscureWord
 import com.example.worditory.setPlayed5LetterWord
@@ -32,7 +34,6 @@ import com.example.worditory.setWonLightning
 import com.example.worditory.setWonRapid
 import com.example.worditory.setZWord
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -40,8 +41,8 @@ import kotlinx.coroutines.launch
 internal abstract class GameViewModelBase(
     model: GameModel,
     val navController: NavController,
-    player1AvatarIdFlow: Flow<Int>,
-    player2AvatarIdFlow: Flow<Int>
+    context: Context,
+    avatarIdPlayer2: Int
 ): ViewModel() {
     internal val id = model.id
     internal val boardWidth = model.board.width
@@ -83,8 +84,8 @@ internal abstract class GameViewModelBase(
     internal val scoreBoard = ScoreBoardViewModel(
         initialScoreToWin = boardWidth * boardHeight,
         currentScoreToWin = model.scoreToWin,
-        player1AvatarIdFlow,
-        player2AvatarIdFlow,
+        context.getPlayerAvatarId().mutableStateIn(viewModelScope, 0),
+        MutableStateFlow(avatarIdPlayer2),
         colorScheme
     )
 

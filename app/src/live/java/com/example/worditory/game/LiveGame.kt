@@ -15,6 +15,13 @@ internal class LiveGame: Game() {
             val boardSize = checkNotNull(match.game.gameType).boardSize()
             val isPlayer1 = match.userID == match.game.player1
 
+            val opponent = if (match.opponent != null) {
+                OpponentModel.newBuilder()
+                    .setDisplayName(match.opponent.displayName)
+                    .setAvatarId(match.opponent.avatarId!!)
+                    .build()
+            } else null
+
             val tiles = mutableListOf<TileModel>()
             for (y in 0..<boardSize.height) {
                 val ownership = when (y) {
@@ -38,7 +45,7 @@ internal class LiveGame: Game() {
                 }
             }
 
-            return LiveGameModel.newBuilder()
+            val builder = LiveGameModel.newBuilder()
                 .setIsPlayer1(match.isPlayer1)
                 .setPlayedWordCount(0)
                 .setGame(GameModel.newBuilder()
@@ -52,7 +59,13 @@ internal class LiveGame: Game() {
                         .addAllTiles(tiles)
                         .build()
                     )
-                ).build()
+                )
+
+            if (opponent != null) {
+                builder.setOpponent(opponent)
+            }
+
+            return builder.build()
         }
     }
 }

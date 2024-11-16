@@ -10,14 +10,19 @@ import com.example.worditory.game.word.WordRepository
 import com.example.worditory.saved.addSavedLiveGame
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 internal class LiveGameViewModel(
     liveModel: LiveGameModel,
     navController: NavController,
-    player1AvatarIsFlow: Flow<Int>,
-    player2AvatarIdFlow: Flow<Int>
-): GameViewModelBase(liveModel.game, navController, player1AvatarIsFlow, player2AvatarIdFlow) {
+    context: Context
+): GameViewModelBase(
+    model = liveModel.game,
+    navController = navController,
+    context = context,
+    avatarIdPlayer2 = liveModel.opponent?.avatarId ?: 0
+) {
     private var playedWordCount = liveModel.playedWordCount
     private var isPlayer1 = liveModel.isPlayer1
 
@@ -25,6 +30,10 @@ internal class LiveGameViewModel(
         get() = LiveGameModel.newBuilder()
             .setIsPlayer1(isPlayer1)
             .setPlayedWordCount(playedWordCount)
+            .setOpponent(OpponentModel.newBuilder()
+                .setDisplayName("") // TODO(handle display name)
+                .setAvatarId(scoreBoard.scorePlayer2.avatarId.value)
+            )
             .setGame(GameModel.newBuilder()
                 .setId(id)
                 .setIsPlayerTurn(isPlayerTurn)
@@ -35,6 +44,9 @@ internal class LiveGameViewModel(
             ).build()
 
     init {
+        if (liveModel.opponent != null) {
+            scoreBoard.scorePlayer2.avatarId.value
+        }
         WordRepository.listenForLatestWord(
             gameId = id,
             onNewWord = { word ->
