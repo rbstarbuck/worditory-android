@@ -30,18 +30,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.example.worditory.R
-import com.example.worditory.game.NpcGameModel
+import com.example.worditory.game.GameModel
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.toBitmap
-import com.example.worditory.resourceid.getResourceId
 
 @Composable
-internal fun SavedNpcGameRowItemView(
-    npcGame: NpcGameModel,
+internal fun SavedGameRowItemView(
+    game: GameModel,
     rowWidth: Dp,
+    avatarResId: Int,
+    modifier: Modifier = Modifier,
     onSavedGameClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: (() -> Unit)? = null
 ) {
     val context = LocalContext.current
 
@@ -52,10 +53,10 @@ internal fun SavedNpcGameRowItemView(
     val closeButtonSize = min(rowWidth / 10f, 30.dp)
     val closeButtonOffset = rowWidth / -60f
 
-    Box(Modifier
+    Box(modifier
         .width(itemWidth)
         .padding(padding)
-        .aspectRatio(npcGame.game.board.width.toFloat() / npcGame.game.board.height.toFloat())
+        .aspectRatio(game.board.width.toFloat() / game.board.height.toFloat())
         .pointerInput(Unit) {
             detectTapGestures(
                 onTap = { onSavedGameClick() }
@@ -68,36 +69,38 @@ internal fun SavedNpcGameRowItemView(
         ) {
             val board =
                 BoardViewModel(
-                    model = npcGame.game.board,
-                    colorScheme = Tile.ColorScheme.from(npcGame.game.colorScheme)
+                    model = game.board,
+                    colorScheme = Tile.ColorScheme.from(game.colorScheme)
                 )
             val image = board.toBitmap(context, this.size)
 
             drawImage(image)
         }
 
-        OutlinedButton(
-            onClick = { onDeleteClick() },
-            modifier = Modifier
-                .size(closeButtonSize)
-                .offset(closeButtonOffset, closeButtonOffset),
-            shape = CircleShape,
-            colors = ButtonColors(
-                containerColor = colorResource(R.color.close_button_background),
-                contentColor = Color.White,
-                disabledContainerColor = Color.White,
-                disabledContentColor = Color.White
-            ),
-            border = BorderStroke(
-                width = 1.dp,
-                color = colorResource(R.color.chooser_grid_cell_border)
-            ),
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Image(
-                imageVector = ImageVector.vectorResource(R.drawable.close_button),
-                contentDescription = stringResource(R.string.delete_saved_game)
-            )
+        if (onDeleteClick != null) {
+            OutlinedButton(
+                onClick = { onDeleteClick() },
+                modifier = Modifier
+                    .size(closeButtonSize)
+                    .offset(closeButtonOffset, closeButtonOffset),
+                shape = CircleShape,
+                colors = ButtonColors(
+                    containerColor = colorResource(R.color.close_button_background),
+                    contentColor = Color.White,
+                    disabledContainerColor = Color.White,
+                    disabledContentColor = Color.White
+                ),
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = colorResource(R.color.chooser_grid_cell_border)
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.close_button),
+                    contentDescription = stringResource(R.string.delete_saved_game)
+                )
+            }
         }
 
         OutlinedButton(
@@ -123,7 +126,6 @@ internal fun SavedNpcGameRowItemView(
                 bottom = 0.dp
             )
         ) {
-            val avatarResId = getResourceId(npcGame.opponent.avatar)
             Image(
                 imageVector = ImageVector.vectorResource(avatarResId),
                 contentDescription = stringResource(R.string.avatar)

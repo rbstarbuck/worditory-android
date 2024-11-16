@@ -38,7 +38,7 @@ suspend fun Context.addSavedLiveGame(liveGame: LiveGameModel) {
     savedLiveGamesDataStore.updateData { savedGames ->
         SavedLiveGames.newBuilder()
             .addGames(liveGame)
-            .addAllGames(savedGames.gamesList.filter { it.game.id == liveGame.game.id })
+            .addAllGames(savedGames.gamesList.filter { it.game.id != liveGame.game.id })
             .build()
     }
 }

@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
+import com.example.worditory.resourceid.getResourceId
 
 @Composable
 internal fun SavedGamesView(
@@ -68,11 +69,13 @@ internal fun SavedGamesView(
             items(savedNpcGamesState.value.gamesList.size) { item ->
                 val npcGame = savedNpcGamesState.value.gamesList.get(item)
 
-                SavedNpcGameRowItemView(
-                    npcGame = npcGame,
+                SavedGameRowItemView(
+                    game = npcGame.game,
                     rowWidth = width,
+                    avatarResId = getResourceId(npcGame.opponent.avatar),
+                    modifier = Modifier.animateItem(),
                     onSavedGameClick = { viewModel.onSavedGameClick(npcGame.game.id) },
-                    onDeleteClick = { onDeleteClick(npcGame.game.id) }
+                    onDeleteClick = { onDeleteClick?.invoke(npcGame.game.id) }
                 )
             }
         }

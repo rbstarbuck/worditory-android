@@ -5,9 +5,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.game.board.tile.asLetter
 import com.example.worditory.game.board.word.WordModel
+import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
+import com.example.worditory.incrementGamesPlayed
+import com.example.worditory.incrementGamesWon
 import com.example.worditory.saved.addSavedLiveGame
+import com.example.worditory.saved.removeSavedLiveGame
 import com.example.worditory.user.UserRepoModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,6 +28,7 @@ internal class LiveGameViewModel(
 ) {
     private var playedWordCount = liveModel.playedWordCount
     private var isPlayer1 = liveModel.isPlayer1
+
     private val latestWordListener: WordRepository.LatestWordListener
     private val opponentListener: GameRepository.UserListener
 
@@ -79,7 +84,19 @@ internal class LiveGameViewModel(
     }
 
     override fun saveGame(context: Context) {
-        viewModelScope.launch { context.addSavedLiveGame(liveModel) }
+        val currentGameOverState = gameOverState
+
+        viewModelScope.launch {
+            if (currentGameOverState == GameOver.State.IN_PROGRESS) {
+                context.addSavedLiveGame(liveModel)
+            } else {
+                context.removeSavedLiveGame(id)
+                context.incrementGamesPlayed()
+                if (currentGameOverState == GameOver.State.WIN) {
+                    context.incrementGamesWon()
+                }
+            }
+        }
     }
 
     private fun onNewWord(word: PlayedWordRepoModel) {

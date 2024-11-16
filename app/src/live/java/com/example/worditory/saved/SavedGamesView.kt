@@ -25,12 +25,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
+import com.example.worditory.game.LiveGameModel
+import com.example.worditory.game.NpcGameModel
+import com.example.worditory.resourceid.getResourceId
 
 @Composable
 internal fun SavedGamesView(
     viewModel: SavedGamesViewModel,
     modifier: Modifier = Modifier,
-    onDeleteClick: (gameId: String) -> Unit
+    onDeleteClick: ((gameId: String) -> Unit)? = null
 ) {
     val context = LocalContext.current
 
@@ -40,10 +43,12 @@ internal fun SavedGamesView(
     val savedLiveGamesData = remember { context.savedLiveGamesDataStore.data }
     val savedLiveGamesState = savedLiveGamesData.collectAsState(SavedLiveGames.newBuilder().build())
 
+    val savedGames = savedLiveGamesState.value.gamesList + savedNpcGamesState.value.gamesList
+
     BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
         val width = this.maxWidth
 
-        if (savedNpcGamesState.value.gamesList.isEmpty()) {
+        if (savedGames.isEmpty()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
                     imageVector = ImageVector.vectorResource(R.drawable.saved_game),
@@ -68,15 +73,27 @@ internal fun SavedGamesView(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            items(savedNpcGamesState.value.gamesList.size) { item ->
-                val npcGame = savedNpcGamesState.value.gamesList.get(item)
+            items(savedGames.size) { item ->
+                val anyGame = savedGames[item]
 
-                SavedNpcGameRowItemView(
-                    npcGame = npcGame,
-                    rowWidth = width,
-                    onSavedGameClick = { viewModel.onSavedGameClick(npcGame.game.id) },
-                    onDeleteClick = { onDeleteClick(npcGame.game.id) }
-                )
+                if (anyGame is LiveGameModel) {
+                    SavedGameRowItemView(
+                        game = anyGame.game,
+                        rowWidth = width,
+                        avatarResId = getResourceId(anyGame.opponent.avatarId),
+                        modifier = Modifier.animateItem(),
+                        onSavedGameClick = { viewModel.onSavedLiveGameClick(anyGame.game.id) }
+                    )
+                } else if (anyGame is NpcGameModel){
+                    SavedGameRowItemView(
+                        game = anyGame.game,
+                        rowWidth = width,
+                        avatarResId = getResourceId(anyGame.opponent.avatar),
+                        modifier = Modifier.animateItem(),
+                        onSavedGameClick = { viewModel.onSavedNpcGameClick(anyGame.game.id) },
+                        onDeleteClick = { onDeleteClick?.invoke(anyGame.game.id) }
+                    )
+                }
             }
         }
     }
