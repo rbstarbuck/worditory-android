@@ -63,6 +63,20 @@
     <string name="hard">Hard</string>
     <string name="opponent_beaten">Opponent beaten</string>
 
+    <string name="you">You</string>
+    <string name="npc_display_name_1">Ted</string>
+    <string name="npc_display_name_2">Bubbles</string>
+    <string name="npc_display_name_3">Rocky</string>
+    <string name="npc_display_name_4">Buggy</string>
+    <string name="npc_display_name_5">Waddle</string>
+    <string name="npc_display_name_6">Moolissa</string>
+    <string name="npc_display_name_7">Flash</string>
+    <string name="npc_display_name_8">Hooty</string>
+    <string name="npc_display_name_9">Roger</string>
+    <string name="npc_display_name_10">Dumbo</string>
+    <string name="npc_display_name_11">Koko</string>
+    <string name="npc_display_name_12">Apollo</string>
+
     <string name="board_size">Board size</string>
     <string name="lightning">Lightning</string>
     <string name="rapid">Rapid</string>

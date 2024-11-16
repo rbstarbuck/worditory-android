@@ -21,7 +21,9 @@ import com.example.worditory.navigation.Screen
 import com.example.worditory.badge.Badge
 import com.example.worditory.badge.addDisplayedBadge
 import com.example.worditory.getPlayerAvatarId
+import com.example.worditory.getPlayerDisplayName
 import com.example.worditory.mutableStateIn
+import com.example.worditory.R
 import com.example.worditory.setHasShownTutorial
 import com.example.worditory.setObscureWord
 import com.example.worditory.setPlayed5LetterWord
@@ -42,7 +44,8 @@ internal abstract class GameViewModelBase(
     model: GameModel,
     val navController: NavController,
     context: Context,
-    avatarIdPlayer2: Int
+    avatarIdPlayer2: Int,
+    displayNamePlayer2: String
 ): ViewModel() {
     internal val id = model.id
     internal val boardWidth = model.board.width
@@ -84,9 +87,13 @@ internal abstract class GameViewModelBase(
     internal val scoreBoard = ScoreBoardViewModel(
         initialScoreToWin = boardWidth * boardHeight,
         currentScoreToWin = model.scoreToWin,
-        context.getPlayerAvatarId().mutableStateIn(viewModelScope, 0),
-        MutableStateFlow(avatarIdPlayer2),
-        colorScheme
+        avatarIdPlayer1 = context.getPlayerAvatarId().mutableStateIn(viewModelScope, 0),
+        avatarIdPlayer2 = MutableStateFlow(avatarIdPlayer2),
+        displayNamePlayer1 = context
+            .getPlayerDisplayName()
+            .mutableStateIn(viewModelScope, context.getString(R.string.you)),
+        displayNamePlayer2 = MutableStateFlow(displayNamePlayer2),
+        colorScheme = colorScheme
     )
 
     internal val board = BoardViewModel(

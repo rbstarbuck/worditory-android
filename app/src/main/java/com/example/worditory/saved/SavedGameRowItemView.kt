@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 import com.example.worditory.game.GameModel
 import com.example.worditory.game.board.BoardViewModel
@@ -40,6 +42,7 @@ internal fun SavedGameRowItemView(
     game: GameModel,
     rowWidth: Dp,
     avatarResId: Int,
+    displayName: String = "",
     modifier: Modifier = Modifier,
     onSavedGameClick: () -> Unit,
     onDeleteClick: (() -> Unit)? = null
@@ -76,6 +79,12 @@ internal fun SavedGameRowItemView(
 
             drawImage(image)
         }
+
+        Text(
+            text = displayName,
+            modifier = Modifier.padding(start = 5.dp),
+            fontSize = 12.sp
+        )
 
         if (onDeleteClick != null) {
             OutlinedButton(

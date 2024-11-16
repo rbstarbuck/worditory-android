@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import com.example.worditory.R
 
 internal val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -19,6 +20,17 @@ internal fun Context.getPlayerAvatarId(): Flow<Int> =
 internal suspend fun Context.setPlayerAvatarId(avatarId: Int) {
     dataStore.edit { settings ->
         settings[DataStoreKey.PlayerAvatarId] = avatarId
+    }
+}
+
+internal fun Context.getPlayerDisplayName(): Flow<String> =
+    dataStore.data.map { preferences ->
+        preferences[DataStoreKey.PlayerDisplayName] ?: getString(R.string.you)
+    }
+
+internal suspend fun Context.setPlayerDisplayName(displayName: String) {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.PlayerDisplayName] = displayName
     }
 }
 
@@ -197,6 +209,7 @@ internal suspend fun Context.setPlayed8LetterWord(word: String) {
 internal class DataStoreKey private constructor() {
     companion object {
         internal val PlayerAvatarId = intPreferencesKey("playerAvatar")
+        internal val PlayerDisplayName = stringPreferencesKey("playerDisplayName")
         internal val GamesPlayed = intPreferencesKey("gamesPlayed")
         internal val GamesWon = intPreferencesKey("gamesWon")
         internal val HasShownTutorial = booleanPreferencesKey("hasShowTutorial")

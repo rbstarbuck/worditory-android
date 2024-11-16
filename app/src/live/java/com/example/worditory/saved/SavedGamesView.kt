@@ -28,6 +28,7 @@ import com.example.worditory.R
 import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.NpcGameModel
 import com.example.worditory.resourceid.getResourceId
+import com.google.protobuf.any
 
 @Composable
 internal fun SavedGamesView(
@@ -81,6 +82,11 @@ internal fun SavedGamesView(
                         game = anyGame.game,
                         rowWidth = width,
                         avatarResId = getResourceId(anyGame.opponent.avatarId),
+                        displayName = if (anyGame.opponent.displayName == "") {
+                            stringResource(R.string.waiting)
+                        } else {
+                            anyGame.opponent.displayName
+                        },
                         modifier = Modifier.animateItem(),
                         onSavedGameClick = { viewModel.onSavedLiveGameClick(anyGame.game.id) }
                     )

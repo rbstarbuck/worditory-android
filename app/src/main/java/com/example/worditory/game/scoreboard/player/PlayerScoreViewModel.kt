@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 internal class PlayerScoreViewModel(
     internal val scoreToWinStateFlow: StateFlow<Int>,
     internal val avatarId: MutableStateFlow<Int>,
+    internal val displayName: MutableStateFlow<String>,
     internal val colorScheme: Tile.ColorScheme.Player,
     internal val isPlayer1: Boolean
 ) : ViewModel() {
@@ -30,9 +31,4 @@ internal class PlayerScoreViewModel(
 
     private val _previousScoreStateFlow = MutableStateFlow(0)
     internal val previousScoreStateFlow = _previousScoreStateFlow.asStateFlow()
-    internal var previousScore: Int
-        get() = previousScoreStateFlow.value
-        set(value) {
-            _previousScoreStateFlow.value = value
-        }
 }

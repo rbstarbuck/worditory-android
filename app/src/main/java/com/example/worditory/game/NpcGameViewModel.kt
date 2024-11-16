@@ -13,10 +13,8 @@ import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.INTERMEDIA
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.SUPER_ADVANCED
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.UNRECOGNIZED
 import com.example.worditory.game.npc.addBeatenOpponent
-import com.example.worditory.getPlayerAvatarId
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
-import com.example.worditory.mutableStateIn
 import com.example.worditory.saved.addSavedNpcGame
 import com.example.worditory.saved.removeSavedNpcGame
 import com.example.worditory.setWonAgainsIntermediate
@@ -24,8 +22,6 @@ import com.example.worditory.setWonAgainstAdvanced
 import com.example.worditory.setWonAgainstBeginner
 import com.example.worditory.setWonAgainstSuperAdvanced
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.security.InvalidParameterException
 import kotlin.random.Random
@@ -38,7 +34,10 @@ internal class NpcGameViewModel(
     model = npcModel.game,
     navController = navController,
     context = context,
-    avatarIdPlayer2 = npcModel.opponent.avatar
+    avatarIdPlayer2 = npcModel.opponent.avatar,
+    displayNamePlayer2 = context.getString(
+        NonPlayerCharacter.avatarIdToDisplayNameResId(npcModel.opponent.avatar)
+    )
 ) {
     private val opponent = npcModel.opponent
     private val nonPlayerCharacter = NonPlayerCharacter(npcModel.opponent, board)

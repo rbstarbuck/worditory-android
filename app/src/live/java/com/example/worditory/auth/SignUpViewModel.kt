@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.worditory.R
 import com.example.worditory.getActivity
 import com.example.worditory.getPlayerAvatarId
+import com.example.worditory.setPlayerDisplayName
 import com.example.worditory.user.UserRepository
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,9 +42,12 @@ internal class SignUpViewModel(
                 if (task.isSuccessful) {
                     viewModelScope.launch {
                         val avatarId = context.getPlayerAvatarId().first()
+
+                        context.setPlayerDisplayName(displayNameStateFlow.value)
                         val changeRequest = UserProfileChangeRequest.Builder()
                             .setDisplayName(displayNameStateFlow.value)
                             .build()
+
                         auth.currentUser!!
                             .updateProfile(changeRequest)
                             .addOnCompleteListener(activity) { task ->
@@ -50,6 +55,8 @@ internal class SignUpViewModel(
                                 onAuthenticated()
                             }
                     }
+                } else if (task.exception is FirebaseAuthWeakPasswordException) {
+                    errorMessage = context.getString(R.string.weak_password)
                 } else if (task.exception is FirebaseAuthUserCollisionException){
                     errorMessage = context.getString(R.string.email_not_available)
                 } else if (task.exception is FirebaseNetworkException) {

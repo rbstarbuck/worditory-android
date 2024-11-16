@@ -1,6 +1,7 @@
 package com.example.worditory.game
 
 import android.content.Context
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.game.board.tile.asLetter
@@ -10,6 +11,7 @@ import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
+import com.example.worditory.R
 import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.saved.removeSavedLiveGame
 import com.example.worditory.user.UserRepoModel
@@ -24,7 +26,12 @@ internal class LiveGameViewModel(
     model = liveModel.game,
     navController = navController,
     context = context,
-    avatarIdPlayer2 = liveModel.opponent?.avatarId ?: 0
+    avatarIdPlayer2 = liveModel.opponent.avatarId,
+    displayNamePlayer2 = if (liveModel.opponent.displayName == "") {
+        context.getString(R.string.waiting)
+    } else {
+        liveModel.opponent.displayName
+    }
 ) {
     private var playedWordCount = liveModel.playedWordCount
     private var isPlayer1 = liveModel.isPlayer1
@@ -37,7 +44,7 @@ internal class LiveGameViewModel(
             .setIsPlayer1(isPlayer1)
             .setPlayedWordCount(playedWordCount)
             .setOpponent(OpponentModel.newBuilder()
-                .setDisplayName("") // TODO(handle display name)
+                .setDisplayName(scoreBoard.scorePlayer2.displayName.value)
                 .setAvatarId(scoreBoard.scorePlayer2.avatarId.value)
             )
             .setGame(GameModel.newBuilder()
@@ -134,6 +141,9 @@ internal class LiveGameViewModel(
     private fun onOpponentChange(opponent: UserRepoModel) {
         if (opponent.avatarId != null) {
             scoreBoard.scorePlayer2.avatarId.value = opponent.avatarId
+        }
+        if (opponent.displayName != null) {
+            scoreBoard.scorePlayer2.displayName.value = opponent.displayName
         }
     }
 

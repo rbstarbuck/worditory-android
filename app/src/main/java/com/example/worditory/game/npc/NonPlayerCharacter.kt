@@ -5,6 +5,7 @@ import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.TileViewModel
 import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.dict.WordDictionary
+import com.example.worditory.R
 import java.security.InvalidParameterException
 
 internal class NonPlayerCharacter(
@@ -178,6 +179,24 @@ internal class NonPlayerCharacter(
         board.adjacentTiles(tile).all {
             it.isOwnedBy(player) || tilesInWord.contains(it)
         }
+
+    companion object {
+        internal fun avatarIdToDisplayNameResId(avatarId: Int) = when(avatarId) {
+            31 -> R.string.npc_display_name_1
+            32 -> R.string.npc_display_name_2
+            33 -> R.string.npc_display_name_3
+            34 -> R.string.npc_display_name_4
+            35 -> R.string.npc_display_name_5
+            36 -> R.string.npc_display_name_6
+            37 -> R.string.npc_display_name_7
+            38 -> R.string.npc_display_name_8
+            39 -> R.string.npc_display_name_9
+            40 -> R.string.npc_display_name_10
+            41 -> R.string.npc_display_name_11
+            42 -> R.string.npc_display_name_12
+            else -> throw InvalidParameterException("Unrecognized NPC avatar ID")
+        }
+    }
 
     private data class WordScore(
         val word: WordModel,

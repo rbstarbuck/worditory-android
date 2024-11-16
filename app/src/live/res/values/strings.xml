@@ -12,8 +12,11 @@
     <string name="sign_up">Sign up</string>
     <string name="no_account">No account?</string>
     <string name="have_an_account">Have an account?</string>
+    <string name="weak_password">Password must be at least 6 characters.</string>
     <string name="email_not_available">Email address has already been registered.</string>
     <string name="incorrect_email_or_password">Incorrect email or password.</string>
     <string name="network_unavailable">No internet access available.</string>
     <string name="unknown_error">Unknown error, please try again.</string>
+
+    <string name="waiting">Waiting…</string>
 </resources>

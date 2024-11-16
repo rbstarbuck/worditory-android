@@ -17,6 +17,8 @@ class ScoreBoardViewModel(
     currentScoreToWin: Int,
     avatarIdPlayer1: MutableStateFlow<Int>,
     avatarIdPlayer2: MutableStateFlow<Int>,
+    displayNamePlayer1: MutableStateFlow<String>,
+    displayNamePlayer2: MutableStateFlow<String>,
     colorScheme: Tile.ColorScheme
 ): ViewModel() {
     private val _scoreToWinStateFlow = MutableStateFlow(currentScoreToWin)
@@ -40,16 +42,18 @@ class ScoreBoardViewModel(
         }
 
     internal val scorePlayer1 = PlayerScoreViewModel(
-        previousScoreToWinStateFlow,
-        avatarIdPlayer1,
-        colorScheme.player1,
-        isPlayer1 = true
+        scoreToWinStateFlow = previousScoreToWinStateFlow,
+        avatarId = avatarIdPlayer1,
+        displayName = displayNamePlayer1,
+        colorScheme = colorScheme.player1,
+        isPlayer1 = true,
     )
 
     internal val scorePlayer2 = PlayerScoreViewModel(
-        previousScoreToWinStateFlow,
-        avatarIdPlayer2,
-        colorScheme.player2,
+        scoreToWinStateFlow = previousScoreToWinStateFlow,
+        avatarId = avatarIdPlayer2,
+        displayName = displayNamePlayer2,
+        colorScheme = colorScheme.player2,
         isPlayer1 = false
     )
 

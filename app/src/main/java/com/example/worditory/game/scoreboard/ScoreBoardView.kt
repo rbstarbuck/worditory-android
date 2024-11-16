@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +20,7 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
     BoxWithConstraints(modifier) {
         val maxHeight = this.maxHeight
         val maxWidth = this.maxWidth
-        if (maxWidth.value / maxHeight.value > 2.5f) {
+        if (maxWidth.value / maxHeight.value > 1.5f) {
             Column {
                 Spacer(Modifier.weight(0.2f))
 
@@ -31,15 +32,17 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
                 ) {
                     Spacer(Modifier.weight(0.5f))
 
-                    PlayerScoreView(viewModel.scorePlayer1, Modifier.fillMaxHeight())
+                    PlayerScoreView(viewModel.scorePlayer1)
 
                     Spacer(Modifier.weight(1f))
+                    Spacer(Modifier.width(10.dp))
 
-                    ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.height(maxHeight / 2f))
+                    ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.height(maxHeight / 3f))
 
                     Spacer(Modifier.weight(1f))
+                    Spacer(Modifier.width(10.dp))
 
-                    PlayerScoreView(viewModel.scorePlayer2, Modifier.fillMaxHeight())
+                    PlayerScoreView(viewModel.scorePlayer2)
 
                     Spacer(Modifier.weight(0.5f))
                 }
@@ -53,7 +56,7 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
                 ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.weight(0.5f))
 
                 Row(Modifier.weight(1f)) {
-                    Spacer(Modifier.weight(0.35f))
+                    Spacer(Modifier.weight(0.2f))
 
                     PlayerScoreView(viewModel.scorePlayer1, Modifier.fillMaxHeight().weight(4f))
 
@@ -61,10 +64,8 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
 
                     PlayerScoreView(viewModel.scorePlayer2, Modifier.fillMaxHeight().weight(4f))
 
-                    Spacer(Modifier.weight(0.35f))
+                    Spacer(Modifier.weight(0.2f))
                 }
-
-                Spacer(Modifier.height(15.dp))
             }
         }
     }
