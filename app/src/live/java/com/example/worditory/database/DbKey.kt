@@ -29,6 +29,7 @@ internal object DbKey {
     }
 
     internal object Words {
+        const val COUNT = "count"
         const val PLAYED_WORDS = "playedWords"
 
         internal object PlayedWords {

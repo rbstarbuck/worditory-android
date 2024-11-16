@@ -8,6 +8,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.database
 
 internal object WordRepository {
@@ -32,6 +33,11 @@ internal object WordRepository {
             .child(DbKey.Words.PLAYED_WORDS)
             .push()
             .setValue(playedWord)
+
+        database
+            .child(DbKey.WORDS)
+            .child(gameId)
+            .updateChildren(mapOf(DbKey.Words.COUNT to ServerValue.increment(1)))
     }
 
     internal fun listenForLatestWord(
