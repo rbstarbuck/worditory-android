@@ -159,7 +159,7 @@ internal abstract class GameViewModelBase(
 
     internal abstract fun saveGame(context: Context)
 
-    internal fun onExitGame(context: Context) {
+    internal open fun onExitGame(context: Context) {
         saveGame(context)
 
         navController.navigate(Screen.Main.route) {

@@ -9,8 +9,6 @@ import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.saved.addSavedLiveGame
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 internal class LiveGameViewModel(
@@ -25,6 +23,7 @@ internal class LiveGameViewModel(
 ) {
     private var playedWordCount = liveModel.playedWordCount
     private var isPlayer1 = liveModel.isPlayer1
+    private val latestWordListener: WordRepository.LatestWordListener
 
     private val liveModel: LiveGameModel
         get() = LiveGameModel.newBuilder()
@@ -47,7 +46,7 @@ internal class LiveGameViewModel(
         if (liveModel.opponent != null) {
             scoreBoard.scorePlayer2.avatarId.value
         }
-        WordRepository.listenForLatestWord(
+        latestWordListener = WordRepository.listenForLatestWord(
             gameId = id,
             onNewWord = { word ->
                 if (word.index!! >= playedWordCount) {
@@ -103,7 +102,11 @@ internal class LiveGameViewModel(
             updateScoreboard()
             isPlayerTurn = !checkForGameOver()
         }
+    }
 
+    override fun onExitGame(context: Context) {
+        super.onExitGame(context)
+        WordRepository.removeListener(id, latestWordListener)
     }
 
     fun flipTileIndex(index: Int) = board.width * board.height - index - 1
