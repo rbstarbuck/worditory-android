@@ -36,8 +36,9 @@ internal fun SavedGamesView(
             ) {
                 items(savedNpcGamesState.value.gamesList.size) { item ->
                     val npcGame = savedNpcGamesState.value.gamesList.get(item)
-
+                    val rowItemViewModel = SavedGameRowItemViewModel(npcGame.game.isPlayerTurn)
                     SavedGameRowItemView(
+                        viewModel = rowItemViewModel,
                         game = npcGame.game,
                         rowWidth = width,
                         avatarResId = getResourceId(npcGame.opponent.avatar),

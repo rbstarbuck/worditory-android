@@ -47,7 +47,15 @@ internal fun SavedGamesView(
                     val anyGame = savedGames[item]
 
                     if (anyGame is LiveGameModel) {
+                        val rowItemViewModel = SavedGameRowItemViewModel(
+                            gameId = anyGame.game.id,
+                            isPlayerTurn = anyGame.game.isPlayerTurn,
+                            onIsPlayerTurn = {
+                                viewModel.onIsPlayerTurn(anyGame.game.id, context)
+                            }
+                        )
                         SavedGameRowItemView(
+                            viewModel = rowItemViewModel,
                             game = anyGame.game,
                             rowWidth = width,
                             avatarResId = getResourceId(anyGame.opponent.avatarId),
@@ -60,7 +68,13 @@ internal fun SavedGamesView(
                             onSavedGameClick = { viewModel.onSavedLiveGameClick(anyGame.game.id) }
                         )
                     } else if (anyGame is NpcGameModel) {
+                        val rowItemViewModel = SavedGameRowItemViewModel(
+                            gameId = anyGame.game.id,
+                            isPlayerTurn = anyGame.game.isPlayerTurn,
+                            onIsPlayerTurn = {}
+                        )
                         SavedGameRowItemView(
+                            viewModel = rowItemViewModel,
                             game = anyGame.game,
                             rowWidth = width,
                             avatarResId = getResourceId(anyGame.opponent.avatar),

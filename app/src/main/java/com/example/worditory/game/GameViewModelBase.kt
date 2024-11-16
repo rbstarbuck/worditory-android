@@ -152,10 +152,10 @@ internal abstract class GameViewModelBase(
                 board.playWord(Game.Player.PLAYER_1)
                 setBadgesOnWordPlayed(wordString, context)
                 updateScoreboard()
+                checkForGameOver()
                 if (gameOverState == GameOver.State.WIN) {
                     setBadgesOnGameWon(context)
                 }
-
                 return true
             } else {
                 isNotAWord = true
