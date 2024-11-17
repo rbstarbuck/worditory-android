@@ -9,18 +9,11 @@ import com.example.worditory.chooser.boardsize.LiveBoardSizeChooserViewModel
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
 import com.example.worditory.game.GameView
 import com.example.worditory.game.LiveGameViewModel
-import com.example.worditory.game.online.TestView
-import com.example.worditory.game.online.TestViewModel
 import com.example.worditory.saved.savedLiveGamesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 internal fun NavGraphBuilder.flavorStack(navController: NavController) {
-    composable(LiveScreen.LiveGame.route) {
-        val viewModel = remember { TestViewModel() }
-        TestView(viewModel)
-    }
-
     composable(LiveScreen.BoardSizeChooser.route) {
         val viewModel = remember { LiveBoardSizeChooserViewModel(navController) }
         BoardSizeChooserView(viewModel)

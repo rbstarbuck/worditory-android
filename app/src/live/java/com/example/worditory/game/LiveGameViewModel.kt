@@ -41,20 +41,14 @@ internal class LiveGameViewModel(
 
     private val liveModel: LiveGameModel
         get() = LiveGameModel.newBuilder()
+            .setGame(model)
             .setIsPlayer1(isPlayer1)
             .setPlayedWordCount(playedWordCount)
             .setOpponent(OpponentModel.newBuilder()
                 .setDisplayName(scoreBoard.scorePlayer2.displayName.value)
                 .setAvatarId(scoreBoard.scorePlayer2.avatarId.value)
             )
-            .setGame(GameModel.newBuilder()
-                .setId(id)
-                .setIsPlayerTurn(isPlayerTurn)
-                .setScoreToWin(scoreBoard.scoreToWin)
-                .setColorScheme(colorScheme.model)
-                .setBoard(board.model)
-                .build()
-            ).build()
+            .build()
 
     init {
         if (liveModel.opponent != null) {
