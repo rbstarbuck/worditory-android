@@ -19,7 +19,6 @@ internal class SavedGamesViewModel(private val navController: NavController): Vi
 
     internal fun onIsPlayerTurn(gameId: String, context: Context) {
         viewModelScope.launch {
-            // TODO(move to front of list)
 //            context.setIsPlayerTurnOnSavedLiveGame(gameId)
         }
     }

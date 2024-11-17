@@ -89,7 +89,7 @@
     <string name="delete">Delete</string>
     <string name="saved_games">Saved games</string>
     <string name="no_saved_games">No in-progress games</string>
-    <string name="its_your_turn">Your\nturn!</string>
+    <string name="its_your_turn">Your turn!</string>
 
     <string name="you_win">You win!</string>
     <string name="you_lose">You lose</string>

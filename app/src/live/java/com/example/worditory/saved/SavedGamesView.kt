@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.worditory.R
 import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.NpcGameModel
+import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.resourceid.getResourceId
 
 @Composable
@@ -47,8 +48,11 @@ internal fun SavedGamesView(
                     val anyGame = savedGames[item]
 
                     if (anyGame is LiveGameModel) {
-                        val rowItemViewModel = SavedGameRowItemViewModel(
+                        val rowItemViewModel = SavedLiveGameRowItemViewModel(
                             gameId = anyGame.game.id,
+                            opponentDisplayName = anyGame.opponent.displayName,
+                            opponentAvatarId = anyGame.opponent.avatarId,
+                            isPlayer1 = anyGame.isPlayer1,
                             isPlayerTurn = anyGame.game.isPlayerTurn,
                             onIsPlayerTurn = {
                                 viewModel.onIsPlayerTurn(anyGame.game.id, context)
@@ -58,26 +62,19 @@ internal fun SavedGamesView(
                             viewModel = rowItemViewModel,
                             game = anyGame.game,
                             rowWidth = width,
-                            avatarResId = getResourceId(anyGame.opponent.avatarId),
-                            displayName = if (anyGame.opponent.displayName == "") {
-                                stringResource(R.string.waiting)
-                            } else {
-                                anyGame.opponent.displayName
-                            },
                             modifier = Modifier.animateItem(),
                             onSavedGameClick = { viewModel.onSavedLiveGameClick(anyGame.game.id) }
                         )
                     } else if (anyGame is NpcGameModel) {
                         val rowItemViewModel = SavedGameRowItemViewModel(
-                            gameId = anyGame.game.id,
                             isPlayerTurn = anyGame.game.isPlayerTurn,
-                            onIsPlayerTurn = {}
+                            opponentDisplayName = "",
+                            opponentAvatarId = anyGame.opponent.avatar
                         )
                         SavedGameRowItemView(
                             viewModel = rowItemViewModel,
                             game = anyGame.game,
                             rowWidth = width,
-                            avatarResId = getResourceId(anyGame.opponent.avatar),
                             modifier = Modifier.animateItem(),
                             onSavedGameClick = { viewModel.onSavedNpcGameClick(anyGame.game.id) },
                             onDeleteClick = { onDeleteClick?.invoke(anyGame.game.id) }

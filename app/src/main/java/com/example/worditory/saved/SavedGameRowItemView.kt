@@ -5,9 +5,12 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -42,14 +45,13 @@ import com.example.worditory.game.GameModel
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.toBitmap
+import com.example.worditory.resourceid.getResourceId
 
 @Composable
 internal fun SavedGameRowItemView(
     viewModel: SavedGameRowItemViewModel,
     game: GameModel,
     rowWidth: Dp,
-    avatarResId: Int,
-    displayName: String = "",
     modifier: Modifier = Modifier,
     onSavedGameClick: () -> Unit,
     onDeleteClick: (() -> Unit)? = null
@@ -57,6 +59,8 @@ internal fun SavedGameRowItemView(
     val context = LocalContext.current
 
     val isPlayerTurnState = viewModel.isPlayerTurnStateFlow.collectAsState()
+    val opponentDisplayNameState = viewModel.opponentDisplayNameStateFlow.collectAsState()
+    val opponentAvatarIdState = viewModel.opponentAvatarIdStateFlow.collectAsState()
 
     val itemWidth = rowWidth / 2.25f
     val padding = rowWidth / 25f
@@ -93,7 +97,7 @@ internal fun SavedGameRowItemView(
             }
 
             Text(
-                text = displayName,
+                text = opponentDisplayNameState.value,
                 color = colorResource(R.color.font_color_dark),
                 modifier = Modifier.padding(start = 15.dp),
                 fontSize = 14.sp,
@@ -150,21 +154,32 @@ internal fun SavedGameRowItemView(
                 )
             ) {
                 Image(
-                    imageVector = ImageVector.vectorResource(avatarResId),
+                    imageVector = ImageVector.vectorResource(
+                        getResourceId(opponentAvatarIdState.value)
+                    ),
                     contentDescription = stringResource(R.string.avatar)
                 )
             }
         }
 
         if (isPlayerTurnState.value) {
-            Text(
-                text = stringResource(R.string.its_your_turn),
-                color = colorResource(R.color.font_color_dark),
-                fontSize = (itemWidth.value / 6f).sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                lineHeight = (itemWidth.value / 6f).sp
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Spacer(Modifier.height(itemWidth / 10f))
+
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.your_turn),
+                    contentDescription = stringResource(R.string.its_your_turn),
+                    modifier.size(itemWidth / 4f)
+                )
+
+                Text(
+                    text = stringResource(R.string.its_your_turn),
+                    color = colorResource(R.color.font_color_dark),
+                    fontSize = (itemWidth.value / 12f).sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
