@@ -176,7 +176,6 @@ internal fun SavedGameRowItemView(
                     text = stringResource(R.string.its_your_turn),
                     color = colorResource(R.color.font_color_dark),
                     fontSize = (itemWidth.value / 12f).sp,
-                    fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
             }
