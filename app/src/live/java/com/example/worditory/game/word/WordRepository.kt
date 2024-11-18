@@ -22,7 +22,6 @@ internal object WordRepository {
         }
 
         val playedWord = PlayedWordRepoModel(
-            timestamp = System.currentTimeMillis(),
             index = index,
             tiles = tiles
         )
@@ -38,6 +37,12 @@ internal object WordRepository {
             .child(DbKey.WORDS)
             .child(gameId)
             .updateChildren(mapOf(DbKey.Words.COUNT to ServerValue.increment(1)))
+
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .child(DbKey.Games.TIMESTAMP)
+            .setValue(ServerValue.TIMESTAMP)
     }
 
     internal fun listenForLatestWord(

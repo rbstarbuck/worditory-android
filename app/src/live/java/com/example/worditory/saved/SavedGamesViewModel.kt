@@ -18,8 +18,8 @@ internal class SavedGamesViewModel(private val navController: NavController): Vi
     }
 
     internal fun onIsPlayerTurn(gameId: String, context: Context) {
-        viewModelScope.launch {
+//        viewModelScope.launch {
 //            context.setIsPlayerTurnOnSavedLiveGame(gameId)
-        }
+//        }
     }
 }

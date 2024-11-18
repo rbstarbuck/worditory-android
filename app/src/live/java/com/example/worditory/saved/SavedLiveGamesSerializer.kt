@@ -38,9 +38,12 @@ suspend fun Context.removeSavedLiveGame(gameId: String) {
 
 suspend fun Context.addSavedLiveGame(liveGame: LiveGameModel) {
     savedLiveGamesDataStore.updateData { savedGames ->
+        val newSavedGames =
+            (savedGames.gamesList.filter { it.game.id != liveGame.game.id } + liveGame)
+                .sortedBy { !it.game.isPlayerTurn }
+
         SavedLiveGames.newBuilder()
-            .addGames(liveGame)
-            .addAllGames(savedGames.gamesList.filter { it.game.id != liveGame.game.id })
+            .addAllGames(newSavedGames)
             .build()
     }
 }
@@ -48,18 +51,16 @@ suspend fun Context.addSavedLiveGame(liveGame: LiveGameModel) {
 suspend fun Context.setIsPlayerTurnOnSavedLiveGame(gameId: String) {
     savedLiveGamesDataStore.data.collect { savedGames ->
         val oldGame = savedGames.gamesList.filter { it.game.id == gameId }.first()
-//        val newGame = LiveGameModel.newBuilder()
-//            .setIsPlayer1(oldGame.isPlayer1)
-//            .setOpponent(oldGame.opponent)
-//            .setPlayedWordCount(oldGame.playedWordCount)
-//            .setGame(GameModel.newBuilder()
-//                .setIsPlayerTurn(true)
-//                .setId(oldGame.game.id)
-//                .setColorScheme(oldGame.game.colorScheme)
-//                .setScoreToWin(oldGame.game.scoreToWin)
-//                .setBoard(oldGame.game.board)
-//                .build()
-//            ).build()
-        addSavedLiveGame(oldGame)
+        val newGame = oldGame.toBuilder()
+            .setGame(
+                oldGame.game.toBuilder()
+                    .setIsPlayerTurn(true)
+                    .build()
+            ).build()
+
+        SavedLiveGames.newBuilder()
+            .addGames(newGame)
+            .addAllGames(savedGames.gamesList.filter { it.game.id != gameId })
+            .build()
     }
 }

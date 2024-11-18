@@ -17,6 +17,7 @@ internal object DbKey {
         const val GAME_TYPE = "gameType"
         const val PLAYER_1 = "player1"
         const val PLAYER_2 = "player2"
+        const val TIMESTAMP = "timestamp"
     }
 
     internal object Boards {
@@ -33,7 +34,6 @@ internal object DbKey {
         const val PLAYED_WORDS = "playedWords"
 
         internal object PlayedWords {
-            const val TIMESTAMP = "timestamp"
             const val INDEX = "index"
             const val TILES = "tiles"
 

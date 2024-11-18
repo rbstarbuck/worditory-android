@@ -55,7 +55,9 @@ internal fun SavedGamesView(
                             isPlayer1 = anyGame.isPlayer1,
                             isPlayerTurn = anyGame.game.isPlayerTurn,
                             onIsPlayerTurn = {
-                                viewModel.onIsPlayerTurn(anyGame.game.id, context)
+                                if (!anyGame.game.isPlayerTurn) {
+                                    viewModel.onIsPlayerTurn(anyGame.game.id, context)
+                                }
                             }
                         )
                         SavedGameRowItemView(

@@ -16,6 +16,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.MutableData
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.Transaction
 import com.google.firebase.database.database
 
@@ -71,7 +72,10 @@ internal object MatchRepository {
         if (userId == null) {
             onFailure(OnMatchFailure(Reason.USER_NOT_AUTHENTICATED))
         } else {
-            val game = GameRepoModel(gameType, userId)
+            val game = GameRepoModel(
+                gameType = gameType,
+                player1 = userId,
+            )
             val board = createBoard(gameType)
 
             val gameTask = database.child(DbKey.GAMES).child(gameId).setValue(game)
@@ -127,6 +131,13 @@ internal object MatchRepository {
                     .child(gameId)
                     .child(DbKey.Games.PLAYER_2)
                     .setValue(userId)
+
+                database
+                    .child(DbKey.GAMES)
+                    .child(gameId)
+                    .child(DbKey.Games.TIMESTAMP)
+                    .setValue(ServerValue.TIMESTAMP)
+
                 onSuccess(OnMatchSuccess(
                     gameId = gameId,
                     userID = userId,

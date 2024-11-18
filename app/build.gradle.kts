@@ -16,8 +16,6 @@ android {
         applicationId = "com.example.worditory"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -37,11 +35,15 @@ android {
             dimension = "version"
             applicationIdSuffix = ".free"
             versionNameSuffix = "-free"
+            versionCode = 1
+            versionName = "1.0"
         }
         create("live") {
             dimension = "version"
             applicationIdSuffix = ".live"
             versionNameSuffix = "-live"
+            versionCode = 1
+            versionName = "1.0"
         }
     }
     compileOptions {

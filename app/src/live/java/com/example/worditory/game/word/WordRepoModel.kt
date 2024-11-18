@@ -6,7 +6,6 @@ data class WordRepoModel(
 )
 
 data class PlayedWordRepoModel(
-    val timestamp: Long? = null,
     val index: Int? = null,
     val tiles: List<WordTileRepoModel>? = null
 )

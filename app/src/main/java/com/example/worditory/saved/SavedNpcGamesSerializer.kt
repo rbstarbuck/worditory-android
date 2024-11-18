@@ -36,9 +36,11 @@ suspend fun Context.removeSavedNpcGame(gameId: String) {
 
 suspend fun Context.addSavedNpcGame(npcGame: NpcGameModel) {
     savedNpcGamesDataStore.updateData { savedGames ->
+        val newSavedGames =
+            (savedGames.gamesList.filter { it.game.id != npcGame.game.id } + npcGame)
+            .sortedBy { !it.game.isPlayerTurn }
         SavedNpcGames.newBuilder()
-            .addGames(npcGame)
-            .addAllGames(savedGames.gamesList.filter { it.game.id != npcGame.game.id })
+            .addAllGames(newSavedGames)
             .build()
     }
 }

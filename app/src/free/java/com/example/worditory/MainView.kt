@@ -16,7 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -57,11 +56,6 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         ) {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "This is the FREE version!",
-                    color = Color.White
-                )
-
                 HeaderView(Modifier.fillMaxWidth().padding(20.dp)) {
                     viewModel.avatarChooserEnabled = true
                 }
