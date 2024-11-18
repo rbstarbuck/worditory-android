@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 internal abstract class MainViewModelBase(protected val navController: NavController, context: Context) {
-    internal val savedGames = SavedGamesViewModel(navController)
+    internal val savedGames = SavedGamesViewModel(navController, context)
     internal val avatarChooser = AvatarChooserViewModel()
     internal val deleteSavedGame = DeleteSavedGameViewModel()
 
