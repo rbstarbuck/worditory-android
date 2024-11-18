@@ -3,7 +3,6 @@ package com.example.worditory.game
 import com.example.worditory.database.DbKey
 import com.example.worditory.user.UserRepoModel
 import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -11,7 +10,6 @@ import com.google.firebase.database.database
 
 internal object GameRepository {
     private val database = Firebase.database.reference
-    private val auth = Firebase.auth
 
     internal fun listenForOpponent(
         gameId: String,

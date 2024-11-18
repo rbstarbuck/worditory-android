@@ -3,6 +3,7 @@ package com.example.worditory.database
 internal object DbKey {
     const val USERS = "users"
     const val GAMES = "games"
+    const val PLAYER_GAMES = "playerGames"
     const val BOARDS = "boards"
     const val MATCHES = "matches"
     const val WORDS = "words"
@@ -18,6 +19,10 @@ internal object DbKey {
         const val PLAYER_1 = "player1"
         const val PLAYER_2 = "player2"
         const val TIMESTAMP = "timestamp"
+    }
+
+    internal object PlayerGames {
+        const val PLAYER = "player"
     }
 
     internal object Boards {

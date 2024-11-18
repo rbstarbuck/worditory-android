@@ -79,9 +79,14 @@ internal object MatchRepository {
             val board = createBoard(gameType)
 
             val gameTask = database.child(DbKey.GAMES).child(gameId).setValue(game)
+            val playerGamesTask = database
+                .child(DbKey.PLAYER_GAMES)
+                .child(userId)
+                .push()
+                .setValue(gameId)
             val boardTask = database.child(DbKey.BOARDS).child(gameId).setValue(board)
 
-            Tasks.whenAll(gameTask, boardTask)
+            Tasks.whenAll(gameTask, playerGamesTask, boardTask)
                 .addOnSuccessListener {
                     onSuccess(OnMatchSuccess(
                         gameId = gameId,
@@ -131,6 +136,12 @@ internal object MatchRepository {
                     .child(gameId)
                     .child(DbKey.Games.PLAYER_2)
                     .setValue(userId)
+
+                database
+                    .child(DbKey.PLAYER_GAMES)
+                    .child(userId)
+                    .push()
+                    .setValue(gameId)
 
                 database
                     .child(DbKey.GAMES)
