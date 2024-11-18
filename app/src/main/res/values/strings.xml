@@ -97,12 +97,12 @@
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="finish">Finish</string>
-    <string name="tutorial_text_1">At the start of the game, you own the tiles on the bottom row. Your opponent owns the top row.</string>
-    <string name="tutorial_text_2">Make words by connecting tiles. The first letter of the word must be from a tile that you own.</string>
-    <string name="tutorial_text_3">After playing, you own any unowned tiles in the word. Opponent\'s tiles become unowned.</string>
-    <string name="tutorial_text_4">If you own all tiles next to a tile you own, it will be \"super owned\" (darker in color). You can only play into your opponent\'s super owned tiles with a word that starts in one of your super owned tiles.</string>
-    <string name="tutorial_text_5">If you can\'t play a word, you can get a hint or pass your turn from the game menu.</string>
-    <string name="tutorial_text_6">Your score is equal to the number of tiles you own.</string>
-    <string name="tutorial_text_7">You win when your score reaches the \"score to win\", which ticks down by one after each turn.</string>
+    <string name="tutorial_text_1">Welcome to Worditory! Spell words to seize territory and beat your opponent by controlling the board before they do! At the start of the game, you own the tiles on the bottom row. Your opponent owns the top row.</string>
+    <string name="tutorial_text_2">During your turn, make a word by connecting tiles. Colored tiles are owned, while non-colored tiles are neutral. The first letter of the word you play must be from a tile that you own.</string>
+    <string name="tutorial_text_3">After playing, you own any neutral tiles in the word. Opponent\'s tiles that are part of your word become neutral.</string>
+    <string name="tutorial_text_4">If you control all of the tiles next to a tile you own, it will become \"uber-owned\" (darker in color). You can only play into your opponent\'s uber-owned tiles with a word that starts in one of your uber-owned tiles.</string>
+    <string name="tutorial_text_5">If you are stumped and can\'t play a word, you can get a hint or pass your turn from the game menu.</string>
+    <string name="tutorial_text_6">Your score is always equal to the number of tiles you own.</string>
+    <string name="tutorial_text_7">You win when your score reaches the \"score to win\" displayed at the top, which ticks down by one after each turn.</string>
     <string name="tutorial_text_8">Click \"Game rules\" in the menu to come back to this tutorial.</string>
 </resources>
