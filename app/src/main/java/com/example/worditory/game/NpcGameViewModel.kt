@@ -121,17 +121,10 @@ internal class NpcGameViewModel(
     }
 
     override fun saveGame(context: Context) {
-        val currentGameOverState = gameOverState
-
         viewModelScope.launch {
-            if (currentGameOverState == GameOver.State.IN_PROGRESS) {
-                context.addSavedNpcGame(npcModel)
-            } else {
-                context.removeSavedNpcGame(id)
-                context.incrementGamesPlayed()
-                if (currentGameOverState == GameOver.State.WIN) {
-                    context.incrementGamesWon()
-                }
+            when (gameOverState) {
+                GameOver.State.IN_PROGRESS -> context.addSavedNpcGame(npcModel)
+                else -> context.removeSavedNpcGame(id)
             }
         }
     }

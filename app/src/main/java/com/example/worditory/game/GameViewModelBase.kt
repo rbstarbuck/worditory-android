@@ -24,6 +24,8 @@ import com.example.worditory.getPlayerAvatarId
 import com.example.worditory.getPlayerDisplayName
 import com.example.worditory.mutableStateIn
 import com.example.worditory.R
+import com.example.worditory.incrementGamesPlayed
+import com.example.worditory.incrementGamesWon
 import com.example.worditory.setHasShownTutorial
 import com.example.worditory.setObscureWord
 import com.example.worditory.setPlayed5LetterWord
@@ -152,9 +154,8 @@ internal abstract class GameViewModelBase(
                 board.playWord(Game.Player.PLAYER_1)
                 setBadgesOnWordPlayed(wordString, context)
                 updateScoreboard()
-                checkForGameOver()
-                if (gameOverState == GameOver.State.WIN) {
-                    setBadgesOnGameWon(context)
+                if (checkForGameOver()) {
+                    onGameOver(context)
                 }
                 saveGame(context)
                 return true
@@ -173,6 +174,16 @@ internal abstract class GameViewModelBase(
     }
 
     internal abstract fun saveGame(context: Context)
+
+    internal open fun onGameOver(context: Context) {
+        viewModelScope.launch {
+            context.incrementGamesPlayed()
+            if (gameOverState == GameOver.State.WIN) {
+                setBadgesOnGameWon(context)
+                context.incrementGamesWon()
+            }
+        }
+    }
 
     internal open fun onExitGame(context: Context) {
         saveGame(context)

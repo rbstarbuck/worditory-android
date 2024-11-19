@@ -60,7 +60,7 @@ internal class LiveGameViewModel(
             gameId = id,
             onNewWord = { word ->
                 if (word.index!! >= playedWordCount) {
-                    onNewWord(word)
+                    onNewWord(word, context)
                 }
             },
             onError = {} // TODO(handle errors)
@@ -93,24 +93,15 @@ internal class LiveGameViewModel(
     }
 
     override fun saveGame(context: Context) {
-        val currentGameOverState = gameOverState
-
         viewModelScope.launch {
-            if (currentGameOverState == GameOver.State.IN_PROGRESS) {
-                context.addSavedLiveGame(liveModel)
-            } else {
-                context.removeSavedLiveGame(id)
-                context.incrementGamesPlayed()
-                UserRepository.incrementGamesPlayed()
-                if (currentGameOverState == GameOver.State.WIN) {
-                    context.incrementGamesWon()
-                    UserRepository.incrementGamesWon()
-                }
+            when (gameOverState) {
+                GameOver.State.IN_PROGRESS -> context.addSavedLiveGame(liveModel)
+                else -> context.removeSavedLiveGame(id)
             }
         }
     }
 
-    private fun onNewWord(word: PlayedWordRepoModel) {
+    private fun onNewWord(word: PlayedWordRepoModel, context: Context) {
         board.word.model = WordModel()
 
         viewModelScope.launch {
@@ -138,7 +129,11 @@ internal class LiveGameViewModel(
             board.playWord(Game.Player.PLAYER_2)
             scoreBoard.score = board.computeScore()
             scoreBoard.decrementScoreToWin()
-            isPlayerTurn = !checkForGameOver()
+            if (checkForGameOver()) {
+                onGameOver(context)
+            } else {
+                isPlayerTurn = true
+            }
             ++playedWordCount
         }
     }
@@ -149,6 +144,14 @@ internal class LiveGameViewModel(
         }
         if (opponent.displayName != null) {
             scoreBoard.scorePlayer2.displayName.value = opponent.displayName
+        }
+    }
+
+    override fun onGameOver(context: Context) {
+        super.onGameOver(context)
+        UserRepository.incrementGamesPlayed()
+        if (gameOverState == GameOver.State.WIN) {
+            UserRepository.incrementGamesWon()
         }
     }
 
