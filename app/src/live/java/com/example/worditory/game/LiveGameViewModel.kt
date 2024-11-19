@@ -108,7 +108,6 @@ internal class LiveGameViewModel(
     }
 
     private fun onNewWord(word: PlayedWordRepoModel) {
-        ++playedWordCount
         board.word.model = WordModel()
 
         viewModelScope.launch {
@@ -136,6 +135,7 @@ internal class LiveGameViewModel(
             board.playWord(Game.Player.PLAYER_2)
             updateScoreboard()
             isPlayerTurn = !checkForGameOver()
+            ++playedWordCount
         }
     }
 

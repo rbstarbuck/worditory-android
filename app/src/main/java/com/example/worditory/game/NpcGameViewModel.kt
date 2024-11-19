@@ -44,7 +44,7 @@ internal class NpcGameViewModel(
 
     init {
         if (!isPlayerTurn) {
-            playNpcWord()
+            playNpcWord(context)
         }
     }
 
@@ -57,7 +57,7 @@ internal class NpcGameViewModel(
     override fun onPlayButtonClick(context: Context): Boolean {
         if (super.onPlayButtonClick(context)) {
             if (gameOverState == GameOver.State.IN_PROGRESS) {
-                playNpcWord()
+                playNpcWord(context)
                 return true
             }
         }
@@ -66,7 +66,7 @@ internal class NpcGameViewModel(
 
     override fun onPassTurn(context: Context) {
         super.onPassTurn(context)
-        playNpcWord()
+        playNpcWord(context)
     }
 
     override fun setBadgesOnGameWon(context: Context) {
@@ -97,7 +97,7 @@ internal class NpcGameViewModel(
         }
     }
 
-    private fun playNpcWord() {
+    private fun playNpcWord(context: Context) {
         val npcWord = nonPlayerCharacter.findWordToPlay()
 
         viewModelScope.launch {
@@ -116,6 +116,7 @@ internal class NpcGameViewModel(
             board.playWord(Game.Player.PLAYER_2)
             updateScoreboard()
             isPlayerTurn = !checkForGameOver()
+            saveGame(context)
         }
     }
 

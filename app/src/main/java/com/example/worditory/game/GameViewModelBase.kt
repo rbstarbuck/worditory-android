@@ -156,12 +156,20 @@ internal abstract class GameViewModelBase(
                 if (gameOverState == GameOver.State.WIN) {
                     setBadgesOnGameWon(context)
                 }
+                saveGame(context)
                 return true
             } else {
                 isNotAWord = true
             }
         }
         return false
+    }
+
+    internal open fun onPassTurn(context: Context) {
+        board.word.model = WordModel()
+        scoreBoard.decrementScoreToWin()
+        isPlayerTurn = !isPlayerTurn
+        saveGame(context)
     }
 
     internal abstract fun saveGame(context: Context)
@@ -199,12 +207,6 @@ internal abstract class GameViewModelBase(
             delay(500L)
             board.word.model = hint.hint()
         }
-    }
-
-    internal open fun onPassTurn(context: Context) {
-        board.word.model = WordModel()
-        scoreBoard.decrementScoreToWin()
-        isPlayerTurn = !isPlayerTurn
     }
 
     internal fun onTutorial() {
