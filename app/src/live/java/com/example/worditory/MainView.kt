@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,6 +34,8 @@ import com.example.worditory.saved.SavedGamesView
 
 @Composable
 internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
     val avatarChooserEnabledState = viewModel.avatarChooserEnabledStateFlow.collectAsState()
     val avatarChooserAnimatedAlpha = animateFloatAsState(
         targetValue = if (avatarChooserEnabledState.value) 1f else 0f,
@@ -84,7 +87,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             )
 
             WorditoryOutlinedButton(
-                onClick = { viewModel.signIn() },
+                onClick = { viewModel.onPlayLiveGameClick(context) },
                 contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
             ) {
                 Text(

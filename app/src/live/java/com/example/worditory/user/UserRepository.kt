@@ -60,4 +60,22 @@ internal object UserRepository {
                 }
         }
     }
+
+    internal fun ifAvatarIsNotSet(thenDo: () -> Unit) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.USERS)
+                .child(currentUser.uid)
+                .child(DbKey.Users.AVATAR_ID)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    val avatarId = snapshot.getValue(Int::class.java)
+                    if (avatarId == null || avatarId == 0) {
+                        thenDo()
+                    }
+                }
+        }
+    }
 }

@@ -44,7 +44,7 @@ internal fun AuthenticationView(viewModel: AuthenticationViewModel) {
                 .alpha(animatedAlpha.value)
                 .pointerInput(Unit) {
                     detectTapGestures(
-                        onTap = { viewModel.enabled = false }
+                        onTap = { viewModel.dismiss() }
                     )
                 },
             contentAlignment = Alignment.TopCenter,

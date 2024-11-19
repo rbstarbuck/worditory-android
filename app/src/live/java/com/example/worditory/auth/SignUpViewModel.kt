@@ -18,10 +18,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-internal class SignUpViewModel(
-    private val auth: FirebaseAuth,
-    private val onAuthenticated: () -> Unit
-): ViewModel() {
+internal class SignUpViewModel(private val auth: FirebaseAuth): ViewModel() {
+    internal var onAuthenticated: () -> Unit = {}
+
     internal val displayNameStateFlow = MutableStateFlow("")
     internal val emailStateFlow = MutableStateFlow("")
     internal val passwordStateFlow = MutableStateFlow("")
