@@ -72,30 +72,34 @@ internal object MatchRepository {
         if (userId == null) {
             onFailure(OnMatchFailure(Reason.USER_NOT_AUTHENTICATED))
         } else {
+            val scoreToWin = gameType.boardWidth() * gameType.boardHeight()
+
             val game = GameRepoModel(
                 gameType = gameType,
                 player1 = userId,
+                scoreToWin = scoreToWin
             )
             val board = createBoard(gameType)
 
+            onSuccess(
+                OnMatchSuccess(
+                    gameId = gameId,
+                    userID = userId,
+                    isPlayer1 = true,
+                    scoreToWin = scoreToWin,
+                    wordCount = 0,
+                    game = game,
+                    board = board,
+                    opponent = null
+                )
+            )
+
             val gameTask = database.child(DbKey.GAMES).child(gameId).setValue(game)
-            val playerGamesTask = database
-                .child(DbKey.PLAYER_GAMES)
-                .child(userId)
-                .push()
-                .setValue(gameId)
             val boardTask = database.child(DbKey.BOARDS).child(gameId).setValue(board)
 
-            Tasks.whenAll(gameTask, playerGamesTask, boardTask)
+            Tasks.whenAll(gameTask, boardTask)
                 .addOnSuccessListener {
-                    onSuccess(OnMatchSuccess(
-                        gameId = gameId,
-                        userID = userId,
-                        isPlayer1 = true,
-                        game = game,
-                        board = board,
-                        opponent = null
-                    ))
+                    database.child(DbKey.PLAYER_GAMES).child(userId).push().setValue(gameId)
                 }.addOnFailureListener {
                     onFailure(OnMatchFailure(Reason.DATABASE_WRITE_ERROR, gameId))
                 }
@@ -131,6 +135,19 @@ internal object MatchRepository {
             } else if (userId == game.player1) {
                 onFailure(OnMatchFailure(Reason.USER_ALREADY_IN_WAITING_ROOM, gameId))
             } else {
+                onSuccess(
+                    OnMatchSuccess(
+                        gameId = gameId,
+                        userID = userId,
+                        isPlayer1 = false,
+                        scoreToWin = game.gameType!!.boardWidth() * game.gameType.boardHeight(),
+                        wordCount = 0,
+                        game = game.copy(player2 = userId),
+                        board = board,
+                        opponent = opponent
+                    )
+                )
+
                 database
                     .child(DbKey.GAMES)
                     .child(gameId)
@@ -138,25 +155,16 @@ internal object MatchRepository {
                     .setValue(userId)
 
                 database
-                    .child(DbKey.PLAYER_GAMES)
-                    .child(userId)
-                    .push()
-                    .setValue(gameId)
-
-                database
                     .child(DbKey.GAMES)
                     .child(gameId)
                     .child(DbKey.Games.TIMESTAMP)
                     .setValue(ServerValue.TIMESTAMP)
 
-                onSuccess(OnMatchSuccess(
-                    gameId = gameId,
-                    userID = userId,
-                    isPlayer1 = false,
-                    game = game.copy(player2 = userId),
-                    board = board,
-                    opponent = opponent
-                ))
+                database
+                    .child(DbKey.PLAYER_GAMES)
+                    .child(userId)
+                    .push()
+                    .setValue(gameId)
             }
         }
     }
@@ -178,6 +186,8 @@ internal class OnMatchSuccess(
     internal val gameId: String,
     internal val userID: String,
     internal val isPlayer1: Boolean,
+    internal val scoreToWin: Int,
+    internal val wordCount: Int,
     internal val game: GameRepoModel,
     internal val board: BoardRepoModel,
     internal val opponent: UserRepoModel?

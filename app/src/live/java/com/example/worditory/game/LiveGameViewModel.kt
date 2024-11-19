@@ -84,6 +84,13 @@ internal class LiveGameViewModel(
         return false
     }
 
+    override fun updateScoreboard() {
+        scoreBoard.score = board.computeScore()
+        if (scoreBoard.decrementScoreToWin()) {
+            GameRepository.decrementScoreToWin(id)
+        }
+    }
+
     override fun saveGame(context: Context) {
         val currentGameOverState = gameOverState
 

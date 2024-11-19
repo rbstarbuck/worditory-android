@@ -5,6 +5,7 @@ import com.example.worditory.user.UserRepoModel
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
@@ -18,10 +19,9 @@ internal object GameRepository {
         onError: (OnFailure) -> Unit
     ): UserListener {
         val userListener = UserListener(gameId, onOpponentChange, onError)
-        val opponentChild = if (opponent == Game.Player.PLAYER_1) {
-            DbKey.Games.PLAYER_1
-        } else {
-            DbKey.Games.PLAYER_2
+        val opponentChild = when (opponent) {
+            Game.Player.PLAYER_1 -> DbKey.Games.PLAYER_1
+            Game.Player.PLAYER_2 -> DbKey.Games.PLAYER_2
         }
 
         database
@@ -70,6 +70,14 @@ internal object GameRepository {
             .child(listener.gameId)
             .child(DbKey.Games.PLAYER_2)
             .removeEventListener(listener)
+    }
+
+    internal fun decrementScoreToWin(gameId: String) {
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .child(DbKey.Games.SCORE_TO_WIN)
+            .setValue(ServerValue.increment(-1))
     }
 
     internal class UserListener(

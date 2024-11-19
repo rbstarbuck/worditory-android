@@ -56,6 +56,7 @@ internal object WordRepository {
             .child(DbKey.WORDS)
             .child(gameId)
             .child(DbKey.Words.PLAYED_WORDS)
+            .limitToLast(1)
             .addChildEventListener(listener)
 
         return listener

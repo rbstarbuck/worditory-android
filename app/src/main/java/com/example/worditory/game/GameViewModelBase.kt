@@ -176,7 +176,7 @@ internal abstract class GameViewModelBase(
         }
     }
 
-    protected fun updateScoreboard() {
+    protected open fun updateScoreboard() {
         scoreBoard.score = board.computeScore()
         scoreBoard.decrementScoreToWin()
     }

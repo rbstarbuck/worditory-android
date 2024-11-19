@@ -47,11 +47,11 @@ internal class LiveGame: Game() {
 
             val builder = LiveGameModel.newBuilder()
                 .setIsPlayer1(match.isPlayer1)
-                .setPlayedWordCount(0)
+                .setPlayedWordCount(match.wordCount)
                 .setGame(GameModel.newBuilder()
                     .setId(match.gameId)
                     .setColorScheme(colorScheme.model)
-                    .setScoreToWin(boardSize.width * boardSize.height)
+                    .setScoreToWin(match.scoreToWin)
                     .setIsPlayerTurn(isPlayer1)
                     .setBoard(BoardModel.newBuilder()
                         .setWidth(boardSize.width)

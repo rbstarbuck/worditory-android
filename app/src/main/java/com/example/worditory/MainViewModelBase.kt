@@ -1,6 +1,7 @@
 package com.example.worditory
 
 import android.content.Context
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.worditory.badge.BadgesRowViewModel
 import com.example.worditory.badge.NewBadgesViewModel
@@ -11,8 +12,11 @@ import com.example.worditory.saved.SavedGamesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-internal abstract class MainViewModelBase(protected val navController: NavController, context: Context) {
-    internal val savedGames = SavedGamesViewModel(navController, context)
+internal abstract class MainViewModelBase(
+    protected val navController: NavController,
+    context: Context
+): ViewModel() {
+    internal val savedGames = SavedGamesViewModel(navController)
     internal val avatarChooser = AvatarChooserViewModel()
     internal val deleteSavedGame = DeleteSavedGameViewModel()
 

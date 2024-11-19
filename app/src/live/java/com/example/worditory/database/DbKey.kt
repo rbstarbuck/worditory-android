@@ -18,6 +18,7 @@ internal object DbKey {
         const val GAME_TYPE = "gameType"
         const val PLAYER_1 = "player1"
         const val PLAYER_2 = "player2"
+        const val SCORE_TO_WIN = "scoreToWin"
         const val TIMESTAMP = "timestamp"
     }
 

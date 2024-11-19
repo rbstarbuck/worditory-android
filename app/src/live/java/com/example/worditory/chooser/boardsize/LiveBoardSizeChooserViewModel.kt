@@ -1,8 +1,6 @@
 package com.example.worditory.chooser.boardsize
 
 import android.content.Context
-import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.config.FeatureFlags
@@ -10,10 +8,7 @@ import com.example.worditory.game.LiveGame
 import com.example.worditory.match.MatchRepository
 import com.example.worditory.match.OnMatchFailure
 import com.example.worditory.navigation.LiveScreen
-import com.example.worditory.saved.SavedNpcGames
 import com.example.worditory.saved.addSavedLiveGame
-import com.example.worditory.saved.savedLiveGamesDataStore
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 internal class LiveBoardSizeChooserViewModel(

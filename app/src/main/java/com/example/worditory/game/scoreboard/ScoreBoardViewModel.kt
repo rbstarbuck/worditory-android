@@ -69,7 +69,12 @@ class ScoreBoardViewModel(
             scorePlayer2.score = value.player2
         }
 
-    internal fun decrementScoreToWin() {
-        if (score.player1 + 1 < scoreToWin && score.player2 + 1 < scoreToWin) --scoreToWin
+    internal fun decrementScoreToWin(): Boolean {
+        if (score.player1 + 1 < scoreToWin && score.player2 + 1 < scoreToWin) {
+            --scoreToWin
+            return true
+        } else {
+            return false
+        }
     }
 }
