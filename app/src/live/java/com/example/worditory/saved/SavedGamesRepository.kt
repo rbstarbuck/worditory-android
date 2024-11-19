@@ -117,9 +117,15 @@ internal object SavedGamesRepository {
                     }
                 }
 
+                val isPlayerTurn = when (match.isPlayer1) {
+                    true -> ownership == TileModel.Ownership.OWNED_PLAYER_2
+                    false -> ownership == TileModel.Ownership.OWNED_PLAYER_1
+                }
+
                 liveGame = liveGame.toBuilder()
                     .setGame(
                         liveGame.game.toBuilder()
+                            .setIsPlayerTurn(isPlayerTurn)
                             .setBoard(boardBuilder)
                     ).build()
 
