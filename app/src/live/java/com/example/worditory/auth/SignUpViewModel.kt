@@ -14,11 +14,15 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-internal class SignUpViewModel(private val auth: FirebaseAuth): ViewModel() {
+internal class SignUpViewModel(
+    private val auth: FirebaseAuth,
+    internal val enabledStateFlow: StateFlow<Boolean>
+): ViewModel() {
     internal var onAuthenticated: () -> Unit = {}
 
     internal val displayNameStateFlow = MutableStateFlow("")

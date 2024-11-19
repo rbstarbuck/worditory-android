@@ -11,10 +11,14 @@ import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-internal class SignInViewModel(private val auth: FirebaseAuth): ViewModel() {
+internal class SignInViewModel(
+    private val auth: FirebaseAuth,
+    internal var enabledStateFlow: StateFlow<Boolean>
+): ViewModel() {
     internal var onAuthenticated: () -> Unit = {}
 
     internal val emailStateFlow = MutableStateFlow("")

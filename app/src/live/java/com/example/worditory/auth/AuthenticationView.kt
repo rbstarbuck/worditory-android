@@ -29,6 +29,7 @@ import com.example.worditory.R
 @Composable
 internal fun AuthenticationView(viewModel: AuthenticationViewModel) {
     val enabledState = viewModel.enabledStateFlow.collectAsState()
+    val visibilityState = viewModel.visibilityStateFlow.collectAsState()
     val screenState = viewModel.screenStateFlow.collectAsState()
 
     val animatedAlpha = animateFloatAsState(
@@ -37,7 +38,7 @@ internal fun AuthenticationView(viewModel: AuthenticationViewModel) {
         label = "alpha"
     )
 
-    if (enabledState.value) {
+    if (visibilityState.value) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

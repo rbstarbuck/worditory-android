@@ -36,7 +36,8 @@ internal object WordRepository {
         database
             .child(DbKey.WORDS)
             .child(gameId)
-            .updateChildren(mapOf(DbKey.Words.COUNT to ServerValue.increment(1)))
+            .child(DbKey.Words.COUNT)
+            .setValue(ServerValue.increment(1))
 
         database
             .child(DbKey.GAMES)

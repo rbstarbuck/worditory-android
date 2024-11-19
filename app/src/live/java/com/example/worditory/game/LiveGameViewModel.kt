@@ -136,7 +136,8 @@ internal class LiveGameViewModel(
 
             board.updateOwnershipsForWord(Game.Player.PLAYER_2)
             board.playWord(Game.Player.PLAYER_2)
-            updateScoreboard()
+            scoreBoard.score = board.computeScore()
+            scoreBoard.decrementScoreToWin()
             isPlayerTurn = !checkForGameOver()
             ++playedWordCount
         }

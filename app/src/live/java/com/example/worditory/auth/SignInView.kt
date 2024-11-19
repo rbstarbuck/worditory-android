@@ -27,8 +27,11 @@ internal fun SignInView(viewModel: SignInViewModel, modifier: Modifier = Modifie
     val emailAddressState = viewModel.emailStateFlow.collectAsState()
     val passwordState = viewModel.passwordStateFlow.collectAsState()
     val errorMessageState = viewModel.errorMessageStateFlow.collectAsState()
+    val enabledState = viewModel.enabledStateFlow.collectAsState()
 
-    val buttonEnabled = emailAddressState.value.isNotEmpty() && passwordState.value.isNotEmpty()
+    val buttonEnabled = emailAddressState.value.isNotEmpty()
+            && passwordState.value.isNotEmpty()
+            && enabledState.value
 
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         val fontSize = 20.sp
