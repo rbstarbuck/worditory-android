@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.worditory.R
 import com.example.worditory.getActivity
 import com.example.worditory.setPlayerDisplayName
+import com.example.worditory.user.UserRepository
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -34,9 +35,7 @@ internal class SignInViewModel(
         auth.signInWithEmailAndPassword(emailStateFlow.value, passwordStateFlow.value)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
-                    viewModelScope.launch {
-                        context.setPlayerDisplayName(auth.currentUser!!.displayName!!)
-                    }
+                    UserRepository.restoreUserParameters(viewModelScope, context)
                     onAuthenticated()
                 } else if (task.exception is FirebaseAuthInvalidCredentialsException) {
                     errorMessage = context.getString(R.string.incorrect_email_or_password)
