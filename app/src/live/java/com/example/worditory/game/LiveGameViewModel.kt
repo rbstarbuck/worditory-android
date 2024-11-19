@@ -15,6 +15,7 @@ import com.example.worditory.R
 import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.saved.removeSavedLiveGame
 import com.example.worditory.user.UserRepoModel
+import com.example.worditory.user.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -100,8 +101,10 @@ internal class LiveGameViewModel(
             } else {
                 context.removeSavedLiveGame(id)
                 context.incrementGamesPlayed()
+                UserRepository.incrementGamesPlayed()
                 if (currentGameOverState == GameOver.State.WIN) {
                     context.incrementGamesWon()
+                    UserRepository.incrementGamesWon()
                 }
             }
         }

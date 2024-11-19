@@ -10,11 +10,10 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import com.example.worditory.R
 
 internal val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-internal fun Context.getPlayerAvatarId(): Flow<Int> =
+internal fun Context.getPlayerAvatarId() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.PlayerAvatarId] ?: 0 }
 
 internal suspend fun Context.setPlayerAvatarId(avatarId: Int) {
@@ -23,7 +22,7 @@ internal suspend fun Context.setPlayerAvatarId(avatarId: Int) {
     }
 }
 
-internal fun Context.getPlayerDisplayName(): Flow<String> =
+internal fun Context.getPlayerDisplayName() =
     dataStore.data.map { preferences ->
         preferences[DataStoreKey.PlayerDisplayName] ?: getString(R.string.you)
     }
@@ -34,8 +33,13 @@ internal suspend fun Context.setPlayerDisplayName(displayName: String) {
     }
 }
 
-internal fun Context.getGamesPlayed(): Flow<Int> =
+internal fun Context.getGamesPlayed() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.GamesPlayed] ?: 0 }
+
+internal suspend fun Context.setGamesPlayed(count: Int) =
+    dataStore.edit { settings ->
+        settings[DataStoreKey.GamesPlayed] = count
+    }
 
 internal suspend fun Context.incrementGamesPlayed() {
     dataStore.edit { settings ->
@@ -43,10 +47,21 @@ internal suspend fun Context.incrementGamesPlayed() {
     }
 }
 
-internal fun Context.getGamesWon(): Flow<Int> =
+internal fun Context.getGamesWon() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.GamesWon] ?: 0 }
 
-internal fun Context.getWinRate(): Flow<Float?> =
+internal suspend fun Context.setGamesWon(count: Int) =
+    dataStore.edit { settings ->
+        settings[DataStoreKey.GamesWon] = count
+    }
+
+internal suspend fun Context.incrementGamesWon() {
+    dataStore.edit { settings ->
+        settings[DataStoreKey.GamesWon] = (settings.get(DataStoreKey.GamesWon) ?: 0) + 1
+    }
+}
+
+internal fun Context.getWinRate() =
     dataStore.data.map { preferences ->
         if ((preferences[DataStoreKey.GamesPlayed] ?: 0) == 0) {
             null
@@ -56,13 +71,7 @@ internal fun Context.getWinRate(): Flow<Float?> =
         }
     }
 
-internal suspend fun Context.incrementGamesWon() {
-    dataStore.edit { settings ->
-        settings[DataStoreKey.GamesWon] = (settings.get(DataStoreKey.GamesWon) ?: 0) + 1
-    }
-}
-
-internal fun Context.hasShownTutorial(): Flow<Boolean> =
+internal fun Context.hasShownTutorial() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.HasShownTutorial] == true }
 
 internal suspend fun Context.setHasShownTutorial() {
@@ -71,7 +80,7 @@ internal suspend fun Context.setHasShownTutorial() {
     }
 }
 
-internal fun Context.soundEnabled(): Flow<Boolean> =
+internal fun Context.soundEnabled() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.SoundEnabled] != false }
 
 internal suspend fun Context.setSoundEnabled(enabled: Boolean) {
@@ -80,7 +89,7 @@ internal suspend fun Context.setSoundEnabled(enabled: Boolean) {
     }
 }
 
-internal fun Context.wonAgainstBeginner(): Flow<Boolean> =
+internal fun Context.wonAgainstBeginner() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.WonAgainstBeginner] == true }
 
 internal suspend fun Context.setWonAgainstBeginner() {
@@ -89,7 +98,7 @@ internal suspend fun Context.setWonAgainstBeginner() {
     }
 }
 
-internal fun Context.wonAgainstIntermediate(): Flow<Boolean> =
+internal fun Context.wonAgainstIntermediate() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.WonAgainstIntermediate] == true }
 
 internal suspend fun Context.setWonAgainsIntermediate() {
@@ -98,7 +107,7 @@ internal suspend fun Context.setWonAgainsIntermediate() {
     }
 }
 
-internal fun Context.wonAgainstAdvanced(): Flow<Boolean> =
+internal fun Context.wonAgainstAdvanced() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.WonAgainstAdvanced] == true }
 
 internal suspend fun Context.setWonAgainstAdvanced() {
@@ -107,7 +116,7 @@ internal suspend fun Context.setWonAgainstAdvanced() {
     }
 }
 
-internal fun Context.wonAgainstSuperAdvanced(): Flow<Boolean> =
+internal fun Context.wonAgainstSuperAdvanced() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.WonAgainstSuperAdvanced] == true }
 
 internal suspend fun Context.setWonAgainstSuperAdvanced() {
@@ -116,7 +125,7 @@ internal suspend fun Context.setWonAgainstSuperAdvanced() {
     }
 }
 
-internal fun Context.wonLightning(): Flow<Boolean> =
+internal fun Context.wonLightning() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.WonLightning] == true }
 
 internal suspend fun Context.setWonLightning() {
@@ -125,7 +134,7 @@ internal suspend fun Context.setWonLightning() {
     }
 }
 
-internal fun Context.wonRapid(): Flow<Boolean> =
+internal fun Context.wonRapid() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.WonRapid] == true }
 
 internal suspend fun Context.setWonRapid() {
@@ -134,7 +143,7 @@ internal suspend fun Context.setWonRapid() {
     }
 }
 
-internal fun Context.wonClassic(): Flow<Boolean> =
+internal fun Context.wonClassic() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.WonClassic] == true }
 
 internal suspend fun Context.setWonClassic() {
@@ -143,7 +152,7 @@ internal suspend fun Context.setWonClassic() {
     }
 }
 
-internal fun Context.obscureWord(): Flow<String?> =
+internal fun Context.obscureWord() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.ObscureWord] }
 
 internal suspend fun Context.setObscureWord(word: String) {
@@ -152,7 +161,7 @@ internal suspend fun Context.setObscureWord(word: String) {
     }
 }
 
-internal fun Context.qWord(): Flow<String?> =
+internal fun Context.qWord() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.QWord] }
 
 internal suspend fun Context.setQWord(word: String) {
@@ -161,7 +170,7 @@ internal suspend fun Context.setQWord(word: String) {
     }
 }
 
-internal fun Context.zWord(): Flow<String?> =
+internal fun Context.zWord() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.ZWord] }
 
 internal suspend fun Context.setZWord(word: String) {
@@ -170,7 +179,7 @@ internal suspend fun Context.setZWord(word: String) {
     }
 }
 
-internal fun Context.played5LetterWord(): Flow<String?> =
+internal fun Context.played5LetterWord() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.Played5Letter] }
 
 internal suspend fun Context.setPlayed5LetterWord(word: String) {
@@ -179,7 +188,7 @@ internal suspend fun Context.setPlayed5LetterWord(word: String) {
     }
 }
 
-internal fun Context.played6LetterWord(): Flow<String?> =
+internal fun Context.played6LetterWord() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.Played6Letter] }
 
 internal suspend fun Context.setPlayed6LetterWord(word: String) {
@@ -188,7 +197,7 @@ internal suspend fun Context.setPlayed6LetterWord(word: String) {
     }
 }
 
-internal fun Context.played7LetterWord(): Flow<String?> =
+internal fun Context.played7LetterWord() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.Played7Letter] }
 
 internal suspend fun Context.setPlayed7LetterWord(word: String) {
@@ -197,7 +206,7 @@ internal suspend fun Context.setPlayed7LetterWord(word: String) {
     }
 }
 
-internal fun Context.played8LetterWord(): Flow<String?> =
+internal fun Context.played8LetterWord() =
     dataStore.data.map { preferences -> preferences[DataStoreKey.Played8Letter] }
 
 internal suspend fun Context.setPlayed8LetterWord(word: String) {

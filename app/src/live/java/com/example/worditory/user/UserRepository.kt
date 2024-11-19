@@ -2,10 +2,13 @@ package com.example.worditory.user
 
 import android.content.Context
 import com.example.worditory.database.DbKey
+import com.example.worditory.setGamesPlayed
+import com.example.worditory.setGamesWon
 import com.example.worditory.setPlayerAvatarId
 import com.example.worditory.setPlayerDisplayName
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.database
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -40,6 +43,32 @@ internal object UserRepository {
         }
     }
 
+    internal fun incrementGamesPlayed(count: Long = 1) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.USERS)
+                .child(currentUser.uid)
+                .child(DbKey.Users.GAMES_PLAYED)
+                .setValue(ServerValue.increment(count))
+
+        }
+    }
+
+    internal fun incrementGamesWon(count: Long = 1) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.USERS)
+                .child(currentUser.uid)
+                .child(DbKey.Users.GAMES_WON)
+                .setValue(ServerValue.increment(count))
+
+        }
+    }
+
     internal fun restoreUserParameters(scope: CoroutineScope, context: Context) {
         val currentUser = auth.currentUser
 
@@ -55,6 +84,8 @@ internal object UserRepository {
                         scope.launch {
                             context.setPlayerDisplayName(user.displayName ?: "")
                             context.setPlayerAvatarId(user.avatarId ?: 0)
+                            context.setGamesPlayed(user.gamesPlayed ?: 0)
+                            context.setGamesWon(user.gamesWon ?: 0)
                         }
                     }
                 }

@@ -12,6 +12,8 @@ internal object DbKey {
         const val EMAIL = "email"
         const val DISPLAY_NAME = "displayName"
         const val AVATAR_ID = "avatarId"
+        const val GAMES_PLAYED = "gamesPlayed"
+        const val GAMES_WON = "gamesWon"
     }
 
     internal object Games {
