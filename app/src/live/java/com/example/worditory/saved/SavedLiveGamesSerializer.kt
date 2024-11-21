@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
-import com.example.worditory.game.GameModel
 import com.example.worditory.game.LiveGameModel
-import com.example.worditory.game.copy
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -38,9 +36,11 @@ suspend fun Context.removeSavedLiveGame(gameId: String) {
 
 suspend fun Context.addSavedLiveGame(liveGame: LiveGameModel) {
     savedLiveGamesDataStore.updateData { savedGames ->
-        val newSavedGames =
-            (savedGames.gamesList.filter { it.game.id != liveGame.game.id } + liveGame)
-                .sortedBy { !it.game.isPlayerTurn }
+        val newSavedGames = mutableListOf<LiveGameModel>()
+        newSavedGames.addAll(savedGames.gamesList.filter { it.game.id != liveGame.game.id })
+        newSavedGames.add(liveGame)
+        newSavedGames.sortByDescending { it.timestamp }
+        newSavedGames.sortByDescending { it.game.isPlayerTurn }
 
         SavedLiveGames.newBuilder()
             .addAllGames(newSavedGames)
@@ -58,9 +58,15 @@ suspend fun Context.setIsPlayerTurnOnSavedLiveGame(gameId: String) {
                     .build()
             ).build()
 
-        SavedLiveGames.newBuilder()
-            .addGames(newGame)
-            .addAllGames(savedGames.gamesList.filter { it.game.id != gameId })
-            .build()
+        addSavedLiveGame(newGame)
+    }
+}
+
+suspend fun Context.setTimestampOnSavedLiveGame(gameId: String, timestamp: Long) {
+    savedLiveGamesDataStore.data.collect { savedGames ->
+        val oldGame = savedGames.gamesList.filter { it.game.id == gameId }.first()
+        val newGame = oldGame.toBuilder().setTimestamp(timestamp).build()
+
+        addSavedLiveGame(newGame)
     }
 }

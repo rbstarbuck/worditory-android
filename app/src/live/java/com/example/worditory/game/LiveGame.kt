@@ -48,6 +48,7 @@ internal class LiveGame: Game() {
             val builder = LiveGameModel.newBuilder()
                 .setIsPlayer1(match.isPlayer1)
                 .setPlayedWordCount(match.wordCount)
+                .setTimestamp(match.timestamp)
                 .setGame(GameModel.newBuilder()
                     .setId(match.gameId)
                     .setColorScheme(colorScheme.model)

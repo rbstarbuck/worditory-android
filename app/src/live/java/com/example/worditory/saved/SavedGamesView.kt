@@ -48,18 +48,21 @@ internal fun SavedGamesView(
                     val anyGame = savedGames[item]
 
                     if (anyGame is LiveGameModel) {
-                        val rowItemViewModel = SavedLiveGameRowItemViewModel(
-                            gameId = anyGame.game.id,
-                            opponentDisplayName = anyGame.opponent.displayName,
-                            opponentAvatarId = anyGame.opponent.avatarId,
-                            isPlayer1 = anyGame.isPlayer1,
-                            isPlayerTurn = anyGame.game.isPlayerTurn,
-                            onIsPlayerTurn = {
-                                if (!anyGame.game.isPlayerTurn) {
+                        val rowItemViewModel = remember {
+                            SavedLiveGameRowItemViewModel(
+                                gameId = anyGame.game.id,
+                                opponentDisplayName = anyGame.opponent.displayName,
+                                opponentAvatarId = anyGame.opponent.avatarId,
+                                isPlayer1 = anyGame.isPlayer1,
+                                isPlayerTurn = anyGame.game.isPlayerTurn,
+                                onIsPlayerTurn = {
                                     viewModel.onIsPlayerTurn(anyGame.game.id, context)
+                                },
+                                onTimestampChange = {
+                                    viewModel.onTimestampChange(anyGame.game.id, it, context)
                                 }
-                            }
-                        )
+                            )
+                        }
                         SavedGameRowItemView(
                             viewModel = rowItemViewModel,
                             game = anyGame.game,
@@ -68,11 +71,13 @@ internal fun SavedGamesView(
                             onSavedGameClick = { viewModel.onSavedLiveGameClick(anyGame.game.id) }
                         )
                     } else if (anyGame is NpcGameModel) {
-                        val rowItemViewModel = SavedGameRowItemViewModel(
-                            isPlayerTurn = anyGame.game.isPlayerTurn,
-                            opponentDisplayName = "",
-                            opponentAvatarId = anyGame.opponent.avatar
-                        )
+                        val rowItemViewModel = remember {
+                            SavedGameRowItemViewModel(
+                                isPlayerTurn = anyGame.game.isPlayerTurn,
+                                opponentDisplayName = "",
+                                opponentAvatarId = anyGame.opponent.avatar
+                            )
+                        }
                         SavedGameRowItemView(
                             viewModel = rowItemViewModel,
                             game = anyGame.game,

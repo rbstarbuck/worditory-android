@@ -88,6 +88,7 @@ internal object MatchRepository {
                     isPlayer1 = true,
                     scoreToWin = scoreToWin,
                     wordCount = 0,
+                    timestamp = 0,
                     game = game,
                     board = board,
                     opponent = null
@@ -142,6 +143,7 @@ internal object MatchRepository {
                         isPlayer1 = false,
                         scoreToWin = game.gameType!!.boardWidth() * game.gameType.boardHeight(),
                         wordCount = 0,
+                        timestamp = game.timestamp as Long,
                         game = game.copy(player2 = userId),
                         board = board,
                         opponent = opponent
@@ -188,6 +190,7 @@ internal class OnMatchSuccess(
     internal val isPlayer1: Boolean,
     internal val scoreToWin: Int,
     internal val wordCount: Int,
+    internal val timestamp: Long,
     internal val game: GameRepoModel,
     internal val board: BoardRepoModel,
     internal val opponent: UserRepoModel?

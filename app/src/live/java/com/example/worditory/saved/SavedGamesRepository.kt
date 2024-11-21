@@ -92,6 +92,7 @@ internal object SavedGamesRepository {
                     isPlayer1 = game.player1 == auth.currentUser!!.uid,
                     scoreToWin = game.scoreToWin!!,
                     wordCount = wordCount,
+                    timestamp = game.timestamp as Long,
                     game = game,
                     board = board,
                     opponent = null

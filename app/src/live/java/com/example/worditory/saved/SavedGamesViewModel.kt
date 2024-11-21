@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.navigation.LiveScreen
 import com.example.worditory.navigation.Screen
+import kotlinx.coroutines.launch
 
 internal class SavedGamesViewModel(
     private val navController: NavController
@@ -19,8 +20,14 @@ internal class SavedGamesViewModel(
     }
 
     internal fun onIsPlayerTurn(gameId: String, context: Context) {
-//        viewModelScope.launch {
-//            context.setIsPlayerTurnOnSavedLiveGame(gameId)
-//        }
+        viewModelScope.launch {
+            context.setIsPlayerTurnOnSavedLiveGame(gameId)
+        }
+    }
+
+    internal fun onTimestampChange(gameId: String, timestamp: Long, context: Context) {
+        viewModelScope.launch {
+            context.setTimestampOnSavedLiveGame(gameId, timestamp)
+        }
     }
 }

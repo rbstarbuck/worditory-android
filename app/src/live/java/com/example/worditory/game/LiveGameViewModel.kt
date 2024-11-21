@@ -36,15 +36,18 @@ internal class LiveGameViewModel(
 ) {
     private var playedWordCount = liveModel.playedWordCount
     private var isPlayer1 = liveModel.isPlayer1
+    private var timestamp = liveModel.timestamp
 
     private val latestWordListener: WordRepository.LatestWordListener
     private val opponentListener: GameRepository.UserListener
+    private val timestampListener: GameRepository.TimestampListener
 
     private val liveModel: LiveGameModel
         get() = LiveGameModel.newBuilder()
             .setGame(model)
             .setIsPlayer1(isPlayer1)
             .setPlayedWordCount(playedWordCount)
+            .setTimestamp(timestamp)
             .setOpponent(OpponentModel.newBuilder()
                 .setDisplayName(scoreBoard.scorePlayer2.displayName.value)
                 .setAvatarId(scoreBoard.scorePlayer2.avatarId.value)
@@ -70,6 +73,12 @@ internal class LiveGameViewModel(
             gameId = id,
             opponent = if (isPlayer1) Game.Player.PLAYER_2 else Game.Player.PLAYER_1,
             onOpponentChange = { onOpponentChange(it) },
+            onError = {} // TODO(handle errors)
+        )
+
+        timestampListener = GameRepository.listenForTimestampChange(
+            gameId = id,
+            onTimestampChange = { timestamp = it },
             onError = {} // TODO(handle errors)
         )
     }
@@ -135,6 +144,7 @@ internal class LiveGameViewModel(
                 isPlayerTurn = true
             }
             ++playedWordCount
+            saveGame(context)
         }
     }
 
@@ -160,6 +170,7 @@ internal class LiveGameViewModel(
 
         WordRepository.removeListener(latestWordListener)
         GameRepository.removeListener(opponentListener)
+        GameRepository.removeListener(timestampListener)
     }
 
     fun flipTileIndex(index: Int) = board.width * board.height - index - 1

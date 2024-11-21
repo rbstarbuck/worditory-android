@@ -9,7 +9,8 @@ internal class SavedLiveGameRowItemViewModel(
     opponentAvatarId: Int,
     isPlayer1: Boolean,
     isPlayerTurn: Boolean,
-    onIsPlayerTurn: () -> Unit
+    onIsPlayerTurn: () -> Unit,
+    onTimestampChange: (Long) -> Unit
 ): SavedGameRowItemViewModel(isPlayerTurn, opponentDisplayName, opponentAvatarId) {
     private val isPlayerTurnListener: GameRepository.IsPlayerTurnListener
     private val opponentListener: GameRepository.UserListener
@@ -36,6 +37,12 @@ internal class SavedLiveGameRowItemViewModel(
                 _opponentDisplayNameStateFlow.value = opponent.displayName ?: opponentDisplayName
                 removeOpponentListener()
             },
+            onError = {} // TODO(handle errors)
+        )
+
+        GameRepository.listenForTimestampChange(
+            gameId = gameId,
+            onTimestampChange = { onTimestampChange(it) },
             onError = {} // TODO(handle errors)
         )
     }

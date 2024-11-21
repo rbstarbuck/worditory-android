@@ -9,5 +9,6 @@ message LiveGameModel {
   GameModel game = 1;
   bool is_player_1 = 2;
   int32 played_word_count = 3;
-  optional OpponentModel opponent = 4;
+  int64 timestamp = 4;
+  optional OpponentModel opponent = 5;
 }

@@ -50,6 +50,22 @@ internal object GameRepository {
         return listener
     }
 
+    internal fun listenForTimestampChange(
+        gameId: String,
+        onTimestampChange: (Long) -> Unit,
+        onError: (OnFailure) -> Unit
+    ): TimestampListener {
+        val listener = TimestampListener(gameId, onTimestampChange, onError)
+
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .child(DbKey.Games.TIMESTAMP)
+            .addValueEventListener(listener)
+
+        return listener
+    }
+
     internal fun removeListener(listener: UserListener) {
         database
             .child(DbKey.GAMES)
@@ -69,6 +85,14 @@ internal object GameRepository {
             .child(DbKey.WORDS)
             .child(listener.gameId)
             .child(DbKey.Games.PLAYER_2)
+            .removeEventListener(listener)
+    }
+
+    internal fun removeListener(listener: TimestampListener) {
+        database
+            .child(DbKey.GAMES)
+            .child(listener.gameId)
+            .child(DbKey.Games.TIMESTAMP)
             .removeEventListener(listener)
     }
 
@@ -145,6 +169,26 @@ internal object GameRepository {
         }
     }
 
+    internal class TimestampListener(
+        internal val gameId: String,
+        private val onTimestampChange: (Long) -> Unit,
+        private val onError: (OnFailure) -> Unit
+    ): ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val timestamp = snapshot.getValue(Long::class.java)
+
+            if (timestamp == null) {
+                onError(OnFailure(OnFailure.Reason.TIMESTAMP_NOT_FOUND))
+            } else {
+                onTimestampChange(timestamp)
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            onError(OnFailure(OnFailure.Reason.CANCELLED))
+        }
+    }
+
     internal class OnFailure(
         internal val reason: Reason,
         internal val error: DatabaseError? = null
@@ -156,6 +200,7 @@ internal object GameRepository {
             USER_NOT_AUTHENTICATED,
             GAME_NOT_FOUND,
             COUNT_NOT_FOUND,
+            TIMESTAMP_NOT_FOUND,
             CANCELLED
         }
     }
