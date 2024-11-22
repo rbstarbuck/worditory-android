@@ -14,8 +14,8 @@
     <string name="badge_dialog_won_against_intermediate">You won against an intermediate opponent!</string>
     <string name="badge_description_won_against_advanced">Won against advanced badge</string>
     <string name="badge_dialog_won_against_advanced">You won against an advanced opponent!</string>
-    <string name="badge_description_won_against_super_advanced">Won against super advanced badge</string>
-    <string name="badge_dialog_won_against_super_advanced">You won against a super advanced opponent!</string>
+    <string name="badge_description_won_against_super_advanced">Won against professional badge</string>
+    <string name="badge_dialog_won_against_super_advanced">You won against a professional opponent!</string>
     <string name="badge_description_won_lightning">Won lightning badge</string>
     <string name="badge_dialog_won_lightning">You won a lightning game!</string>
     <string name="badge_description_won_rapid">Won rapid badge</string>

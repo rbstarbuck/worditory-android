@@ -10,12 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import com.example.worditory.R
 import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.NpcGameModel
-import com.example.worditory.game.npc.NonPlayerCharacter
-import com.example.worditory.resourceid.getResourceId
 
 @Composable
 internal fun SavedGamesView(
@@ -31,7 +27,10 @@ internal fun SavedGamesView(
     val savedLiveGamesData = remember { context.savedLiveGamesDataStore.data }
     val savedLiveGamesState = savedLiveGamesData.collectAsState(SavedLiveGames.newBuilder().build())
 
-    val savedGames = savedLiveGamesState.value.gamesList + savedNpcGamesState.value.gamesList
+    val savedGames = savedLiveGamesState.value.gamesList
+        .sortedByDescending { it.timestamp }
+        .sortedByDescending { it.game.isPlayerTurn } +
+            savedNpcGamesState.value.gamesList
 
     BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
         val width = this.maxWidth
@@ -48,38 +47,16 @@ internal fun SavedGamesView(
                     val anyGame = savedGames[item]
 
                     if (anyGame is LiveGameModel) {
-                        val rowItemViewModel = remember {
-                            SavedLiveGameRowItemViewModel(
-                                gameId = anyGame.game.id,
-                                opponentDisplayName = anyGame.opponent.displayName,
-                                opponentAvatarId = anyGame.opponent.avatarId,
-                                isPlayer1 = anyGame.isPlayer1,
-                                isPlayerTurn = anyGame.game.isPlayerTurn,
-                                onIsPlayerTurn = {
-                                    viewModel.onIsPlayerTurn(anyGame.game.id, context)
-                                },
-                                onTimestampChange = {
-                                    viewModel.onTimestampChange(anyGame.game.id, it, context)
-                                }
-                            )
-                        }
                         SavedGameRowItemView(
-                            viewModel = rowItemViewModel,
+                            viewModel = viewModel.getRowItemViewModel(anyGame, context),
                             game = anyGame.game,
                             rowWidth = width,
                             modifier = Modifier.animateItem(),
                             onSavedGameClick = { viewModel.onSavedLiveGameClick(anyGame.game.id) }
                         )
                     } else if (anyGame is NpcGameModel) {
-                        val rowItemViewModel = remember {
-                            SavedGameRowItemViewModel(
-                                isPlayerTurn = anyGame.game.isPlayerTurn,
-                                opponentDisplayName = "",
-                                opponentAvatarId = anyGame.opponent.avatar
-                            )
-                        }
                         SavedGameRowItemView(
-                            viewModel = rowItemViewModel,
+                            viewModel = viewModel.getRowItemViewModel(anyGame),
                             game = anyGame.game,
                             rowWidth = width,
                             modifier = Modifier.animateItem(),

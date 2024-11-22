@@ -186,8 +186,6 @@ internal abstract class GameViewModelBase(
     }
 
     internal open fun onExitGame(context: Context) {
-        saveGame(context)
-
         navController.navigate(Screen.Main.route) {
             popUpTo(Screen.Main.route) {
                 inclusive = true

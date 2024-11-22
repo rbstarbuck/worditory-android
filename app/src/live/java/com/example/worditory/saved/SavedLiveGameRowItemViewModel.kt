@@ -14,16 +14,16 @@ internal class SavedLiveGameRowItemViewModel(
 ): SavedGameRowItemViewModel(isPlayerTurn, opponentDisplayName, opponentAvatarId) {
     private val isPlayerTurnListener: GameRepository.IsPlayerTurnListener
     private val opponentListener: GameRepository.UserListener
+    private val timestampListener: GameRepository.TimestampListener
 
     init {
         isPlayerTurnListener = GameRepository.listenForIsPlayerTurn(
             gameId = gameId,
             isPlayer1 = isPlayer1,
             onIsPlayerTurn = { isPlayerTurn ->
-                _isPlayerTurnStateFlow.value = isPlayerTurn
                 if (isPlayerTurn) {
+                    _isPlayerTurnStateFlow.value = true
                     onIsPlayerTurn()
-                    removeIsPlayerTurnListener()
                 }
              },
             onError = {} // TODO(handle errors)
@@ -35,23 +35,20 @@ internal class SavedLiveGameRowItemViewModel(
             onOpponentChange = { opponent ->
                 _opponentAvatarIdStateFlow.value = opponent.avatarId ?: opponentAvatarId
                 _opponentDisplayNameStateFlow.value = opponent.displayName ?: opponentDisplayName
-                removeOpponentListener()
             },
             onError = {} // TODO(handle errors)
         )
 
-        GameRepository.listenForTimestampChange(
+        timestampListener = GameRepository.listenForTimestampChange(
             gameId = gameId,
             onTimestampChange = { onTimestampChange(it) },
             onError = {} // TODO(handle errors)
         )
     }
 
-    private fun removeIsPlayerTurnListener() {
+    internal fun removeListeners() {
         GameRepository.removeListener(isPlayerTurnListener)
-    }
-
-    private fun removeOpponentListener() {
         GameRepository.removeListener(opponentListener)
+        GameRepository.removeListener(timestampListener)
     }
 }

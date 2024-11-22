@@ -35,7 +35,7 @@ internal class LiveGameViewModel(
     }
 ) {
     private var playedWordCount = liveModel.playedWordCount
-    private var isPlayer1 = liveModel.isPlayer1
+    private val isPlayer1 = liveModel.isPlayer1
     private var timestamp = liveModel.timestamp
 
     private val latestWordListener: WordRepository.LatestWordListener
@@ -103,17 +103,14 @@ internal class LiveGameViewModel(
 
     override fun saveGame(context: Context) {
         viewModelScope.launch {
-            when (gameOverState) {
-                GameOver.State.IN_PROGRESS -> context.addSavedLiveGame(liveModel)
-                else -> context.removeSavedLiveGame(id)
-            }
+            context.addSavedLiveGame(liveModel)
         }
     }
 
     private fun onNewWord(word: PlayedWordRepoModel, context: Context) {
-        board.word.model = WordModel()
-
         viewModelScope.launch {
+            board.word.model = WordModel()
+
             board.word.withDrawPathTweenDuration(millis = word.tiles!!.size * 350) {
                 for (repoTile in word.tiles) {
                     val tile = board.tiles[flipTileIndex(repoTile.index!!)]
@@ -166,11 +163,17 @@ internal class LiveGameViewModel(
     }
 
     override fun onExitGame(context: Context) {
-        super.onExitGame(context)
-
         WordRepository.removeListener(latestWordListener)
         GameRepository.removeListener(opponentListener)
         GameRepository.removeListener(timestampListener)
+
+        super.onExitGame(context)
+
+        if (gameOverState != GameOver.State.IN_PROGRESS) {
+            viewModelScope.launch {
+                context.removeSavedLiveGame(id)
+            }
+        }
     }
 
     fun flipTileIndex(index: Int) = board.width * board.height - index - 1

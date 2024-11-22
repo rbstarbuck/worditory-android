@@ -115,16 +115,27 @@ internal class NpcGameViewModel(
             board.updateOwnershipsForWord(Game.Player.PLAYER_2)
             board.playWord(Game.Player.PLAYER_2)
             updateScoreboard()
-            isPlayerTurn = !checkForGameOver()
+            if (checkForGameOver()) {
+                onGameOver(context)
+            } else {
+                isPlayerTurn = true
+            }
             saveGame(context)
         }
     }
 
     override fun saveGame(context: Context) {
         viewModelScope.launch {
-            when (gameOverState) {
-                GameOver.State.IN_PROGRESS -> context.addSavedNpcGame(npcModel)
-                else -> context.removeSavedNpcGame(id)
+            context.addSavedNpcGame(npcModel)
+        }
+    }
+
+    override fun onExitGame(context: Context) {
+        super.onExitGame(context)
+
+        if (gameOverState != GameOver.State.IN_PROGRESS) {
+            viewModelScope.launch {
+                context.removeSavedNpcGame(id)
             }
         }
     }

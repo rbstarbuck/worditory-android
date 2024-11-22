@@ -5,7 +5,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 import com.example.worditory.composable.BackHandler
+import com.example.worditory.getGamesPlayed
 import com.example.worditory.hasShownLivePromo
 import com.example.worditory.setHasShownLivePromo
 
@@ -44,8 +43,12 @@ internal fun LivePromotionView(viewModel: LivePromotionViewModel) {
     val enabledState = viewModel.enabledStateFlow.collectAsState()
     val playStoreUriState = viewModel.playStoreUriStateFlow.collectAsState()
     val hasShownLivePromoState = context.hasShownLivePromo().collectAsState(true)
+    val gamesPlayedState = context.getGamesPlayed().collectAsState(0)
 
-    if (!hasShownLivePromoState.value && playStoreUriState.value.isNotEmpty()) {
+    if (!hasShownLivePromoState.value
+        && playStoreUriState.value.isNotEmpty()
+        && gamesPlayedState.value > 0
+    ) {
         viewModel.enabled = true
     }
 
