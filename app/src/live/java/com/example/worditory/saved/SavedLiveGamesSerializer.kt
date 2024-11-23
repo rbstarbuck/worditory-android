@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
+import com.example.worditory.game.GameRepository
 import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
+import com.example.worditory.user.UserRepository
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -53,15 +55,21 @@ internal suspend fun Context.addSavedLiveGame(liveGame: LiveGameModel) {
 
 internal suspend fun Context.setGameOver(gameId: String, gameOverState: GameOver.State) {
     savedLiveGamesDataStore.data.collect { savedGames ->
-        val oldGame = savedGames.gamesList.filter { it.game.id == gameId }.first()
+        val oldGameList = savedGames.gamesList.filter { it.game.id == gameId }
 
-        if (!oldGame.isGameOver) {
-            val newGame = oldGame.toBuilder().setIsGameOver(true).build()
-            addSavedLiveGame(newGame)
+        if (oldGameList.isNotEmpty()) {
+            val oldGame = oldGameList.first()
 
-            incrementGamesPlayed()
-            if (gameOverState == GameOver.State.WIN) {
-                incrementGamesWon()
+            if (!oldGame.isGameOver) {
+                val newGame = oldGame.toBuilder().setIsGameOver(true).build()
+                addSavedLiveGame(newGame)
+
+                incrementGamesPlayed()
+                UserRepository.incrementGamesPlayed()
+                if (gameOverState == GameOver.State.WIN) {
+                    incrementGamesWon()
+                    UserRepository.incrementGamesWon()
+                }
             }
         }
     }

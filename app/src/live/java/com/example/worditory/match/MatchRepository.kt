@@ -72,7 +72,7 @@ internal object MatchRepository {
         if (userId == null) {
             onFailure(OnMatchFailure(Reason.USER_NOT_AUTHENTICATED))
         } else {
-            val scoreToWin = gameType.boardWidth() + 1// * gameType.boardHeight()
+            val scoreToWin = gameType.boardWidth() * gameType.boardHeight()
 
             val game = GameRepoModel(
                 gameType = gameType,

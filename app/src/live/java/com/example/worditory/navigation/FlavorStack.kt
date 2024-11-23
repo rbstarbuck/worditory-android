@@ -23,7 +23,7 @@ internal fun NavGraphBuilder.flavorStack(navController: NavController) {
         val context = LocalContext.current
         val gameId = checkNotNull(backStack.arguments?.getString("id"))
 
-        val savedLiveGames = remember { context.savedLiveGamesDataStore.data }
+        val savedLiveGames = context.savedLiveGamesDataStore.data
         val savedGame = runBlocking {
             savedLiveGames.first().gamesList.filter { it.game.id == gameId }.first()
         }
