@@ -13,8 +13,6 @@ import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.INTERMEDIA
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.SUPER_ADVANCED
 import com.example.worditory.game.npc.NpcModel.Spec.OverallSkillLevel.UNRECOGNIZED
 import com.example.worditory.game.npc.addBeatenOpponent
-import com.example.worditory.incrementGamesPlayed
-import com.example.worditory.incrementGamesWon
 import com.example.worditory.saved.addSavedNpcGame
 import com.example.worditory.saved.removeSavedNpcGame
 import com.example.worditory.setWonAgainsIntermediate

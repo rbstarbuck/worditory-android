@@ -16,10 +16,12 @@ internal class SavedGamesViewModel(
     private val savedLiveGameViewModels = mutableMapOf<String, SavedLiveGameRowItemViewModel>()
     private val savedNpcGameViewModels = mutableMapOf<String, SavedGameRowItemViewModel>()
 
-    internal fun getRowItemViewModel(model: LiveGameModel): SavedLiveGameRowItemViewModel =
-        savedLiveGameViewModels.getOrPut(model.game.id) {
-            SavedLiveGameRowItemViewModel(model)
-        }
+    internal fun getRowItemViewModel(
+        model: LiveGameModel,
+        context: Context
+    ): SavedLiveGameRowItemViewModel = savedLiveGameViewModels.getOrPut(model.game.id) {
+        SavedLiveGameRowItemViewModel(model, context)
+    }
 
     internal fun getRowItemViewModel(model: NpcGameModel): SavedGameRowItemViewModel =
         savedNpcGameViewModels.getOrPut(model.game.id) {

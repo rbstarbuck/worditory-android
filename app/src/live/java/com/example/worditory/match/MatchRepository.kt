@@ -72,7 +72,7 @@ internal object MatchRepository {
         if (userId == null) {
             onFailure(OnMatchFailure(Reason.USER_NOT_AUTHENTICATED))
         } else {
-            val scoreToWin = gameType.boardWidth() * gameType.boardHeight()
+            val scoreToWin = gameType.boardWidth() + 1// * gameType.boardHeight()
 
             val game = GameRepoModel(
                 gameType = gameType,
@@ -100,7 +100,7 @@ internal object MatchRepository {
 
             Tasks.whenAll(gameTask, boardTask)
                 .addOnSuccessListener {
-                    database.child(DbKey.PLAYER_GAMES).child(userId).push().setValue(gameId)
+                    database.child(DbKey.PLAYER_GAMES).child(userId).child(gameId).setValue(true)
                 }.addOnFailureListener {
                     onFailure(OnMatchFailure(Reason.DATABASE_WRITE_ERROR, gameId))
                 }
@@ -141,7 +141,7 @@ internal object MatchRepository {
                         gameId = gameId,
                         userID = userId,
                         isPlayer1 = false,
-                        scoreToWin = game.gameType!!.boardWidth() * game.gameType.boardHeight(),
+                        scoreToWin = game.scoreToWin!!,
                         wordCount = 0,
                         timestamp = game.timestamp as Long,
                         game = game.copy(player2 = userId),
@@ -165,8 +165,8 @@ internal object MatchRepository {
                 database
                     .child(DbKey.PLAYER_GAMES)
                     .child(userId)
-                    .push()
-                    .setValue(gameId)
+                    .child(gameId)
+                    .setValue(true)
             }
         }
     }

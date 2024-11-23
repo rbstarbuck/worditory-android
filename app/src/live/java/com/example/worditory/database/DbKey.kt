@@ -21,11 +21,9 @@ internal object DbKey {
         const val PLAYER_1 = "player1"
         const val PLAYER_2 = "player2"
         const val SCORE_TO_WIN = "scoreToWin"
+        const val PLAYER_1_WON = "player1Won"
+        const val PLAYER_2_WON = "player2Won"
         const val TIMESTAMP = "timestamp"
-    }
-
-    internal object PlayerGames {
-        const val PLAYER = "player"
     }
 
     internal object Boards {

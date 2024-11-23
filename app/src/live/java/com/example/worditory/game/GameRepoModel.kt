@@ -7,5 +7,6 @@ data class GameRepoModel(
     val player1: String? = null,
     val player2: String? = null,
     val scoreToWin: Int? = null,
-    val timestamp: Any? = ServerValue.TIMESTAMP
+    val gameOver: Boolean = false,
+    val timestamp: Any = ServerValue.TIMESTAMP
 )

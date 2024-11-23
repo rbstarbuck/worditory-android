@@ -1,8 +1,10 @@
 package com.example.worditory.game
 
 import com.example.worditory.database.DbKey
+import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.user.UserRepoModel
 import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ServerValue
@@ -11,6 +13,7 @@ import com.google.firebase.database.database
 
 internal object GameRepository {
     private val database = Firebase.database.reference
+    private val auth = Firebase.auth
 
     internal fun listenForOpponent(
         gameId: String,
@@ -66,6 +69,45 @@ internal object GameRepository {
         return listener
     }
 
+    internal fun listenForGameOver(
+        gameId: String,
+        isPlayer1: Boolean,
+        onGameOver: (GameOver.State) -> Unit,
+        onError: (OnFailure) -> Unit
+    ): GameOverListener {
+
+        val listener = GameOverListener(
+            player1Listener = GameOverStateListener(
+                gameId = gameId,
+                isPlayer1 = isPlayer1,
+                isPlayer1Listener = true,
+                onGameOver = onGameOver,
+                onError = onError,
+            ),
+            player2Listener = GameOverStateListener(
+                gameId = gameId,
+                isPlayer1 = isPlayer1,
+                isPlayer1Listener = false,
+                onGameOver = onGameOver,
+                onError = onError
+            )
+        )
+
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .child(DbKey.Games.PLAYER_1_WON)
+            .addValueEventListener(listener.player1Listener)
+
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .child(DbKey.Games.PLAYER_2_WON)
+            .addValueEventListener(listener.player2Listener)
+
+        return listener
+    }
+
     internal fun removeListener(listener: UserListener) {
         database
             .child(DbKey.GAMES)
@@ -96,12 +138,45 @@ internal object GameRepository {
             .removeEventListener(listener)
     }
 
+    internal fun removeListener(listener: GameOverListener) {
+        database
+            .child(DbKey.WORDS)
+            .child(listener.player1Listener.gameId)
+            .child(DbKey.Games.PLAYER_1_WON)
+            .removeEventListener(listener.player1Listener)
+
+        database
+            .child(DbKey.WORDS)
+            .child(listener.player2Listener.gameId)
+            .child(DbKey.Games.PLAYER_2_WON)
+            .removeEventListener(listener.player2Listener)
+    }
+
     internal fun decrementScoreToWin(gameId: String) {
         database
             .child(DbKey.GAMES)
             .child(gameId)
             .child(DbKey.Games.SCORE_TO_WIN)
             .setValue(ServerValue.increment(-1))
+    }
+
+    internal fun setGameOver(gameId: String, gameOverState: GameOver.State, isPlayer1: Boolean) {
+        val player1Won = when (isPlayer1) {
+            true -> gameOverState == GameOver.State.WIN
+            false -> gameOverState == GameOver.State.LOSE
+        }
+
+        if (player1Won) {
+            database.child(DbKey.GAMES).child(gameId).child(DbKey.Games.PLAYER_1_WON).setValue(true)
+        } else {
+            database.child(DbKey.GAMES).child(gameId).child(DbKey.Games.PLAYER_2_WON).setValue(true)
+        }
+
+        database
+            .child(DbKey.PLAYER_GAMES)
+            .child(auth.currentUser!!.uid)
+            .child(gameId)
+            .setValue(false)
     }
 
     internal class UserListener(
@@ -189,6 +264,48 @@ internal object GameRepository {
         }
     }
 
+    internal class GameOverListener(
+        internal val player1Listener: GameOverStateListener,
+        internal val player2Listener: GameOverStateListener
+    )
+
+    internal class GameOverStateListener(
+        internal val gameId: String,
+        private val isPlayer1: Boolean,
+        private val isPlayer1Listener: Boolean,
+        private val onGameOver: (GameOver.State) -> Unit,
+        private val onError: (OnFailure) -> Unit
+    ): ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val playerDidWin = snapshot.getValue(Boolean::class.java)
+
+            if (playerDidWin == null) {
+                onError(OnFailure(OnFailure.Reason.IS_GAME_OVER_NOT_FOUND))
+            } else if (playerDidWin) {
+                if (isPlayer1Listener) {
+                    val gameOverState = when (isPlayer1) {
+                        true -> GameOver.State.WIN
+                        false -> GameOver.State.LOSE
+                    }
+
+                    onGameOver(gameOverState)
+                } else {
+                    val gameOverState = when (isPlayer1) {
+                        true -> GameOver.State.LOSE
+                        false -> GameOver.State.WIN
+                    }
+
+                    onGameOver(gameOverState)
+                }
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            onError(OnFailure(OnFailure.Reason.CANCELLED, error))
+        }
+
+    }
+
     internal class OnFailure(
         internal val reason: Reason,
         internal val error: DatabaseError? = null
@@ -201,6 +318,7 @@ internal object GameRepository {
             GAME_NOT_FOUND,
             COUNT_NOT_FOUND,
             TIMESTAMP_NOT_FOUND,
+            IS_GAME_OVER_NOT_FOUND,
             CANCELLED
         }
     }

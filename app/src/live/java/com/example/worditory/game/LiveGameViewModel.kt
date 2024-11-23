@@ -1,7 +1,6 @@
 package com.example.worditory.game
 
 import android.content.Context
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.game.board.tile.asLetter
@@ -9,11 +8,10 @@ import com.example.worditory.game.board.word.WordModel
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
-import com.example.worditory.incrementGamesPlayed
-import com.example.worditory.incrementGamesWon
 import com.example.worditory.R
 import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.saved.removeSavedLiveGame
+import com.example.worditory.saved.setGameOver
 import com.example.worditory.user.UserRepoModel
 import com.example.worditory.user.UserRepository
 import kotlinx.coroutines.delay
@@ -48,6 +46,7 @@ internal class LiveGameViewModel(
             .setIsPlayer1(isPlayer1)
             .setPlayedWordCount(playedWordCount)
             .setTimestamp(timestamp)
+            .setIsGameOver(gameOverState != GameOver.State.IN_PROGRESS)
             .setOpponent(OpponentModel.newBuilder()
                 .setDisplayName(scoreBoard.scorePlayer2.displayName.value)
                 .setAvatarId(scoreBoard.scorePlayer2.avatarId.value)
@@ -155,19 +154,23 @@ internal class LiveGameViewModel(
     }
 
     override fun onGameOver(context: Context) {
-        super.onGameOver(context)
-        UserRepository.incrementGamesPlayed()
+        viewModelScope.launch {
+            context.setGameOver(id, gameOverState)
+        }
+
+        GameRepository.setGameOver(id, gameOverState, isPlayer1)
+
         if (gameOverState == GameOver.State.WIN) {
-            UserRepository.incrementGamesWon()
+            setBadgesOnGameWon(context)
         }
     }
 
     override fun onExitGame(context: Context) {
+        super.onExitGame(context)
+
         WordRepository.removeListener(latestWordListener)
         GameRepository.removeListener(opponentListener)
         GameRepository.removeListener(timestampListener)
-
-        super.onExitGame(context)
 
         if (gameOverState != GameOver.State.IN_PROGRESS) {
             viewModelScope.launch {

@@ -32,10 +32,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -45,6 +43,7 @@ import com.example.worditory.game.GameModel
 import com.example.worditory.game.board.BoardViewModel
 import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.toBitmap
+import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.resourceid.getResourceId
 
 @Composable
@@ -61,6 +60,7 @@ internal fun SavedGameRowItemView(
     val isPlayerTurnState = viewModel.isPlayerTurnStateFlow.collectAsState()
     val opponentDisplayNameState = viewModel.opponentDisplayNameStateFlow.collectAsState()
     val opponentAvatarIdState = viewModel.opponentAvatarIdStateFlow.collectAsState()
+    val gameOverState = viewModel.gameOverStateFlow.collectAsState()
 
     val itemWidth = rowWidth / 2.25f
     val padding = rowWidth / 25f
@@ -162,22 +162,46 @@ internal fun SavedGameRowItemView(
             }
         }
 
-        if (isPlayerTurnState.value) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(Modifier.height(itemWidth / 10f))
+        when (gameOverState.value) {
+            GameOver.State.IN_PROGRESS -> {
+                if (isPlayerTurnState.value) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Spacer(Modifier.height(itemWidth / 10f))
 
-                Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.your_turn),
-                    contentDescription = stringResource(R.string.its_your_turn),
-                    modifier.size(itemWidth / 4f)
-                )
+                        Image(
+                            imageVector = ImageVector.vectorResource(R.drawable.your_turn),
+                            contentDescription = stringResource(R.string.its_your_turn),
+                            modifier.size(itemWidth / 4f)
+                        )
 
-                Text(
-                    text = stringResource(R.string.its_your_turn),
-                    color = colorResource(R.color.font_color_dark),
-                    fontSize = (itemWidth.value / 12f).sp,
-                    textAlign = TextAlign.Center
-                )
+                        Text(
+                            text = stringResource(R.string.its_your_turn),
+                            color = colorResource(R.color.font_color_dark),
+                            fontSize = (itemWidth.value / 12f).sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+
+            GameOver.State.WIN -> {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(R.drawable.game_over_win),
+                        contentDescription = stringResource(R.string.you_win),
+                        modifier.size(itemWidth / 3f)
+                    )
+                }
+            }
+
+            GameOver.State.LOSE -> {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(R.drawable.game_over_lose),
+                        contentDescription = stringResource(R.string.you_lose),
+                        modifier.size(itemWidth / 3f)
+                    )
+                }
             }
         }
     }
