@@ -22,8 +22,6 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
         val maxWidth = this.maxWidth
         if (maxWidth.value / maxHeight.value > 1.5f) {
             Column {
-                Spacer(Modifier.weight(0.2f))
-
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -32,22 +30,20 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
                 ) {
                     Spacer(Modifier.weight(0.5f))
 
-                    PlayerScoreView(viewModel.scorePlayer1)
+                    PlayerScoreView(viewModel.scorePlayer1, Modifier.width(maxWidth / 3f))
 
                     Spacer(Modifier.weight(1f))
                     Spacer(Modifier.width(10.dp))
 
-                    ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.height(maxHeight / 3f))
+                    ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.width(maxWidth / 5f))
 
                     Spacer(Modifier.weight(1f))
                     Spacer(Modifier.width(10.dp))
 
-                    PlayerScoreView(viewModel.scorePlayer2)
+                    PlayerScoreView(viewModel.scorePlayer2, Modifier.width(maxWidth / 3f))
 
                     Spacer(Modifier.weight(0.5f))
                 }
-
-                Spacer(Modifier.weight(0.2f))
             }
         } else {
             Column(Modifier.fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
