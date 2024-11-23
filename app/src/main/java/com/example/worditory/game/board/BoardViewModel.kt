@@ -59,6 +59,10 @@ class BoardViewModel(
         tiles = tilesData.toList()
 
         restoreModel(model)
+
+        for (tile in tiles) {
+            letterBag.removeLetter(tile.letter)
+        }
     }
 
     internal fun restoreModel(model: BoardModel) {
@@ -73,8 +77,6 @@ class BoardViewModel(
                 tile.letter = letter
             }
             tile.ownership = model.ownership
-
-            letterBag.removeLetter(letter)
         }
 
         updateSuperOwnerships()

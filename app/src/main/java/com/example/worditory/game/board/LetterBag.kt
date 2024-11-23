@@ -64,6 +64,7 @@ internal class LetterBag {
 
     private fun takeConsonant(): String {
         if (consonantsInBag == 0) return takeVowel()
+
         val consonant = randomConsonant()
 
         letterCounts[consonant] = letterCounts.getValue(consonant) - 1

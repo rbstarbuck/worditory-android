@@ -36,8 +36,8 @@ android {
             dimension = "version"
             applicationIdSuffix = ".free"
             versionNameSuffix = "-free"
-            versionCode = 1
-            versionName = "1.0"
+            versionCode = 2
+            versionName = "1.1"
         }
         create("live") {
             dimension = "version"
