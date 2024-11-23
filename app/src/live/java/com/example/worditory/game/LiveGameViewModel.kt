@@ -135,12 +135,12 @@ internal class LiveGameViewModel(
             board.playWord(Game.Player.PLAYER_2)
             scoreBoard.score = board.computeScore()
             scoreBoard.decrementScoreToWin()
+            ++playedWordCount
             if (checkForGameOver()) {
                 onGameOver(context)
             } else {
                 isPlayerTurn = true
             }
-            ++playedWordCount
             saveGame(context)
         }
     }

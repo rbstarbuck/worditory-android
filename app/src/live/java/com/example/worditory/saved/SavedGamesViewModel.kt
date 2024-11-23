@@ -16,20 +16,9 @@ internal class SavedGamesViewModel(
     private val savedLiveGameViewModels = mutableMapOf<String, SavedLiveGameRowItemViewModel>()
     private val savedNpcGameViewModels = mutableMapOf<String, SavedGameRowItemViewModel>()
 
-    internal fun getRowItemViewModel(
-        model: LiveGameModel,
-        context: Context
-    ): SavedLiveGameRowItemViewModel =
+    internal fun getRowItemViewModel(model: LiveGameModel): SavedLiveGameRowItemViewModel =
         savedLiveGameViewModels.getOrPut(model.game.id) {
-            SavedLiveGameRowItemViewModel(
-                gameId = model.game.id,
-                opponentDisplayName = model.opponent.displayName,
-                opponentAvatarId = model.opponent.avatarId,
-                isPlayer1 = model.isPlayer1,
-                isPlayerTurn = model.game.isPlayerTurn,
-                onIsPlayerTurn = { onIsPlayerTurn(model.game.id, context) },
-                onTimestampChange = { onTimestampChange(model.game.id, it, context) }
-            )
+            SavedLiveGameRowItemViewModel(model)
         }
 
     internal fun getRowItemViewModel(model: NpcGameModel): SavedGameRowItemViewModel =
@@ -47,21 +36,5 @@ internal class SavedGamesViewModel(
 
     internal fun onSavedLiveGameClick(gameId: String) {
         navController.navigate(LiveScreen.LiveGame.buildRoute(gameId))
-    }
-
-    internal fun onIsPlayerTurn(gameId: String, context: Context) {
-//        viewModelScope.launch {
-//            savedLiveGameViewModels[gameId]?.removeListeners()
-//            savedLiveGameViewModels.remove(gameId)
-//            context.setIsPlayerTurnOnSavedLiveGame(gameId)
-//        }
-    }
-
-    internal fun onTimestampChange(gameId: String, timestamp: Long, context: Context) {
-//        viewModelScope.launch {
-//            savedLiveGameViewModels[gameId]?.removeListeners()
-//            savedLiveGameViewModels.remove(gameId)
-//            context.setTimestampOnSavedLiveGame(gameId, timestamp)
-//        }
     }
 }

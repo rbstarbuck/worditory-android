@@ -2,53 +2,39 @@ package com.example.worditory.saved
 
 import com.example.worditory.game.Game
 import com.example.worditory.game.GameRepository
+import com.example.worditory.game.LiveGameModel
 
-internal class SavedLiveGameRowItemViewModel(
-    gameId: String,
-    opponentDisplayName: String,
-    opponentAvatarId: Int,
-    isPlayer1: Boolean,
-    isPlayerTurn: Boolean,
-    onIsPlayerTurn: () -> Unit,
-    onTimestampChange: (Long) -> Unit
-): SavedGameRowItemViewModel(isPlayerTurn, opponentDisplayName, opponentAvatarId) {
+internal class SavedLiveGameRowItemViewModel(model: LiveGameModel): SavedGameRowItemViewModel(
+    model.game.isPlayerTurn,
+    model.opponent.displayName,
+    model.opponent.avatarId
+) {
     private val isPlayerTurnListener: GameRepository.IsPlayerTurnListener
     private val opponentListener: GameRepository.UserListener
-    private val timestampListener: GameRepository.TimestampListener
 
     init {
         isPlayerTurnListener = GameRepository.listenForIsPlayerTurn(
-            gameId = gameId,
-            isPlayer1 = isPlayer1,
+            gameId = model.game.id,
+            isPlayer1 = model.isPlayer1,
             onIsPlayerTurn = { isPlayerTurn ->
                 if (isPlayerTurn) {
                     _isPlayerTurnStateFlow.value = true
-                    onIsPlayerTurn()
+                    GameRepository.removeListener(isPlayerTurnListener)
                 }
              },
             onError = {} // TODO(handle errors)
         )
 
         opponentListener = GameRepository.listenForOpponent(
-            gameId = gameId,
-            opponent = if (isPlayer1) Game.Player.PLAYER_2 else Game.Player.PLAYER_1,
+            gameId = model.game.id,
+            opponent = if (model.isPlayer1) Game.Player.PLAYER_2 else Game.Player.PLAYER_1,
             onOpponentChange = { opponent ->
-                _opponentAvatarIdStateFlow.value = opponent.avatarId ?: opponentAvatarId
-                _opponentDisplayNameStateFlow.value = opponent.displayName ?: opponentDisplayName
+                _opponentAvatarIdStateFlow.value = opponent.avatarId ?: model.opponent.avatarId
+                _opponentDisplayNameStateFlow.value =
+                    opponent.displayName ?: model.opponent.displayName
+                GameRepository.removeListener(opponentListener)
             },
             onError = {} // TODO(handle errors)
         )
-
-        timestampListener = GameRepository.listenForTimestampChange(
-            gameId = gameId,
-            onTimestampChange = { onTimestampChange(it) },
-            onError = {} // TODO(handle errors)
-        )
-    }
-
-    internal fun removeListeners() {
-        GameRepository.removeListener(isPlayerTurnListener)
-        GameRepository.removeListener(opponentListener)
-        GameRepository.removeListener(timestampListener)
     }
 }
