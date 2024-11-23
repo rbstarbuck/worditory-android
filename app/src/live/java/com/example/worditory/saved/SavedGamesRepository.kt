@@ -44,8 +44,9 @@ internal object SavedGamesRepository {
                     scope.launch {
                         context.savedLiveGamesDataStore.data.collect { savedGames ->
                             val savedGamesIds = savedGames.gamesList.map { it.game.id }.toSet()
-                            val liveGameIds =
-                                snapshot.children.map { it.getValue(String::class.java)!! }
+                            val liveGameIds = snapshot.children
+                                .filter { it.getValue(Boolean::class.java)!! }
+                                .map { it.key!! }
 
 
                             for (liveGameId in liveGameIds) {
@@ -119,8 +120,8 @@ internal object SavedGamesRepository {
                 }
 
                 val isPlayerTurn = when (match.isPlayer1) {
-                    true -> ownership == TileModel.Ownership.OWNED_PLAYER_2
-                    false -> ownership == TileModel.Ownership.OWNED_PLAYER_1
+                    true -> wordsSnapshot.childrenCount % 2L == 0L
+                    false -> wordsSnapshot.childrenCount % 2L == 1L
                 }
 
                 liveGame = liveGame.toBuilder()
@@ -162,49 +163,49 @@ internal object SavedGamesRepository {
         }
     }
 
-    private fun restoreSuperOwnerships(boardBuilder: BoardModel.Builder, boardSize: IntSize) {
-        for (index in 0..<boardBuilder.tilesList.size) {
-            val tile = boardBuilder.tilesList[index]
-            if (tileOwnedByPlayer1(tile) && adjacentTiles(index, boardSize).all {
-                    tileOwnedByPlayer1(boardBuilder.tilesList[it])
-                }) {
-                boardBuilder.setTiles(
-                    index,
-                    boardBuilder.tilesList[index].toBuilder().setOwnership(
-                        TileModel.Ownership.SUPER_OWNED_PLAYER_1
-                    )
-                )
-            } else if (tileOwnedByPlayer2(tile) && adjacentTiles(index, boardSize).all {
-                    tileOwnedByPlayer2(boardBuilder.tilesList[it])
-                }) {
-                boardBuilder.setTiles(
-                    index,
-                    boardBuilder.tilesList[index].toBuilder().setOwnership(
-                        TileModel.Ownership.SUPER_OWNED_PLAYER_2
-                    )
-                )
-            }
-        }
-    }
-
-    private fun adjacentTiles(index: Int, boardSize: IntSize): List<Int> {
-        val x = index % boardSize.width
-        val y = index / boardSize.width
-
-        val indices = mutableListOf<Int>()
-        if (x > 0) indices.add(index - 1)
-        if (x < boardSize.width - 1) indices.add(index + 1)
-        if (y >= boardSize.width) indices.add(index - boardSize.width)
-        if (y < boardSize.height * (boardSize.width - 1)) indices.add(index + boardSize.width)
-
-        return indices
-    }
-
-    private fun tileOwnedByPlayer1(tile: TileModel) =
-        tile.ownership == TileModel.Ownership.OWNED_PLAYER_1
-                || tile.ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_1
-
-    private fun tileOwnedByPlayer2(tile: TileModel) =
-        tile.ownership == TileModel.Ownership.OWNED_PLAYER_2
-                || tile.ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_2
+//    private fun restoreSuperOwnerships(boardBuilder: BoardModel.Builder, boardSize: IntSize) {
+//        for (index in 0..<boardBuilder.tilesList.size) {
+//            val tile = boardBuilder.tilesList[index]
+//            if (tileOwnedByPlayer1(tile) && adjacentTiles(index, boardSize).all {
+//                    tileOwnedByPlayer1(boardBuilder.tilesList[it])
+//                }) {
+//                boardBuilder.setTiles(
+//                    index,
+//                    boardBuilder.tilesList[index].toBuilder().setOwnership(
+//                        TileModel.Ownership.SUPER_OWNED_PLAYER_1
+//                    )
+//                )
+//            } else if (tileOwnedByPlayer2(tile) && adjacentTiles(index, boardSize).all {
+//                    tileOwnedByPlayer2(boardBuilder.tilesList[it])
+//                }) {
+//                boardBuilder.setTiles(
+//                    index,
+//                    boardBuilder.tilesList[index].toBuilder().setOwnership(
+//                        TileModel.Ownership.SUPER_OWNED_PLAYER_2
+//                    )
+//                )
+//            }
+//        }
+//    }
+//
+//    private fun adjacentTiles(index: Int, boardSize: IntSize): List<Int> {
+//        val x = index % boardSize.width
+//        val y = index / boardSize.width
+//
+//        val indices = mutableListOf<Int>()
+//        if (x > 0) indices.add(index - 1)
+//        if (x < boardSize.width - 1) indices.add(index + 1)
+//        if (y >= boardSize.width) indices.add(index - boardSize.width)
+//        if (y < boardSize.height * (boardSize.width - 1)) indices.add(index + boardSize.width)
+//
+//        return indices
+//    }
+//
+//    private fun tileOwnedByPlayer1(tile: TileModel) =
+//        tile.ownership == TileModel.Ownership.OWNED_PLAYER_1
+//                || tile.ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_1
+//
+//    private fun tileOwnedByPlayer2(tile: TileModel) =
+//        tile.ownership == TileModel.Ownership.OWNED_PLAYER_2
+//                || tile.ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_2
 }
