@@ -2,6 +2,4 @@ Worditory Free! Privacy Policy
 
 This app does not store or transmit any personally identifiable information. Stored data are limited to saved game states, i.e. letters on the board, player ownership of those letters, player scores, etc. These data are only accessible locally--no data are transmitted to any server.
 
-No Android permissions are used by this app.
-
 If clarification is needed regarding these policies, please contact rbstarbuck@gmail.com.
