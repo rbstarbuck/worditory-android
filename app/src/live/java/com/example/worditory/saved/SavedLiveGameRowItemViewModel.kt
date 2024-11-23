@@ -25,6 +25,9 @@ internal class SavedLiveGameRowItemViewModel(
             isPlayer1 = model.isPlayer1,
             onIsPlayerTurn = { isPlayerTurn ->
                 if (isPlayerTurn) {
+                    viewModelScope.launch {
+                        context.setIsPlayerTurnOnSavedLiveGame(model.game.id)
+                    }
                     _isPlayerTurnStateFlow.value = true
                     GameRepository.removeListener(isPlayerTurnListener)
                 }
