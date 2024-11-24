@@ -64,12 +64,12 @@ internal fun WorditoryConfirmationDialogView(
                             .padding(width * 0.05f)
                             .fillMaxWidth(),
                         color = colorResource(R.color.font_color_dark),
-                        fontSize = 24.sp,
-                        lineHeight = 30.sp,
+                        fontSize = 22.sp,
+                        lineHeight = 28.sp,
                         textAlign = TextAlign.Center
                     )
 
-                    Row(Modifier.padding(width * 0.05f)) {
+                    Row(Modifier.padding(bottom = width * 0.05f)) {
                         WorditoryOutlinedButton(
                             onClick = {
                                 viewModel.dismiss()
@@ -79,7 +79,7 @@ internal fun WorditoryConfirmationDialogView(
                         ) {
                             Text(
                                 text = stringResource(R.string.ok),
-                                fontSize = 24.sp
+                                fontSize = 20.sp
                             )
                         }
 
@@ -91,7 +91,7 @@ internal fun WorditoryConfirmationDialogView(
                         ) {
                             Text(
                                 text = stringResource(R.string.cancel),
-                                fontSize = 24.sp
+                                fontSize = 20.sp
                             )
                         }
                     }

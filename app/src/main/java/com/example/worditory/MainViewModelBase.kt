@@ -2,15 +2,19 @@ package com.example.worditory
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.worditory.badge.BadgesRowViewModel
 import com.example.worditory.badge.NewBadgesViewModel
 import com.example.worditory.chooser.avatar.AvatarChooserViewModel
+import com.example.worditory.composable.WorditoryConfirmationDialogViewModel
 import com.example.worditory.navigation.Screen
-import com.example.worditory.saved.DeleteSavedGameViewModel
 import com.example.worditory.saved.SavedGamesViewModel
+import com.example.worditory.saved.removeSavedNpcGame
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 internal abstract class MainViewModelBase(
     protected val navController: NavController,
@@ -18,7 +22,7 @@ internal abstract class MainViewModelBase(
 ): ViewModel() {
     internal val savedGames = SavedGamesViewModel(navController)
     internal val avatarChooser = AvatarChooserViewModel()
-    internal val deleteSavedGame = DeleteSavedGameViewModel()
+    internal val deleteSavedGame = WorditoryConfirmationDialogViewModel()
 
     private val _avatarChooserEnabledStateFlow =  MutableStateFlow(false)
     internal val avatarChooserEnabledStateFlow = _avatarChooserEnabledStateFlow.asStateFlow()
@@ -28,19 +32,17 @@ internal abstract class MainViewModelBase(
             _avatarChooserEnabledStateFlow.value = value
         }
 
-    private val _deleteSavedGameIdStateFlow =  MutableStateFlow("")
-    internal val deleteSavedGameIdStateFlow = _deleteSavedGameIdStateFlow.asStateFlow()
-    internal var deleteSavedGameId: String
-        get() = deleteSavedGameIdStateFlow.value
-        set(value) {
-            _deleteSavedGameIdStateFlow.value = value
-        }
-
     internal val badgesRow = BadgesRowViewModel(context)
 
     internal val newBadges = NewBadgesViewModel()
 
     internal fun onPlayGameClicked() {
         navController.navigate(Screen.NpcChooser.route)
+    }
+
+    internal fun deleteSavedGame(gameId: String, context: Context) {
+        viewModelScope.launch {
+            context.removeSavedNpcGame(gameId)
+        }
     }
 }

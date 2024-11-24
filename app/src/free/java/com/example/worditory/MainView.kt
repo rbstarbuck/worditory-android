@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,26 +25,21 @@ import com.example.worditory.badge.BadgesDialogView
 import com.example.worditory.badge.BadgesRowView
 import com.example.worditory.badge.NewBadgesView
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
+import com.example.worditory.composable.WorditoryConfirmationDialogView
 import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.header.HeaderView
 import com.example.worditory.promo.LivePromotionView
-import com.example.worditory.saved.DeleteSavedGameDialog
 import com.example.worditory.saved.SavedGamesView
 
 @Composable
 internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
     val avatarChooserEnabledState = viewModel.avatarChooserEnabledStateFlow.collectAsState()
     val avatarChooserAnimatedAlpha = animateFloatAsState(
         targetValue = if (avatarChooserEnabledState.value) 1f else 0f,
         animationSpec = tween(500),
         label = "avatarChooserAlpha"
-    )
-
-    val deleteSavedGameIdState = viewModel.deleteSavedGameIdStateFlow.collectAsState()
-    val deleteSavedGameAnimatedAlpha = animateFloatAsState(
-        targetValue = if (deleteSavedGameIdState.value == "") 0f else 1f,
-        animationSpec = tween(500),
-        label = "deleteSavedGameAlpha"
     )
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
@@ -70,7 +66,9 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 viewModel = viewModel.savedGames,
                 onDeleteClick = { gameId ->
-                    viewModel.deleteSavedGameId = gameId
+                    viewModel.deleteSavedGame.show(
+                        onConfirmed = { viewModel.deleteSavedGame(gameId, context) }
+                    )
                 }
             )
 
@@ -100,15 +98,10 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             }
         }
 
-        if (deleteSavedGameIdState.value != "") {
-            DeleteSavedGameDialog(
-                viewModel = viewModel.deleteSavedGame,
-                modifier = Modifier.alpha(deleteSavedGameAnimatedAlpha.value),
-                gameId = deleteSavedGameIdState.value
-            ) {
-                viewModel.deleteSavedGameId = ""
-            }
-        }
+        WorditoryConfirmationDialogView(
+            viewModel = viewModel.deleteSavedGame,
+            text = stringResource(R.string.delete_saved_game_question)
+        )
 
         NewBadgesView(viewModel.newBadges)
 
