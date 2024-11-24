@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -20,7 +19,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -76,7 +74,8 @@ internal fun WorditoryConfirmationDialogView(
                             onClick = {
                                 viewModel.dismiss()
                                 viewModel.onConfirmed()
-                            }
+                            },
+                            enabled = visibilityState.value
                         ) {
                             Text(
                                 text = stringResource(R.string.ok),
@@ -87,7 +86,8 @@ internal fun WorditoryConfirmationDialogView(
                         Spacer(Modifier.width(width * 0.05f))
 
                         WorditoryOutlinedButton(
-                            onClick = { viewModel.dismiss() }
+                            onClick = { viewModel.dismiss() },
+                            enabled = visibilityState.value
                         ) {
                             Text(
                                 text = stringResource(R.string.cancel),
