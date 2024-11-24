@@ -5,6 +5,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import com.example.worditory.chooser.boardsize.LiveBoardSizeChooserViewModel
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
 import com.example.worditory.game.GameView
@@ -19,7 +20,12 @@ internal fun NavGraphBuilder.flavorStack(navController: NavController) {
         BoardSizeChooserView(viewModel)
     }
 
-    composable(LiveScreen.LiveGame.route) { backStack ->
+    composable(
+        route = LiveScreen.LiveGame.route,
+        deepLinks = listOf(navDeepLink {
+            uriPattern = "https://rbstarbuck.com/livegame/{id}"
+        })
+    ) { backStack ->
         val context = LocalContext.current
         val gameId = checkNotNull(backStack.arguments?.getString("id"))
 

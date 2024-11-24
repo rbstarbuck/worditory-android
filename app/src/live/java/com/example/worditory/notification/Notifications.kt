@@ -9,11 +9,13 @@ import android.Manifest
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.util.DisplayMetrics
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.example.worditory.MainActivity
 import com.example.worditory.MainActivityBase
 import com.example.worditory.R
 import com.example.worditory.getActivity
@@ -66,7 +68,13 @@ internal object Notifications {
                 " " +
                 playedWord
 
-        val intent = Intent(context, MainActivityBase::class.java)
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://rbstarbuck.com/livegame/$gameId"),
+            context,
+            MainActivity::class.java
+        )
+
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             /* context = */ context,
             /* requestCode = */ 0,
