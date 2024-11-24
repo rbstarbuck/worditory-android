@@ -48,7 +48,7 @@ internal fun SavedGamesView(
 
                     if (anyGame is LiveGameModel) {
                         SavedGameRowItemView(
-                            viewModel = viewModel.getRowItemViewModel(anyGame, context),
+                            viewModel = viewModel.getRowItemViewModel(anyGame),
                             game = anyGame.game,
                             rowWidth = width,
                             modifier = Modifier.animateItem(),

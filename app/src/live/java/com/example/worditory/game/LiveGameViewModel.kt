@@ -86,11 +86,13 @@ internal class LiveGameViewModel(
     override fun onPlayButtonClick(context: Context): Boolean {
         val word = board.word.model
 
-        if (isPlayerTurn && WordDictionary.contains(board.word.toString())) {
+        if (super.onPlayButtonClick(context)) {
             WordRepository.playWord(id, word, board.model, playedWordCount++)
+            saveGame(context)
+            return true
         }
 
-        return super.onPlayButtonClick(context)
+        return false
     }
 
     override fun onPassTurn(context: Context) {

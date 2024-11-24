@@ -1,16 +1,10 @@
 package com.example.worditory.saved
 
-import android.content.Context
-import androidx.lifecycle.viewModelScope
 import com.example.worditory.game.Game
 import com.example.worditory.game.GameRepository
 import com.example.worditory.game.LiveGameModel
-import kotlinx.coroutines.launch
 
-internal class SavedLiveGameRowItemViewModel(
-    model: LiveGameModel,
-    context: Context
-): SavedGameRowItemViewModel(
+internal class SavedLiveGameRowItemViewModel(model: LiveGameModel): SavedGameRowItemViewModel(
     model.game.isPlayerTurn,
     model.opponent.displayName,
     model.opponent.avatarId
@@ -25,9 +19,6 @@ internal class SavedLiveGameRowItemViewModel(
             isPlayer1 = model.isPlayer1,
             onIsPlayerTurn = { isPlayerTurn ->
                 if (isPlayerTurn) {
-                    viewModelScope.launch {
-                        context.setIsPlayerTurnOnSavedLiveGame(model.game.id)
-                    }
                     _isPlayerTurnStateFlow.value = true
                     GameRepository.removeListener(isPlayerTurnListener)
                 }
@@ -51,9 +42,6 @@ internal class SavedLiveGameRowItemViewModel(
             gameId = model.game.id,
             isPlayer1 = model.isPlayer1,
             onGameOver = { gameOverState ->
-                viewModelScope.launch {
-                    context.setGameOver(model.game.id, gameOverState)
-                }
                 _gameOverStateFlow.value = gameOverState
                 GameRepository.removeListener(gameOverListener)
             },
