@@ -10,6 +10,7 @@ import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.R
 import com.example.worditory.game.dict.WordDictionary
+import com.example.worditory.notification.Notifications
 import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.saved.removeSavedLiveGame
 import com.example.worditory.saved.setGameOver
@@ -84,8 +85,10 @@ internal class LiveGameViewModel(
     }
 
     override fun onPlayButtonClick(context: Context): Boolean {
+        val word = board.word.model
+
         if (super.onPlayButtonClick(context)) {
-            WordRepository.playWord(id, board.word.model, board.model, playedWordCount++)
+            WordRepository.playWord(id, word, board.model, playedWordCount++)
             saveGame(context)
             return true
         }

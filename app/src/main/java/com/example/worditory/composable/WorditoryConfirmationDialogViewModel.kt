@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 
 internal class WorditoryConfirmationDialogViewModel(): ViewModel() {
     internal var onConfirmed: () -> Unit = {}
+    internal var onCancelled: () -> Unit = {}
 
     private val _enabledStateFlow = MutableStateFlow(false)
     internal val enabledStateFlow = _enabledStateFlow.asStateFlow()
@@ -30,8 +31,9 @@ internal class WorditoryConfirmationDialogViewModel(): ViewModel() {
     private val _visibilityStateFlow = MutableStateFlow(false)
     internal val visibilityStateFlow = _visibilityStateFlow.asStateFlow()
 
-    internal fun show(onConfirmed: () -> Unit = {}) {
+    internal fun show(onConfirmed: () -> Unit = {}, onCancelled: () -> Unit = {}) {
         this.onConfirmed = onConfirmed
+        this.onCancelled = onCancelled
         enabled = true
     }
 

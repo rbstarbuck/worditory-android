@@ -85,7 +85,9 @@ internal fun AvatarChooserDialog(
                             },
                             shape = RoundedCornerShape(15.dp),
                             colors = ButtonColors(
-                                containerColor = colorResource(R.color.avatar_chooser_grid_cell_background),
+                                containerColor = colorResource(
+                                    R.color.avatar_chooser_grid_cell_background
+                                ),
                                 contentColor = Color.White,
                                 disabledContainerColor = Color.White,
                                 disabledContentColor = Color.White
@@ -106,7 +108,7 @@ internal fun AvatarChooserDialog(
 
                             Image(
                                 imageVector = avatarVector,
-                                contentDescription = "Avatar" // TODO(Set avatar content description)
+                                contentDescription = "Avatar" // TODO(Set avatar description)
                             )
                         }
                     }

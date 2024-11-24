@@ -30,6 +30,8 @@ import com.example.worditory.R
 internal fun WorditoryConfirmationDialogView(
     viewModel: WorditoryConfirmationDialogViewModel,
     text: String,
+    confirmButtonText: String = stringResource(R.string.ok),
+    cancelButtonText: String = stringResource(R.string.cancel),
     modifier: Modifier = Modifier
 ) {
     val enabledState = viewModel.enabledStateFlow.collectAsState()
@@ -78,7 +80,7 @@ internal fun WorditoryConfirmationDialogView(
                             enabled = visibilityState.value
                         ) {
                             Text(
-                                text = stringResource(R.string.ok),
+                                text = confirmButtonText,
                                 fontSize = 20.sp
                             )
                         }
@@ -86,11 +88,14 @@ internal fun WorditoryConfirmationDialogView(
                         Spacer(Modifier.width(width * 0.05f))
 
                         WorditoryOutlinedButton(
-                            onClick = { viewModel.dismiss() },
+                            onClick = {
+                                viewModel.dismiss()
+                                viewModel.onCancelled()
+                            },
                             enabled = visibilityState.value
                         ) {
                             Text(
-                                text = stringResource(R.string.cancel),
+                                text = cancelButtonText,
                                 fontSize = 20.sp
                             )
                         }

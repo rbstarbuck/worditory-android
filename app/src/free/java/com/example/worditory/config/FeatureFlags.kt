@@ -16,7 +16,7 @@ internal open class FeatureFlags private constructor(val key: String) {
                 val mutableStateFlow = MutableStateFlow("")
 
                 val remoteConfig = Firebase.remoteConfig
-                val remote = remoteConfig.fetchAndActivate()
+                val remote = Firebase.remoteConfig.fetchAndActivate()
 
                 remote.addOnSuccessListener{
                     mutableStateFlow.value = remoteConfig.getString(key)
@@ -25,6 +25,7 @@ internal open class FeatureFlags private constructor(val key: String) {
                 return mutableStateFlow
             }
     }
+
     companion object {
         internal fun init() {
             val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig

@@ -17,6 +17,7 @@ import com.example.worditory.game.NpcGameModel
 internal fun SavedGamesView(
     viewModel: SavedGamesViewModel,
     modifier: Modifier = Modifier,
+    whenIsSavedLiveGame: (() -> Unit)? = null,
     onDeleteClick: ((gameId: String) -> Unit)? = null
 ) {
     val context = LocalContext.current
@@ -28,6 +29,10 @@ internal fun SavedGamesView(
     val savedLiveGamesState = savedLiveGamesData.collectAsState(SavedLiveGames.newBuilder().build())
 
     val savedGames = savedLiveGamesState.value.gamesList + savedNpcGamesState.value.gamesList
+
+    if (savedLiveGamesState.value.gamesList.isNotEmpty()) {
+        whenIsSavedLiveGame?.invoke()
+    }
 
     BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
         val width = this.maxWidth

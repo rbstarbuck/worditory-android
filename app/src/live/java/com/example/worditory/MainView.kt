@@ -1,7 +1,5 @@
 package com.example.worditory
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,11 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -46,11 +41,6 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         ) {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "This is the LIVE version!",
-                    color = Color.White
-                )
-
                 HeaderView(
                     Modifier
                         .fillMaxWidth()
@@ -67,6 +57,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             SavedGamesView(
                 modifier = Modifier.fillMaxWidth(),
                 viewModel = viewModel.savedGames,
+                whenIsSavedLiveGame = { viewModel.requestNotificationPermission(context) },
                 onDeleteClick = { gameId ->
                     viewModel.deleteSavedGame.show(
                         onConfirmed = { viewModel.deleteSavedGame(gameId, context) }
@@ -109,5 +100,11 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         NewBadgesView(viewModel.newBadges)
 
         AuthenticationView(viewModel.authentication)
+
+        WorditoryConfirmationDialogView(
+            viewModel = viewModel.notificationPermission,
+            text = stringResource(R.string.request_notification_permission),
+            cancelButtonText = stringResource(R.string.no_thanks)
+        )
     }
 }

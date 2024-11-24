@@ -83,55 +83,57 @@ internal object SavedGamesRepository {
                 val wordCountSnapshot = tasks[2].result as DataSnapshot
                 val wordsSnapshot = tasks[3].result as DataSnapshot
 
-                val game = gameSnapshot.getValue(GameRepoModel::class.java)!!
-                val board = boardSnapshot.getValue(BoardRepoModel::class.java)!!
-                val wordCount = wordCountSnapshot.getValue(Int::class.java)!!
+                val game = gameSnapshot.getValue(GameRepoModel::class.java)
+                val board = boardSnapshot.getValue(BoardRepoModel::class.java)
+                val wordCount = wordCountSnapshot.getValue(Int::class.java)
 
-                val match = OnMatchSuccess(
-                    gameId = gameId,
-                    userID = auth.currentUser!!.uid,
-                    isPlayer1 = game.player1 == auth.currentUser!!.uid,
-                    scoreToWin = game.scoreToWin!!,
-                    wordCount = wordCount,
-                    timestamp = game.timestamp as Long,
-                    game = game,
-                    board = board,
-                    opponent = null
-                )
+                if (game != null && board != null && wordCount != null) {
+                    val match = OnMatchSuccess(
+                        gameId = gameId,
+                        userID = auth.currentUser!!.uid,
+                        isPlayer1 = game.player1 == auth.currentUser!!.uid,
+                        scoreToWin = game.scoreToWin!!,
+                        wordCount = wordCount,
+                        timestamp = game.timestamp as Long,
+                        game = game,
+                        board = board,
+                        opponent = null
+                    )
 
-                var liveGame = LiveGame.newLiveModel(match)
-                val boardBuilder = liveGame.game.board.toBuilder()
+                    var liveGame = LiveGame.newLiveModel(match)
+                    val boardBuilder = liveGame.game.board.toBuilder()
 
-                var ownership = when (match.isPlayer1) {
-                    true -> TileModel.Ownership.OWNED_PLAYER_1
-                    false -> TileModel.Ownership.OWNED_PLAYER_2
-                }
-
-                for (child in wordsSnapshot.children) {
-                    val playedWord = child.getValue(PlayedWordRepoModel::class.java)!!
-
-                    restoreWord(playedWord, boardBuilder, ownership)
-
-                    ownership = if (ownership == TileModel.Ownership.OWNED_PLAYER_1) {
-                        TileModel.Ownership.OWNED_PLAYER_2
-                    } else {
-                        TileModel.Ownership.OWNED_PLAYER_1
+                    var ownership = when (match.isPlayer1) {
+                        true -> TileModel.Ownership.OWNED_PLAYER_1
+                        false -> TileModel.Ownership.OWNED_PLAYER_2
                     }
+
+                    for (child in wordsSnapshot.children) {
+                        val playedWord = child.getValue(PlayedWordRepoModel::class.java)!!
+
+                        restoreWord(playedWord, boardBuilder, ownership)
+
+                        ownership = if (ownership == TileModel.Ownership.OWNED_PLAYER_1) {
+                            TileModel.Ownership.OWNED_PLAYER_2
+                        } else {
+                            TileModel.Ownership.OWNED_PLAYER_1
+                        }
+                    }
+
+                    val isPlayerTurn = when (match.isPlayer1) {
+                        true -> wordsSnapshot.childrenCount % 2L == 0L
+                        false -> wordsSnapshot.childrenCount % 2L == 1L
+                    }
+
+                    liveGame = liveGame.toBuilder()
+                        .setGame(
+                            liveGame.game.toBuilder()
+                                .setIsPlayerTurn(isPlayerTurn)
+                                .setBoard(boardBuilder)
+                        ).build()
+
+                    context.addSavedLiveGame(liveGame)
                 }
-
-                val isPlayerTurn = when (match.isPlayer1) {
-                    true -> wordsSnapshot.childrenCount % 2L == 0L
-                    false -> wordsSnapshot.childrenCount % 2L == 1L
-                }
-
-                liveGame = liveGame.toBuilder()
-                    .setGame(
-                        liveGame.game.toBuilder()
-                            .setIsPlayerTurn(isPlayerTurn)
-                            .setBoard(boardBuilder)
-                    ).build()
-
-                context.addSavedLiveGame(liveGame)
             }
         }
     }
