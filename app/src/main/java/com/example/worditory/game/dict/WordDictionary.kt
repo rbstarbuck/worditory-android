@@ -45,20 +45,20 @@ internal object WordDictionary {
     internal fun search(word: String, previousResult: SearchResult): SearchResult {
         var frequency = -1
 
-        val from = wordFrequencies.binarySearch(
-            previousResult.from.absoluteValue,
+        val toIndex = if (previousResult.to.absoluteValue > wordFrequencies.size) {
+            wordFrequencies.size
+        } else {
             previousResult.to.absoluteValue
-        ) {
+        }
+
+        val from = wordFrequencies.binarySearch(previousResult.from.absoluteValue, toIndex) {
             it.word.compareTo(word)
         }
 
         if (from > 0) frequency = wordFrequencies[from].frequency
 
         val wordTail = "$word~"
-        val to = wordFrequencies.binarySearch(
-            previousResult.from.absoluteValue,
-            previousResult.to.absoluteValue
-        ) {
+        val to = wordFrequencies.binarySearch(previousResult.from.absoluteValue, toIndex) {
             it.word.compareTo(wordTail)
         }
 
