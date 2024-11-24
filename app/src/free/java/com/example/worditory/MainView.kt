@@ -35,13 +35,6 @@ import com.example.worditory.saved.SavedGamesView
 internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
-    val avatarChooserEnabledState = viewModel.avatarChooserEnabledStateFlow.collectAsState()
-    val avatarChooserAnimatedAlpha = animateFloatAsState(
-        targetValue = if (avatarChooserEnabledState.value) 1f else 0f,
-        animationSpec = tween(500),
-        label = "avatarChooserAlpha"
-    )
-
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier
@@ -53,7 +46,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 HeaderView(Modifier.fillMaxWidth().padding(20.dp)) {
-                    viewModel.avatarChooserEnabled = true
+                    viewModel.avatarChooser.enabled = true
                 }
 
                 BadgesRowView(
@@ -89,14 +82,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
 
         BadgesDialogView(viewModel.badgesRow)
 
-        if (avatarChooserEnabledState.value) {
-            AvatarChooserDialog(
-                viewModel = viewModel.avatarChooser,
-                modifier = Modifier.alpha(avatarChooserAnimatedAlpha.value)
-            ) {
-                viewModel.avatarChooserEnabled = false
-            }
-        }
+        AvatarChooserDialog(viewModel = viewModel.avatarChooser)
 
         WorditoryConfirmationDialogView(
             viewModel = viewModel.deleteSavedGame,

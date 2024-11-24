@@ -22,7 +22,7 @@ internal class MainViewModel(
                 authentication.dismiss()
                 SavedGamesRepository.syncLocalSavedGamesWithServer(viewModelScope, context)
                 UserRepository.ifAvatarIsNotSet {
-                    avatarChooserEnabled = true
+                    avatarChooser.enabled = true
                 }
             }
         }
