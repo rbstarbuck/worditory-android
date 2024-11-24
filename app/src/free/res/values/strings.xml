@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Worditory Free!</string>
+    <string name="app_name">Worditory!</string>
 
     <string name="switch_to_worditory_live">Switch to Worditory Live!</string>
     <string name="worditory_promo">Worditory Live! is now available. Play online with your friends and show off your skills!</string>
