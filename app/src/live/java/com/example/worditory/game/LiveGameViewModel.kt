@@ -99,6 +99,12 @@ internal class LiveGameViewModel(
         super.onPassTurn(context)
     }
 
+    override fun onResignGame(context: Context) {
+        WordRepository.resignGame(id, playedWordCount++)
+
+        super.onResignGame(context)
+    }
+
     override fun updateScoreboard() {
         scoreBoard.score = board.computeScore()
         if (scoreBoard.decrementScoreToWin()) {
@@ -119,6 +125,14 @@ internal class LiveGameViewModel(
                     scoreBoard.decrementScoreToWin()
                     ++playedWordCount
                     isPlayerTurn = true
+                    saveGame(context)
+                }
+            )
+        } else if (word.resignGame) {
+            resignGameDialog.show(
+                onDismiss = {
+                    gameOverState = GameOver.State.WIN
+                    onGameOver(context)
                     saveGame(context)
                 }
             )

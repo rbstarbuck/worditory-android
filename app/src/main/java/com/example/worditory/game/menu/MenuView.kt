@@ -27,9 +27,10 @@ import com.example.worditory.soundEnabled
 fun MenuView(
     viewModel: MenuViewModel,
     modifier: Modifier = Modifier,
-    onSound: (Boolean) -> Unit,
-    onHint: () -> Unit,
+    onSoundClick: (Boolean) -> Unit,
+    onHintClick: () -> Unit,
     onPassTurnClick: () -> Unit,
+    onResignGameClick: () -> Unit,
     onDisplayTutorialClick: () -> Unit,
     onExitGameClick: () -> Unit,
     onDismiss: () -> Unit
@@ -57,7 +58,7 @@ fun MenuView(
         contentAlignment = Alignment.Center
     ) {
         val buttonWidth = this.maxWidth * 0.6f
-        val buttonPaddingVertical = this.maxWidth * 0.02f
+        val buttonPaddingVertical = this.maxWidth * 0.01f
         val fontSize = (this.maxWidth.value / 20f).sp
 
         Column(
@@ -75,7 +76,7 @@ fun MenuView(
         ) {
             WorditoryOutlinedButton(
                 onClick = {
-                    onSound(!soundEnabledState.value)
+                    onSoundClick(!soundEnabledState.value)
                 },
                 modifier = Modifier
                     .width(buttonWidth)
@@ -86,7 +87,7 @@ fun MenuView(
 
             WorditoryOutlinedButton(
                 onClick = {
-                    onHint()
+                    onHintClick()
                     onDismiss()
                 },
                 modifier = Modifier
@@ -95,6 +96,18 @@ fun MenuView(
                 enabled = isPlayerTurnState.value
             ) {
                 Text(text = stringResource(R.string.give_me_a_hint), fontSize = fontSize)
+            }
+
+            WorditoryOutlinedButton(
+                onClick = {
+                    onDisplayTutorialClick()
+                    onDismiss()
+                },
+                modifier = Modifier
+                    .width(buttonWidth)
+                    .padding(vertical = buttonPaddingVertical)
+            ) {
+                Text(text = stringResource(R.string.game_rules), fontSize = fontSize)
             }
 
             WorditoryOutlinedButton(
@@ -112,15 +125,15 @@ fun MenuView(
 
             WorditoryOutlinedButton(
                 onClick = {
-                    onDisplayTutorialClick()
+                    onResignGameClick()
                     onDismiss()
                 },
                 modifier = Modifier
                     .width(buttonWidth)
-                    .padding(vertical = buttonPaddingVertical)
+                    .padding(vertical = buttonPaddingVertical),
+                enabled = isPlayerTurnState.value
             ) {
-                Text(text = stringResource(R.string.game_rules), fontSize = fontSize)
-            }
+                Text(text = stringResource(R.string.resign_game), fontSize = fontSize)}
 
             WorditoryOutlinedButton(
                 onClick = {

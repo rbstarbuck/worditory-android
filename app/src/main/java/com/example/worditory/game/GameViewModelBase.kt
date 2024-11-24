@@ -24,6 +24,7 @@ import com.example.worditory.getPlayerAvatarId
 import com.example.worditory.getPlayerDisplayName
 import com.example.worditory.mutableStateIn
 import com.example.worditory.R
+import com.example.worditory.composable.WorditoryConfirmationDialogViewModel
 import com.example.worditory.composable.WorditoryInfoDialogViewModel
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
@@ -131,6 +132,9 @@ internal abstract class GameViewModelBase(
     internal val tutorial = TutorialViewModel(board, scoreBoard)
 
     internal val passTurnDialog = WorditoryInfoDialogViewModel()
+    internal val resignGameDialog = WorditoryInfoDialogViewModel()
+
+    internal val resignGameConfirmationDialog = WorditoryConfirmationDialogViewModel()
 
     internal val model: GameModel
         get() = GameModel.newBuilder()
@@ -172,6 +176,14 @@ internal abstract class GameViewModelBase(
         board.word.model = WordModel()
         scoreBoard.decrementScoreToWin()
         isPlayerTurn = !isPlayerTurn
+        saveGame(context)
+    }
+
+    internal open fun onResignGame(context: Context) {
+        board.word.model = WordModel()
+        gameOverState = GameOver.State.LOSE
+        isPlayerTurn = false
+        onGameOver(context)
         saveGame(context)
     }
 

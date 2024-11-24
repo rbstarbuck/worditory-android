@@ -22,6 +22,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.worditory.R
 import com.example.worditory.composable.BackHandler
+import com.example.worditory.composable.WorditoryConfirmationDialogView
 import com.example.worditory.composable.WorditoryInfoDialogView
 import com.example.worditory.game.board.BoardView
 import com.example.worditory.game.playbutton.PlayButtonView
@@ -116,9 +117,14 @@ internal fun GameView(
             MenuView(
                 viewModel = viewModel.menu,
                 modifier = Modifier.alpha(animatedMenuAlpha.value),
-                onSound = { enabled -> viewModel.onSound(enabled, context) },
-                onHint = { viewModel.onHint() },
+                onSoundClick = { enabled -> viewModel.onSound(enabled, context) },
+                onHintClick = { viewModel.onHint() },
                 onPassTurnClick = { viewModel.onPassTurn(context) },
+                onResignGameClick = {
+                    viewModel.resignGameConfirmationDialog.show(
+                        onConfirmed = { viewModel.onResignGame(context) }
+                    )
+                },
                 onDisplayTutorialClick = { viewModel.onTutorial() },
                 onExitGameClick = { viewModel.onExitGame(context) },
                 onDismiss = { viewModel.onDismissMenu() }
@@ -128,6 +134,16 @@ internal fun GameView(
         WorditoryInfoDialogView(
             viewModel = viewModel.passTurnDialog,
             text = stringResource(R.string.pass_turn_dialog)
+        )
+
+        WorditoryInfoDialogView(
+            viewModel = viewModel.resignGameDialog,
+            text = stringResource(R.string.resign_game_dialog)
+        )
+
+        WorditoryConfirmationDialogView(
+            viewModel = viewModel.resignGameConfirmationDialog,
+            text = stringResource(R.string.resign_game_confirmation_dialog)
         )
     }
 }

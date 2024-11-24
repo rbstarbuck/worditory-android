@@ -1,4 +1,5 @@
 <resources>
+    <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
 
     <string name="played">Played</string>
@@ -49,6 +50,7 @@
     <string name="off">Off</string>
     <string name="give_me_a_hint">Give me a hint!</string>
     <string name="pass_turn">Pass turn</string>
+    <string name="resign_game">Resign game</string>
     <string name="game_rules">Game rules</string>
     <string name="exit_game">Save and exit</string>
 
@@ -95,6 +97,8 @@
     <string name="you_lose">You lose</string>
 
     <string name="pass_turn_dialog">Your opponent passed their turn.</string>
+    <string name="resign_game_dialog">Your opponent resigned!</string>
+    <string name="resign_game_confirmation_dialog">Are you sure you want to resign?</string>
 
     <string name="next">Next</string>
     <string name="back">Back</string>
