@@ -160,7 +160,6 @@ internal abstract class GameViewModelBase(
                 if (checkForGameOver()) {
                     onGameOver(context)
                 }
-                saveGame(context)
                 return true
             } else {
                 isNotAWord = true

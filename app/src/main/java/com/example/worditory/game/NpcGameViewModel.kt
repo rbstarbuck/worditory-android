@@ -54,6 +54,7 @@ internal class NpcGameViewModel(
 
     override fun onPlayButtonClick(context: Context): Boolean {
         if (super.onPlayButtonClick(context)) {
+            saveGame(context)
             if (gameOverState == GameOver.State.IN_PROGRESS) {
                 playNpcWord(context)
                 return true
