@@ -6,10 +6,12 @@ import com.example.worditory.game.board.tile.asLetter
 import com.example.worditory.game.word.WordRepository
 
 internal class GameNotifier(private val liveGame: LiveGameModel, context: Context) {
+    private var hasSkippedFirstWord = false
+
     private val wordListener = WordRepository.listenForLatestWord(
         gameId = liveGame.game.id,
         onNewWord = { playedWord ->
-            if (NotificationService.notificationsEnabled) {
+            if (hasSkippedFirstWord) {
                 val wordString = playedWord.tiles!!.map {
                     liveGame.game.board.tilesList[tileIndex(it.index!!)].letter.asLetter()
                 }.joinToString("")
@@ -21,6 +23,8 @@ internal class GameNotifier(private val liveGame: LiveGameModel, context: Contex
                     playedWord = wordString,
                     context = context
                 )
+            } else {
+                hasSkippedFirstWord = true
             }
         },
         onError = {}

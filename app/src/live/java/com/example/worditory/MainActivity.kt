@@ -11,17 +11,16 @@ class MainActivity: MainActivityBase() {
         super.onCreate(savedInstanceState)
 
         Notifications.createNotificationChannels(this)
-        startService(Intent(this, NotificationService::class.java))
     }
 
     override fun onStart() {
         super.onStart()
 
-        NotificationService.notificationsEnabled = false
+        stopService(Intent(this, NotificationService::class.java))
     }
 
     override fun onStop() {
-        NotificationService.notificationsEnabled = true
+        startService(Intent(this, NotificationService::class.java))
 
         super.onStop()
     }

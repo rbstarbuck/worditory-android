@@ -27,16 +27,12 @@ internal class NotificationService: Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-
         for (notifier in notifiers) {
             notifier.removeListener()
         }
 
         notifiers = emptyList()
-    }
 
-    companion object {
-        internal var notificationsEnabled = false
+        super.onDestroy()
     }
 }
