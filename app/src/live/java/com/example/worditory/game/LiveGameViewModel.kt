@@ -93,6 +93,12 @@ internal class LiveGameViewModel(
         return super.onPlayButtonClick(context)
     }
 
+    override fun onPassTurn(context: Context) {
+        WordRepository.passTurn(id, playedWordCount++)
+
+        super.onPassTurn(context)
+    }
+
     override fun updateScoreboard() {
         scoreBoard.score = board.computeScore()
         if (scoreBoard.decrementScoreToWin()) {
@@ -107,40 +113,52 @@ internal class LiveGameViewModel(
     }
 
     private fun onNewWord(word: PlayedWordRepoModel, context: Context) {
-        viewModelScope.launch {
-            board.word.model = WordModel()
+        if (word.passTurn) {
+            passTurnDialog.show(
+                onDismiss = {
+                    scoreBoard.decrementScoreToWin()
+                    ++playedWordCount
+                    isPlayerTurn = true
+                    saveGame(context)
+                }
+            )
+        } else {
+            viewModelScope.launch {
+                board.word.model = WordModel()
 
-            board.word.withDrawPathTweenDuration(millis = word.tiles!!.size * 350) {
-                for (repoTile in word.tiles) {
-                    val tile = board.tiles[flipTileIndex(repoTile.index!!)]
-                    board.word.onSelectTile(tile, Game.Player.PLAYER_2)
+                board.word.withDrawPathTweenDuration(millis = word.tiles!!.size * 350) {
+                    for (repoTile in word.tiles) {
+                        val tile = board.tiles[flipTileIndex(repoTile.index!!)]
+                        board.word.onSelectTile(tile, Game.Player.PLAYER_2)
+                    }
+
+                    delay(word.tiles.size * 350L + 1000L)
                 }
 
-                delay(word.tiles.size * 350L + 1000L)
-            }
+                for (repoTile in word.tiles) {
+                    val tile = board.tiles[flipTileIndex(repoTile.index!!)]
+                    val newLetter = repoTile.newLetter!!.asLetter()
 
-            for (repoTile in word.tiles) {
-                val tile = board.tiles[flipTileIndex(repoTile.index!!)]
-                val newLetter = repoTile.newLetter!!.asLetter()
+                    board.letterBag.exchangeForLetter(
+                        oldLetter = tile.letter,
+                        newLetter = newLetter
+                    )
+                    tile.letter = newLetter
+                }
 
-                board.letterBag.exchangeForLetter(
-                    oldLetter = tile.letter,
-                    newLetter = newLetter
-                )
-                tile.letter = newLetter
-            }
+                board.updateOwnershipsForWord(Game.Player.PLAYER_2)
+                board.playWord(Game.Player.PLAYER_2)
+                scoreBoard.score = board.computeScore()
+                scoreBoard.decrementScoreToWin()
+                ++playedWordCount
+                if (checkForGameOver()) {
+                    onGameOver(context)
+                } else {
+                    isPlayerTurn = true
+                }
 
-            board.updateOwnershipsForWord(Game.Player.PLAYER_2)
-            board.playWord(Game.Player.PLAYER_2)
-            scoreBoard.score = board.computeScore()
-            scoreBoard.decrementScoreToWin()
-            ++playedWordCount
-            if (checkForGameOver()) {
-                onGameOver(context)
-            } else {
-                isPlayerTurn = true
+                saveGame(context)
             }
-            saveGame(context)
         }
     }
 

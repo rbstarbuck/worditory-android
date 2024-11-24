@@ -94,6 +94,8 @@
     <string name="you_win">You win!</string>
     <string name="you_lose">You lose</string>
 
+    <string name="pass_turn_dialog">Your opponent passed their turn.</string>
+
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="finish">Finish</string>

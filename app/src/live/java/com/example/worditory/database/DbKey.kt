@@ -41,6 +41,8 @@ internal object DbKey {
 
         internal object PlayedWords {
             const val INDEX = "index"
+            const val PASS_TURN = "passTurn"
+            const val RESIGN_GAME = "resignGame"
             const val TILES = "tiles"
 
             internal object Tiles {

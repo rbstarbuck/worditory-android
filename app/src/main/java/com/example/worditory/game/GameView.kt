@@ -22,6 +22,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.worditory.R
 import com.example.worditory.composable.BackHandler
+import com.example.worditory.composable.WorditoryInfoDialogView
 import com.example.worditory.game.board.BoardView
 import com.example.worditory.game.playbutton.PlayButtonView
 import com.example.worditory.game.scoreboard.ScoreBoardView
@@ -123,5 +124,10 @@ internal fun GameView(
                 onDismiss = { viewModel.onDismissMenu() }
             )
         }
+
+        WorditoryInfoDialogView(
+            viewModel = viewModel.passTurnDialog,
+            text = stringResource(R.string.pass_turn_dialog)
+        )
     }
 }

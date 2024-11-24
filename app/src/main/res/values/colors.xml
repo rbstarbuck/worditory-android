@@ -8,6 +8,8 @@
     <color name="badges_background">#FFDDDDDD</color>
     <color name="new_badges_background">#FFDDDDDD</color>
 
+    <color name="dialog_background">#FFDDDDDD</color>
+
     <color name="player_green_light">#FFA9F56E</color>
     <color name="player_green_dark">#FF78D433</color>
     <color name="player_purple_light">#FFDE93ED</color>

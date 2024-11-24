@@ -7,6 +7,8 @@ data class WordRepoModel(
 
 data class PlayedWordRepoModel(
     val index: Int? = null,
+    val passTurn: Boolean = false,
+    val resignGame: Boolean = false,
     val tiles: List<WordTileRepoModel>? = null
 )
 
