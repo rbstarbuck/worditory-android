@@ -27,10 +27,7 @@ internal fun SavedGamesView(
     val savedLiveGamesData = remember { context.savedLiveGamesDataStore.data }
     val savedLiveGamesState = savedLiveGamesData.collectAsState(SavedLiveGames.newBuilder().build())
 
-    val savedGames = savedLiveGamesState.value.gamesList
-        .sortedByDescending { it.timestamp }
-        .sortedByDescending { it.game.isPlayerTurn } +
-            savedNpcGamesState.value.gamesList
+    val savedGames = savedLiveGamesState.value.gamesList + savedNpcGamesState.value.gamesList
 
     BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
         val width = this.maxWidth
