@@ -4,11 +4,11 @@
 
     <string name="no_thanks">No thanks</string>
 
-    <string name="request_notification_permission">Would you like to be notified when it\'s your turn to play in a Live game?</string>
+    <string name="request_notification_permission">Would you like to be receive silent notifications when it\'s your turn to play in a Live game?</string>
     <string name="player_turn_channel_name">Your turn</string>
     <string name="player_turn_channel_description">Notifies you when it\'s your turn to act in a Live game.</string>
-    <string name="player_turn_notification_title">It\'s your turn in Worditory Live!</string>
-    <string name="player_turn_notification_text">just played</string>
+    <string name="player_turn_notification_title">It\'s your turn!</string>
+    <string name="player_turn_notification_text">played</string>
 
     <string name="play_against_computer">Play against computer</string>
 

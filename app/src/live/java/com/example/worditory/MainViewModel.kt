@@ -25,8 +25,6 @@ internal class MainViewModel(
     internal val notificationPermission = WorditoryConfirmationDialogViewModel()
 
     init {
-        Notifications.createNotificationChannels(context)
-
         if (Firebase.auth.currentUser == null) {
             authentication.authenticate {
                 authentication.dismiss()

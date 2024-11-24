@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.drawable.toBitmap
-import com.example.worditory.MainActivity
+import com.example.worditory.MainActivityBase
 import com.example.worditory.R
 import com.example.worditory.getActivity
 import com.example.worditory.resourceid.getResourceId
@@ -37,7 +37,7 @@ internal object Notifications {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.player_turn_channel_name)
             val descriptionText = context.getString(R.string.player_turn_channel_description)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_LOW
             val channel = NotificationChannel(PLAYER_TURN_CHANNEL_ID, name, importance)
             channel.description = descriptionText
 
@@ -66,7 +66,7 @@ internal object Notifications {
                 " " +
                 playedWord
 
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = Intent(context, MainActivityBase::class.java)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             /* context = */ context,
             /* requestCode = */ 0,
@@ -76,7 +76,7 @@ internal object Notifications {
 
         var notification = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
             .setSmallIcon(R.drawable.your_turn)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentTitle(context.getString(R.string.player_turn_notification_title))
             .setContentText(contentText)
             .setLargeIcon(largeIcon)
