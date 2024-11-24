@@ -37,17 +37,16 @@ internal fun AvatarChooserDialog(
     modifier: Modifier = Modifier
 ) {
     val enabledState = viewModel.enabledStateFlow.collectAsState()
+    val visibilityState = viewModel.visibilityStateFlow.collectAsState()
+
+    val animatedAlpha = animateFloatAsState(
+        targetValue = if (visibilityState.value) 1f else 0f,
+        animationSpec = tween(500),
+        label = "alpha"
+    )
 
     if (enabledState.value) {
         val context = LocalContext.current
-
-        val visibilityState = viewModel.visibilityStateFlow.collectAsState()
-
-        val animatedAlpha = animateFloatAsState(
-            targetValue = if (visibilityState.value) 1f else 0f,
-            animationSpec = tween(500),
-            label = "alpha"
-        )
 
         BackHandler { viewModel.enabled = false }
 
