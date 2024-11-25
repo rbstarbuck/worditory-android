@@ -16,7 +16,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.example.worditory.MainActivity
-import com.example.worditory.MainActivityBase
 import com.example.worditory.R
 import com.example.worditory.getActivity
 import com.example.worditory.resourceid.getResourceId
@@ -69,10 +68,10 @@ internal object Notifications {
                 playedWord
 
         val intent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("https://rbstarbuck.com/livegame/$gameId"),
-            context,
-            MainActivity::class.java
+            /* action = */ Intent.ACTION_VIEW,
+            /* uri = */ Uri.parse("https://rbstarbuck.com/livegame/$gameId"),
+            /* packageContext = */ context,
+            /* cls = */ MainActivity::class.java
         )
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
@@ -107,7 +106,7 @@ internal object Notifications {
                 // for ActivityCompat#requestPermissions for more details.
                 return@with
             }
-            // notificationId is a unique int for each notification that you must define.
+
             notify(PLAYER_TURN_NOTIFICATION_ID, notification)
         }
     }

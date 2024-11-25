@@ -6,5 +6,20 @@
         <service
             android:name=".notification.NotificationService"
             android:exported="false"/>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="rbstarbuck.com"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
