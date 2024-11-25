@@ -23,7 +23,7 @@ internal class SavedLiveGameRowItemViewModel(model: LiveGameModel): SavedGameRow
                     GameRepository.removeListener(isPlayerTurnListener)
                 }
              },
-            onError = {} // TODO(handle errors)
+            onError = {}
         )
 
         opponentListener = GameRepository.listenForOpponent(
@@ -35,7 +35,7 @@ internal class SavedLiveGameRowItemViewModel(model: LiveGameModel): SavedGameRow
                     opponent.displayName ?: model.opponent.displayName
                 GameRepository.removeListener(opponentListener)
             },
-            onError = {} // TODO(handle errors)
+            onError = {}
         )
 
         gameOverListener = GameRepository.listenForGameOver(
@@ -45,7 +45,15 @@ internal class SavedLiveGameRowItemViewModel(model: LiveGameModel): SavedGameRow
                 _gameOverStateFlow.value = gameOverState
                 GameRepository.removeListener(gameOverListener)
             },
-            onError = {} // TODO(handle errors)
+            onError = {}
         )
+    }
+
+    override fun onCleared() {
+        GameRepository.removeListener(isPlayerTurnListener)
+        GameRepository.removeListener(opponentListener)
+        GameRepository.removeListener(gameOverListener)
+
+        super.onCleared()
     }
 }
