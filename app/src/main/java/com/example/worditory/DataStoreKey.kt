@@ -179,7 +179,7 @@ internal suspend fun Context.setZWord(word: String) {
 }
 
 internal fun Context.played5LetterWord() =
-    dataStore.data.map { preferences -> preferences[DataStoreKey.Played5Letter] }
+    dataStore.data.map { preferences -> preferences[DataStoreKey.Played5Letter] ?: "" }
 
 internal suspend fun Context.setPlayed5LetterWord(word: String) {
     dataStore.edit { settings ->
@@ -188,7 +188,7 @@ internal suspend fun Context.setPlayed5LetterWord(word: String) {
 }
 
 internal fun Context.played6LetterWord() =
-    dataStore.data.map { preferences -> preferences[DataStoreKey.Played6Letter] }
+    dataStore.data.map { preferences -> preferences[DataStoreKey.Played6Letter] ?: "" }
 
 internal suspend fun Context.setPlayed6LetterWord(word: String) {
     dataStore.edit { settings ->
@@ -197,7 +197,7 @@ internal suspend fun Context.setPlayed6LetterWord(word: String) {
 }
 
 internal fun Context.played7LetterWord() =
-    dataStore.data.map { preferences -> preferences[DataStoreKey.Played7Letter] }
+    dataStore.data.map { preferences -> preferences[DataStoreKey.Played7Letter] ?: "" }
 
 internal suspend fun Context.setPlayed7LetterWord(word: String) {
     dataStore.edit { settings ->
@@ -206,7 +206,7 @@ internal suspend fun Context.setPlayed7LetterWord(word: String) {
 }
 
 internal fun Context.played8LetterWord() =
-    dataStore.data.map { preferences -> preferences[DataStoreKey.Played8Letter] }
+    dataStore.data.map { preferences -> preferences[DataStoreKey.Played8Letter] ?: "" }
 
 internal suspend fun Context.setPlayed8LetterWord(word: String) {
     dataStore.edit { settings ->
