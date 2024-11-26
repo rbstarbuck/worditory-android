@@ -72,12 +72,9 @@ internal fun GameView(
             PlayButtonView(
                 viewModel = viewModel.playButton,
                 modifier = Modifier.height(130.dp),
-                onMenuClick = {
-                    viewModel.onMenuClick()
-                },
-                onPlayClick =  {
-                    viewModel.onPlayButtonClick(context)
-                }
+                onMenuClick = { viewModel.onMenuClick() },
+                onPlayClick = { viewModel.onPlayButtonClick(context) },
+                onNextGameClick = { viewModel.onNextGameClick(it, context) }
             )
         }
 

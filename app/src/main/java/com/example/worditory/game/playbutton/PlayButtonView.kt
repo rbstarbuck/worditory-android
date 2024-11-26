@@ -37,12 +37,14 @@ internal fun PlayButtonView(
     viewModel: PlayButtonViewModel,
     modifier: Modifier = Modifier,
     onPlayClick: () -> Unit,
-    onMenuClick: () -> Unit
+    onMenuClick: () -> Unit,
+    onNextGameClick: (String) -> Unit
 ) {
     Column(modifier.fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
         val wordState = viewModel.wordStateFlow.collectAsState()
         val isPlayerTurnState = viewModel.isPlayerTurnStateFlow.collectAsState()
         val isNotAWordState = viewModel.isNotAWordStateFlow.collectAsState()
+        val nextGameState = viewModel.nextGameStateFlow.collectAsState()
 
         val wordTextColor = colorResource(R.color.font_color_light)
 
@@ -82,7 +84,26 @@ internal fun PlayButtonView(
             }
 
             Spacer(Modifier.weight(1f))
-            Spacer(Modifier.width(56.dp))
+
+            val nextGame = nextGameState.value
+            if (nextGame == null) {
+                Spacer(Modifier.width(40.dp))
+            } else {
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.next),
+                    contentDescription = stringResource(R.string.next_game),
+                    modifier = Modifier
+                        .width(40.dp)
+                        .height(40.dp)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = { onNextGameClick(nextGame) }
+                            )
+                        }
+                )
+            }
+
+            Spacer(Modifier.width(16.dp))
         }
 
         Spacer(Modifier.weight(0.75f))

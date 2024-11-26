@@ -72,6 +72,14 @@ internal abstract class GameViewModelBase(
             _isNotAWordStateFlow.value = value
         }
 
+    private val _nextGameStateFlow = MutableStateFlow<String?>(null)
+    private val nextGameStateFlow = _nextGameStateFlow.asStateFlow()
+    protected var nextGame: String?
+        get() = nextGameStateFlow.value
+        set(value) {
+            _nextGameStateFlow.value = value
+        }
+
     private val _displayMenuStateFlow = MutableStateFlow(false)
     internal val displayMenuStateFlow = _displayMenuStateFlow.asStateFlow()
     private var displayMenu: Boolean
@@ -110,7 +118,8 @@ internal abstract class GameViewModelBase(
     internal val playButton = PlayButtonViewModel(
         board.word.modelStateFlow,
         isNotAWordStateFlow,
-        isPlayerTurnStateFlow
+        isPlayerTurnStateFlow,
+        nextGameStateFlow
     )
 
     internal val menu = MenuViewModel(isPlayerTurnStateFlow)
@@ -187,6 +196,11 @@ internal abstract class GameViewModelBase(
         saveGame(context)
     }
 
+    protected open fun updateScoreboard() {
+        scoreBoard.score = board.computeScore()
+        scoreBoard.decrementScoreToWin()
+    }
+
     internal abstract fun saveGame(context: Context)
 
     internal open fun onGameOver(context: Context) {
@@ -200,6 +214,8 @@ internal abstract class GameViewModelBase(
     }
 
     internal open fun onExitGame(context: Context) {
+        saveGame(context)
+
         navController.navigate(Screen.Main.route) {
             popUpTo(Screen.Main.route) {
                 inclusive = true
@@ -207,10 +223,7 @@ internal abstract class GameViewModelBase(
         }
     }
 
-    protected open fun updateScoreboard() {
-        scoreBoard.score = board.computeScore()
-        scoreBoard.decrementScoreToWin()
-    }
+    internal open fun onNextGameClick(gameId: String, context: Context) {}
 
     internal fun onMenuClick() {
         displayMenu = true

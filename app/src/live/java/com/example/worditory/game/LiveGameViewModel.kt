@@ -1,6 +1,7 @@
 package com.example.worditory.game
 
 import android.content.Context
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.game.board.tile.asLetter
@@ -10,13 +11,18 @@ import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.R
 import com.example.worditory.game.dict.WordDictionary
+import com.example.worditory.navigation.LiveScreen
 import com.example.worditory.notification.Notifications
+import com.example.worditory.saved.SavedGamesService
 import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.saved.removeSavedLiveGame
 import com.example.worditory.saved.setGameOver
 import com.example.worditory.user.UserRepoModel
 import com.example.worditory.user.UserRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 internal class LiveGameViewModel(
@@ -41,6 +47,10 @@ internal class LiveGameViewModel(
     private val latestWordListener: WordRepository.LatestWordListener
     private val opponentListener: GameRepository.UserListener
     private val timestampListener: GameRepository.TimestampListener
+
+    private var isOpponentOpeningTurn = false
+
+    private val nextGameJob: Job
 
     private val liveModel: LiveGameModel
         get() = LiveGameModel.newBuilder()
@@ -82,6 +92,24 @@ internal class LiveGameViewModel(
             onTimestampChange = { timestamp = it },
             onError = {} // TODO(handle errors)
         )
+
+        nextGameJob = viewModelScope.launch {
+            SavedGamesService.savedGamesStateFlow.collect { savedGames ->
+                val validNextGames = savedGames.filter {
+                    it.isPlayerTurn && it.liveGame.game.id != id
+                }
+
+                nextGame = when {
+                    validNextGames.isEmpty() -> null
+                    else -> validNextGames.first().liveGame.game.id
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            delay(2500L)
+            isOpponentOpeningTurn = false
+        }
     }
 
     override fun onPlayButtonClick(context: Context): Boolean {
@@ -106,6 +134,11 @@ internal class LiveGameViewModel(
         WordRepository.resignGame(id, playedWordCount++)
 
         super.onResignGame(context)
+    }
+
+    override fun onNextGameClick(gameId: String, context: Context) {
+        onExitGame(context)
+        navController.navigate(LiveScreen.LiveGame.buildRoute(gameId))
     }
 
     override fun updateScoreboard() {
@@ -144,6 +177,10 @@ internal class LiveGameViewModel(
                 board.word.model = WordModel()
 
                 board.word.withDrawPathTweenDuration(millis = word.tiles!!.size * 350) {
+                    if (isOpponentOpeningTurn) {
+                        delay(1500L)
+                    }
+
                     for (repoTile in word.tiles) {
                         val tile = board.tiles[flipTileIndex(repoTile.index!!)]
                         board.word.onSelectTile(tile, Game.Player.PLAYER_2)
@@ -212,6 +249,8 @@ internal class LiveGameViewModel(
                 context.removeSavedLiveGame(id)
             }
         }
+
+        nextGameJob.cancel()
     }
 
     fun flipTileIndex(index: Int) = board.width * board.height - index - 1

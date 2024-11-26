@@ -56,6 +56,8 @@
 
     <string name="play">Play</string>
 
+    <string name="next_game">Next game</string>
+
     <string name="is_not_a_word">ain\'t a word!</string>
 
     <string name="opponent">Opponent</string>

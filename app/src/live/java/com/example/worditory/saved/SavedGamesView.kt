@@ -66,8 +66,8 @@ internal fun SavedGamesView(
                         SavedGameRowItemView(
                             game = item.liveGame.game,
                             isPlayerTurn = item.isPlayerTurn,
-                            opponentDisplayName = item.liveGame.opponent.displayName,
-                            opponentAvatarId = item.liveGame.opponent.avatarId,
+                            opponentDisplayName = item.opponentDisplayName,
+                            opponentAvatarId = item.opponentAvatarId,
                             gameOverState = item.gameOverState,
                             rowWidth = width,
                             modifier = Modifier.animateItem(),
