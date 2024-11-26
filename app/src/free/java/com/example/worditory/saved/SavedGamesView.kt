@@ -38,7 +38,10 @@ internal fun SavedGamesView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                items(savedNpcGamesState.value.gamesList.size) { i ->
+                items(
+                    count = savedNpcGamesState.value.gamesList.size,
+                    key = { savedNpcGamesState.value.gamesList[it].game.id }
+                ) { i ->
                     val npcGame = savedNpcGamesState.value.gamesList[i]
 
                     SavedGameRowItemView(

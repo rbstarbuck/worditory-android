@@ -47,7 +47,19 @@ internal fun SavedGamesView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                items(savedGames.size) { i ->
+                items(
+                    count = savedGames.size,
+                    key = { i ->
+                        val item = savedGames[i]
+                        if (item is SavedGameData) {
+                            item.liveGame.game.id
+                        } else if (item is NpcGameModel) {
+                            item.game.id
+                        } else {
+                            i
+                        }
+                    }
+                ) { i ->
                     val item = savedGames[i]
 
                     if (item is SavedGameData) {

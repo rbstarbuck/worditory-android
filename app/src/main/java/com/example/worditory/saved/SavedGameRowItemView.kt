@@ -66,9 +66,9 @@ internal fun SavedGameRowItemView(
     val closeButtonSize = min(rowWidth / 10f, 30.dp)
     val closeButtonOffset = rowWidth / -60f
 
-    Box(contentAlignment = Alignment.Center) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .width(itemWidth)
                 .padding(padding)
                 .aspectRatio(game.board.width.toFloat() / game.board.height.toFloat())
