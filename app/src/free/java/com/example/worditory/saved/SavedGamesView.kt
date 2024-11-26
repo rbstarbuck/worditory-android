@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.npc.NonPlayerCharacter
 import com.example.worditory.resourceid.getResourceId
 
@@ -37,16 +38,17 @@ internal fun SavedGamesView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                items(savedNpcGamesState.value.gamesList.size) { item ->
-                    val npcGame = savedNpcGamesState.value.gamesList.get(item)
-                    val rowItemViewModel = SavedGameRowItemViewModel(
-                        isPlayerTurn = npcGame.game.isPlayerTurn,
-                        opponentDisplayName = "",
-                        opponentAvatarId = npcGame.opponent.avatar
-                    )
+                items(savedNpcGamesState.value.gamesList.size) { i ->
+                    val npcGame = savedNpcGamesState.value.gamesList[i]
+
                     SavedGameRowItemView(
-                        viewModel = rowItemViewModel,
                         game = npcGame.game,
+                        isPlayerTurn = npcGame.game.isPlayerTurn,
+                        opponentDisplayName = stringResource(
+                            NonPlayerCharacter.avatarIdToDisplayNameResId(npcGame.opponent.avatar)
+                        ),
+                        opponentAvatarId = npcGame.opponent.avatar,
+                        gameOverState = GameOver.State.IN_PROGRESS,
                         rowWidth = width,
                         modifier = Modifier.animateItem(),
                         onSavedGameClick = { viewModel.onSavedGameClick(npcGame.game.id) },

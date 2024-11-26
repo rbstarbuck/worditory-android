@@ -21,7 +21,6 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,19 +47,17 @@ import com.example.worditory.resourceid.getResourceId
 
 @Composable
 internal fun SavedGameRowItemView(
-    viewModel: SavedGameRowItemViewModel,
     game: GameModel,
+    isPlayerTurn: Boolean,
+    opponentDisplayName: String,
+    opponentAvatarId: Int,
+    gameOverState: GameOver.State,
     rowWidth: Dp,
     modifier: Modifier = Modifier,
     onSavedGameClick: () -> Unit,
     onDeleteClick: (() -> Unit)? = null
 ) {
     val context = LocalContext.current
-
-    val isPlayerTurnState = viewModel.isPlayerTurnStateFlow.collectAsState()
-    val opponentDisplayNameState = viewModel.opponentDisplayNameStateFlow.collectAsState()
-    val opponentAvatarIdState = viewModel.opponentAvatarIdStateFlow.collectAsState()
-    val gameOverState = viewModel.gameOverStateFlow.collectAsState()
 
     val itemWidth = rowWidth / 2.25f
     val padding = rowWidth / 25f
@@ -97,7 +94,7 @@ internal fun SavedGameRowItemView(
             }
 
             Text(
-                text = opponentDisplayNameState.value,
+                text = opponentDisplayName,
                 color = colorResource(R.color.font_color_dark),
                 modifier = Modifier.padding(start = 15.dp),
                 fontSize = 14.sp,
@@ -155,16 +152,16 @@ internal fun SavedGameRowItemView(
             ) {
                 Image(
                     imageVector = ImageVector.vectorResource(
-                        getResourceId(opponentAvatarIdState.value)
+                        getResourceId(opponentAvatarId)
                     ),
                     contentDescription = stringResource(R.string.avatar)
                 )
             }
         }
 
-        when (gameOverState.value) {
+        when (gameOverState) {
             GameOver.State.IN_PROGRESS -> {
-                if (isPlayerTurnState.value) {
+                if (isPlayerTurn) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Spacer(Modifier.height(itemWidth / 10f))
 
