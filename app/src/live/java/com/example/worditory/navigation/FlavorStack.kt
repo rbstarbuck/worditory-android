@@ -43,7 +43,7 @@ internal fun NavGraphBuilder.flavorStack(navController: NavController) {
                     context = context
                 )
             }
-            
+
             GameView(viewModel)
         }
 

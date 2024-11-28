@@ -51,6 +51,7 @@ internal fun SavedGamesView(
                             NonPlayerCharacter.avatarIdToDisplayNameResId(npcGame.opponent.avatar)
                         ),
                         opponentAvatarId = npcGame.opponent.avatar,
+                        isTimedOut = false,
                         gameOverState = GameOver.State.IN_PROGRESS,
                         rowWidth = width,
                         modifier = Modifier.animateItem(),

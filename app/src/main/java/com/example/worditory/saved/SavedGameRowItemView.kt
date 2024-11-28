@@ -51,6 +51,7 @@ internal fun SavedGameRowItemView(
     isPlayerTurn: Boolean,
     opponentDisplayName: String,
     opponentAvatarId: Int,
+    isTimedOut: Boolean,
     gameOverState: GameOver.State,
     rowWidth: Dp,
     modifier: Modifier = Modifier,
@@ -178,6 +179,23 @@ internal fun SavedGameRowItemView(
                             textAlign = TextAlign.Center
                         )
                     }
+                } else if (isTimedOut) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Spacer(Modifier.height(itemWidth / 10f))
+
+                        Image(
+                            imageVector = ImageVector.vectorResource(R.drawable.claim_victory),
+                            contentDescription = stringResource(R.string.claim_victory),
+                            modifier.size(itemWidth / 4f)
+                        )
+
+                        Text(
+                            text = stringResource(R.string.claim_victory),
+                            color = colorResource(R.color.font_color_dark),
+                            fontSize = (itemWidth.value / 12f).sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
 
@@ -186,7 +204,7 @@ internal fun SavedGameRowItemView(
                     Image(
                         imageVector = ImageVector.vectorResource(R.drawable.game_over_win),
                         contentDescription = stringResource(R.string.you_win),
-                        modifier.size(itemWidth / 3f)
+                        modifier = modifier.size(itemWidth / 3f)
                     )
                 }
             }
@@ -196,7 +214,7 @@ internal fun SavedGameRowItemView(
                     Image(
                         imageVector = ImageVector.vectorResource(R.drawable.game_over_lose),
                         contentDescription = stringResource(R.string.you_lose),
-                        modifier.size(itemWidth / 3f)
+                        modifier = modifier.size(itemWidth / 3f)
                     )
                 }
             }

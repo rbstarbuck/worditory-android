@@ -4,6 +4,7 @@ import com.example.worditory.game.Game
 import com.example.worditory.game.GameRepository
 import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.gameover.GameOver
+import com.example.worditory.timeout.TIMEOUT_MILLIS
 
 internal data class SavedGameData(
     internal val liveGame: LiveGameModel,
@@ -11,6 +12,7 @@ internal data class SavedGameData(
     internal val opponentDisplayName: String,
     internal val opponentAvatarId: Int,
     internal val timestamp: Long,
+    internal val isTimedOut: Boolean,
     internal val gameOverState: GameOver.State
 )
 
@@ -21,6 +23,7 @@ internal class SavedGameUpdater(internal val liveGame: LiveGameModel, onDataChan
         opponentDisplayName = liveGame.opponent.displayName,
         opponentAvatarId = liveGame.opponent.avatarId,
         timestamp = liveGame.timestamp,
+        isTimedOut = false,
         gameOverState = GameOver.State.IN_PROGRESS
     )
 
@@ -66,6 +69,16 @@ internal class SavedGameUpdater(internal val liveGame: LiveGameModel, onDataChan
         onError = {}
     )
 
+    private val timeoutListener = GameRepository.listenForTimeout(
+        gameId = liveGame.game.id,
+        timeoutDelta = TIMEOUT_MILLIS,
+        onTimeout = {
+            data = data.copy(isTimedOut = true)
+            onDataChange()
+        },
+        onError = {},
+    )
+
     private val gameOverListener = GameRepository.listenForGameOver(
         gameId = liveGame.game.id,
         isPlayer1 = liveGame.isPlayer1,
@@ -82,6 +95,7 @@ internal class SavedGameUpdater(internal val liveGame: LiveGameModel, onDataChan
         GameRepository.removeListener(isPlayerTurnListener)
         GameRepository.removeListener(timestampListener)
         GameRepository.removeListener(opponentListener)
+        GameRepository.removeListener(timeoutListener)
         GameRepository.removeListener(gameOverListener)
     }
 }

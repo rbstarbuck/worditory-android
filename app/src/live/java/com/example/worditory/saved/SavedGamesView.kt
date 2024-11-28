@@ -68,6 +68,7 @@ internal fun SavedGamesView(
                             isPlayerTurn = item.isPlayerTurn,
                             opponentDisplayName = item.opponentDisplayName,
                             opponentAvatarId = item.opponentAvatarId,
+                            isTimedOut = item.isTimedOut,
                             gameOverState = item.gameOverState,
                             rowWidth = width,
                             modifier = Modifier.animateItem(),
@@ -83,6 +84,7 @@ internal fun SavedGamesView(
                                 NonPlayerCharacter.avatarIdToDisplayNameResId(item.opponent.avatar)
                             ),
                             opponentAvatarId = item.opponent.avatar,
+                            isTimedOut = false,
                             gameOverState = GameOver.State.IN_PROGRESS,
                             rowWidth = width,
                             modifier = Modifier.animateItem(),

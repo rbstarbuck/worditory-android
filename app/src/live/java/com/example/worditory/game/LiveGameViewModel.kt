@@ -237,7 +237,7 @@ internal class LiveGameViewModel(
     }
 
     private fun onTimeout(context: Context) {
-        if (isPlayerTurn) {
+        if (!isPlayerTurn) {
             claimVictoryConfirmationDialog.show(
                 onConfirmed = {
                     gameOverState = GameOver.State.WIN
