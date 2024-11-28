@@ -7,6 +7,7 @@ import com.example.worditory.R
 import com.example.worditory.setSoundEnabled
 import com.example.worditory.soundEnabled
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 internal object AudioPlayer {
@@ -24,9 +25,7 @@ internal object AudioPlayer {
         gameOverLose = MediaPlayer.create(context, R.raw.game_over_lose)
 
         GlobalScope.launch {
-            context.soundEnabled().collect {
-                enabled = it
-            }
+            enabled = context.soundEnabled().first()
         }
     }
 

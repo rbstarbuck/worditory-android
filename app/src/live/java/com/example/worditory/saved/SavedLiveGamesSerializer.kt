@@ -10,6 +10,7 @@ import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
 import com.example.worditory.user.UserRepository
+import kotlinx.coroutines.flow.first
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -41,63 +42,30 @@ internal suspend fun Context.removeSavedLiveGame(gameId: String) {
 
 internal suspend fun Context.addSavedLiveGame(liveGame: LiveGameModel) {
     savedLiveGamesDataStore.updateData { savedGames ->
-        val newSavedGames = mutableListOf<LiveGameModel>()
-        newSavedGames.addAll(savedGames.gamesList.filter { it.game.id != liveGame.game.id })
-        newSavedGames.add(liveGame)
-        newSavedGames.sortByDescending { it.timestamp }
-        newSavedGames.sortByDescending { it.game.isPlayerTurn }
-
         SavedLiveGames.newBuilder()
-            .addAllGames(newSavedGames)
+            .addAllGames(savedGames.gamesList.filter { it.game.id != liveGame.game.id })
+            .addGames(liveGame)
             .build()
     }
 }
 
 internal suspend fun Context.setGameOver(gameId: String, gameOverState: GameOver.State) {
-    savedLiveGamesDataStore.data.collect { savedGames ->
-        val oldGameList = savedGames.gamesList.filter { it.game.id == gameId }
+    val savedGames = savedLiveGamesDataStore.data.first()
+    val oldGameList = savedGames.gamesList.filter { it.game.id == gameId }
 
-        if (oldGameList.isNotEmpty()) {
-            val oldGame = oldGameList.first()
+    if (oldGameList.isNotEmpty()) {
+        val oldGame = oldGameList.first()
 
-            if (!oldGame.isGameOver) {
-                val newGame = oldGame.toBuilder().setIsGameOver(true).build()
-                addSavedLiveGame(newGame)
+        if (!oldGame.isGameOver) {
+            val newGame = oldGame.toBuilder().setIsGameOver(true).build()
+            addSavedLiveGame(newGame)
 
-                incrementGamesPlayed()
-                UserRepository.incrementGamesPlayed()
-                if (gameOverState == GameOver.State.WIN) {
-                    incrementGamesWon()
-                    UserRepository.incrementGamesWon()
-                }
+            incrementGamesPlayed()
+            UserRepository.incrementGamesPlayed()
+            if (gameOverState == GameOver.State.WIN) {
+                incrementGamesWon()
+                UserRepository.incrementGamesWon()
             }
-        }
-    }
-}
-
-internal suspend fun Context.setIsPlayerTurnOnSavedLiveGame(gameId: String) {
-    savedLiveGamesDataStore.data.collect { savedGames ->
-        val oldGame = savedGames.gamesList.filter { it.game.id == gameId }.first()
-
-        if (!oldGame.game.isPlayerTurn) {
-            val newGame = oldGame.toBuilder()
-                .setGame(
-                    oldGame.game.toBuilder()
-                        .setIsPlayerTurn(true)
-                ).build()
-
-            addSavedLiveGame(newGame)
-        }
-    }
-}
-
-internal suspend fun Context.setTimestampOnSavedLiveGame(gameId: String, timestamp: Long) {
-    savedLiveGamesDataStore.data.collect { savedGames ->
-        val oldGame = savedGames.gamesList.filter { it.game.id == gameId }.first()
-
-        if (oldGame.timestamp != timestamp) {
-            val newGame = oldGame.toBuilder().setTimestamp(timestamp).build()
-            addSavedLiveGame(newGame)
         }
     }
 }

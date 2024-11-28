@@ -1,32 +1,21 @@
 package com.example.worditory.saved
 
 import android.content.Context
-import androidx.compose.ui.unit.IntSize
-import com.example.worditory.boardSize
 import com.example.worditory.database.DbKey
-import com.example.worditory.game.Game
-import com.example.worditory.game.GameModel
 import com.example.worditory.game.GameRepoModel
 import com.example.worditory.game.LiveGame
-import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.board.BoardModel
 import com.example.worditory.game.board.BoardRepoModel
-import com.example.worditory.game.board.BoardViewModel
-import com.example.worditory.game.board.tile.Tile
 import com.example.worditory.game.board.tile.TileModel
-import com.example.worditory.game.board.tile.TileModelKt
-import com.example.worditory.game.board.word.WordModel
-import com.example.worditory.game.board.word.WordViewModel
 import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.match.OnMatchSuccess
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 internal object SavedGamesRepository {
@@ -42,17 +31,16 @@ internal object SavedGamesRepository {
                 .get()
                 .addOnSuccessListener { snapshot ->
                     scope.launch {
-                        context.savedLiveGamesDataStore.data.collect { savedGames ->
-                            val savedGamesIds = savedGames.gamesList.map { it.game.id }.toSet()
-                            val liveGameIds = snapshot.children
-                                .filter { it.getValue(Boolean::class.java)!! }
-                                .map { it.key!! }
+                        val savedGames = context.savedLiveGamesDataStore.data.first()
+                        val savedGamesIds = savedGames.gamesList.map { it.game.id }.toSet()
+                        val liveGameIds = snapshot.children
+                            .filter { it.getValue(Boolean::class.java)!! }
+                            .map { it.key!! }
 
 
-                            for (liveGameId in liveGameIds) {
-                                if (!savedGamesIds.contains(liveGameId)) {
-                                    restoreSavedGameFromServer(liveGameId, scope, context)
-                                }
+                        for (liveGameId in liveGameIds) {
+                            if (!savedGamesIds.contains(liveGameId)) {
+                                restoreSavedGameFromServer(liveGameId, scope, context)
                             }
                         }
                     }
