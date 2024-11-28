@@ -1,7 +1,6 @@
 package com.example.worditory.game
 
 import android.content.Context
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.game.board.tile.asLetter
@@ -10,19 +9,15 @@ import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.R
-import com.example.worditory.game.dict.WordDictionary
 import com.example.worditory.navigation.LiveScreen
-import com.example.worditory.notification.Notifications
 import com.example.worditory.saved.SavedGamesService
 import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.saved.removeSavedLiveGame
 import com.example.worditory.saved.setGameOver
+import com.example.worditory.timeout.TIMEOUT_MILLIS
 import com.example.worditory.user.UserRepoModel
-import com.example.worditory.user.UserRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 internal class LiveGameViewModel(
@@ -47,6 +42,7 @@ internal class LiveGameViewModel(
     private val latestWordListener: WordRepository.LatestWordListener
     private val opponentListener: GameRepository.UserListener
     private val timestampListener: GameRepository.TimestampListener
+    private val timeoutListener: GameRepository.TimeoutListener
 
     private var isOpponentOpeningTurn = false
 
@@ -90,6 +86,13 @@ internal class LiveGameViewModel(
         timestampListener = GameRepository.listenForTimestampChange(
             gameId = id,
             onTimestampChange = { timestamp = it },
+            onError = {} // TODO(handle errors)
+        )
+
+        timeoutListener = GameRepository.listenForTimeout(
+            gameId = id,
+            timeoutDelta = TIMEOUT_MILLIS,
+            onTimeout = { onTimeout(context) },
             onError = {} // TODO(handle errors)
         )
 
@@ -172,6 +175,14 @@ internal class LiveGameViewModel(
                     saveGame(context)
                 }
             )
+        } else if (word.claimVictory) {
+            claimVictoryDialog.show(
+                onDismiss = {
+                    gameOverState = GameOver.State.LOSE
+                    onGameOver(context)
+                    saveGame(context)
+                }
+            )
         } else {
             viewModelScope.launch {
                 board.word.model = WordModel()
@@ -225,6 +236,20 @@ internal class LiveGameViewModel(
         }
     }
 
+    private fun onTimeout(context: Context) {
+        if (isPlayerTurn) {
+            claimVictoryConfirmationDialog.show(
+                onConfirmed = {
+                    gameOverState = GameOver.State.WIN
+                    onGameOver(context)
+                    saveGame(context)
+
+                    WordRepository.claimVictory(id, playedWordCount++)
+                }
+            )
+        }
+    }
+
     override fun onGameOver(context: Context) {
         viewModelScope.launch {
             context.setGameOver(id, gameOverState)
@@ -243,6 +268,7 @@ internal class LiveGameViewModel(
         WordRepository.removeListener(latestWordListener)
         GameRepository.removeListener(opponentListener)
         GameRepository.removeListener(timestampListener)
+        GameRepository.removeListener(timeoutListener)
 
         if (gameOverState != GameOver.State.IN_PROGRESS) {
             viewModelScope.launch {

@@ -3,6 +3,7 @@ package com.example.worditory.game.word
 import com.example.worditory.database.DbKey
 import com.example.worditory.game.board.BoardModel
 import com.example.worditory.game.board.word.WordModel
+import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository.OnFailure
 import com.google.firebase.Firebase
 import com.google.firebase.database.ChildEventListener
@@ -50,6 +51,33 @@ internal object WordRepository {
         val playedWord = PlayedWordRepoModel(
             index = index,
             passTurn = true,
+            tiles = emptyList()
+        )
+
+        database
+            .child(DbKey.WORDS)
+            .child(gameId)
+            .child(DbKey.Words.PLAYED_WORDS)
+            .push()
+            .setValue(playedWord)
+
+        database
+            .child(DbKey.WORDS)
+            .child(gameId)
+            .child(DbKey.Words.COUNT)
+            .setValue(ServerValue.increment(1))
+
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .child(DbKey.Games.TIMESTAMP)
+            .setValue(ServerValue.TIMESTAMP)
+    }
+
+    internal fun claimVictory(gameId: String, index: Int) {
+        val playedWord = PlayedWordRepoModel(
+            index = index,
+            claimVictory = true,
             tiles = emptyList()
         )
 

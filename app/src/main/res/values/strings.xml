@@ -100,7 +100,10 @@
 
     <string name="pass_turn_dialog">Your opponent passed their turn.</string>
     <string name="resign_game_dialog">Your opponent resigned!</string>
+    <string name="claim_victory_dialog">You didn\'t move for two days and your opponent claimed victory.</string>
     <string name="resign_game_confirmation_dialog">Are you sure you want to resign?</string>
+    <string name="claim_victory_confirmation_dialog">Your opponent hasn\'t moved in two days.</string>
+    <string name="claim_victory">Claim victory</string>
 
     <string name="next">Next</string>
     <string name="back">Back</string>

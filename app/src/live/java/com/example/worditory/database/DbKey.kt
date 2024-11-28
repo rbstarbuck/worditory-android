@@ -7,6 +7,7 @@ internal object DbKey {
     const val BOARDS = "boards"
     const val MATCHES = "matches"
     const val WORDS = "words"
+    const val SERVER_TIME = "serverTime"
 
     internal object Users {
         const val EMAIL = "email"

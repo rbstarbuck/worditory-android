@@ -9,6 +9,7 @@ import androidx.navigation.navDeepLink
 import com.example.worditory.chooser.boardsize.LiveBoardSizeChooserViewModel
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
 import com.example.worditory.game.GameView
+import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.LiveGameViewModel
 import com.example.worditory.saved.savedLiveGamesDataStore
 import kotlinx.coroutines.flow.first
@@ -31,17 +32,20 @@ internal fun NavGraphBuilder.flavorStack(navController: NavController) {
 
         val savedLiveGames = context.savedLiveGamesDataStore.data
         val savedGame = runBlocking {
-            savedLiveGames.first().gamesList.filter { it.game.id == gameId }.first()
+            savedLiveGames.first().gamesList.filter { it.game.id == gameId }
         }
 
-        val viewModel = remember {
-            LiveGameViewModel(
-                liveModel = savedGame,
-                navController = navController,
-                context = context
-            )
+        if (savedGame.isNotEmpty()) {
+            val viewModel = remember {
+                LiveGameViewModel(
+                    liveModel = savedGame.first(),
+                    navController = navController,
+                    context = context
+                )
+            }
+            
+            GameView(viewModel)
         }
 
-        GameView(viewModel)
     }
 }

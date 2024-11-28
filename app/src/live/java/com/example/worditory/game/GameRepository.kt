@@ -1,5 +1,7 @@
 package com.example.worditory.game
 
+import android.os.CountDownTimer
+import com.example.worditory.database.DatabaseRepository
 import com.example.worditory.database.DbKey
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.user.UserRepoModel
@@ -108,6 +110,23 @@ internal object GameRepository {
         return listener
     }
 
+    internal fun listenForTimeout(
+        gameId: String,
+        timeoutDelta: Long,
+        onTimeout: () -> Unit,
+        onError: (OnFailure) -> Unit
+    ): TimeoutListener {
+        val listener = TimeoutListener(gameId, timeoutDelta, onTimeout, onError)
+
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .child(DbKey.Games.TIMESTAMP)
+            .addValueEventListener(listener)
+
+        return listener
+    }
+
     internal fun removeListener(listener: UserListener) {
         database
             .child(DbKey.GAMES)
@@ -150,6 +169,14 @@ internal object GameRepository {
             .child(listener.player2Listener.gameId)
             .child(DbKey.Games.PLAYER_2_WON)
             .removeEventListener(listener.player2Listener)
+    }
+
+    internal fun removeListener(listener: TimeoutListener) {
+        database
+            .child(DbKey.GAMES)
+            .child(listener.gameId)
+            .child(DbKey.Games.TIMESTAMP)
+            .removeEventListener(listener)
     }
 
     internal fun decrementScoreToWin(gameId: String) {
@@ -303,7 +330,47 @@ internal object GameRepository {
         override fun onCancelled(error: DatabaseError) {
             onError(OnFailure(OnFailure.Reason.CANCELLED, error))
         }
+    }
 
+    internal class TimeoutListener(
+        internal val gameId: String,
+        private val timeoutDelta: Long,
+        private val onTimeout: () -> Unit,
+        private val onError: (OnFailure) -> Unit
+    ): ValueEventListener {
+        private var timer: CountDownTimer? = null
+
+        override fun onDataChange(snapshot: DataSnapshot) {
+            timer?.cancel()
+
+            val timestamp = snapshot.getValue(Long::class.java)
+
+            if (timestamp == null) {
+                onError(OnFailure(OnFailure.Reason.TIMESTAMP_NOT_FOUND))
+            } else {
+                DatabaseRepository.getServerTime { currentTime ->
+                    val timeToTimeout = timestamp - currentTime + timeoutDelta
+
+                    if (timeToTimeout <= 0L) {
+                        onTimeout()
+                    } else {
+                        timer = object: CountDownTimer(timeToTimeout, timeToTimeout) {
+                            override fun onTick(p0: Long) {}
+
+                            override fun onFinish() {
+                                onTimeout()
+                            }
+                        }
+
+                        timer?.start()
+                    }
+                }
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            onError(OnFailure(OnFailure.Reason.CANCELLED, error))
+        }
     }
 
     internal class OnFailure(

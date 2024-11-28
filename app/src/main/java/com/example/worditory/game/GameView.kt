@@ -138,9 +138,20 @@ internal fun GameView(
             text = stringResource(R.string.resign_game_dialog)
         )
 
+        WorditoryInfoDialogView(
+            viewModel = viewModel.claimVictoryDialog,
+            text = stringResource(R.string.claim_victory_dialog)
+        )
+
         WorditoryConfirmationDialogView(
             viewModel = viewModel.resignGameConfirmationDialog,
             text = stringResource(R.string.resign_game_confirmation_dialog)
+        )
+
+        WorditoryConfirmationDialogView(
+            viewModel = viewModel.claimVictoryConfirmationDialog,
+            text = stringResource(R.string.claim_victory_confirmation_dialog),
+            confirmButtonText = stringResource(R.string.claim_victory)
         )
     }
 }
