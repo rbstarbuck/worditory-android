@@ -93,7 +93,10 @@ internal class NonPlayerCharacter(
                 var nextWord: WordModel? = null
                 var nextTilesInWord: Set<TileViewModel>? = null
 
-                if (nextResult.isWord && resultIsWithinVocabulary(nextResult)) {
+                if (nextResult.isWord
+                    && nextWordString.length > 2
+                    && resultIsWithinVocabulary(nextResult)
+                ) {
                     nextWord = buildNextWord(previousWord, tile)
                     nextTilesInWord = buildNextTilesInWord(tilesInWord, tile)
                     val nextWordScore = evaluateWordScore(nextWord, nextTilesInWord)

@@ -100,14 +100,14 @@ internal class NpcGameViewModel(
         val npcWord = nonPlayerCharacter.findWordToPlay()
 
         viewModelScope.launch {
-            delay(Random.nextLong(from = 1500L, until = 2500L))
+            delay(Random.nextLong(from = 1000L, until = 2000L))
 
             board.word.withDrawPathTweenDuration(millis = npcWord.tiles.size * 350) {
                 for (tile in npcWord.tiles) {
                     board.word.onSelectTile(tile, Game.Player.PLAYER_2)
                 }
 
-                delay(4000L)
+                delay(2000L)
             }
 
             board.updateLettersForWord()
