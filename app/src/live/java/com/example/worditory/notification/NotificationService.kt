@@ -28,7 +28,7 @@ internal class NotificationService: Service() {
 
     override fun onDestroy() {
         for (notifier in notifiers) {
-            notifier.removeListener()
+            notifier.removeListeners()
         }
 
         notifiers = emptyList()
