@@ -263,8 +263,6 @@ internal class LiveGameViewModel(
     }
 
     override fun onExitGame(context: Context) {
-        super.onExitGame(context)
-
         WordRepository.removeListener(latestWordListener)
         GameRepository.removeListener(opponentListener)
         GameRepository.removeListener(timestampListener)
@@ -277,6 +275,8 @@ internal class LiveGameViewModel(
         }
 
         nextGameJob.cancel()
+
+        super.onExitGame(context)
     }
 
     fun flipTileIndex(index: Int) = board.width * board.height - index - 1

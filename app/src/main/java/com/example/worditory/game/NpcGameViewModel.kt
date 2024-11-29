@@ -41,7 +41,7 @@ internal class NpcGameViewModel(
     private val nonPlayerCharacter = NonPlayerCharacter(npcModel.opponent, board)
 
     init {
-        if (!isPlayerTurn) {
+        if (!isPlayerTurn && gameOverState == GameOver.State.IN_PROGRESS) {
             playNpcWord(context)
         }
     }
@@ -54,8 +54,8 @@ internal class NpcGameViewModel(
 
     override fun onPlayButtonClick(context: Context): Boolean {
         if (super.onPlayButtonClick(context)) {
-            saveGame(context)
             if (gameOverState == GameOver.State.IN_PROGRESS) {
+                saveGame(context)
                 playNpcWord(context)
                 return true
             }
@@ -130,12 +130,12 @@ internal class NpcGameViewModel(
     }
 
     override fun onExitGame(context: Context) {
-        super.onExitGame(context)
-
         if (gameOverState != GameOver.State.IN_PROGRESS) {
             viewModelScope.launch {
                 context.removeSavedNpcGame(id)
             }
         }
+
+        super.onExitGame(context)
     }
 }

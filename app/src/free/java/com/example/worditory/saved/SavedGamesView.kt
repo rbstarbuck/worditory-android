@@ -56,7 +56,7 @@ internal fun SavedGamesView(
                         rowWidth = width,
                         modifier = Modifier.animateItem(),
                         onSavedGameClick = { viewModel.onSavedGameClick(npcGame.game.id) },
-                        onDeleteClick = { onDeleteClick?.invoke(npcGame.game.id) }
+                        onDeleteClick = { onDeleteClick(npcGame.game.id) }
                     )
                 }
             }
