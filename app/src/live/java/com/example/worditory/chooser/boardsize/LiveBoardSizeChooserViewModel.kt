@@ -30,9 +30,11 @@ internal class LiveBoardSizeChooserViewModel(
             },
             onFailure = { failure ->
                 if (failure.reason == OnMatchFailure.Reason.USER_ALREADY_IN_WAITING_ROOM) {
-                    navController.navigate(
-                        LiveScreen.LiveGame.buildRoute(checkNotNull(failure.gameId))
-                    )
+                    viewModelScope.launch {
+                        navController.navigate(
+                            LiveScreen.LiveGame.buildRoute(failure.gameId!!)
+                        )
+                    }
                 }
             }
         )
