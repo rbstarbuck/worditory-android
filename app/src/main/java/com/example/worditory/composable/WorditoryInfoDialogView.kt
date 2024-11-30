@@ -67,8 +67,8 @@ internal fun WorditoryInfoDialogView(
                         .padding(width * 0.05f)
                         .fillMaxWidth(),
                     color = colorResource(R.color.font_color_dark),
-                    fontSize = 22.sp,
-                    lineHeight = 28.sp,
+                    fontSize = (width.value / 20f).sp,
+                    lineHeight = (width.value / 15).sp,
                     textAlign = TextAlign.Center
                 )
             }

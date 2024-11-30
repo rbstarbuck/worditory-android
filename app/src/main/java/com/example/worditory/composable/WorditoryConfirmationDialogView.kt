@@ -66,8 +66,8 @@ internal fun WorditoryConfirmationDialogView(
                             .padding(width * 0.05f)
                             .fillMaxWidth(),
                         color = colorResource(R.color.font_color_dark),
-                        fontSize = 22.sp,
-                        lineHeight = 28.sp,
+                        fontSize = (width.value / 20f).sp,
+                        lineHeight = (width.value / 15).sp,
                         textAlign = TextAlign.Center
                     )
 
@@ -81,7 +81,7 @@ internal fun WorditoryConfirmationDialogView(
                         ) {
                             Text(
                                 text = confirmButtonText,
-                                fontSize = 20.sp
+                                fontSize = (width.value / 25f).sp
                             )
                         }
 
@@ -96,7 +96,7 @@ internal fun WorditoryConfirmationDialogView(
                         ) {
                             Text(
                                 text = cancelButtonText,
-                                fontSize = 20.sp
+                                fontSize = (width.value / 25f).sp
                             )
                         }
                     }
