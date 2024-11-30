@@ -10,6 +10,7 @@ import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.R
 import com.example.worditory.navigation.LiveScreen
+import com.example.worditory.notification.Notifications
 import com.example.worditory.saved.SavedGamesService
 import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.saved.removeSavedLiveGame
@@ -42,7 +43,7 @@ internal class LiveGameViewModel(
     private val latestWordListener: WordRepository.LatestWordListener
     private val opponentListener: GameRepository.UserListener
     private val timestampListener: GameRepository.TimestampListener
-    private val timeoutListener: GameRepository.TimeoutListener
+    private var timeoutListener: GameRepository.TimeoutListener? = null
 
     private var isOpponentOpeningTurn = false
 
@@ -72,6 +73,26 @@ internal class LiveGameViewModel(
                 if (word.index!! >= playedWordCount) {
                     onNewWord(word, context)
                 }
+
+                if (gameOverState == GameOver.State.IN_PROGRESS) {
+                    if (timeoutListener != null) {
+                        GameRepository.removeListener(timeoutListener!!)
+                    }
+
+                    val isActuallyPlayerTurn = when (isPlayer1) {
+                        true -> word.index % 2 == 0
+                        false -> word.index % 2 == 1
+                    }
+
+                    if (isActuallyPlayerTurn) {
+                        timeoutListener = GameRepository.listenForTimeout(
+                            gameId = id,
+                            timeoutDelta = TIMEOUT_MILLIS,
+                            onTimeout = { onClaimVictory(context) },
+                            onError = {} // TODO(handle errors)
+                        )
+                    }
+                }
             },
             onError = {} // TODO(handle errors)
         )
@@ -89,13 +110,6 @@ internal class LiveGameViewModel(
             onError = {} // TODO(handle errors)
         )
 
-        timeoutListener = GameRepository.listenForTimeout(
-            gameId = id,
-            timeoutDelta = TIMEOUT_MILLIS,
-            onTimeout = { onTimeout(context) },
-            onError = {} // TODO(handle errors)
-        )
-
         nextGameJob = viewModelScope.launch {
             SavedGamesService.savedGamesStateFlow.collect { savedGames ->
                 val validNextGames = savedGames.filter {
@@ -110,7 +124,7 @@ internal class LiveGameViewModel(
         }
 
         viewModelScope.launch {
-            delay(2500L)
+            delay(1000L)
             isOpponentOpeningTurn = false
         }
     }
@@ -121,6 +135,7 @@ internal class LiveGameViewModel(
         if (super.onPlayButtonClick(context)) {
             WordRepository.playWord(id, word, board.model, playedWordCount++)
             saveGame(context)
+            Notifications.cancel(id, context)
             return true
         }
 
@@ -189,7 +204,7 @@ internal class LiveGameViewModel(
 
                 board.word.withDrawPathTweenDuration(millis = word.tiles!!.size * 350) {
                     if (isOpponentOpeningTurn) {
-                        delay(1500L)
+                        delay(2000L)
                     }
 
                     for (repoTile in word.tiles) {
@@ -236,21 +251,32 @@ internal class LiveGameViewModel(
         }
     }
 
-    private fun onTimeout(context: Context) {
+    private fun onClaimVictory(context: Context) {
         if (!isPlayerTurn) {
-            claimVictoryConfirmationDialog.show(
-                onConfirmed = {
-                    gameOverState = GameOver.State.WIN
-                    onGameOver(context)
-                    saveGame(context)
+            GameRepository.ifGameOver(id) { isGameOver ->
+                if (!isGameOver) {
+                    claimVictoryConfirmationDialog.show(
+                        onConfirmed = {
+                            Notifications.cancel(id, context)
 
-                    WordRepository.claimVictory(id, playedWordCount++)
+                            gameOverState = GameOver.State.WIN
+                            onGameOver(context)
+                            saveGame(context)
+
+                            WordRepository.claimVictory(id, playedWordCount++)
+                        },
+                        onCancelled = {
+                            Notifications.cancel(id, context)
+                        }
+                    )
                 }
-            )
+            }
         }
     }
 
     override fun onGameOver(context: Context) {
+        Notifications.cancel(id, context)
+
         viewModelScope.launch {
             context.setGameOver(id, gameOverState)
         }
@@ -266,7 +292,9 @@ internal class LiveGameViewModel(
         WordRepository.removeListener(latestWordListener)
         GameRepository.removeListener(opponentListener)
         GameRepository.removeListener(timestampListener)
-        GameRepository.removeListener(timeoutListener)
+        if (timeoutListener != null) {
+            GameRepository.removeListener(timeoutListener!!)
+        }
 
         if (gameOverState != GameOver.State.IN_PROGRESS) {
             viewModelScope.launch {

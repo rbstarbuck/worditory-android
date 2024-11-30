@@ -11,20 +11,26 @@ class MainActivity: MainActivityBase() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Notifications.createNotificationChannels(this)
+        Notifications.createChannels(this)
     }
 
     override fun onStart() {
         super.onStart()
-
-        startService(Intent(this, SavedGamesService::class.java))
         stopService(Intent(this, NotificationService::class.java))
     }
 
-    override fun onStop() {
-        stopService(Intent(this, NotificationService::class.java))
-        startService(Intent(this, NotificationService::class.java))
+    override fun onResume() {
+        super.onResume()
+        startService(Intent(this, SavedGamesService::class.java))
+    }
 
+    override fun onPause() {
+        stopService(Intent(this, SavedGamesService::class.java))
+        super.onPause()
+    }
+
+    override fun onStop() {
+        startService(Intent(this, NotificationService::class.java))
         super.onStop()
     }
 }

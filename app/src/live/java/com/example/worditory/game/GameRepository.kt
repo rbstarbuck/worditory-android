@@ -5,6 +5,7 @@ import com.example.worditory.database.DatabaseRepository
 import com.example.worditory.database.DbKey
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.user.UserRepoModel
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
@@ -172,6 +173,8 @@ internal object GameRepository {
     }
 
     internal fun removeListener(listener: TimeoutListener) {
+        listener.timer?.cancel()
+
         database
             .child(DbKey.GAMES)
             .child(listener.gameId)
@@ -185,6 +188,23 @@ internal object GameRepository {
             .child(gameId)
             .child(DbKey.Games.SCORE_TO_WIN)
             .setValue(ServerValue.increment(-1))
+    }
+
+    internal fun ifGameOver(gameId: String, isGameOver: (Boolean) -> Unit) {
+        val player1WonTask =
+            database.child(DbKey.GAMES).child(gameId).child(DbKey.Games.PLAYER_1_WON).get()
+        val player2WonTask =
+            database.child(DbKey.GAMES).child(gameId).child(DbKey.Games.PLAYER_2_WON).get()
+
+        Tasks.whenAllComplete(player1WonTask, player2WonTask).addOnCompleteListener { taskList ->
+            val player1WonSnapshot = taskList.result[0].result as DataSnapshot
+            val player1Won = player1WonSnapshot.getValue(Boolean::class.java) == true
+
+            val player2WonSnapshot = taskList.result[1].result as DataSnapshot
+            val player2Won = player2WonSnapshot.getValue(Boolean::class.java) == true
+
+            isGameOver(player1Won || player2Won)
+        }
     }
 
     internal fun setGameOver(gameId: String, gameOverState: GameOver.State, isPlayer1: Boolean) {
@@ -338,7 +358,7 @@ internal object GameRepository {
         private val onTimeout: () -> Unit,
         private val onError: (OnFailure) -> Unit
     ): ValueEventListener {
-        private var timer: CountDownTimer? = null
+        internal var timer: CountDownTimer? = null
 
         override fun onDataChange(snapshot: DataSnapshot) {
             timer?.cancel()

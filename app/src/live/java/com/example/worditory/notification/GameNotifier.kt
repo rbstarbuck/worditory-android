@@ -9,71 +9,114 @@ import com.example.worditory.timeout.TIMEOUT_MILLIS
 import com.example.worditory.timeout.TIMEOUT_WARNING_MILLIS
 
 internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
-    private var hasSkippedFirstWord = false
+    private var timeoutListener: GameRepository.TimeoutListener? = null
+
+    private val isPlayerTurnListener = GameRepository.listenForIsPlayerTurn(
+        gameId = liveGame.game.id,
+        isPlayer1 = liveGame.isPlayer1,
+        onIsPlayerTurn = { isPlayerTurn ->
+            if (timeoutListener != null) {
+                GameRepository.removeListener(timeoutListener!!)
+            }
+
+            timeoutListener = if (isPlayerTurn) {
+                GameRepository.listenForTimeout(
+                    gameId = liveGame.game.id,
+                    timeoutDelta = TIMEOUT_WARNING_MILLIS,
+                    onTimeout = {
+                        if (!NotificationService.isWarmingUp) {
+                            GameRepository.ifGameOver(liveGame.game.id) { isGameOver ->
+                                if (!isGameOver) {
+                                    Notifications.timeoutImminent(
+                                        gameId = liveGame.game.id,
+                                        opponentName = liveGame.opponent.displayName,
+                                        opponentAvatarId = liveGame.opponent.avatarId,
+                                        context = context
+                                    )
+                                }
+                            }
+                        }
+                    },
+                    onError = {}
+                )
+            } else {
+                GameRepository.listenForTimeout(
+                    gameId = liveGame.game.id,
+                    timeoutDelta = TIMEOUT_MILLIS,
+                    onTimeout = {
+                        if (!NotificationService.isWarmingUp) {
+                            Notifications.canClaimVictory(
+                                gameId = liveGame.game.id,
+                                opponentName = liveGame.opponent.displayName,
+                                opponentAvatarId = liveGame.opponent.avatarId,
+                                context = context
+                            )
+                        }
+                    },
+                    onError = {}
+                )
+            }
+        },
+        onError = {}
+    )
 
     private val wordListener = WordRepository.listenForLatestWord(
         gameId = liveGame.game.id,
         onNewWord = { playedWord ->
-            if (hasSkippedFirstWord) {
+            if (!NotificationService.isWarmingUp) {
                 val isOpponentWord = when (liveGame.isPlayer1) {
                     true -> playedWord.index!! % 2 == 1
                     false -> playedWord.index!! % 2 == 0
                 }
 
                 if (isOpponentWord) {
-                    val wordString = playedWord.tiles!!.map {
-                        val tileIndex =
-                            liveGame.game.board.width * liveGame.game.board.height - it.index!! - 1
-                        liveGame.game.board.tilesList[tileIndex].letter.asLetter()
-                    }.joinToString("")
+                    if (playedWord.passTurn) {
+                        Notifications.passedTurn(
+                            gameId = liveGame.game.id,
+                            opponentName = liveGame.opponent.displayName,
+                            opponentAvatarId = liveGame.opponent.avatarId,
+                            context = context
+                        )
+                    } else if (playedWord.resignGame) {
+                        Notifications.resignedGame(
+                            gameId = liveGame.game.id,
+                            opponentName = liveGame.opponent.displayName,
+                            opponentAvatarId = liveGame.opponent.avatarId,
+                            context = context
+                        )
+                    } else if (playedWord.claimVictory) {
+                        Notifications.claimedVictory(
+                            gameId = liveGame.game.id,
+                            opponentName = liveGame.opponent.displayName,
+                            opponentAvatarId = liveGame.opponent.avatarId,
+                            context = context
+                        )
+                    } else {
+                        val wordString = playedWord.tiles!!.map {
+                            val tileIndex =
+                                liveGame.game.board.width * liveGame.game.board.height - it.index!! - 1
+                            liveGame.game.board.tilesList[tileIndex].letter.asLetter()
+                        }.joinToString("")
 
-                    Notifications.notifyIsPlayerTurn(
-                        gameId = liveGame.game.id,
-                        opponentName = liveGame.opponent.displayName,
-                        opponentAvatarId = liveGame.opponent.avatarId,
-                        playedWord = wordString,
-                        context = context
-                    )
+                        Notifications.isPlayerTurn(
+                            gameId = liveGame.game.id,
+                            opponentName = liveGame.opponent.displayName,
+                            opponentAvatarId = liveGame.opponent.avatarId,
+                            playedWord = wordString.uppercase(),
+                            context = context
+                        )
+                    }
                 }
-            } else {
-                hasSkippedFirstWord = true
             }
         },
         onError = {}
     )
 
-    private val timeoutListener = if (liveGame.game.isPlayerTurn) {
-        GameRepository.listenForTimeout(
-            gameId = liveGame.game.id,
-            timeoutDelta = TIMEOUT_WARNING_MILLIS,
-            onTimeout = {
-                Notifications.notifyTimeoutImminent(
-                    gameId = liveGame.game.id,
-                    opponentName = liveGame.opponent.displayName,
-                    opponentAvatarId = liveGame.opponent.avatarId,
-                    context = context
-                )
-            },
-            onError = {}
-        )
-    } else {
-        GameRepository.listenForTimeout(
-            gameId = liveGame.game.id,
-            timeoutDelta = TIMEOUT_MILLIS,
-            onTimeout = {
-                Notifications.notifyCanClaimVictory(
-                    gameId = liveGame.game.id,
-                    opponentName = liveGame.opponent.displayName,
-                    opponentAvatarId = liveGame.opponent.avatarId,
-                    context = context
-                )
-            },
-            onError = {}
-        )
-    }
-
     internal fun removeListeners() {
         WordRepository.removeListener(wordListener)
-        GameRepository.removeListener(timeoutListener)
+        GameRepository.removeListener(isPlayerTurnListener)
+        if (timeoutListener != null) {
+            GameRepository.removeListener(timeoutListener!!)
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import com.example.worditory.saved.savedLiveGamesDataStore
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 internal class NotificationService: Service() {
@@ -19,10 +20,16 @@ internal class NotificationService: Service() {
 
         val context = this
 
+        isWarmingUp = true
         GlobalScope.launch {
             savedLiveGamesDataStore.data.collect { savedGames ->
                 notifiers = savedGames.gamesList.map { GameNotifier(it, context) }
             }
+        }
+
+        GlobalScope.launch{
+            delay(3000L)
+            isWarmingUp = false
         }
     }
 
@@ -34,5 +41,10 @@ internal class NotificationService: Service() {
         notifiers = emptyList()
 
         super.onDestroy()
+    }
+
+    companion object {
+        internal var isWarmingUp = true
+            private set
     }
 }

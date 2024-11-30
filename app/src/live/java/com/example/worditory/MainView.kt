@@ -42,11 +42,13 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 HeaderView(
-                    Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .padding(20.dp)) {
-                    viewModel.avatarChooser.enabled = true
-                }
+                        .padding(20.dp),
+                    onAvatarClick = {
+                        viewModel.avatarChooser.enabled = true
+                    }
+                )
 
                 BadgesRowView(
                     viewModel = viewModel.badgesRow,
@@ -70,7 +72,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
             ) {
                 Text(
-                    text = "Play Live",
+                    text = stringResource(R.string.play_live),
                     color = colorResource(R.color.font_color_dark),
                     fontSize = 30.sp
                 )
@@ -81,16 +83,16 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.play_against_computer),
+                    text = stringResource(R.string.play_against_ai),
                     color = colorResource(R.color.font_color_dark),
-                    fontSize = 18.sp
+                    fontSize = 20.sp
                 )
             }
         }
 
         BadgesDialogView(viewModel.badgesRow)
 
-        AvatarChooserDialog(viewModel = viewModel.avatarChooser)
+        AvatarChooserDialog(viewModel.avatarChooser)
 
         WorditoryConfirmationDialogView(
             viewModel = viewModel.deleteSavedGame,

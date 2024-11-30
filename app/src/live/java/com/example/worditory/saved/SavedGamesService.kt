@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 internal class SavedGamesService: Service() {
-    private val savedGameUpdaters = mutableListOf<SavedGameUpdater>()
+    private var savedGameUpdaters = emptyList<SavedGameUpdater>()
     private lateinit var job: Job
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -28,12 +28,12 @@ internal class SavedGamesService: Service() {
         scope.launch {
             savedLiveGamesDataStore.data.collect { liveGames ->
                 clear()
-                savedGameUpdaters.addAll(liveGames.gamesList.map { liveGame ->
+                savedGameUpdaters = liveGames.gamesList.map { liveGame ->
                     SavedGameUpdater(
                         liveGame = liveGame,
                         onDataChange = { onDataChange() }
-                    )}
-                )
+                    )
+                }
                 onDataChange()
             }
         }
@@ -47,8 +47,9 @@ internal class SavedGamesService: Service() {
     }
 
     private fun onDataChange() {
-        savedGameUpdaters.sortBy { it.data.timestamp }
-        savedGameUpdaters.sortByDescending { it.data.isPlayerTurn }
+        savedGameUpdaters = savedGameUpdaters
+            .sortedBy { it.data.timestamp }
+            .sortedByDescending { it.data.isPlayerTurn }
         _savedGamesStateFlow.value = savedGameUpdaters.map { it.data }
     }
 
@@ -56,7 +57,7 @@ internal class SavedGamesService: Service() {
         for (savedGame in savedGameUpdaters) {
             savedGame.removeListeners()
         }
-        savedGameUpdaters.clear()
+        savedGameUpdaters = emptyList()
     }
 
     companion object {

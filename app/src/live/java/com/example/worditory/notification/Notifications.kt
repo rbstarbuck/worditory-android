@@ -20,15 +20,16 @@ import com.example.worditory.R
 import com.example.worditory.getActivity
 import com.example.worditory.resourceid.getResourceId
 
-internal object Notifications {
-    private const val POST_NOTIFICATIONS_REQUEST_CODE = 0
-    private const val PLAYER_TURN_CHANNEL_ID = "playerTurn"
-    private const val TIMEOUT_CHANNEL_ID = "timeout"
-    private const val CLAIM_VICTORY_CHANNEl_ID = "claimVictory"
-    private const val PLAYER_TURN_NOTIFICATION_ID = 0
-    private const val TIMEOUT_NOTIFICATION_ID = 1
-    private const val CLAIM_VICTORY_NOTIFICATION_ID = 2
+private const val POST_NOTIFICATIONS_REQUEST_CODE = 0
 
+private const val PLAYER_TURN_GROUP = "com.rbstarbuck.worditory.live.notification.PLAYER_TURN"
+
+private const val PLAYER_TURN_CHANNEL_ID = "playerTurn"
+private const val TIMEOUT_CHANNEL_ID = "timeout"
+
+private const val PLAYER_TURN_NOTIFICATION_ID = 0
+
+internal object Notifications {
     internal fun requestPermission(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             context.getActivity()?.requestPermissions(
@@ -38,7 +39,7 @@ internal object Notifications {
         }
     }
 
-    internal fun createNotificationChannels(context: Context) {
+    internal fun createChannels(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = context.getSystemService(
                 NOTIFICATION_SERVICE
@@ -64,7 +65,7 @@ internal object Notifications {
         }
     }
 
-    internal fun notifyIsPlayerTurn(
+    internal fun isPlayerTurn(
         gameId: String,
         opponentName: String,
         opponentAvatarId: Int,
@@ -76,10 +77,8 @@ internal object Notifications {
             ?.toBitmap(largeIconSize, largeIconSize)
 
         val contentText = opponentName +
-                " " +
-                context.getString(R.string.player_turn_notification_text) +
-                " " +
-                playedWord
+                " " + context.getString(R.string.player_turn_notification_text) +
+                " " + playedWord
 
         val intent = Intent(
             /* action = */ Intent.ACTION_VIEW,
@@ -95,14 +94,20 @@ internal object Notifications {
             /* flags = */ PendingIntent.FLAG_IMMUTABLE
         )
 
-        var notification = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
+        val notification = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
             .setSmallIcon(R.drawable.your_turn)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentTitle(context.getString(R.string.player_turn_notification_title))
             .setContentText(contentText)
             .setLargeIcon(largeIcon)
             .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
+            .setGroup(PLAYER_TURN_GROUP)
+            .build()
+
+        val groupSummary = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
+            .setSmallIcon(R.drawable.your_turn)
+            .setGroup(PLAYER_TURN_GROUP)
+            .setGroupSummary(true)
             .build()
 
         with(NotificationManagerCompat.from(context)) {
@@ -111,21 +116,186 @@ internal object Notifications {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                // ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                // public fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                //                                        grantResults: IntArray)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return@with
             }
 
-            notify(PLAYER_TURN_NOTIFICATION_ID, notification)
+            notify(gameId.hashCode(), notification)
+            notify(PLAYER_TURN_NOTIFICATION_ID, groupSummary)
         }
     }
 
-    internal fun notifyTimeoutImminent(
+    internal fun passedTurn(
+        gameId: String,
+        opponentName: String,
+        opponentAvatarId: Int,
+        context: Context
+    ) {
+        val largeIconSize = largeIconSize(context)
+        val largeIcon = context.getDrawable(getResourceId(opponentAvatarId))
+            ?.toBitmap(largeIconSize, largeIconSize)
+
+        val contentText = opponentName +
+                " " + context.getString(R.string.passed_turn_notification_text)
+
+        val intent = Intent(
+            /* action = */ Intent.ACTION_VIEW,
+            /* uri = */ Uri.parse("https://rbstarbuck.com/livegame/$gameId"),
+            /* packageContext = */ context,
+            /* cls = */ MainActivity::class.java
+        )
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ 0,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
+            .setSmallIcon(R.drawable.your_turn)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentTitle(context.getString(R.string.player_turn_notification_title))
+            .setContentText(contentText)
+            .setLargeIcon(largeIcon)
+            .setContentIntent(pendingIntent)
+            .setGroup(PLAYER_TURN_GROUP)
+            .build()
+
+        val groupSummary = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
+            .setSmallIcon(R.drawable.your_turn)
+            .setGroup(PLAYER_TURN_GROUP)
+            .setGroupSummary(true)
+            .build()
+
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return@with
+            }
+
+            notify(gameId.hashCode(), notification)
+            notify(PLAYER_TURN_NOTIFICATION_ID, groupSummary)
+        }
+    }
+
+    internal fun resignedGame(
+        gameId: String,
+        opponentName: String,
+        opponentAvatarId: Int,
+        context: Context
+    ) {
+        val largeIconSize = largeIconSize(context)
+        val largeIcon = context.getDrawable(getResourceId(opponentAvatarId))
+            ?.toBitmap(largeIconSize, largeIconSize)
+
+        val contentText = opponentName +
+                " " + context.getString(R.string.resigned_game_notification_text)
+
+        val intent = Intent(
+            /* action = */ Intent.ACTION_VIEW,
+            /* uri = */ Uri.parse("https://rbstarbuck.com/livegame/$gameId"),
+            /* packageContext = */ context,
+            /* cls = */ MainActivity::class.java
+        )
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ 0,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
+            .setSmallIcon(R.drawable.game_over_win)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentTitle(context.getString(R.string.resigned_game_notification_title))
+            .setContentText(contentText)
+            .setLargeIcon(largeIcon)
+            .setContentIntent(pendingIntent)
+            .setGroup(PLAYER_TURN_GROUP)
+            .build()
+
+        val groupSummary = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
+            .setSmallIcon(R.drawable.your_turn)
+            .setGroup(PLAYER_TURN_GROUP)
+            .setGroupSummary(true)
+            .build()
+
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return@with
+            }
+
+            notify(gameId.hashCode(), notification)
+            notify(PLAYER_TURN_NOTIFICATION_ID, groupSummary)
+        }
+    }
+
+    internal fun claimedVictory(
+        gameId: String,
+        opponentName: String,
+        opponentAvatarId: Int,
+        context: Context
+    ) {
+        val largeIconSize = largeIconSize(context)
+        val largeIcon = context.getDrawable(getResourceId(opponentAvatarId))
+            ?.toBitmap(largeIconSize, largeIconSize)
+
+        val contentText = opponentName +
+                " " + context.getString(R.string.claimed_victory_notification_text)
+
+        val intent = Intent(
+            /* action = */ Intent.ACTION_VIEW,
+            /* uri = */ Uri.parse("https://rbstarbuck.com/livegame/$gameId"),
+            /* packageContext = */ context,
+            /* cls = */ MainActivity::class.java
+        )
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ 0,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
+            .setSmallIcon(R.drawable.game_over_lose)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentTitle(context.getString(R.string.claimed_victory_notification_title))
+            .setContentText(contentText)
+            .setLargeIcon(largeIcon)
+            .setContentIntent(pendingIntent)
+            .setGroup(PLAYER_TURN_GROUP)
+            .build()
+
+        val groupSummary = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
+            .setSmallIcon(R.drawable.your_turn)
+            .setGroup(PLAYER_TURN_GROUP)
+            .setGroupSummary(true)
+            .build()
+
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return@with
+            }
+
+            notify(gameId.hashCode(), notification)
+            notify(PLAYER_TURN_NOTIFICATION_ID, groupSummary)
+        }
+    }
+
+    internal fun timeoutImminent(
         gameId: String,
         opponentName: String,
         opponentAvatarId: Int,
@@ -160,7 +330,13 @@ internal object Notifications {
             .setContentText(contentText)
             .setLargeIcon(largeIcon)
             .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
+            .setGroup(PLAYER_TURN_GROUP)
+            .build()
+
+        val groupSummary = NotificationCompat.Builder(context, TIMEOUT_CHANNEL_ID)
+            .setSmallIcon(R.drawable.timeout_imminent)
+            .setGroup(PLAYER_TURN_GROUP)
+            .setGroupSummary(true)
             .build()
 
         with(NotificationManagerCompat.from(context)) {
@@ -169,21 +345,15 @@ internal object Notifications {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                // ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                // public fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                //                                        grantResults: IntArray)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return@with
             }
 
-            notify(TIMEOUT_NOTIFICATION_ID, notification)
+            notify(gameId.hashCode(), notification)
+            notify(PLAYER_TURN_NOTIFICATION_ID, groupSummary)
         }
     }
 
-    internal fun notifyCanClaimVictory(
+    internal fun canClaimVictory(
         gameId: String,
         opponentName: String,
         opponentAvatarId: Int,
@@ -194,9 +364,7 @@ internal object Notifications {
             ?.toBitmap(largeIconSize, largeIconSize)
 
         val contentText =
-                context.getString(R.string.claim_victory_notification_text) +
-                        " " +
-                        opponentName
+                context.getString(R.string.claim_victory_notification_text) + " " + opponentName
 
 
         val intent = Intent(
@@ -213,14 +381,20 @@ internal object Notifications {
             /* flags = */ PendingIntent.FLAG_IMMUTABLE
         )
 
-        var notification = NotificationCompat.Builder(context, CLAIM_VICTORY_CHANNEl_ID)
+        var notification = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
             .setSmallIcon(R.drawable.claim_victory)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentTitle(context.getString(R.string.claim_victory_notification_title))
             .setContentText(contentText)
             .setLargeIcon(largeIcon)
             .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
+            .setGroup(PLAYER_TURN_GROUP)
+            .build()
+
+        val groupSummary = NotificationCompat.Builder(context, PLAYER_TURN_CHANNEL_ID)
+            .setSmallIcon(R.drawable.your_turn)
+            .setGroup(PLAYER_TURN_GROUP)
+            .setGroupSummary(true)
             .build()
 
         with(NotificationManagerCompat.from(context)) {
@@ -229,26 +403,28 @@ internal object Notifications {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                // ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                // public fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                //                                        grantResults: IntArray)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return@with
             }
 
-            notify(CLAIM_VICTORY_NOTIFICATION_ID, notification)
+            notify(gameId.hashCode(), notification)
+            notify(PLAYER_TURN_NOTIFICATION_ID, groupSummary)
         }
     }
-}
 
-private fun largeIconSize(context: Context) = when(context.resources.displayMetrics.densityDpi) {
-    DisplayMetrics.DENSITY_LOW -> 18
-    DisplayMetrics.DENSITY_MEDIUM -> 24
-    DisplayMetrics.DENSITY_HIGH -> 36
-    DisplayMetrics.DENSITY_XHIGH -> 48
-    DisplayMetrics.DENSITY_XXHIGH -> 72
-    else -> 96
+    internal fun cancel(gameId: String, context: Context) {
+        val notificationManager = context.getSystemService(
+            NOTIFICATION_SERVICE
+        ) as NotificationManager
+
+        notificationManager.cancel(gameId.hashCode())
+    }
+
+    private fun largeIconSize(context: Context) = when(context.resources.displayMetrics.densityDpi) {
+        DisplayMetrics.DENSITY_LOW -> 18
+        DisplayMetrics.DENSITY_MEDIUM -> 24
+        DisplayMetrics.DENSITY_HIGH -> 36
+        DisplayMetrics.DENSITY_XHIGH -> 48
+        DisplayMetrics.DENSITY_XXHIGH -> 72
+        else -> 96
+    }
 }

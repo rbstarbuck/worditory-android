@@ -151,7 +151,8 @@ internal fun GameView(
         WorditoryConfirmationDialogView(
             viewModel = viewModel.claimVictoryConfirmationDialog,
             text = stringResource(R.string.claim_victory_confirmation_dialog),
-            confirmButtonText = stringResource(R.string.claim_victory)
+            confirmButtonText = stringResource(R.string.claim_victory),
+            cancelButtonText = stringResource(R.string.wait)
         )
     }
 }
