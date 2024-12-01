@@ -9,6 +9,7 @@ import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.R
+import com.example.worditory.game.gameover.GameOverView
 import com.example.worditory.navigation.LiveScreen
 import com.example.worditory.notification.Notifications
 import com.example.worditory.saved.SavedGamesService
@@ -17,6 +18,7 @@ import com.example.worditory.saved.removeSavedLiveGame
 import com.example.worditory.saved.setGameOver
 import com.example.worditory.timeout.TIMEOUT_MILLIS
 import com.example.worditory.user.UserRepoModel
+import com.example.worditory.user.UserRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,11 +41,12 @@ internal class LiveGameViewModel(
     private var playedWordCount = liveModel.playedWordCount
     private val isPlayer1 = liveModel.isPlayer1
     private var timestamp = liveModel.timestamp
+    private var isGameOver = liveModel.isGameOver
 
     private val latestWordListener: WordRepository.LatestWordListener
     private val opponentListener: GameRepository.UserListener
     private val timestampListener: GameRepository.TimestampListener
-    private var timeoutListener: GameRepository.TimeoutListener? = null
+    private var timeoutListener: GameRepository.TimeoutListener
 
     private var isOpponentOpeningTurn = false
 
@@ -69,26 +72,6 @@ internal class LiveGameViewModel(
                 if (word.index!! >= playedWordCount) {
                     onNewWord(word, context)
                 }
-
-                if (gameOverState == GameOver.State.IN_PROGRESS) {
-                    if (timeoutListener != null) {
-                        GameRepository.removeListener(timeoutListener!!)
-                    }
-
-                    val isActuallyPlayerTurn = when (isPlayer1) {
-                        true -> word.index % 2 == 0
-                        false -> word.index % 2 == 1
-                    }
-
-                    if (isActuallyPlayerTurn) {
-                        timeoutListener = GameRepository.listenForTimeout(
-                            gameId = id,
-                            timeoutDelta = TIMEOUT_MILLIS,
-                            onTimeout = { onClaimVictory(context) },
-                            onError = {} // TODO(handle errors)
-                        )
-                    }
-                }
             },
             onError = {} // TODO(handle errors)
         )
@@ -104,6 +87,13 @@ internal class LiveGameViewModel(
             gameId = id,
             onTimestampChange = { timestamp = it },
             onError = {} // TODO(handle errors)
+        )
+
+        timeoutListener = GameRepository.listenForTimeout(
+            gameId = id,
+            timeoutDelta = TIMEOUT_MILLIS,
+            onTimeout = { onClaimVictory(context) },
+            onError = {}
         )
 
         nextGameJob = viewModelScope.launch {
@@ -166,71 +156,69 @@ internal class LiveGameViewModel(
     }
 
     private fun onNewWord(word: PlayedWordRepoModel, context: Context) {
-        if (word.passTurn == true) {
-            passTurnDialog.show(
-                onDismiss = {
-                    scoreBoard.decrementScoreToWin()
-                    ++playedWordCount
-                    isPlayerTurn = true
-                    saveGame(context)
-                }
-            )
-        } else if (word.resignGame == true) {
-            resignGameDialog.show(
-                onDismiss = {
-                    gameOverState = GameOver.State.WIN
-                    onGameOver(context)
-                    saveGame(context)
-                }
-            )
-        } else if (word.claimVictory == true) {
-            claimVictoryDialog.show(
-                onDismiss = {
-                    gameOverState = GameOver.State.LOSE
-                    onGameOver(context)
-                    saveGame(context)
-                }
-            )
-        } else {
-            viewModelScope.launch {
-                board.word.model = WordModel()
+        val isOpponentWord = when (isPlayer1) {
+            true -> word.index!! % 2 == 1
+            false -> word.index!! % 2 == 0
+        }
 
-                board.word.withDrawPathTweenDuration(millis = word.tiles!!.size * 350) {
-                    if (isOpponentOpeningTurn) {
-                        delay(2000L)
+        when {
+            word.passTurn -> passTurnDialog.show {
+                scoreBoard.decrementScoreToWin()
+                ++playedWordCount
+                isPlayerTurn = true
+                saveGame(context)
+            }
+            word.resignGame -> resignGameDialog.show {
+                gameOverState = GameOver.State.WIN
+                onGameOver(context)
+                saveGame(context)
+            }
+            word.claimVictory && !isOpponentWord -> claimVictoryDialog.show {
+                gameOverState = GameOver.State.LOSE
+                onGameOver(context)
+                saveGame(context)
+            }
+            word.tiles != null -> {
+                viewModelScope.launch {
+                    board.word.model = WordModel()
+
+                    board.word.withDrawPathTweenDuration(millis = word.tiles.size * 350) {
+                        if (isOpponentOpeningTurn) {
+                            delay(2000L)
+                        }
+
+                        for (repoTile in word.tiles) {
+                            val tile = board.tiles[flipTileIndex(repoTile.index!!)]
+                            board.word.onSelectTile(tile, Game.Player.PLAYER_2)
+                        }
+
+                        delay(word.tiles.size * 350L + 1000L)
                     }
 
                     for (repoTile in word.tiles) {
                         val tile = board.tiles[flipTileIndex(repoTile.index!!)]
-                        board.word.onSelectTile(tile, Game.Player.PLAYER_2)
+                        val newLetter = repoTile.newLetter!!.asLetter()
+
+                        board.letterBag.exchangeForLetter(
+                            oldLetter = tile.letter,
+                            newLetter = newLetter
+                        )
+                        tile.letter = newLetter
                     }
 
-                    delay(word.tiles.size * 350L + 1000L)
+                    board.updateOwnershipsForWord(Game.Player.PLAYER_2)
+                    board.playWord(Game.Player.PLAYER_2)
+                    scoreBoard.score = board.computeScore()
+                    scoreBoard.decrementScoreToWin()
+                    ++playedWordCount
+                    if (checkForGameOver()) {
+                        onGameOver(context)
+                    } else {
+                        isPlayerTurn = true
+                    }
+
+                    saveGame(context)
                 }
-
-                for (repoTile in word.tiles) {
-                    val tile = board.tiles[flipTileIndex(repoTile.index!!)]
-                    val newLetter = repoTile.newLetter!!.asLetter()
-
-                    board.letterBag.exchangeForLetter(
-                        oldLetter = tile.letter,
-                        newLetter = newLetter
-                    )
-                    tile.letter = newLetter
-                }
-
-                board.updateOwnershipsForWord(Game.Player.PLAYER_2)
-                board.playWord(Game.Player.PLAYER_2)
-                scoreBoard.score = board.computeScore()
-                scoreBoard.decrementScoreToWin()
-                ++playedWordCount
-                if (checkForGameOver()) {
-                    onGameOver(context)
-                } else {
-                    isPlayerTurn = true
-                }
-
-                saveGame(context)
             }
         }
     }
@@ -245,9 +233,9 @@ internal class LiveGameViewModel(
     }
 
     private fun onClaimVictory(context: Context) {
-        if (!isPlayerTurn) {
+        GameRepository.ifIsPlayerTurn(id, isPlayer1) { isPlayerTurn ->
             GameRepository.ifGameOver(id) { isGameOver ->
-                if (!isGameOver) {
+                if (!(isPlayerTurn || isGameOver)) {
                     claimVictoryConfirmationDialog.show(
                         onConfirmed = {
                             Notifications.cancel(id, context)
@@ -285,9 +273,7 @@ internal class LiveGameViewModel(
         WordRepository.removeListener(latestWordListener)
         GameRepository.removeListener(opponentListener)
         GameRepository.removeListener(timestampListener)
-        if (timeoutListener != null) {
-            GameRepository.removeListener(timeoutListener!!)
-        }
+        GameRepository.removeListener(timeoutListener)
 
         if (gameOverState != GameOver.State.IN_PROGRESS) {
             viewModelScope.launch {

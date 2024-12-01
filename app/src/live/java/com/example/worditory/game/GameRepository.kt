@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import com.example.worditory.database.DatabaseRepository
 import com.example.worditory.database.DbKey
 import com.example.worditory.game.gameover.GameOver
+import com.example.worditory.game.word.WordRepository
 import com.example.worditory.user.UserRepoModel
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
@@ -173,8 +174,6 @@ internal object GameRepository {
     }
 
     internal fun removeListener(listener: TimeoutListener) {
-        listener.timer?.cancel()
-
         database
             .child(DbKey.GAMES)
             .child(listener.gameId)
@@ -205,6 +204,30 @@ internal object GameRepository {
 
             isGameOver(player1Won || player2Won)
         }
+    }
+
+    internal fun ifIsPlayerTurn(
+        gameId: String,
+        isPlayer1: Boolean,
+        isPlayerTurn: (Boolean) -> Unit
+    ) {
+        database
+            .child(DbKey.WORDS)
+            .child(gameId)
+            .child(DbKey.Words.COUNT)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val count = snapshot.getValue(Int::class.java)
+
+                if (count != null) {
+                    val isPlayerTurn = when (isPlayer1) {
+                        true -> count % 2 == 0
+                        false -> count % 2 == 1
+                    }
+
+                    isPlayerTurn(isPlayerTurn)
+                }
+            }
     }
 
     internal fun setGameOver(gameId: String, gameOverState: GameOver.State, isPlayer1: Boolean) {
@@ -358,11 +381,7 @@ internal object GameRepository {
         private val onTimeout: () -> Unit,
         private val onError: (OnFailure) -> Unit
     ): ValueEventListener {
-        internal var timer: CountDownTimer? = null
-
         override fun onDataChange(snapshot: DataSnapshot) {
-            timer?.cancel()
-
             val timestamp = snapshot.getValue(Long::class.java)
 
             if (timestamp == null) {
@@ -374,15 +393,24 @@ internal object GameRepository {
                     if (timeToTimeout <= 0L) {
                         onTimeout()
                     } else {
-                        timer = object: CountDownTimer(timeToTimeout, timeToTimeout) {
+                        val timer = object: CountDownTimer(timeToTimeout, timeToTimeout) {
                             override fun onTick(p0: Long) {}
 
                             override fun onFinish() {
-                                onTimeout()
+                                database
+                                    .child(DbKey.GAMES)
+                                    .child(gameId)
+                                    .child(DbKey.Games.TIMESTAMP)
+                                    .get()
+                                    .addOnSuccessListener { snapshot ->
+                                        if (timestamp == snapshot.getValue(Long::class.java)) {
+                                            onTimeout()
+                                        }
+                                    }
                             }
                         }
 
-                        timer?.start()
+                        timer.start()
                     }
                 }
             }

@@ -21,6 +21,10 @@
     <string name="timeout_notification_text">can claim victory in three hours</string>
     <string name="claim_victory_notification_text">You can claim victory against</string>
 
+    <string name="live">Live</string>=
+    <string name="computer">Computer</string>
+    <string name="rank">Rank:</string>
+
     <string name="play_live">Play Live!</string>
     <string name="play_against_ai">Play computer</string>
 
