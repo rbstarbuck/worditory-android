@@ -63,6 +63,14 @@ internal fun SavedGamesView(
                     val item = savedGames[i]
 
                     if (item is SavedGameData) {
+                        if (item.gameOverState != GameOver.State.IN_PROGRESS) {
+                            viewModel.setGameOver(
+                                gameId = item.liveGame.game.id,
+                                gameOverState = item.gameOverState,
+                                context = context
+                            )
+                        }
+
                         SavedGameRowItemView(
                             game = item.liveGame.game,
                             isPlayerTurn = item.isPlayerTurn,

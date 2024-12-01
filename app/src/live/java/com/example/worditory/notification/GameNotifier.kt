@@ -78,42 +78,44 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
                     false -> playedWord.index!! % 2 == 0
                 }
 
-                UserRepository.getOpponent(liveGame.game.id) { opponent ->
-                    if (playedWord.passTurn == true) {
-                        Notifications.passedTurn(
-                            gameId = liveGame.game.id,
-                            opponentName = opponent.displayName ?: "",
-                            opponentAvatarId = opponent.avatarId ?: 0,
-                            context = context
-                        )
-                    } else if (playedWord.resignGame == true) {
-                        Notifications.resignedGame(
-                            gameId = liveGame.game.id,
-                            opponentName = opponent.displayName ?: "",
-                            opponentAvatarId = opponent.avatarId ?: 0,
-                            context = context
-                        )
-                    } else if (playedWord.claimVictory == true) {
-                        Notifications.claimedVictory(
-                            gameId = liveGame.game.id,
-                            opponentName = opponent.displayName ?: "",
-                            opponentAvatarId = opponent.avatarId ?: 0,
-                            context = context
-                        )
-                    } else if (isOpponentWord) {
-                        val wordString = playedWord.tiles!!.map {
-                            val tileIndex =
-                                liveGame.game.board.width * liveGame.game.board.height - it.index!! - 1
-                            liveGame.game.board.tilesList[tileIndex].letter.asLetter()
-                        }.joinToString("")
+                if (isOpponentWord/* || playedWord.claimVictory == true*/) {
+                    UserRepository.getOpponent(liveGame.game.id) { opponent ->
+                        when {
+                            playedWord.passTurn -> Notifications.passedTurn(
+                                gameId = liveGame.game.id,
+                                opponentName = opponent.displayName ?: "",
+                                opponentAvatarId = opponent.avatarId ?: 0,
+                                context = context
+                            )
+                            playedWord.resignGame -> Notifications.resignedGame(
+                                gameId = liveGame.game.id,
+                                opponentName = opponent.displayName ?: "",
+                                opponentAvatarId = opponent.avatarId ?: 0,
+                                context = context
+                            )
+//                            playedWord.claimVictory -> Notifications.claimedVictory(
+//                                gameId = liveGame.game.id,
+//                                opponentName = opponent.displayName ?: "",
+//                                opponentAvatarId = opponent.avatarId ?: 0,
+//                                context = context
+//                            )
+                            playedWord.tiles != null -> {
+                                val wordString = playedWord.tiles.map {
+                                    val numTiles =
+                                        liveGame.game.board.width * liveGame.game.board.height
+                                    val tileIndex = numTiles - it.index!! -  1
+                                    liveGame.game.board.tilesList[tileIndex].letter.asLetter()
+                                }.joinToString("").uppercase()
 
-                        Notifications.isPlayerTurn(
-                            gameId = liveGame.game.id,
-                            opponentName = opponent.displayName ?: "",
-                            opponentAvatarId = opponent.avatarId ?: 0,
-                            playedWord = wordString.uppercase(),
-                            context = context
-                        )
+                                Notifications.isPlayerTurn(
+                                    gameId = liveGame.game.id,
+                                    opponentName = opponent.displayName ?: "",
+                                    opponentAvatarId = opponent.avatarId ?: 0,
+                                    playedWord = wordString,
+                                    context = context
+                                )
+                            }
+                        }
                     }
                 }
             }
