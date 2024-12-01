@@ -63,10 +63,6 @@ internal class LiveGameViewModel(
             .build()
 
     init {
-        if (liveModel.opponent != null) {
-            scoreBoard.scorePlayer2.avatarId.value
-        }
-
         latestWordListener = WordRepository.listenForLatestWord(
             gameId = id,
             onNewWord = { word ->
@@ -116,10 +112,7 @@ internal class LiveGameViewModel(
                     it.isPlayerTurn && it.liveGame.game.id != id
                 }
 
-                nextGame = when {
-                    validNextGames.isEmpty() -> null
-                    else -> validNextGames.first().liveGame.game.id
-                }
+                nextGame = validNextGames.firstOrNull()?.liveGame?.game?.id
             }
         }
 
@@ -173,7 +166,7 @@ internal class LiveGameViewModel(
     }
 
     private fun onNewWord(word: PlayedWordRepoModel, context: Context) {
-        if (word.passTurn) {
+        if (word.passTurn == true) {
             passTurnDialog.show(
                 onDismiss = {
                     scoreBoard.decrementScoreToWin()
@@ -182,7 +175,7 @@ internal class LiveGameViewModel(
                     saveGame(context)
                 }
             )
-        } else if (word.resignGame) {
+        } else if (word.resignGame == true) {
             resignGameDialog.show(
                 onDismiss = {
                     gameOverState = GameOver.State.WIN
@@ -190,7 +183,7 @@ internal class LiveGameViewModel(
                     saveGame(context)
                 }
             )
-        } else if (word.claimVictory) {
+        } else if (word.claimVictory == true) {
             claimVictoryDialog.show(
                 onDismiss = {
                     gameOverState = GameOver.State.LOSE

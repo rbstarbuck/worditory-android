@@ -45,12 +45,16 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
                     timeoutDelta = TIMEOUT_MILLIS,
                     onTimeout = {
                         if (!NotificationService.isWarmingUp) {
-                            Notifications.canClaimVictory(
-                                gameId = liveGame.game.id,
-                                opponentName = liveGame.opponent.displayName,
-                                opponentAvatarId = liveGame.opponent.avatarId,
-                                context = context
-                            )
+                            GameRepository.ifGameOver(liveGame.game.id) { isGameOver ->
+                                if (!isGameOver) {
+                                    Notifications.canClaimVictory(
+                                        gameId = liveGame.game.id,
+                                        opponentName = liveGame.opponent.displayName,
+                                        opponentAvatarId = liveGame.opponent.avatarId,
+                                        context = context
+                                    )
+                                }
+                            }
                         }
                     },
                     onError = {}
@@ -69,43 +73,41 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
                     false -> playedWord.index!! % 2 == 0
                 }
 
-                if (isOpponentWord) {
-                    if (playedWord.passTurn) {
-                        Notifications.passedTurn(
-                            gameId = liveGame.game.id,
-                            opponentName = liveGame.opponent.displayName,
-                            opponentAvatarId = liveGame.opponent.avatarId,
-                            context = context
-                        )
-                    } else if (playedWord.resignGame) {
-                        Notifications.resignedGame(
-                            gameId = liveGame.game.id,
-                            opponentName = liveGame.opponent.displayName,
-                            opponentAvatarId = liveGame.opponent.avatarId,
-                            context = context
-                        )
-                    } else if (playedWord.claimVictory) {
-                        Notifications.claimedVictory(
-                            gameId = liveGame.game.id,
-                            opponentName = liveGame.opponent.displayName,
-                            opponentAvatarId = liveGame.opponent.avatarId,
-                            context = context
-                        )
-                    } else {
-                        val wordString = playedWord.tiles!!.map {
-                            val tileIndex =
-                                liveGame.game.board.width * liveGame.game.board.height - it.index!! - 1
-                            liveGame.game.board.tilesList[tileIndex].letter.asLetter()
-                        }.joinToString("")
+                if (playedWord.passTurn == true) {
+                    Notifications.passedTurn(
+                        gameId = liveGame.game.id,
+                        opponentName = liveGame.opponent.displayName,
+                        opponentAvatarId = liveGame.opponent.avatarId,
+                        context = context
+                    )
+                } else if (playedWord.resignGame == true) {
+                    Notifications.resignedGame(
+                        gameId = liveGame.game.id,
+                        opponentName = liveGame.opponent.displayName,
+                        opponentAvatarId = liveGame.opponent.avatarId,
+                        context = context
+                    )
+                } else if (playedWord.claimVictory == true) {
+                    Notifications.claimedVictory(
+                        gameId = liveGame.game.id,
+                        opponentName = liveGame.opponent.displayName,
+                        opponentAvatarId = liveGame.opponent.avatarId,
+                        context = context
+                    )
+                } else if (isOpponentWord) {
+                    val wordString = playedWord.tiles!!.map {
+                        val tileIndex =
+                            liveGame.game.board.width * liveGame.game.board.height - it.index!! - 1
+                        liveGame.game.board.tilesList[tileIndex].letter.asLetter()
+                    }.joinToString("")
 
-                        Notifications.isPlayerTurn(
-                            gameId = liveGame.game.id,
-                            opponentName = liveGame.opponent.displayName,
-                            opponentAvatarId = liveGame.opponent.avatarId,
-                            playedWord = wordString.uppercase(),
-                            context = context
-                        )
-                    }
+                    Notifications.isPlayerTurn(
+                        gameId = liveGame.game.id,
+                        opponentName = liveGame.opponent.displayName,
+                        opponentAvatarId = liveGame.opponent.avatarId,
+                        playedWord = wordString.uppercase(),
+                        context = context
+                    )
                 }
             }
         },

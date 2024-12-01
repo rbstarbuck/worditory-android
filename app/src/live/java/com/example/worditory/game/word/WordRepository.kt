@@ -3,7 +3,6 @@ package com.example.worditory.game.word
 import com.example.worditory.database.DbKey
 import com.example.worditory.game.board.BoardModel
 import com.example.worditory.game.board.word.WordModel
-import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository.OnFailure
 import com.google.firebase.Firebase
 import com.google.firebase.database.ChildEventListener
