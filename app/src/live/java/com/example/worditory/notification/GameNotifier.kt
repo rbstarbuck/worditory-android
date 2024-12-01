@@ -7,6 +7,7 @@ import com.example.worditory.game.board.tile.asLetter
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.timeout.TIMEOUT_MILLIS
 import com.example.worditory.timeout.TIMEOUT_WARNING_MILLIS
+import com.example.worditory.user.UserRepository
 
 internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
     private var timeoutListener: GameRepository.TimeoutListener? = null
@@ -27,12 +28,14 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
                         if (!NotificationService.isWarmingUp) {
                             GameRepository.ifGameOver(liveGame.game.id) { isGameOver ->
                                 if (!isGameOver) {
-                                    Notifications.timeoutImminent(
-                                        gameId = liveGame.game.id,
-                                        opponentName = liveGame.opponent.displayName,
-                                        opponentAvatarId = liveGame.opponent.avatarId,
-                                        context = context
-                                    )
+                                    UserRepository.getOpponent(liveGame.game.id) { opponent ->
+                                        Notifications.timeoutImminent(
+                                            gameId = liveGame.game.id,
+                                            opponentName = opponent.displayName ?: "",
+                                            opponentAvatarId = opponent.avatarId ?: 0,
+                                            context = context
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -47,12 +50,14 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
                         if (!NotificationService.isWarmingUp) {
                             GameRepository.ifGameOver(liveGame.game.id) { isGameOver ->
                                 if (!isGameOver) {
-                                    Notifications.canClaimVictory(
-                                        gameId = liveGame.game.id,
-                                        opponentName = liveGame.opponent.displayName,
-                                        opponentAvatarId = liveGame.opponent.avatarId,
-                                        context = context
-                                    )
+                                    UserRepository.getOpponent(liveGame.game.id) { opponent ->
+                                        Notifications.canClaimVictory(
+                                            gameId = liveGame.game.id,
+                                            opponentName = opponent.displayName ?: "",
+                                            opponentAvatarId = opponent.avatarId ?: 0,
+                                            context = context
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -73,41 +78,43 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
                     false -> playedWord.index!! % 2 == 0
                 }
 
-                if (playedWord.passTurn == true) {
-                    Notifications.passedTurn(
-                        gameId = liveGame.game.id,
-                        opponentName = liveGame.opponent.displayName,
-                        opponentAvatarId = liveGame.opponent.avatarId,
-                        context = context
-                    )
-                } else if (playedWord.resignGame == true) {
-                    Notifications.resignedGame(
-                        gameId = liveGame.game.id,
-                        opponentName = liveGame.opponent.displayName,
-                        opponentAvatarId = liveGame.opponent.avatarId,
-                        context = context
-                    )
-                } else if (playedWord.claimVictory == true) {
-                    Notifications.claimedVictory(
-                        gameId = liveGame.game.id,
-                        opponentName = liveGame.opponent.displayName,
-                        opponentAvatarId = liveGame.opponent.avatarId,
-                        context = context
-                    )
-                } else if (isOpponentWord) {
-                    val wordString = playedWord.tiles!!.map {
-                        val tileIndex =
-                            liveGame.game.board.width * liveGame.game.board.height - it.index!! - 1
-                        liveGame.game.board.tilesList[tileIndex].letter.asLetter()
-                    }.joinToString("")
+                UserRepository.getOpponent(liveGame.game.id) { opponent ->
+                    if (playedWord.passTurn == true) {
+                        Notifications.passedTurn(
+                            gameId = liveGame.game.id,
+                            opponentName = opponent.displayName ?: "",
+                            opponentAvatarId = opponent.avatarId ?: 0,
+                            context = context
+                        )
+                    } else if (playedWord.resignGame == true) {
+                        Notifications.resignedGame(
+                            gameId = liveGame.game.id,
+                            opponentName = opponent.displayName ?: "",
+                            opponentAvatarId = opponent.avatarId ?: 0,
+                            context = context
+                        )
+                    } else if (playedWord.claimVictory == true) {
+                        Notifications.claimedVictory(
+                            gameId = liveGame.game.id,
+                            opponentName = opponent.displayName ?: "",
+                            opponentAvatarId = opponent.avatarId ?: 0,
+                            context = context
+                        )
+                    } else if (isOpponentWord) {
+                        val wordString = playedWord.tiles!!.map {
+                            val tileIndex =
+                                liveGame.game.board.width * liveGame.game.board.height - it.index!! - 1
+                            liveGame.game.board.tilesList[tileIndex].letter.asLetter()
+                        }.joinToString("")
 
-                    Notifications.isPlayerTurn(
-                        gameId = liveGame.game.id,
-                        opponentName = liveGame.opponent.displayName,
-                        opponentAvatarId = liveGame.opponent.avatarId,
-                        playedWord = wordString.uppercase(),
-                        context = context
-                    )
+                        Notifications.isPlayerTurn(
+                            gameId = liveGame.game.id,
+                            opponentName = opponent.displayName ?: "",
+                            opponentAvatarId = opponent.avatarId ?: 0,
+                            playedWord = wordString.uppercase(),
+                            context = context
+                        )
+                    }
                 }
             }
         },

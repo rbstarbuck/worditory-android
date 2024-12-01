@@ -2,6 +2,8 @@ package com.example.worditory.user
 
 import android.content.Context
 import com.example.worditory.database.DbKey
+import com.example.worditory.game.Game
+import com.example.worditory.game.GameRepoModel
 import com.example.worditory.setGamesPlayed
 import com.example.worditory.setGamesWon
 import com.example.worditory.setPlayerAvatarId
@@ -107,6 +109,33 @@ internal object UserRepository {
                         thenDo()
                     }
                 }
+        }
+    }
+
+    internal fun getOpponent(gameId: String, withUser: (UserRepoModel) -> Unit) {
+        database.child(DbKey.GAMES).child(gameId).get().addOnSuccessListener { snapshot ->
+            val game = snapshot.getValue(GameRepoModel::class.java)
+
+            if (game != null) {
+                val uid = when (auth.currentUser?.uid) {
+                    game.player1 -> game.player2
+                    game.player2 -> game.player1
+                    else -> null
+                }
+
+                if (uid != null) {
+                    database
+                        .child(DbKey.USERS)
+                        .child(uid)
+                        .get()
+                        .addOnSuccessListener { snapshot ->
+                            val user = snapshot.getValue(UserRepoModel::class.java)
+                            if (user != null) {
+                                withUser(user)
+                            }
+                        }
+                }
+            }
         }
     }
 }
