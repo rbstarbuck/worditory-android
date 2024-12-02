@@ -66,7 +66,7 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
     val liveGamesPlayedState = remember { context.getLiveGamesPlayed() }.collectAsState(0)
     val liveGamesWonState = remember { context.getLiveGamesWon() }.collectAsState(0)
     val liveWinRateState = remember { context.getLiveWinRate() }.collectAsState(null)
-    val livePlayerRankState = remember { context.getPlayerRank() }.collectAsState(1500)
+    val livePlayerRankState = remember { context.getPlayerRank() }.collectAsState(-1)
 
     val npcWinRate = npcWinRateState.value
     val npcWinPercentage = if (npcWinRate == null) {
@@ -82,14 +82,17 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
         (liveWinRate * 100f).roundToInt().toString() + "%"
     }
 
+    val livePlayerRank = if (livePlayerRankState.value == -1) {
+        "--"
+    } else {
+        livePlayerRankState.value.toString()
+    }
+
     val avatarResId = getResourceId(avatarState.value)
 
     BoxWithConstraints(modifier, contentAlignment = Alignment.TopCenter) {
         val width = this.maxWidth
         val strokeWidth = width / 80f
-        val cornerRadius = width / 10f
-        val counterFontSizeLarge = (width.value / 14f / LocalDensity.current.fontScale).sp
-        val counterFontSizeSmall = (width.value / 25f / LocalDensity.current.fontScale).sp
 
         Row(
             modifier = Modifier
@@ -223,8 +226,7 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
-                        text = stringResource(R.string.rank) +
-                                " " + livePlayerRankState.value.toString(),
+                        text = stringResource(R.string.rank) + " " + livePlayerRank,
                         color = colorResource(R.color.font_color_light),
                         fontSize = 22.sp
                     )

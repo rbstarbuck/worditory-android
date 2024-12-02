@@ -16,6 +16,7 @@ import com.example.worditory.saved.SavedGamesService
 import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.saved.removeSavedLiveGame
 import com.example.worditory.saved.setGameOver
+import com.example.worditory.setPlayerRank
 import com.example.worditory.timeout.TIMEOUT_MILLIS
 import com.example.worditory.user.UserRepoModel
 import com.example.worditory.user.UserRepository
@@ -259,7 +260,7 @@ internal class LiveGameViewModel(
         Notifications.cancel(id, context)
 
         viewModelScope.launch {
-            context.setGameOver(id, gameOverState)
+            context.setGameOver(id, gameOverState, viewModelScope)
         }
 
         GameRepository.setGameOver(id, gameOverState, isPlayer1)

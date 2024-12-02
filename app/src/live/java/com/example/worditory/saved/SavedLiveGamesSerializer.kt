@@ -4,13 +4,15 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
-import com.example.worditory.game.GameRepository
 import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
+import com.example.worditory.setPlayerRank
 import com.example.worditory.user.UserRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -49,7 +51,12 @@ internal suspend fun Context.addSavedLiveGame(liveGame: LiveGameModel) {
     }
 }
 
-internal suspend fun Context.setGameOver(gameId: String, gameOverState: GameOver.State) {
+internal suspend fun Context.setGameOver(
+    gameId: String,
+    gameOverState: GameOver.State,
+    scope: CoroutineScope,
+    updatedRank: (Int) -> Unit = {}
+) {
     val savedGames = savedLiveGamesDataStore.data.first()
     val oldGameList = savedGames.gamesList.filter { it.game.id == gameId }
 
@@ -61,11 +68,22 @@ internal suspend fun Context.setGameOver(gameId: String, gameOverState: GameOver
             addSavedLiveGame(newGame)
 
             incrementGamesPlayed()
-            UserRepository.incrementGamesPlayed()
+            UserRepository.incrementNpcGamesPlayed()
             if (gameOverState == GameOver.State.WIN) {
                 incrementGamesWon()
-                UserRepository.incrementGamesWon()
+                UserRepository.incrementNpcGamesWon()
             }
+
+            UserRepository.updateRank(
+                gameId = gameId,
+                gameOverState = gameOverState,
+                updatedRank = { rank ->
+                    scope.launch {
+                        setPlayerRank(rank)
+                    }
+                    updatedRank(rank)
+                }
+            )
         }
     }
 }

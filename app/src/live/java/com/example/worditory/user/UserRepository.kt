@@ -2,18 +2,22 @@ package com.example.worditory.user
 
 import android.content.Context
 import com.example.worditory.database.DbKey
-import com.example.worditory.game.Game
 import com.example.worditory.game.GameRepoModel
+import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.setGamesPlayed
 import com.example.worditory.setGamesWon
 import com.example.worditory.setPlayerAvatarId
 import com.example.worditory.setPlayerDisplayName
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ServerValue
 import com.google.firebase.database.database
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 internal object UserRepository {
     private val database = Firebase.database.reference
@@ -45,27 +49,53 @@ internal object UserRepository {
         }
     }
 
-    internal fun incrementGamesPlayed(count: Long = 1) {
+    internal fun incrementNpcGamesPlayed(count: Long = 1) {
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
             database
                 .child(DbKey.USERS)
                 .child(currentUser.uid)
-                .child(DbKey.Users.GAMES_PLAYED)
+                .child(DbKey.Users.NPC_GAMES_PLAYED)
                 .setValue(ServerValue.increment(count))
 
         }
     }
 
-    internal fun incrementGamesWon(count: Long = 1) {
+    internal fun incrementNpcGamesWon(count: Long = 1) {
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
             database
                 .child(DbKey.USERS)
                 .child(currentUser.uid)
-                .child(DbKey.Users.GAMES_WON)
+                .child(DbKey.Users.NPC_GAMES_WON)
+                .setValue(ServerValue.increment(count))
+
+        }
+    }
+
+    internal fun incrementLiveGamesWon(count: Long = 1) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.USERS)
+                .child(currentUser.uid)
+                .child(DbKey.Users.LIVE_GAMES_WON)
+                .setValue(ServerValue.increment(count))
+
+        }
+    }
+
+    internal fun incrementLiveGamesPlayed(count: Long = 1) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.USERS)
+                .child(currentUser.uid)
+                .child(DbKey.Users.LIVE_GAMES_PLAYED)
                 .setValue(ServerValue.increment(count))
 
         }
@@ -134,6 +164,63 @@ internal object UserRepository {
                                 withUser(user)
                             }
                         }
+                }
+            }
+        }
+    }
+
+    internal fun updateRank(
+        gameId: String,
+        gameOverState: GameOver.State,
+        updatedRank: (Int) -> Unit = {},
+        onError: () -> Unit = {}
+    ) {
+        database.child(DbKey.GAMES).child(gameId).get().addOnSuccessListener { snapshot ->
+            val game = snapshot.getValue(GameRepoModel::class.java)!!
+
+            val currentUser = auth.currentUser
+
+            if (game.player1 == null || game.player2 == null || currentUser == null) {
+                onError()
+            } else {
+                val player1Task = database.child(DbKey.USERS).child(game.player1).get()
+                val player2Task = database.child(DbKey.USERS).child(game.player2).get()
+
+                var playerTask: Task<DataSnapshot>? = null
+                var opponentTask: Task<DataSnapshot>? = null
+                var playerUid: String? = null
+
+                if (currentUser.uid == game.player1) {
+                    playerTask = player1Task
+                    opponentTask = player2Task
+                    playerUid = game.player1
+                } else {
+                    playerTask = player2Task
+                    opponentTask = player1Task
+                    playerUid = game.player2
+                }
+
+                Tasks.whenAllComplete(playerTask, opponentTask).addOnSuccessListener { taskList ->
+                    val playerSnapshot = taskList[0].result as DataSnapshot
+                    val opponentSnapshot = taskList[1].result as DataSnapshot
+
+                    val player = playerSnapshot.getValue(UserRepoModel::class.java)
+                    val opponent = opponentSnapshot.getValue(UserRepoModel::class.java)
+
+                    if (player == null || opponent == null) {
+                        onError()
+                    } else {
+                        val rank =
+                            player.rank(opponent, gameOverState == GameOver.State.WIN).roundToInt()
+
+                        database
+                            .child(DbKey.USERS)
+                            .child(playerUid)
+                            .child(DbKey.Users.RANK)
+                            .setValue(rank)
+
+                        updatedRank(rank)
+                    }
                 }
             }
         }

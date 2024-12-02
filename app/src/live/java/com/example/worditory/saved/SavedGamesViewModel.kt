@@ -3,7 +3,6 @@ package com.example.worditory.saved
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.navigation.LiveScreen
@@ -23,7 +22,7 @@ internal class SavedGamesViewModel(
 
     internal fun setGameOver(gameId: String, gameOverState: GameOver.State, context: Context) {
         viewModelScope.launch {
-            context.setGameOver(gameId, gameOverState)
+            context.setGameOver(gameId, gameOverState, viewModelScope)
         }
     }
 }
