@@ -49,32 +49,6 @@ internal object UserRepository {
         }
     }
 
-    internal fun incrementNpcGamesPlayed(count: Long = 1) {
-        val currentUser = auth.currentUser
-
-        if (currentUser != null) {
-            database
-                .child(DbKey.USERS)
-                .child(currentUser.uid)
-                .child(DbKey.Users.NPC_GAMES_PLAYED)
-                .setValue(ServerValue.increment(count))
-
-        }
-    }
-
-    internal fun incrementNpcGamesWon(count: Long = 1) {
-        val currentUser = auth.currentUser
-
-        if (currentUser != null) {
-            database
-                .child(DbKey.USERS)
-                .child(currentUser.uid)
-                .child(DbKey.Users.NPC_GAMES_WON)
-                .setValue(ServerValue.increment(count))
-
-        }
-    }
-
     internal fun incrementLiveGamesWon(count: Long = 1) {
         val currentUser = auth.currentUser
 
@@ -82,7 +56,7 @@ internal object UserRepository {
             database
                 .child(DbKey.USERS)
                 .child(currentUser.uid)
-                .child(DbKey.Users.LIVE_GAMES_WON)
+                .child(DbKey.Users.GAMES_WON)
                 .setValue(ServerValue.increment(count))
 
         }
@@ -95,7 +69,7 @@ internal object UserRepository {
             database
                 .child(DbKey.USERS)
                 .child(currentUser.uid)
-                .child(DbKey.Users.LIVE_GAMES_PLAYED)
+                .child(DbKey.Users.GAMES_PLAYED)
                 .setValue(ServerValue.increment(count))
 
         }

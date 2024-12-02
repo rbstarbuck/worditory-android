@@ -8,6 +8,8 @@ import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.incrementGamesPlayed
 import com.example.worditory.incrementGamesWon
+import com.example.worditory.incrementLiveGameWon
+import com.example.worditory.incrementLiveGamesPlayed
 import com.example.worditory.setPlayerRank
 import com.example.worditory.user.UserRepository
 import kotlinx.coroutines.CoroutineScope
@@ -67,11 +69,11 @@ internal suspend fun Context.setGameOver(
             val newGame = oldGame.toBuilder().setIsGameOver(true).build()
             addSavedLiveGame(newGame)
 
-            incrementGamesPlayed()
-            UserRepository.incrementNpcGamesPlayed()
+            incrementLiveGamesPlayed()
+            UserRepository.incrementLiveGamesPlayed()
             if (gameOverState == GameOver.State.WIN) {
-                incrementGamesWon()
-                UserRepository.incrementNpcGamesWon()
+                incrementLiveGameWon()
+                UserRepository.incrementLiveGamesWon()
             }
 
             UserRepository.updateRank(
