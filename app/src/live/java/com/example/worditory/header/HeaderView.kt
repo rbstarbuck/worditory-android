@@ -3,8 +3,6 @@ package com.example.worditory.header
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -18,7 +16,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -28,16 +25,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.getGamesPlayed
@@ -50,7 +44,6 @@ import com.example.worditory.getLiveGamesWon
 import com.example.worditory.getLiveWinRate
 import com.example.worditory.getPlayerRank
 import com.example.worditory.resourceid.getResourceId
-import org.checkerframework.common.subtyping.qual.Bottom
 import kotlin.math.roundToInt
 
 @Composable
@@ -97,11 +90,11 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(y = width / 6f)
+                .offset(y = width / 40f)
         ) {
-            Column(Modifier.padding(horizontal = 10.dp)) {
+            Column(Modifier.padding(horizontal = 15.dp)) {
                 Text(
-                    text = stringResource(R.string.live),
+                    text = stringResource(R.string.live_games),
                     color = colorResource(R.color.font_color_light),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
@@ -130,12 +123,12 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
             Spacer(Modifier.weight(1f))
 
             Column(
-                Modifier.padding(horizontal = 10.dp),
+                Modifier.padding(horizontal = 15.dp),
                 horizontalAlignment = Alignment.End
             ) {
                 Column {
                     Text(
-                        text = stringResource(R.string.computer),
+                        text = stringResource(R.string.ai_games),
                         color = colorResource(R.color.font_color_light),
                         modifier = Modifier.fillMaxWidth(),
                         fontSize = 14.sp,
@@ -175,8 +168,8 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
         OutlinedButton(
             onClick = { onAvatarClick() },
             modifier = Modifier
-                .width(width / 2f)
-                .height(width / 2f),
+                .width(width / 3f)
+                .height(width / 3f),
             shape = CircleShape,
             colors = ButtonColors(
                 containerColor = colorResource(R.color.header_avatar_background),
@@ -189,10 +182,10 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
                 color = colorResource(R.color.header_background)
             ),
             contentPadding = PaddingValues(
-                top = width / 20f,
-                start = width / 20f,
-                end = width / 20f,
-                bottom = width / 8f
+                top = width / 30f,
+                start = width / 30f,
+                end = width / 30f,
+                bottom = width / 12f
             )
         ) {
             Image(
@@ -204,12 +197,12 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
 
         Column(
             modifier = Modifier
-                .padding(top = width * 0.37f),
+                .padding(top = width * 0.233f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
                 modifier = Modifier
-                    .width(width / 2.4f)
+                    .width(width / 3.6f)
                     .height(strokeWidth)
                     .background(colorResource(R.color.header_background))
             )
@@ -226,9 +219,9 @@ fun HeaderView(modifier: Modifier = Modifier, onAvatarClick: () -> Unit) {
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
-                        text = stringResource(R.string.rank) + " " + livePlayerRank,
+                        text = stringResource(R.string.rank) + ": " + livePlayerRank,
                         color = colorResource(R.color.font_color_light),
-                        fontSize = 22.sp
+                        fontSize = 18.sp
                     )
                 }
             }

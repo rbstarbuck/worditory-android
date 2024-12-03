@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.auth.AuthenticationView
@@ -54,7 +56,10 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                     viewModel = viewModel.badgesRow,
                     modifier = Modifier.fillMaxWidth()
                 )
+
+                Spacer(Modifier.height(15.dp))
             }
+
 
             SavedGamesView(
                 modifier = Modifier.fillMaxWidth(),
@@ -67,26 +72,32 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 }
             )
 
-            WorditoryOutlinedButton(
-                onClick = { viewModel.onPlayLiveGameClick(context) },
-                contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(
-                    text = stringResource(R.string.play_live),
-                    color = colorResource(R.color.font_color_dark),
-                    fontSize = 30.sp
-                )
-            }
+                WorditoryOutlinedButton(
+                    onClick = { viewModel.onPlayLiveGameClick(context) },
+                    contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.play_live),
+                        color = colorResource(R.color.font_color_dark),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
 
-            WorditoryOutlinedButton(
-                onClick = { viewModel.onPlayGameClicked() },
-                contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.play_against_ai),
-                    color = colorResource(R.color.font_color_dark),
-                    fontSize = 20.sp
-                )
+                WorditoryOutlinedButton(
+                    onClick = { viewModel.onPlayGameClicked() },
+                    contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.play_against_ai),
+                        color = colorResource(R.color.font_color_dark),
+                        fontSize = 24.sp
+                    )
+                }
             }
         }
 
