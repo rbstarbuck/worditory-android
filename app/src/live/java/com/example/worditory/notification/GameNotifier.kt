@@ -81,19 +81,19 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
                 if (isOpponentWord/* || playedWord.claimVictory == true*/) {
                     UserRepository.getOpponent(liveGame.game.id) { opponent ->
                         when {
-                            playedWord.passTurn -> Notifications.passedTurn(
+                            playedWord.passTurn == true -> Notifications.passedTurn(
                                 gameId = liveGame.game.id,
                                 opponentName = opponent.displayName ?: "",
                                 opponentAvatarId = opponent.avatarId ?: 0,
                                 context = context
                             )
-                            playedWord.resignGame -> Notifications.resignedGame(
+                            playedWord.resignGame == true -> Notifications.resignedGame(
                                 gameId = liveGame.game.id,
                                 opponentName = opponent.displayName ?: "",
                                 opponentAvatarId = opponent.avatarId ?: 0,
                                 context = context
                             )
-//                            playedWord.claimVictory -> Notifications.claimedVictory(
+//                            playedWord.claimVictory == true -> Notifications.claimedVictory(
 //                                gameId = liveGame.game.id,
 //                                opponentName = opponent.displayName ?: "",
 //                                opponentAvatarId = opponent.avatarId ?: 0,

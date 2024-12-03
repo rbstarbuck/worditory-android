@@ -163,18 +163,18 @@ internal class LiveGameViewModel(
         }
 
         when {
-            word.passTurn -> passTurnDialog.show {
+            word.passTurn == true -> passTurnDialog.show {
                 scoreBoard.decrementScoreToWin()
                 ++playedWordCount
                 isPlayerTurn = true
                 saveGame(context)
             }
-            word.resignGame -> resignGameDialog.show {
+            word.resignGame == true -> resignGameDialog.show {
                 gameOverState = GameOver.State.WIN
                 onGameOver(context)
                 saveGame(context)
             }
-            word.claimVictory && !isOpponentWord -> claimVictoryDialog.show {
+            word.claimVictory == true && !isOpponentWord -> claimVictoryDialog.show {
                 gameOverState = GameOver.State.LOSE
                 onGameOver(context)
                 saveGame(context)
