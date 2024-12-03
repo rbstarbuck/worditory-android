@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.auth.AuthenticationViewModel
 import com.example.worditory.composable.WorditoryConfirmationDialogViewModel
+import com.example.worditory.composable.WorditoryInfoDialogViewModel
+import com.example.worditory.friends.SavedFriendsViewModel
+import com.example.worditory.friends.SendFriendRequestViewModel
 import com.example.worditory.navigation.LiveScreen
 import com.example.worditory.notification.Notifications
 import com.example.worditory.saved.SavedGamesRepository
@@ -23,6 +26,9 @@ internal class MainViewModel(
 ): MainViewModelBase(navController, context) {
     internal val authentication = AuthenticationViewModel()
     internal val notificationPermission = WorditoryConfirmationDialogViewModel()
+    internal val savedFriends = SavedFriendsViewModel()
+    internal val sendFriendRequest = SendFriendRequestViewModel()
+    internal val friendRequestSent = WorditoryInfoDialogViewModel()
 
     init {
         if (Firebase.auth.currentUser == null) {

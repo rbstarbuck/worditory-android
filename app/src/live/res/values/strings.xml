@@ -25,6 +25,12 @@
     <string name="ai_games">AI Games</string>
     <string name="rank">Rank</string>
 
+    <string name="friend_avatar">Friend avatar</string>
+    <string name="add_friend">Add friend</string>
+    <string name="send_friend_request_dialog_text">Send a friend request to challenge your buddy!</string>
+    <string name="send">Send</string>
+    <string name="friend_request_sent">Friend request sent!</string>
+
     <string name="play_live">Play Live!</string>
     <string name="play_against_ai">Play AI</string>
 

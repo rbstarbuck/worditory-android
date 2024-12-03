@@ -3,4 +3,6 @@
     <color name="sign_in_background">#FFDDDDDD</color>
     <color name="textfield_placeholder">#FFBBBBBB</color>
     <color name="error_message_text">#FFFF0000</color>
+
+    <color name="saved_friends_avatar_background">#FFEEEEEE</color>
 </resources>

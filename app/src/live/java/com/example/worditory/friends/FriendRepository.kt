@@ -1,6 +1,7 @@
 package com.example.worditory.friends
 
 import com.example.worditory.database.DbKey
+import com.example.worditory.user.sanitizeEmail
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseError
@@ -32,17 +33,23 @@ internal object FriendRepository {
 
     internal fun sendFriendRequestFromEmail(
         email: String,
+        onSuccess: () -> Unit,
         onError: (OnFailure) -> Unit
     ) {
-        database.child(DbKey.EMAIL_TO_UID).child(email).get().addOnSuccessListener { snapshot ->
-            val uid = snapshot.getValue(String::class.java)
+        database
+            .child(DbKey.EMAIL_TO_UID)
+            .child(sanitizeEmail(email))
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val uid = snapshot.getValue(String::class.java)
 
-            if (uid == null) {
-                onError(OnFailure(OnFailure.Reason.EMAIL_NOT_REGISTERED))
-            } else {
-                sendFriendRequest(uid)
+                if (uid == null) {
+                    onError(OnFailure(OnFailure.Reason.EMAIL_NOT_REGISTERED))
+                } else {
+                    sendFriendRequest(uid)
+                    onSuccess()
+                }
             }
-        }
     }
 
     private fun sendFriendRequest(uid: String) {

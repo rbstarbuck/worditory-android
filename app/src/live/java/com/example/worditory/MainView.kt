@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +26,10 @@ import com.example.worditory.badge.BadgesRowView
 import com.example.worditory.badge.NewBadgesView
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.composable.WorditoryConfirmationDialogView
+import com.example.worditory.composable.WorditoryInfoDialogView
 import com.example.worditory.composable.WorditoryOutlinedButton
+import com.example.worditory.friends.SavedFriendsView
+import com.example.worditory.friends.SendFriendRequestView
 import com.example.worditory.header.HeaderView
 import com.example.worditory.saved.SavedGamesView
 
@@ -72,6 +74,12 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 }
             )
 
+            SavedFriendsView(
+                viewModel = viewModel.savedFriends,
+                modifier = Modifier.fillMaxWidth(),
+                onAddFriendClick = { viewModel.sendFriendRequest.enabled = true }
+            )
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -108,6 +116,16 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         WorditoryConfirmationDialogView(
             viewModel = viewModel.deleteSavedGame,
             text = stringResource(R.string.delete_saved_game_question)
+        )
+
+        SendFriendRequestView(
+            viewModel = viewModel.sendFriendRequest,
+            onRequestSent = { viewModel.friendRequestSent.show() }
+        )
+
+        WorditoryInfoDialogView(
+            viewModel = viewModel.friendRequestSent,
+            text = stringResource(R.string.friend_request_sent)
         )
 
         NewBadgesView(viewModel.newBadges)

@@ -37,7 +37,10 @@ internal object UserRepository {
             )
 
             database.child(DbKey.USERS).child(currentUser.uid).setValue(model)
-            database.child(DbKey.EMAIL_TO_UID).child(currentUser.email!!).setValue(currentUser.uid)
+            database
+                .child(DbKey.EMAIL_TO_UID)
+                .child(sanitizeEmail(currentUser.email!!))
+                .setValue(currentUser.uid)
         }
     }
 
@@ -205,3 +208,11 @@ internal object UserRepository {
         }
     }
 }
+
+internal fun sanitizeEmail(email: String) =
+    email
+        .replace('.', ',')
+        .replace('#', '%')
+        .replace('$', '&')
+        .replace('[', '{')
+        .replace(']', '}')
