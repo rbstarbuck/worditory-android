@@ -47,9 +47,7 @@ internal fun SavedGamesView(
                     SavedGameRowItemView(
                         game = npcGame.game,
                         isPlayerTurn = npcGame.game.isPlayerTurn,
-                        opponentDisplayName = stringResource(
-                            NonPlayerCharacter.avatarIdToDisplayNameResId(npcGame.opponent.avatar)
-                        ),
+                        opponentDisplayName = "",
                         opponentAvatarId = npcGame.opponent.avatar,
                         isTimedOut = false,
                         gameOverState = GameOver.State.IN_PROGRESS,
