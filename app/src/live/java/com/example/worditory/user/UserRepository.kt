@@ -6,8 +6,11 @@ import com.example.worditory.game.GameRepoModel
 import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.setGamesPlayed
 import com.example.worditory.setGamesWon
+import com.example.worditory.setLiveGamesPlayed
+import com.example.worditory.setLiveGamesWon
 import com.example.worditory.setPlayerAvatarId
 import com.example.worditory.setPlayerDisplayName
+import com.example.worditory.setPlayerRank
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
@@ -90,8 +93,9 @@ internal object UserRepository {
                         scope.launch {
                             context.setPlayerDisplayName(user.displayName ?: "")
                             context.setPlayerAvatarId(user.avatarId ?: 0)
-                            context.setGamesPlayed(user.gamesPlayed ?: 0)
-                            context.setGamesWon(user.gamesWon ?: 0)
+                            context.setLiveGamesPlayed(user.gamesPlayed ?: 0)
+                            context.setLiveGamesWon(user.gamesWon ?: 0)
+                            context.setPlayerRank(user.rank ?: 1500)
                         }
                     }
                 }

@@ -27,6 +27,10 @@ internal suspend fun Context.setPlayerRank(rank: Int) {
 internal fun Context.getLiveGamesPlayed() =
     dataStore.data.map { preferences -> preferences[LiveDataStoreKey.LiveGamesPlayed] ?: 0 }
 
+internal suspend fun Context.setLiveGamesPlayed(gamesPlayed: Int) {
+    dataStore.edit { settings -> settings[LiveDataStoreKey.LiveGamesPlayed] = gamesPlayed }
+}
+
 internal suspend fun Context.incrementLiveGamesPlayed() {
     dataStore.edit { settings ->
         settings[LiveDataStoreKey.LiveGamesPlayed] =
@@ -36,6 +40,10 @@ internal suspend fun Context.incrementLiveGamesPlayed() {
 
 internal fun Context.getLiveGamesWon() =
     dataStore.data.map { preferences -> preferences[LiveDataStoreKey.LiveGamesWon] ?: 0 }
+
+internal suspend fun Context.setLiveGamesWon(gamesWon: Int) {
+    dataStore.edit { settings -> settings[LiveDataStoreKey.LiveGamesWon] = gamesWon }
+}
 
 internal suspend fun Context.incrementLiveGameWon() {
     dataStore.edit { settings ->
