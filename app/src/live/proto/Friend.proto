@@ -1,0 +1,17 @@
+syntax = "proto3";
+option java_package = "com.example.worditory.friends";
+option java_multiple_files = true;
+
+message Friend {
+  string uid = 1;
+  string display_name = 2;
+  int32 avatar_id = 3;
+  int32 rank = 4;
+  int32 games_played = 5;
+  int32 game_won = 6;
+  int64 timestamp = 7;
+}
+
+message SavedFriends {
+  repeated Friend friends = 1;
+}

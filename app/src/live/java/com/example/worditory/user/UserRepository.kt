@@ -37,6 +37,7 @@ internal object UserRepository {
             )
 
             database.child(DbKey.USERS).child(currentUser.uid).setValue(model)
+            database.child(DbKey.EMAIL_TO_UID).child(currentUser.email!!).setValue(currentUser.uid)
         }
     }
 

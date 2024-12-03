@@ -2,6 +2,9 @@ package com.example.worditory.database
 
 internal object DbKey {
     const val USERS = "users"
+    const val EMAIL_TO_UID = "emailToUid"
+    const val FRIENDS = "friends"
+    const val FRIEND_REQUESTS = "friendRequests"
     const val GAMES = "games"
     const val PLAYER_GAMES = "playerGames"
     const val BOARDS = "boards"
