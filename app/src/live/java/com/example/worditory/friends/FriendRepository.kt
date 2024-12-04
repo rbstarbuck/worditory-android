@@ -1,16 +1,49 @@
 package com.example.worditory.friends
 
+import androidx.compose.animation.core.snap
 import com.example.worditory.database.DbKey
+import com.example.worditory.user.UserRepoModel
 import com.example.worditory.user.sanitizeEmail
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ServerValue
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
 internal object FriendRepository {
     private val database = Firebase.database.reference
     private val auth = Firebase.auth
+
+    internal fun listenForFriendRequests(
+        onRequestAdded: (Pair<String, UserRepoModel>) -> Unit,
+        onRequestRemoved: (String) -> Unit
+    ): FriendRequestListener {
+        val listener = FriendRequestListener(onRequestAdded, onRequestRemoved)
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.FRIEND_REQUESTS)
+                .child(currentUser.uid)
+                .addChildEventListener(listener)
+        }
+
+        return listener
+    }
+
+    internal fun removeListener(listener: FriendRequestListener) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.FRIEND_REQUESTS)
+                .child(currentUser.uid)
+                .removeEventListener(listener)
+        }
+    }
 
     internal fun sendFriendRequestFromGame(gameId: String) {
         val currentUser = auth.currentUser
@@ -86,6 +119,39 @@ internal object FriendRepository {
         if (currentUser != null) {
             database.child(DbKey.FRIEND_REQUESTS).child(currentUser.uid).child(uid).removeValue()
         }
+    }
+
+    internal class FriendRequestListener(
+        private val onRequestAdded: (Pair<String, UserRepoModel>) -> Unit,
+        private val onRequestRemoved: (String) -> Unit
+    ): ChildEventListener {
+        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+            val uid = snapshot.key
+
+            if (uid != null) {
+                database.child(DbKey.USERS).child(uid).get().addOnSuccessListener { snapshot ->
+                    val user = snapshot.getValue(UserRepoModel::class.java)
+
+                    if (user != null) {
+                        onRequestAdded(Pair(uid, user))
+                    }
+                }
+            }
+        }
+
+        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+
+        override fun onChildRemoved(snapshot: DataSnapshot) {
+            val uid = snapshot.key
+
+            if (uid != null) {
+                onRequestRemoved(uid)
+            }
+        }
+
+        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+
+        override fun onCancelled(error: DatabaseError) {}
     }
 
     internal class OnFailure(

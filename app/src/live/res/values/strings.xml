@@ -30,6 +30,10 @@
     <string name="send_friend_request_dialog_text">Send a friend request to challenge your buddy!</string>
     <string name="send">Send</string>
     <string name="friend_request_sent">Friend request sent!</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="new_friend_requests_singular">You have a new friend request!</string>
+    <string name="new_friend_requests_plural">You have new friend requests!!</string>
 
     <string name="play_live">Play Live!</string>
     <string name="play_against_ai">Play AI</string>

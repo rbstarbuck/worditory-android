@@ -11,6 +11,10 @@
             android:name=".saved.SavedGamesService"
             android:exported="false"/>
 
+        <service
+            android:name=".friends.FriendService"
+            android:exported="false"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

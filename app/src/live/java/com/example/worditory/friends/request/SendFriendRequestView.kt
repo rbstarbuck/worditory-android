@@ -1,4 +1,4 @@
-package com.example.worditory.friends
+package com.example.worditory.friends.request
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

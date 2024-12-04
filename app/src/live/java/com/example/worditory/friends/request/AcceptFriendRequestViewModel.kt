@@ -1,15 +1,14 @@
-package com.example.worditory.friends
+package com.example.worditory.friends.request
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.worditory.friends.Friend
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-internal class SendFriendRequestViewModel: ViewModel() {
-    internal val emailAddressStateFlow = MutableStateFlow("")
-
+internal class AcceptFriendRequestViewModel: ViewModel() {
     private val _enabledStateFlow = MutableStateFlow(false)
     internal val enabledStateFlow = _enabledStateFlow.asStateFlow()
     internal var enabled: Boolean
@@ -30,11 +29,11 @@ internal class SendFriendRequestViewModel: ViewModel() {
     private val _visibilityStateFlow = MutableStateFlow(false)
     internal val visibilityStateFlow = _visibilityStateFlow.asStateFlow()
 
-    internal fun sendFriendRequest(onSuccess: () -> Unit, onFailure: () -> Unit) {
-        FriendRepository.sendFriendRequestFromEmail(
-            email = emailAddressStateFlow.value,
-            onSuccess = onSuccess,
-            onError = { onFailure() }
-        )
+    internal fun acceptFriendRequest(friend: Friend) {
+
+    }
+
+    internal fun rejectFriendRequest(friend: Friend) {
+
     }
 }

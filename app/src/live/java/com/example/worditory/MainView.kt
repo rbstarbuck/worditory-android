@@ -29,7 +29,8 @@ import com.example.worditory.composable.WorditoryConfirmationDialogView
 import com.example.worditory.composable.WorditoryInfoDialogView
 import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.friends.SavedFriendsView
-import com.example.worditory.friends.SendFriendRequestView
+import com.example.worditory.friends.request.AcceptFriendRequestView
+import com.example.worditory.friends.request.SendFriendRequestView
 import com.example.worditory.header.HeaderView
 import com.example.worditory.saved.SavedGamesView
 
@@ -129,6 +130,8 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         )
 
         NewBadgesView(viewModel.newBadges)
+
+        AcceptFriendRequestView(viewModel.acceptFriendRequest)
 
         AuthenticationView(viewModel.authentication)
 
