@@ -33,6 +33,7 @@ import com.example.worditory.resourceid.getResourceId
 
 @Composable
 internal fun AcceptFriendRequestColumnItemView(
+    modifier: Modifier = Modifier,
     avatarId: Int,
     displayName: String,
     rank: Int,
@@ -40,73 +41,75 @@ internal fun AcceptFriendRequestColumnItemView(
     onAccept: () -> Unit,
     onReject: () -> Unit
 ) {
-    Spacer(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(1.dp)
-            .background(colorResource(R.color.accept_friend_request_separator))
-    )
+    Column(modifier) {
+        Spacer(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(colorResource(R.color.accept_friend_request_separator))
+        )
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(avatarSize / 5f),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            modifier = Modifier.width(avatarSize * 3f),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(avatarSize / 5f),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                imageVector = ImageVector.vectorResource(getResourceId(avatarId)),
-                modifier = Modifier.size(avatarSize),
-                contentDescription = stringResource(R.string.friend_avatar)
-            )
+            Column(
+                modifier = Modifier.width(avatarSize * 3f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    imageVector = ImageVector.vectorResource(getResourceId(avatarId)),
+                    modifier = Modifier.size(avatarSize),
+                    contentDescription = stringResource(R.string.friend_avatar)
+                )
 
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(avatarSize / 8f))
-                    .border(width = 1.dp, color = colorResource(R.color.background))
-                    .background(
-                        colorResource(R.color.accept_friend_request_display_name_background)
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(avatarSize / 8f))
+                        .border(width = 1.dp, color = colorResource(R.color.background))
+                        .background(
+                            colorResource(R.color.accept_friend_request_display_name_background)
+                        )
+                ) {
+                    Text(
+                        text = displayName + " (" + rank.toString() + ")",
+                        color = colorResource(R.color.font_color_dark),
+                        modifier = Modifier
+                            .padding(vertical = avatarSize / 12f, horizontal = avatarSize / 8f),
+                        fontSize = (avatarSize.value / 5f).sp,
+                        lineHeight = (avatarSize.value / 3f).sp,
+                        textAlign = TextAlign.Center
                     )
+                }
+            }
+
+            Spacer(Modifier.weight(1f))
+
+            WorditoryOutlinedButton(
+                onClick = onReject,
+                contentPadding = PaddingValues(horizontal = avatarSize / 3f)
             ) {
                 Text(
-                    text = displayName + " (" + rank.toString() + ")",
-                    color = colorResource(R.color.font_color_dark),
-                    modifier = Modifier
-                        .padding(vertical = avatarSize / 12f, horizontal = avatarSize / 8f),
-                    fontSize = (avatarSize.value / 5f).sp,
-                    lineHeight = (avatarSize.value / 3f).sp,
-                    textAlign = TextAlign.Center
+                    text = stringResource(R.string.reject),
+                    fontSize = (avatarSize.value / 3f).sp
                 )
             }
+
+            Spacer(Modifier.width(avatarSize / 5f))
+
+            WorditoryOutlinedButton(
+                onClick = onAccept,
+                contentPadding = PaddingValues(horizontal = avatarSize / 3f)
+            ) {
+                Text(
+                    text = stringResource(R.string.accept),
+                    fontSize = (avatarSize.value / 3f).sp,
+                )
+            }
+
+            Spacer(Modifier.width(avatarSize / 15f))
         }
-
-        Spacer(Modifier.weight(1f))
-
-        WorditoryOutlinedButton(
-            onClick = onReject,
-            contentPadding = PaddingValues(horizontal = avatarSize / 3f)
-        ) {
-            Text(
-                text = stringResource(R.string.reject),
-                fontSize = (avatarSize.value / 3f).sp
-            )
-        }
-
-        Spacer(Modifier.width(avatarSize / 5f))
-
-        WorditoryOutlinedButton(
-            onClick = onAccept,
-            contentPadding = PaddingValues(horizontal = avatarSize / 3f)
-        ) {
-            Text(
-                text = stringResource(R.string.accept),
-                fontSize = (avatarSize.value / 3f).sp,
-            )
-        }
-
-        Spacer(Modifier.width(avatarSize / 15f))
     }
 }

@@ -2,6 +2,7 @@ package com.example.worditory
 
 import android.content.Intent
 import android.os.Bundle
+import com.example.worditory.friends.FriendService
 import com.example.worditory.notification.NotificationService
 import com.example.worditory.notification.Notifications
 import com.example.worditory.saved.SavedGamesService
@@ -32,5 +33,10 @@ class MainActivity: MainActivityBase() {
     override fun onStop() {
         startService(Intent(this, NotificationService::class.java))
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        stopService(Intent(this, FriendService::class.java))
+        super.onDestroy()
     }
 }

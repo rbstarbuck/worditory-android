@@ -3,6 +3,7 @@ package com.example.worditory.friends
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,7 +34,7 @@ internal fun SavedFriendsView(
 
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.Center
         ) {
             items(
                 count = friends.size + 1,
@@ -41,7 +42,9 @@ internal fun SavedFriendsView(
             ) { i ->
                 if (i == 0) {
                     SavedFriendsRowItemView(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier
+                            .animateItem()
+                            .padding(horizontal = itemWidth / 12f),
                         avatar = ImageVector.vectorResource(R.drawable.add_friend),
                         displayName = stringResource(R.string.add_friend),
                         shiftAvatar = false,
@@ -50,7 +53,9 @@ internal fun SavedFriendsView(
                 } else {
                     val friend = friends[i - 1]
                     SavedFriendsRowItemView(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier
+                            .animateItem()
+                            .padding(horizontal = itemWidth / 12f),
                         avatar = ImageVector.vectorResource(getResourceId(friend.avatarId)),
                         displayName = friend.displayName,
                         shiftAvatar = true,

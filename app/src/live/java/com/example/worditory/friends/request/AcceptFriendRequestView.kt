@@ -5,7 +5,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -93,12 +92,13 @@ internal fun AcceptFriendRequestView(viewModel: AcceptFriendRequestViewModel) {
                         val friendRequest = friendRequests[i]
 
                         AcceptFriendRequestColumnItemView(
+                            modifier = Modifier.animateItem(),
                             avatarId = friendRequest.avatarId,
                             displayName = friendRequest.displayName,
                             rank = friendRequest.rank,
                             avatarSize = this@BoxWithConstraints.maxWidth / 10f,
-                            onAccept = { viewModel.acceptFriendRequest(friendRequest) },
-                            onReject = { viewModel.rejectFriendRequest(friendRequest) }
+                            onAccept = { viewModel.acceptFriendRequest(friendRequest, context) },
+                            onReject = { viewModel.rejectFriendRequest(friendRequest, context) }
                         )
                     }
                 }
