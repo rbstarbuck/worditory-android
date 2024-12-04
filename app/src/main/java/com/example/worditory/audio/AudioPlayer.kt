@@ -45,7 +45,7 @@ internal object AudioPlayer {
 
     internal fun wordPlayed(numLetters: Int) {
         if (enabled) {
-            val time = numLetters * 225L
+            val time = numLetters * 250L
             val timer = object: CountDownTimer(time, time) {
                 override fun onTick(p0: Long) {}
 
