@@ -153,7 +153,7 @@ internal fun NpcChooserView(viewModel: NpcChooserViewModel, modifier: Modifier =
                                         .size(this.maxWidth * 0.3f)
                                         .offset(
                                             x = this.maxWidth * 0.75f,
-                                            y = this.maxWidth * 0.75f
+                                            y = this.maxWidth * -0.05f
                                         )
                                 )
                             }
