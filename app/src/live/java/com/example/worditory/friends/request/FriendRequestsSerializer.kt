@@ -6,6 +6,7 @@ import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
 import com.example.worditory.friends.Friend
 import com.example.worditory.friends.SavedFriends
+import kotlinx.coroutines.flow.first
 import java.io.InputStream
 import java.io.OutputStream
 

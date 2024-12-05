@@ -30,11 +30,13 @@ import com.example.worditory.R
 import com.example.worditory.composable.BackHandler
 import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.composable.WorditoryTextField
+import com.example.worditory.friends.FriendRepository
 
 @Composable
 internal fun SendFriendRequestView(
     viewModel: SendFriendRequestViewModel,
-    onRequestSent: () -> Unit
+    onRequestSent: () -> Unit,
+    onError: (FriendRepository.OnFailure.Reason) -> Unit
 ) {
     val enabledState = viewModel.enabledStateFlow.collectAsState()
     val visibilityState = viewModel.visibilityStateFlow.collectAsState()
@@ -91,7 +93,7 @@ internal fun SendFriendRequestView(
                                         viewModel.enabled = false
                                         onRequestSent()
                                     },
-                                    onFailure = {}
+                                    onFailure = { onError(it) }
                                 )
                             },
                             enabled = visibilityState.value

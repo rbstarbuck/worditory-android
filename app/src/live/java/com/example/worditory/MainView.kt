@@ -29,6 +29,7 @@ import com.example.worditory.composable.WorditoryConfirmationDialogView
 import com.example.worditory.composable.WorditoryInfoDialogView
 import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.friends.FriendCardView
+import com.example.worditory.friends.FriendRepository
 import com.example.worditory.friends.SavedFriendsView
 import com.example.worditory.friends.request.AcceptFriendRequestView
 import com.example.worditory.friends.request.SendFriendRequestView
@@ -126,7 +127,19 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
 
         SendFriendRequestView(
             viewModel = viewModel.sendFriendRequest,
-            onRequestSent = { viewModel.friendRequestSent.show() }
+            onRequestSent = { viewModel.friendRequestSent.show() },
+            onError = { reason ->
+                viewModel.sendFriendRequest.enabled = false
+                when (reason) {
+                    FriendRepository.OnFailure.Reason.EMAIL_NOT_REGISTERED -> {}
+                    FriendRepository.OnFailure.Reason.USER_IS_ALREADY_A_FRIEND -> {
+                        viewModel.friendAlreadyExists.show(
+                            onDismiss = { viewModel.sendFriendRequest.enabled = true }
+                        )
+                    }
+                    else -> {}
+                }
+            }
         )
 
         FriendCardView(viewModel = viewModel.friendCard)
@@ -136,9 +149,14 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             text = stringResource(R.string.friend_request_sent)
         )
 
-        NewBadgesView(viewModel.newBadges)
+        WorditoryInfoDialogView(
+            viewModel = viewModel.friendAlreadyExists,
+            text = stringResource(R.string.friend_already_exists)
+        )
 
         AcceptFriendRequestView(viewModel.acceptFriendRequest)
+
+        NewBadgesView(viewModel.newBadges)
 
         AuthenticationView(viewModel.authentication)
 

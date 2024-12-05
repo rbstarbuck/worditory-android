@@ -32,6 +32,7 @@ internal class MainViewModel(
     internal val savedFriends = SavedFriendsViewModel()
     internal val sendFriendRequest = SendFriendRequestViewModel()
     internal val friendRequestSent = WorditoryInfoDialogViewModel()
+    internal val friendAlreadyExists = WorditoryInfoDialogViewModel()
     internal val acceptFriendRequest = AcceptFriendRequestViewModel()
     internal val friendCard = FriendCardViewModel()
 

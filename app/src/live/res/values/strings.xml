@@ -4,7 +4,7 @@
 
     <string name="no_thanks">No thanks</string>
 
-    <string name="request_notification_permission">Would you like to be silently notified when it\'s your turn to play?</string>
+    <string name="request_notification_permission">Would you like a silent notification when it\'s your turn to play?</string>
     <string name="player_turn_channel_name">Your turn</string>
     <string name="timeout_channel_name">Timeout imminent</string>
     <string name="player_turn_channel_description">Notifies you when it\'s your turn to act in a Live game.</string>
@@ -30,6 +30,7 @@
     <string name="send_friend_request_dialog_text">Send a friend request to challenge your buddy!</string>
     <string name="send">Send</string>
     <string name="friend_request_sent">Friend request sent!</string>
+    <string name="friend_already_exists">You\'re already friends with this user!</string>
     <string name="accept">Accept</string>
     <string name="reject">Reject</string>
     <string name="new_friend_requests_singular">You have a new friend request!</string>

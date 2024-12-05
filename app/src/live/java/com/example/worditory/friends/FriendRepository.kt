@@ -137,8 +137,25 @@ internal object FriendRepository {
                 if (uid == null) {
                     onError(OnFailure(OnFailure.Reason.EMAIL_NOT_REGISTERED))
                 } else {
-                    sendFriendRequest(uid)
-                    onSuccess()
+                    val currentUser = auth.currentUser
+
+                    if (currentUser != null) {
+                        database
+                            .child(DbKey.FRIENDS)
+                            .child(currentUser.uid)
+                            .child(uid)
+                            .get()
+                            .addOnSuccessListener { snapshot ->
+                                val existingFriend = snapshot.getValue(Long::class.java)
+
+                                if (existingFriend == null) {
+                                    sendFriendRequest(uid)
+                                    onSuccess()
+                                } else {
+                                    onError(OnFailure(OnFailure.Reason.USER_IS_ALREADY_A_FRIEND))
+                                }
+                            }
+                    }
                 }
             }
     }
@@ -218,6 +235,7 @@ internal object FriendRepository {
     ) {
         enum class Reason {
             EMAIL_NOT_REGISTERED,
+            USER_IS_ALREADY_A_FRIEND,
             CANCELLED
         }
     }

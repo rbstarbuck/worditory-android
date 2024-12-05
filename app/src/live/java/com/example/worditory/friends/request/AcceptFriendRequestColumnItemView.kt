@@ -13,12 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -67,7 +65,6 @@ internal fun AcceptFriendRequestColumnItemView(
 
                 Box(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(avatarSize / 8f))
                         .border(width = 1.dp, color = colorResource(R.color.background))
                         .background(
                             colorResource(R.color.accept_friend_request_display_name_background)
@@ -78,8 +75,8 @@ internal fun AcceptFriendRequestColumnItemView(
                         color = colorResource(R.color.font_color_dark),
                         modifier = Modifier
                             .padding(vertical = avatarSize / 12f, horizontal = avatarSize / 8f),
-                        fontSize = (avatarSize.value / 5f).sp,
-                        lineHeight = (avatarSize.value / 3f).sp,
+                        fontSize = (avatarSize.value / 3f).sp,
+                        lineHeight = (avatarSize.value / 2.5f).sp,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -93,7 +90,7 @@ internal fun AcceptFriendRequestColumnItemView(
             ) {
                 Text(
                     text = stringResource(R.string.reject),
-                    fontSize = (avatarSize.value / 3f).sp
+                    fontSize = (avatarSize.value / 2.5f).sp
                 )
             }
 
@@ -105,7 +102,7 @@ internal fun AcceptFriendRequestColumnItemView(
             ) {
                 Text(
                     text = stringResource(R.string.accept),
-                    fontSize = (avatarSize.value / 3f).sp,
+                    fontSize = (avatarSize.value / 2.5f).sp,
                 )
             }
 
