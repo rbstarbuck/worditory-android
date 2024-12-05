@@ -63,7 +63,9 @@ internal fun GameView(
                 viewModel = viewModel.scoreBoard,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f))
+                    .weight(1f),
+                onAddFriend = { viewModel.onAddFriend() }
+            )
 
             Spacer(Modifier.height(15.dp))
 
@@ -153,6 +155,11 @@ internal fun GameView(
             text = stringResource(R.string.claim_victory_confirmation_dialog),
             confirmButtonText = stringResource(R.string.claim_victory),
             cancelButtonText = stringResource(R.string.wait)
+        )
+
+        WorditoryInfoDialogView(
+            viewModel = viewModel.friendRequestSetDialog,
+            text = stringResource(R.string.friend_request_sent)
         )
     }
 }

@@ -6,6 +6,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -31,11 +34,14 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 import com.example.worditory.composable.saveCoordinates
@@ -43,12 +49,17 @@ import com.example.worditory.composable.Coordinates
 import com.example.worditory.resourceid.getResourceId
 
 @Composable
-internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier = Modifier) {
+internal fun PlayerScoreView(
+    viewModel: PlayerScoreViewModel,
+    modifier: Modifier = Modifier,
+    onAddFriend: () -> Unit
+) {
     val scoreState = viewModel.scoreStateFlow.collectAsState()
     val previousScoreState = viewModel.previousScoreStateFlow.collectAsState()
     val scoreToWinState = viewModel.scoreToWinStateFlow.collectAsState()
     val avatarIdState = viewModel.avatarId.collectAsState()
     val displayNameState = viewModel.displayName.collectAsState()
+    val addFriendState = viewModel.addFriendStateFlow.collectAsState()
 
     val avatarResId = getResourceId(avatarIdState.value)
     val avatarVector = ImageVector.vectorResource(avatarResId)
@@ -151,6 +162,20 @@ internal fun PlayerScoreView(viewModel: PlayerScoreViewModel, modifier: Modifier
                         draw(drawContext.size)
                     }
                 }
+            }
+
+            if (addFriendState.value) {
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.add_friend),
+                    modifier = Modifier
+                        .size(maxWidth * 0.35f)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = { onAddFriend() }
+                            )
+                        },
+                    contentDescription = stringResource(R.string.add_friend)
+                )
             }
 
             val fontColor = colorResource(R.color.font_color_dark)

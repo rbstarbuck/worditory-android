@@ -9,6 +9,8 @@ import com.example.worditory.game.gameover.GameOver
 import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.R
+import com.example.worditory.friends.FriendRepository
+import com.example.worditory.friends.request.isFriendsWith
 import com.example.worditory.game.gameover.GameOverView
 import com.example.worditory.navigation.LiveScreen
 import com.example.worditory.notification.Notifications
@@ -143,6 +145,12 @@ internal class LiveGameViewModel(
         navController.navigate(LiveScreen.LiveGame.buildRoute(gameId))
     }
 
+    override fun onAddFriend() {
+        FriendRepository.sendFriendRequestFromGame(id)
+        friendRequestSetDialog.show()
+        scoreBoard.scorePlayer2.addFriend = false
+    }
+
     override fun updateScoreboard() {
         scoreBoard.score = board.computeScore()
         if (scoreBoard.decrementScoreToWin()) {
@@ -225,9 +233,16 @@ internal class LiveGameViewModel(
     }
 
     private fun onOpponentChange(opponent: UserRepoModel) {
+        FriendRepository.ifOpponentIsFriend(id) { isFriend ->
+            if (!isFriend) {
+                scoreBoard.scorePlayer2.addFriend = true
+            }
+        }
+
         if (opponent.avatarId != null) {
             scoreBoard.scorePlayer2.avatarId.value = opponent.avatarId
         }
+
         if (opponent.displayName != null) {
             scoreBoard.scorePlayer2.displayName.value = opponent.displayName
         }

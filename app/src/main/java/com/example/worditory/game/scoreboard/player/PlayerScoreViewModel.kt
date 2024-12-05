@@ -31,4 +31,12 @@ internal class PlayerScoreViewModel(
 
     private val _previousScoreStateFlow = MutableStateFlow(0)
     internal val previousScoreStateFlow = _previousScoreStateFlow.asStateFlow()
+
+    private val _addFriendStateFlow = MutableStateFlow(false)
+    internal val addFriendStateFlow = _addFriendStateFlow.asStateFlow()
+    internal var addFriend: Boolean
+        get() = addFriendStateFlow.value
+        set(value) {
+            _addFriendStateFlow.value = value
+        }
 }

@@ -50,3 +50,6 @@ internal suspend fun Context.removeFriendRequest(uid: String) {
 internal suspend fun Context.clearFriendRequests() {
     friendRequestsDataStore.updateData { SavedFriends.newBuilder().build() }
 }
+
+internal suspend fun Context.isFriendsWith(uid: String): Boolean =
+    friendRequestsDataStore.data.first().friendsList.filter { it.uid == uid }.isNotEmpty()

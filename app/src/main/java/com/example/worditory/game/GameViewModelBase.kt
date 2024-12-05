@@ -147,6 +147,8 @@ internal abstract class GameViewModelBase(
     internal val resignGameConfirmationDialog = WorditoryConfirmationDialogViewModel()
     internal val claimVictoryConfirmationDialog = WorditoryConfirmationDialogViewModel()
 
+    internal val friendRequestSetDialog = WorditoryInfoDialogViewModel()
+
     internal val model: GameModel
         get() = GameModel.newBuilder()
             .setId(id)
@@ -197,6 +199,8 @@ internal abstract class GameViewModelBase(
         onGameOver(context)
         saveGame(context)
     }
+
+    internal open fun onAddFriend() {}
 
     protected open fun updateScoreboard() {
         scoreBoard.score = board.computeScore()

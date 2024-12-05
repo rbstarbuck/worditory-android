@@ -196,6 +196,42 @@ internal object FriendRepository {
         }
     }
 
+    internal fun ifOpponentIsFriend(gameId: String, isFriend: (Boolean) -> Unit) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database.child(DbKey.GAMES).child(gameId).get().addOnSuccessListener { snapshot ->
+                val player1Uid = snapshot.child(DbKey.Games.PLAYER_1).getValue(String::class.java)!!
+                val player2Uid = snapshot.child(DbKey.Games.PLAYER_2).getValue(String::class.java)!!
+
+                val opponentUid = when (currentUser.uid) {
+                    player1Uid -> player2Uid
+                    player2Uid -> player1Uid
+                    else -> throw IllegalArgumentException("User is not in game")
+                }
+
+                database
+                    .child(DbKey.FRIENDS)
+                    .child(currentUser.uid)
+                    .get()
+                    .addOnSuccessListener { snapshot ->
+                        var isFriend = false
+
+                        for (child in snapshot.children) {
+                            val uid = child.key
+
+                            if (uid != null && uid == opponentUid) {
+                                isFriend = true
+                                break
+                            }
+                        }
+
+                        isFriend(isFriend)
+                    }
+            }
+        }
+    }
+
     internal class FriendRequestListener(
         private val onRequestAdded: (Pair<String, UserRepoModel>) -> Unit,
         private val onRequestRemoved: (String) -> Unit

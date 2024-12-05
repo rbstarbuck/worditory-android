@@ -16,7 +16,11 @@ import com.example.worditory.game.scoreboard.player.PlayerScoreView
 import com.example.worditory.game.scoreboard.scoretowin.ScoreToWinView
 
 @Composable
-internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier = Modifier) {
+internal fun ScoreBoardView(
+    viewModel: ScoreBoardViewModel,
+    modifier: Modifier = Modifier,
+    onAddFriend: () -> Unit
+) {
     BoxWithConstraints(modifier) {
         val maxHeight = this.maxHeight
         val maxWidth = this.maxWidth
@@ -32,7 +36,8 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
 
                     PlayerScoreView(
                         viewModel = viewModel.scorePlayer1,
-                        modifier = Modifier.width(maxWidth / 3f)
+                        modifier = Modifier.width(maxWidth / 3.5f),
+                        onAddFriend = onAddFriend
                     )
 
                     Spacer(Modifier.weight(1f))
@@ -48,7 +53,8 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
 
                     PlayerScoreView(
                         viewModel = viewModel.scorePlayer2,
-                        modifier = Modifier.width(maxWidth / 3f)
+                        modifier = Modifier.width(maxWidth / 3.5f),
+                        onAddFriend = onAddFriend
                     )
 
                     Spacer(Modifier.weight(0.5f))
@@ -68,14 +74,16 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
 
                     PlayerScoreView(
                         viewModel = viewModel.scorePlayer1,
-                        modifier = Modifier.fillMaxHeight().width(maxWidth / 2.2f)
+                        modifier = Modifier.fillMaxHeight().width(maxWidth / 2.2f),
+                        onAddFriend = onAddFriend
                     )
 
                     Spacer(Modifier.weight(1f))
 
                     PlayerScoreView(
                         viewModel = viewModel.scorePlayer2,
-                        modifier = Modifier.fillMaxHeight().width(maxWidth / 2.2f)
+                        modifier = Modifier.fillMaxHeight().width(maxWidth / 2.2f),
+                        onAddFriend = onAddFriend
                     )
 
                     Spacer(Modifier.weight(0.2f))
