@@ -34,6 +34,7 @@
     <string name="reject">Reject</string>
     <string name="new_friend_requests_singular">You have a new friend request!</string>
     <string name="new_friend_requests_plural">You have new friend requests!!</string>
+    <string name="challenge">Challenge</string>
 
     <string name="play_live">Play Live!</string>
     <string name="play_against_ai">Play AI</string>

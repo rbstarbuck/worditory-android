@@ -28,6 +28,7 @@ import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.composable.WorditoryConfirmationDialogView
 import com.example.worditory.composable.WorditoryInfoDialogView
 import com.example.worditory.composable.WorditoryOutlinedButton
+import com.example.worditory.friends.FriendCardView
 import com.example.worditory.friends.SavedFriendsView
 import com.example.worditory.friends.request.AcceptFriendRequestView
 import com.example.worditory.friends.request.SendFriendRequestView
@@ -78,7 +79,11 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             SavedFriendsView(
                 viewModel = viewModel.savedFriends,
                 modifier = Modifier.fillMaxWidth(),
-                onAddFriendClick = { viewModel.sendFriendRequest.enabled = true }
+                onAddFriendClick = { viewModel.sendFriendRequest.enabled = true },
+                onFriendClick = { friend ->
+                    viewModel.friendCard.friend = friend
+                    viewModel.friendCard.enabled = true
+                }
             )
 
             Row(
@@ -123,6 +128,8 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             viewModel = viewModel.sendFriendRequest,
             onRequestSent = { viewModel.friendRequestSent.show() }
         )
+
+        FriendCardView(viewModel = viewModel.friendCard)
 
         WorditoryInfoDialogView(
             viewModel = viewModel.friendRequestSent,

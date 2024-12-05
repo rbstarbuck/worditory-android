@@ -21,7 +21,8 @@ import com.example.worditory.resourceid.getResourceId
 internal fun SavedFriendsView(
     viewModel: SavedFriendsViewModel,
     modifier: Modifier = Modifier,
-    onAddFriendClick: () -> Unit
+    onAddFriendClick: () -> Unit,
+    onFriendClick: (Friend) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -60,7 +61,7 @@ internal fun SavedFriendsView(
                         displayName = friend.displayName,
                         shiftAvatar = true,
                         itemWidth = itemWidth
-                    ) { }
+                    ) { onFriendClick(friend) }
                 }
             }
         }

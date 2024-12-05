@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import com.example.worditory.auth.AuthenticationViewModel
 import com.example.worditory.composable.WorditoryConfirmationDialogViewModel
 import com.example.worditory.composable.WorditoryInfoDialogViewModel
+import com.example.worditory.friends.FriendCardViewModel
 import com.example.worditory.friends.FriendService
 import com.example.worditory.friends.SavedFriendsViewModel
 import com.example.worditory.friends.request.AcceptFriendRequestViewModel
@@ -31,6 +32,7 @@ internal class MainViewModel(
     internal val sendFriendRequest = SendFriendRequestViewModel()
     internal val friendRequestSent = WorditoryInfoDialogViewModel()
     internal val acceptFriendRequest = AcceptFriendRequestViewModel()
+    internal val friendCard = FriendCardViewModel()
 
     init {
         if (Firebase.auth.currentUser == null) {

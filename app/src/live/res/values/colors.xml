@@ -6,7 +6,7 @@
 
     <color name="saved_friends_avatar_background">#FFEEEEEE</color>
 
-    <color name="accept_friend_request_background">#FFEEEEEE</color>
-    <color name="accept_friend_request_display_name_background">#FFDDDDDD</color>
+    <color name="accept_friend_request_background">#FFDDDDDD</color>
+    <color name="accept_friend_request_display_name_background">#FFEEEEEE</color>
     <color name="accept_friend_request_separator">#FFCCCCCC</color>
 </resources>
