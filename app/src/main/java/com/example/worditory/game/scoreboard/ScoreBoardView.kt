@@ -30,17 +30,26 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
                 ) {
                     Spacer(Modifier.weight(0.5f))
 
-                    PlayerScoreView(viewModel.scorePlayer1, Modifier.width(maxWidth / 3f))
+                    PlayerScoreView(
+                        viewModel = viewModel.scorePlayer1,
+                        modifier = Modifier.width(maxWidth / 3f)
+                    )
 
                     Spacer(Modifier.weight(1f))
                     Spacer(Modifier.width(10.dp))
 
-                    ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.width(maxWidth / 5f))
+                    ScoreToWinView(
+                        viewModel = viewModel.scoreToWinViewModel,
+                        modifier = Modifier.width(maxWidth / 5f)
+                    )
 
                     Spacer(Modifier.weight(1f))
                     Spacer(Modifier.width(10.dp))
 
-                    PlayerScoreView(viewModel.scorePlayer2, Modifier.width(maxWidth / 3f))
+                    PlayerScoreView(
+                        viewModel = viewModel.scorePlayer2,
+                        modifier = Modifier.width(maxWidth / 3f)
+                    )
 
                     Spacer(Modifier.weight(0.5f))
                 }
@@ -49,16 +58,25 @@ internal fun ScoreBoardView(viewModel: ScoreBoardViewModel, modifier: Modifier =
             Column(Modifier.fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(Modifier.height(15.dp))
 
-                ScoreToWinView(viewModel.scoreToWinViewModel, Modifier.weight(0.5f))
+                ScoreToWinView(
+                    viewModel = viewModel.scoreToWinViewModel,
+                    modifier = Modifier.width(maxWidth / 3.5f)
+                )
 
-                Row(Modifier.weight(1f)) {
+                Row {
                     Spacer(Modifier.weight(0.2f))
 
-                    PlayerScoreView(viewModel.scorePlayer1, Modifier.fillMaxHeight().weight(4f))
+                    PlayerScoreView(
+                        viewModel = viewModel.scorePlayer1,
+                        modifier = Modifier.fillMaxHeight().width(maxWidth / 2.2f)
+                    )
 
                     Spacer(Modifier.weight(1f))
 
-                    PlayerScoreView(viewModel.scorePlayer2, Modifier.fillMaxHeight().weight(4f))
+                    PlayerScoreView(
+                        viewModel = viewModel.scorePlayer2,
+                        modifier = Modifier.fillMaxHeight().width(maxWidth / 2.2f)
+                    )
 
                     Spacer(Modifier.weight(0.2f))
                 }
