@@ -91,7 +91,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 WorditoryOutlinedButton(
-                    onClick = { viewModel.onPlayLiveGameClick(context) },
+                    onClick = { viewModel.onPlayLiveGameClick() },
                     contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
                 ) {
                     Text(

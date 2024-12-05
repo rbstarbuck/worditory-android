@@ -9,6 +9,7 @@ import com.example.worditory.auth.AuthenticationViewModel
 import com.example.worditory.composable.WorditoryConfirmationDialogViewModel
 import com.example.worditory.composable.WorditoryInfoDialogViewModel
 import com.example.worditory.friends.FriendCardViewModel
+import com.example.worditory.friends.FriendRepository
 import com.example.worditory.friends.FriendService
 import com.example.worditory.friends.SavedFriendsViewModel
 import com.example.worditory.friends.request.AcceptFriendRequestViewModel
@@ -38,19 +39,18 @@ internal class MainViewModel(
         if (Firebase.auth.currentUser == null) {
             authentication.authenticate {
                 authentication.dismiss()
-                SavedGamesRepository.syncLocalSavedGamesWithServer(viewModelScope, context)
-                context.startService(Intent(context, FriendService::class.java))
+                onAuthenticated(context)
                 UserRepository.ifAvatarIsNotSet {
                     avatarChooser.enabled = true
                 }
             }
+        } else {
+            onAuthenticated(context)
         }
     }
 
-    internal fun onPlayLiveGameClick(context: Context) {
+    internal fun onPlayLiveGameClick() {
         authentication.authenticate {
-            SavedGamesRepository.syncLocalSavedGamesWithServer(viewModelScope, context)
-            context.startService(Intent(context, FriendService::class.java))
             navController.navigate(LiveScreen.BoardSizeChooser.route)
         }
     }
@@ -68,5 +68,11 @@ internal class MainViewModel(
                 }
             }
         }
+    }
+
+    private fun onAuthenticated(context: Context) {
+        SavedGamesRepository.syncLocalSavedGamesWithServer(viewModelScope, context)
+        FriendRepository.syncLocalSavedFriendsWithServer(viewModelScope, context)
+        context.startService(Intent(context, FriendService::class.java))
     }
 }

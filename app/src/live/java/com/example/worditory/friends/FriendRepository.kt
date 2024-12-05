@@ -1,6 +1,6 @@
 package com.example.worditory.friends
 
-import androidx.compose.animation.core.snap
+import android.content.Context
 import com.example.worditory.database.DbKey
 import com.example.worditory.user.UserRepoModel
 import com.example.worditory.user.sanitizeEmail
@@ -10,8 +10,10 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ServerValue
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 internal object FriendRepository {
     private val database = Firebase.database.reference
@@ -42,6 +44,62 @@ internal object FriendRepository {
                 .child(DbKey.FRIEND_REQUESTS)
                 .child(currentUser.uid)
                 .removeEventListener(listener)
+        }
+    }
+
+    internal fun syncLocalSavedFriendsWithServer(scope: CoroutineScope, context: Context) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.FRIENDS)
+                .child(currentUser.uid)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    scope.launch {
+                        val localFriends = context.savedFriendsDataStore.data.first().friendsList
+                        val localFriendUids = localFriends.map { it.uid }.toSet()
+                        val serverFriendUids = mutableSetOf<String>()
+
+                        for (child in snapshot.children) {
+                            val serverFriendUid = child.key!!
+                            serverFriendUids.add(serverFriendUid)
+
+                            if (!localFriendUids.contains(serverFriendUid)) {
+                                val timestamp = child.getValue(Long::class.java)!!
+
+                                database
+                                    .child(DbKey.USERS)
+                                    .child(serverFriendUid)
+                                    .get()
+                                    .addOnSuccessListener { snapshot ->
+                                        val serverFriend =
+                                            snapshot.getValue(UserRepoModel::class.java)!!
+
+                                        val localFriend = Friend.newBuilder()
+                                            .setUid(serverFriendUid)
+                                            .setDisplayName(serverFriend.displayName ?: "")
+                                            .setAvatarId(serverFriend.avatarId ?: 0)
+                                            .setRank(serverFriend.rank ?: 1500)
+                                            .setGamesPlayed(serverFriend.gamesPlayed ?: 0)
+                                            .setGameWon(serverFriend.gamesWon ?: 0)
+                                            .setTimestamp(timestamp)
+                                            .build()
+
+                                        scope.launch {
+                                            context.addSavedFriend(localFriend)
+                                        }
+                                    }
+                            }
+                        }
+
+                        for (localFriendUid in localFriendUids) {
+                            if (!serverFriendUids.contains(localFriendUid)) {
+                                context.removeSavedFriend(localFriendUid)
+                            }
+                        }
+                    }
+                }
         }
     }
 
