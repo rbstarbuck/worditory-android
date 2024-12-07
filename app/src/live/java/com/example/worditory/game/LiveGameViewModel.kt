@@ -44,12 +44,11 @@ internal class LiveGameViewModel(
     private var playedWordCount = liveModel.playedWordCount
     private val isPlayer1 = liveModel.isPlayer1
     private var timestamp = liveModel.timestamp
-    private var isGameOver = liveModel.isGameOver
 
     private val latestWordListener: WordRepository.LatestWordListener
     private val opponentListener: GameRepository.UserListener
     private val timestampListener: GameRepository.TimestampListener
-    private var timeoutListener: GameRepository.TimeoutListener
+    private val timeoutListener: GameRepository.TimeoutListener
 
     private var isOpponentOpeningTurn = false
 

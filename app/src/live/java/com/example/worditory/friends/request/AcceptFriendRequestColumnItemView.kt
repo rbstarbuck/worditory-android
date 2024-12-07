@@ -89,7 +89,7 @@ internal fun AcceptFriendRequestColumnItemView(
                 contentPadding = PaddingValues(horizontal = avatarSize / 3f)
             ) {
                 Text(
-                    text = stringResource(R.string.reject),
+                    text = stringResource(R.string.decline),
                     fontSize = (avatarSize.value / 2.5f).sp
                 )
             }

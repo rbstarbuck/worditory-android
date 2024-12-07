@@ -24,6 +24,7 @@ import com.example.worditory.auth.AuthenticationView
 import com.example.worditory.badge.BadgesDialogView
 import com.example.worditory.badge.BadgesRowView
 import com.example.worditory.badge.NewBadgesView
+import com.example.worditory.challenge.ChallengeConfirationDialogView
 import com.example.worditory.chooser.avatar.AvatarChooserDialog
 import com.example.worditory.composable.WorditoryConfirmationDialogView
 import com.example.worditory.composable.WorditoryInfoDialogView
@@ -143,6 +144,8 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         )
 
         FriendCardView(viewModel = viewModel.friendCard)
+
+        ChallengeConfirationDialogView(viewModel.challengeConfirmation)
 
         WorditoryInfoDialogView(
             viewModel = viewModel.friendRequestSent,

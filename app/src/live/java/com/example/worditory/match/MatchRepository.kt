@@ -13,16 +13,39 @@ import com.example.worditory.user.UserRepoModel
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.MutableData
 import com.google.firebase.database.ServerValue
 import com.google.firebase.database.Transaction
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
 internal object MatchRepository {
     private val database = Firebase.database.reference
     private val auth = Firebase.auth
+
+    internal fun listenForChallenges(
+        onChallenge: (Challenge) -> Unit
+    ): ChallengeListener {
+        val listener = ChallengeListener(onChallenge)
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database.child(DbKey.CHALLENGES).child(currentUser.uid).addChildEventListener(listener)
+        }
+
+        return listener
+    }
+
+    internal fun removeListener(listener: ChallengeListener) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database.child(DbKey.CHALLENGES).child(currentUser.uid).removeEventListener(listener)
+        }
+    }
 
     internal fun makeMatch(
         gameType: String,
@@ -59,6 +82,110 @@ internal object MatchRepository {
                 currentData: DataSnapshot?
             ) { }
         })
+    }
+
+    internal fun challengeFriend(
+        friendUid: String,
+        gameType: String,
+        onSuccess:  (OnMatchSuccess) -> Unit,
+        onFailure: (OnMatchFailure) -> Unit
+    ) {
+        val currentUser = auth.currentUser
+
+        if (currentUser == null) {
+            onFailure(OnMatchFailure(Reason.USER_NOT_AUTHENTICATED))
+        } else {
+            val challengeLock = challengeLock(currentUser.uid, friendUid)
+
+            database
+                .child(DbKey.CHALLENGE_LOCKS)
+                .child(challengeLock)
+                .runTransaction(object : Transaction.Handler {
+                    override fun doTransaction(currentData: MutableData): Transaction.Result {
+                        if (currentData.value == null) {
+                            currentData.value = true
+                            val gameId = generateKey()
+                            createGame(
+                                gameId = gameId,
+                                gameType = gameType,
+                                onSuccess = { onMatchSuccess ->
+                                    database
+                                        .child(DbKey.CHALLENGES)
+                                        .child(friendUid)
+                                        .child(currentUser.uid)
+                                        .setValue(gameId)
+                                    onSuccess(onMatchSuccess)
+                                },
+                                onFailure = onFailure
+                            )
+                        } else {
+                            // TODO(handle case where user sends two challenges to same person)
+                            database
+                                .child(DbKey.CHALLENGES)
+                                .child(currentUser.uid)
+                                .child(friendUid)
+                                .addValueEventListener(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if (snapshot.exists()) {
+                                            val gameId = snapshot.getValue(String::class.java)!!
+                                            acceptChallenge(
+                                                gameId = gameId,
+                                                opponentUid = friendUid,
+                                                onSuccess = onSuccess,
+                                                onFailure = onFailure
+                                            )
+
+                                            database
+                                                .child(DbKey.CHALLENGES)
+                                                .child(currentUser.uid)
+                                                .child(friendUid)
+                                                .removeEventListener(this)
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        onFailure(OnMatchFailure(Reason.CANCELLED))
+                                    }
+                                })
+                        }
+
+                        return Transaction.success(currentData)
+                    }
+
+                    override fun onComplete(
+                        error: DatabaseError?,
+                        committed: Boolean,
+                        currentData: DataSnapshot?
+                    ) {}
+                })
+        }
+    }
+
+    internal fun acceptChallenge(
+        gameId: String,
+        opponentUid: String,
+        onSuccess: (OnMatchSuccess) -> Unit,
+        onFailure: (OnMatchFailure) -> Unit
+    ) {
+        deleteChallenge(opponentUid)
+        loadGame(gameId, opponentUid, onSuccess, onFailure)
+    }
+
+    internal fun deleteChallenge(opponentUid: String) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.CHALLENGE_LOCKS)
+                .child(challengeLock(currentUser.uid, opponentUid))
+                .removeValue()
+
+            database
+                .child(DbKey.CHALLENGES)
+                .child(currentUser.uid)
+                .child(opponentUid)
+                .removeValue()
+        }
     }
 
     private fun createGame(
@@ -182,6 +309,38 @@ internal object MatchRepository {
 
         return BoardRepoModel(letters)
     }
+
+    internal class ChallengeListener(
+        private val onChallenge: (Challenge) -> Unit
+    ): ChildEventListener {
+        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+            val userId = snapshot.key!!
+            val gameId = snapshot.getValue(String::class.java)!!
+
+            database
+                .child(DbKey.USERS)
+                .child(userId)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    val user = snapshot.getValue(UserRepoModel::class.java)!!
+                    onChallenge(Challenge(gameId, userId, user))
+                }
+        }
+
+        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+
+        override fun onChildRemoved(snapshot: DataSnapshot) {}
+
+        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+
+        override fun onCancelled(error: DatabaseError) {}
+    }
+
+    internal data class Challenge(
+        internal val gameId: String,
+        internal val userId: String,
+        internal val user: UserRepoModel
+    )
 }
 
 internal class OnMatchSuccess(
@@ -205,6 +364,17 @@ internal class OnMatchFailure(
         USER_NOT_AUTHENTICATED,
         GAME_TYPE_NOT_INITIALIZED,
         DATABASE_READ_ERROR,
-        DATABASE_WRITE_ERROR
+        DATABASE_WRITE_ERROR,
+        CANCELLED
     }
 }
+
+private fun challengeLock(userId: String, opponentUid: String) =
+    if (userId < opponentUid) {
+        userId + opponentUid
+    } else {
+        opponentUid + userId
+    }
+
+private val gameTypes = listOf("size5x4, size5x5, size7x5, size6x6, size8x6, size 8x8")
+internal fun randomGameType() = gameTypes.random()

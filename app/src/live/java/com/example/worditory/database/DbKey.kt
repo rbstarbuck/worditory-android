@@ -11,6 +11,8 @@ internal object DbKey {
     const val MATCHES = "matches"
     const val WORDS = "words"
     const val SERVER_TIME = "serverTime"
+    const val CHALLENGES = "challenges"
+    const val CHALLENGE_LOCKS = "challengeLocks"
 
     internal object Users {
         const val EMAIL = "email"

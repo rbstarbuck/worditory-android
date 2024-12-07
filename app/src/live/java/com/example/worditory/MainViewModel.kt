@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.auth.AuthenticationViewModel
+import com.example.worditory.challenge.ChallengeConfirmationDialogViewModel
 import com.example.worditory.composable.WorditoryConfirmationDialogViewModel
 import com.example.worditory.composable.WorditoryInfoDialogViewModel
 import com.example.worditory.friends.FriendCardViewModel
@@ -14,9 +15,12 @@ import com.example.worditory.friends.FriendService
 import com.example.worditory.friends.SavedFriendsViewModel
 import com.example.worditory.friends.request.AcceptFriendRequestViewModel
 import com.example.worditory.friends.request.SendFriendRequestViewModel
+import com.example.worditory.game.LiveGame
+import com.example.worditory.match.MatchRepository
 import com.example.worditory.navigation.LiveScreen
 import com.example.worditory.notification.Notifications
 import com.example.worditory.saved.SavedGamesRepository
+import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.user.UserRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -34,7 +38,8 @@ internal class MainViewModel(
     internal val friendRequestSent = WorditoryInfoDialogViewModel()
     internal val friendAlreadyExists = WorditoryInfoDialogViewModel()
     internal val acceptFriendRequest = AcceptFriendRequestViewModel()
-    internal val friendCard = FriendCardViewModel()
+    internal val friendCard = FriendCardViewModel(navController)
+    internal val challengeConfirmation = ChallengeConfirmationDialogViewModel()
 
     init {
         if (Firebase.auth.currentUser == null) {
@@ -75,5 +80,28 @@ internal class MainViewModel(
         SavedGamesRepository.syncLocalSavedGamesWithServer(viewModelScope, context)
         FriendRepository.syncLocalSavedFriendsWithServer(viewModelScope, context)
         context.startService(Intent(context, FriendService::class.java))
+
+        MatchRepository.listenForChallenges { challenge ->
+            challengeConfirmation.show(
+                user = challenge.user,
+                onConfirmed = {
+                    MatchRepository.acceptChallenge(
+                        gameId = challenge.gameId,
+                        opponentUid = challenge.userId,
+                        onSuccess = { match ->
+                            viewModelScope.launch {
+                                val liveGame = LiveGame.newLiveModel(match)
+                                context.addSavedLiveGame(liveGame)
+                                navController.navigate(LiveScreen.LiveGame.buildRoute(match.gameId))
+                            }
+                        },
+                        onFailure = {}
+                    )
+                },
+                onCancelled = {
+                    MatchRepository.deleteChallenge(challenge.userId)
+                }
+            )
+        }
     }
 }

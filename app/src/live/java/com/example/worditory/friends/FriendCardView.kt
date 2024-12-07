@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -32,10 +33,13 @@ import com.example.worditory.R
 import com.example.worditory.composable.BackHandler
 import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.resourceid.getResourceId
-import kotlin.math.roundToInt
 
 @Composable
-internal fun FriendCardView(viewModel: FriendCardViewModel) {
+internal fun FriendCardView(
+    viewModel: FriendCardViewModel
+) {
+    val context = LocalContext.current
+
     val enabledState = viewModel.enabledStateFlow.collectAsState()
     val visibilityState = viewModel.visibilityStateFlow.collectAsState()
 
@@ -111,7 +115,7 @@ internal fun FriendCardView(viewModel: FriendCardViewModel) {
                 Spacer(Modifier.height(this@BoxWithConstraints.maxWidth * 0.05f))
 
                 WorditoryOutlinedButton(
-                    onClick = {}
+                    onClick = { viewModel.onChallenge(context) }
                 ) {
                     Text(
                         text = stringResource(R.string.challenge),
