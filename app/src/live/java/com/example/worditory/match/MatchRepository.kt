@@ -403,5 +403,5 @@ private fun challengeLock(userId: String, opponentUid: String) =
         opponentUid + userId
     }
 
-private val gameTypes = listOf("size5x4, size5x5, size7x5, size6x6, size8x6, size 8x8")
+private val gameTypes = listOf("size5x4", "size5x5", "size7x5", "size6x6", "size8x6", "size8x8")
 internal fun randomGameType() = gameTypes.random()
