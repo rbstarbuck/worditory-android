@@ -4,7 +4,6 @@ import android.os.CountDownTimer
 import com.example.worditory.database.DatabaseRepository
 import com.example.worditory.database.DbKey
 import com.example.worditory.game.gameover.GameOver
-import com.example.worditory.game.word.WordRepository
 import com.example.worditory.user.UserRepoModel
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
@@ -129,6 +128,22 @@ internal object GameRepository {
         return listener
     }
 
+    internal fun listenForChallengeDeclined(
+        gameId: String,
+        onChallengeDeclined: () -> Unit,
+        onError: (OnFailure) -> Unit
+    ): ChallengeDeclinedListener {
+        val listener = ChallengeDeclinedListener(gameId, onChallengeDeclined, onError)
+
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .child(DbKey.Games.CHALLENGE_DECLINED)
+            .addValueEventListener(listener)
+
+        return listener
+    }
+
     internal fun removeListener(listener: UserListener) {
         database
             .child(DbKey.GAMES)
@@ -181,12 +196,40 @@ internal object GameRepository {
             .removeEventListener(listener)
     }
 
+    internal fun removeListener(listener: ChallengeDeclinedListener) {
+        database
+            .child(DbKey.GAMES)
+            .child(listener.gameId)
+            .child(DbKey.Games.CHALLENGE_DECLINED)
+            .removeEventListener(listener)
+    }
+
     internal fun decrementScoreToWin(gameId: String) {
         database
             .child(DbKey.GAMES)
             .child(gameId)
             .child(DbKey.Games.SCORE_TO_WIN)
             .setValue(ServerValue.increment(-1))
+    }
+
+    internal fun declineChallenge(gameId: String) {
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .child(DbKey.Games.CHALLENGE_DECLINED)
+            .setValue(true)
+    }
+
+    internal fun removeFromPlayerGames(gameId: String) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.PLAYER_GAMES)
+                .child(currentUser.uid)
+                .child(gameId)
+                .setValue(false)
+        }
     }
 
     internal fun ifGameOver(gameId: String, isGameOver: (Boolean) -> Unit) {
@@ -227,6 +270,17 @@ internal object GameRepository {
 
                     isPlayerTurn(isPlayerTurn)
                 }
+            }
+    }
+
+    internal fun ifOpponentHasJoined(gameId: String, opponentHasJoined: (Boolean) -> Unit) {
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .child(DbKey.Games.PLAYER_2)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                opponentHasJoined(snapshot.getValue(String::class.java) != null)
             }
     }
 
@@ -418,6 +472,22 @@ internal object GameRepository {
 
         override fun onCancelled(error: DatabaseError) {
             onError(OnFailure(OnFailure.Reason.CANCELLED, error))
+        }
+    }
+
+    internal class ChallengeDeclinedListener(
+        internal val gameId: String,
+        private val onChallengeDeclined: () -> Unit,
+        private val onError: (OnFailure) -> Unit
+    ): ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if (snapshot.getValue(Boolean::class.java) == true) {
+                onChallengeDeclined()
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            onError(OnFailure(OnFailure.Reason.CANCELLED))
         }
     }
 

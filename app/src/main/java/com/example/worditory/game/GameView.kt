@@ -158,6 +158,11 @@ internal fun GameView(
         )
 
         WorditoryInfoDialogView(
+            viewModel = viewModel.challengeDeclinedDialog,
+            text = stringResource(R.string.challenge_declined_dialog)
+        )
+
+        WorditoryInfoDialogView(
             viewModel = viewModel.friendRequestSetDialog,
             text = stringResource(R.string.friend_request_sent)
         )

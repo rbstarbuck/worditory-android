@@ -1,6 +1,5 @@
 package com.example.worditory.saved
 
-import android.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,10 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import com.example.worditory.game.gameover.GameOver
-import com.example.worditory.game.npc.NonPlayerCharacter
-import com.example.worditory.resourceid.getResourceId
 
 @Composable
 internal fun SavedGamesView(
@@ -51,6 +47,7 @@ internal fun SavedGamesView(
                         opponentAvatarId = npcGame.opponent.avatar,
                         isTimedOut = false,
                         gameOverState = GameOver.State.IN_PROGRESS,
+                        isChallengeDeclined = false,
                         rowWidth = width,
                         modifier = Modifier.animateItem(),
                         onSavedGameClick = { viewModel.onSavedGameClick(npcGame.game.id) },

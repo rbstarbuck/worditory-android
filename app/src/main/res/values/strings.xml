@@ -95,6 +95,7 @@
     <string name="saved_games">Saved games</string>
     <string name="no_saved_games">No in-progress games</string>
     <string name="its_your_turn">Your turn!</string>
+    <string name="declined">Declined</string>
 
     <string name="you_win">You win!</string>
     <string name="you_lose">You lose</string>
@@ -105,6 +106,7 @@
     <string name="resign_game_confirmation_dialog">Are you sure you want to resign?</string>
     <string name="claim_victory_confirmation_dialog">Your opponent hasn\'t moved in two days.</string>
     <string name="claim_victory">Claim victory</string>
+    <string name="challenge_declined_dialog">Your challenge was declined.</string>
 
     <string name="next">Next</string>
     <string name="back">Back</string>

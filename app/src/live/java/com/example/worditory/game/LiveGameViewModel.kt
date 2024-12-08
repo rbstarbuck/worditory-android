@@ -10,18 +10,14 @@ import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.R
 import com.example.worditory.friends.FriendRepository
-import com.example.worditory.friends.request.isFriendsWith
-import com.example.worditory.game.gameover.GameOverView
 import com.example.worditory.navigation.LiveScreen
 import com.example.worditory.notification.Notifications
 import com.example.worditory.saved.SavedGamesService
 import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.saved.removeSavedLiveGame
 import com.example.worditory.saved.setGameOver
-import com.example.worditory.setPlayerRank
 import com.example.worditory.timeout.TIMEOUT_MILLIS
 import com.example.worditory.user.UserRepoModel
-import com.example.worditory.user.UserRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -45,10 +41,13 @@ internal class LiveGameViewModel(
     private val isPlayer1 = liveModel.isPlayer1
     private var timestamp = liveModel.timestamp
 
+    private var challengeDeclined = false
+
     private val latestWordListener: WordRepository.LatestWordListener
     private val opponentListener: GameRepository.UserListener
     private val timestampListener: GameRepository.TimestampListener
     private val timeoutListener: GameRepository.TimeoutListener
+    private val challengeDeclinedListener: GameRepository.ChallengeDeclinedListener
 
     private var isOpponentOpeningTurn = false
 
@@ -81,7 +80,7 @@ internal class LiveGameViewModel(
         opponentListener = GameRepository.listenForOpponent(
             gameId = id,
             opponent = if (isPlayer1) Game.Player.PLAYER_2 else Game.Player.PLAYER_1,
-            onOpponentChange = { onOpponentChange(it) },
+            onOpponentChange = { onOpponentJoined(it) },
             onError = {} // TODO(handle errors)
         )
 
@@ -95,6 +94,12 @@ internal class LiveGameViewModel(
             gameId = id,
             timeoutDelta = TIMEOUT_MILLIS,
             onTimeout = { onClaimVictory(context) },
+            onError = {}
+        )
+
+        challengeDeclinedListener = GameRepository.listenForChallengeDeclined(
+            gameId = id,
+            onChallengeDeclined = { onChallengeDeclined(context) },
             onError = {}
         )
 
@@ -231,7 +236,7 @@ internal class LiveGameViewModel(
         }
     }
 
-    private fun onOpponentChange(opponent: UserRepoModel) {
+    private fun onOpponentJoined(opponent: UserRepoModel) {
         FriendRepository.ifOpponentIsFriend(id) { isFriend ->
             if (!isFriend) {
                 scoreBoard.scorePlayer2.addFriend = true
@@ -250,21 +255,23 @@ internal class LiveGameViewModel(
     private fun onClaimVictory(context: Context) {
         GameRepository.ifIsPlayerTurn(id, isPlayer1) { isPlayerTurn ->
             GameRepository.ifGameOver(id) { isGameOver ->
-                if (!(isPlayerTurn || isGameOver)) {
-                    claimVictoryConfirmationDialog.show(
-                        onConfirmed = {
-                            Notifications.cancel(id, context)
+                GameRepository.ifOpponentHasJoined(id) { opponentHasJoined ->
+                    if (!isPlayerTurn && !isGameOver && opponentHasJoined) {
+                        claimVictoryConfirmationDialog.show(
+                            onConfirmed = {
+                                Notifications.cancel(id, context)
 
-                            gameOverState = GameOver.State.WIN
-                            onGameOver(context)
-                            saveGame(context)
+                                gameOverState = GameOver.State.WIN
+                                onGameOver(context)
+                                saveGame(context)
 
-                            WordRepository.claimVictory(id, playedWordCount++)
-                        },
-                        onCancelled = {
-                            Notifications.cancel(id, context)
-                        }
-                    )
+                                WordRepository.claimVictory(id, playedWordCount++)
+                            },
+                            onCancelled = {
+                                Notifications.cancel(id, context)
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -284,13 +291,22 @@ internal class LiveGameViewModel(
         }
     }
 
+    private fun onChallengeDeclined(context: Context) {
+        challengeDeclinedDialog.show {
+            challengeDeclined = true
+            GameRepository.removeFromPlayerGames(id)
+            onExitGame(context)
+        }
+    }
+
     override fun onExitGame(context: Context) {
         WordRepository.removeListener(latestWordListener)
         GameRepository.removeListener(opponentListener)
         GameRepository.removeListener(timestampListener)
         GameRepository.removeListener(timeoutListener)
+        GameRepository.removeListener(challengeDeclinedListener)
 
-        if (gameOverState != GameOver.State.IN_PROGRESS) {
+        if (gameOverState != GameOver.State.IN_PROGRESS || challengeDeclined) {
             viewModelScope.launch {
                 context.removeSavedLiveGame(id)
             }

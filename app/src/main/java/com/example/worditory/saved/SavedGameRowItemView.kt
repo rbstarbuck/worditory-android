@@ -53,6 +53,7 @@ internal fun SavedGameRowItemView(
     opponentAvatarId: Int,
     isTimedOut: Boolean,
     gameOverState: GameOver.State,
+    isChallengeDeclined: Boolean,
     rowWidth: Dp,
     modifier: Modifier = Modifier,
     onSavedGameClick: () -> Unit,
@@ -162,7 +163,24 @@ internal fun SavedGameRowItemView(
 
         when (gameOverState) {
             GameOver.State.IN_PROGRESS -> {
-                if (isPlayerTurn) {
+                if (isChallengeDeclined) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Spacer(Modifier.height(itemWidth / 10f))
+
+                        Image(
+                            imageVector = ImageVector.vectorResource(R.drawable.declined),
+                            contentDescription = stringResource(R.string.declined),
+                            modifier.size(itemWidth / 4f)
+                        )
+
+                        Text(
+                            text = stringResource(R.string.declined),
+                            color = colorResource(R.color.font_color_dark),
+                            fontSize = (itemWidth.value / 12f).sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                } else if (isPlayerTurn) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Spacer(Modifier.height(itemWidth / 10f))
 

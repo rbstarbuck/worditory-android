@@ -15,6 +15,7 @@ import com.example.worditory.friends.FriendService
 import com.example.worditory.friends.SavedFriendsViewModel
 import com.example.worditory.friends.request.AcceptFriendRequestViewModel
 import com.example.worditory.friends.request.SendFriendRequestViewModel
+import com.example.worditory.game.GameRepository
 import com.example.worditory.game.LiveGame
 import com.example.worditory.match.MatchRepository
 import com.example.worditory.navigation.LiveScreen
@@ -100,6 +101,7 @@ internal class MainViewModel(
                 },
                 onCancelled = {
                     MatchRepository.deleteChallenge(challenge.userId)
+                    GameRepository.declineChallenge(challenge.gameId)
                 }
             )
         }

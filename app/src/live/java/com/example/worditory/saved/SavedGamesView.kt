@@ -78,6 +78,7 @@ internal fun SavedGamesView(
                             opponentAvatarId = item.opponentAvatarId,
                             isTimedOut = item.isTimedOut,
                             gameOverState = item.gameOverState,
+                            isChallengeDeclined = item.challengeDeclined,
                             rowWidth = width,
                             modifier = Modifier.animateItem(),
                             onSavedGameClick = {
@@ -92,6 +93,7 @@ internal fun SavedGamesView(
                             opponentAvatarId = item.opponent.avatar,
                             isTimedOut = false,
                             gameOverState = GameOver.State.IN_PROGRESS,
+                            isChallengeDeclined = false,
                             rowWidth = width,
                             modifier = Modifier.animateItem(),
                             onSavedGameClick = { viewModel.onSavedNpcGameClick(item.game.id) },

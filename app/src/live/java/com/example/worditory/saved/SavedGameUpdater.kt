@@ -13,7 +13,8 @@ internal data class SavedGameData(
     internal val opponentAvatarId: Int,
     internal val timestamp: Long,
     internal val isTimedOut: Boolean,
-    internal val gameOverState: GameOver.State
+    internal val gameOverState: GameOver.State,
+    internal val challengeDeclined: Boolean
 )
 
 internal class SavedGameUpdater(internal val liveGame: LiveGameModel, onDataChange: () -> Unit) {
@@ -24,7 +25,8 @@ internal class SavedGameUpdater(internal val liveGame: LiveGameModel, onDataChan
         opponentAvatarId = liveGame.opponent.avatarId,
         timestamp = liveGame.timestamp,
         isTimedOut = false,
-        gameOverState = GameOver.State.IN_PROGRESS
+        gameOverState = GameOver.State.IN_PROGRESS,
+        challengeDeclined = false
     )
 
     private val isPlayerTurnListener = GameRepository.listenForIsPlayerTurn(
@@ -73,8 +75,19 @@ internal class SavedGameUpdater(internal val liveGame: LiveGameModel, onDataChan
         gameId = liveGame.game.id,
         timeoutDelta = TIMEOUT_MILLIS,
         onTimeout = {
-            data = data.copy(isTimedOut = true)
-            onDataChange()
+            GameRepository.ifIsPlayerTurn(
+                gameId = data.liveGame.game.id,
+                isPlayer1 = data.liveGame.isPlayer1
+            ) { isPlayerTurn ->
+                GameRepository.ifGameOver(data.liveGame.game.id) { isGameOver ->
+                    GameRepository.ifOpponentHasJoined(data.liveGame.game.id) { opponentHasJoined ->
+                        if (opponentHasJoined && !isPlayerTurn && !isGameOver && !data.isTimedOut) {
+                            data = data.copy(isTimedOut = true)
+                            onDataChange()
+                        }
+                    }
+                }
+            }
         },
         onError = {},
     )
@@ -91,11 +104,23 @@ internal class SavedGameUpdater(internal val liveGame: LiveGameModel, onDataChan
         onError = {}
     )
 
+    private val challengeDeclinedListener = GameRepository.listenForChallengeDeclined(
+        gameId = liveGame.game.id,
+        onChallengeDeclined = {
+            if (!data.challengeDeclined) {
+                data = data.copy(challengeDeclined = true)
+                onDataChange()
+            }
+        },
+        onError = {}
+    )
+
     internal fun removeListeners() {
         GameRepository.removeListener(isPlayerTurnListener)
         GameRepository.removeListener(timestampListener)
         GameRepository.removeListener(opponentListener)
         GameRepository.removeListener(timeoutListener)
         GameRepository.removeListener(gameOverListener)
+        GameRepository.removeListener(challengeDeclinedListener)
     }
 }
