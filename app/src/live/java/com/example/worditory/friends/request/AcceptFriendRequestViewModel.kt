@@ -39,7 +39,6 @@ internal class AcceptFriendRequestViewModel: ViewModel() {
         DatabaseRepository.getServerTime { timestamp ->
             viewModelScope.launch {
                 context.removeFriendRequest(friend.uid)
-                context.addSavedFriend(friend.toBuilder().setTimestamp(timestamp).build())
             }
         }
     }

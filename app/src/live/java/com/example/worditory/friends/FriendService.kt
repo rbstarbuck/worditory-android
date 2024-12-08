@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 
 internal class FriendService: Service() {
     private lateinit var friendRequestListener: FriendRepository.FriendRequestListener
+    private lateinit var friendDataListener: FriendRepository.FriendDataListener
 
     override fun onBind(p0: Intent?): IBinder? = null
 
@@ -22,10 +23,7 @@ internal class FriendService: Service() {
             clearFriendRequests()
 
             friendRequestListener = FriendRepository.listenForFriendRequests(
-                onRequestAdded = { uidAndUser ->
-                    val uid = uidAndUser.first
-                    val user = uidAndUser.second
-
+                onRequestAdded = { uid, user ->
                     DatabaseRepository.getServerTime { timestamp ->
                         GlobalScope.launch {
                             addFriendRequest(
@@ -48,11 +46,37 @@ internal class FriendService: Service() {
                     }
                 }
             )
+
+            friendDataListener = FriendRepository.listenForFriendDataChanges { uid, user ->
+                if (user != null) {
+                    DatabaseRepository.getServerTime { timestamp ->
+                        GlobalScope.launch {
+                            addSavedFriend(
+                                Friend.newBuilder()
+                                    .setUid(uid)
+                                    .setDisplayName(user.displayName ?: "")
+                                    .setAvatarId(user.avatarId ?: 0)
+                                    .setGamesPlayed(user.gamesPlayed ?: 0)
+                                    .setGameWon(user.gamesWon ?: 0)
+                                    .setRank(user.rank ?: 1500)
+                                    .setTimestamp(timestamp)
+                                    .build()
+
+                            )
+                        }
+                    }
+                } else {
+                    GlobalScope.launch {
+                        removeSavedFriend(uid)
+                    }
+                }
+            }
         }
     }
 
     override fun onDestroy() {
         FriendRepository.removeListener(friendRequestListener)
+        FriendRepository.removeListener(friendDataListener)
 
         super.onDestroy()
     }

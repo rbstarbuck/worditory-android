@@ -13,17 +13,15 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ServerValue
 import com.google.firebase.database.database
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import com.example.worditory.R
+import com.google.firebase.database.ValueEventListener
 
 internal object FriendRepository {
     private val database = Firebase.database.reference
     private val auth = Firebase.auth
 
     internal fun listenForFriendRequests(
-        onRequestAdded: (Pair<String, UserRepoModel>) -> Unit,
+        onRequestAdded: (String, UserRepoModel) -> Unit,
         onRequestRemoved: (String) -> Unit
     ): FriendRequestListener {
         val listener = FriendRequestListener(onRequestAdded, onRequestRemoved)
@@ -32,6 +30,22 @@ internal object FriendRepository {
         if (currentUser != null) {
             database
                 .child(DbKey.FRIEND_REQUESTS)
+                .child(currentUser.uid)
+                .addChildEventListener(listener)
+        }
+
+        return listener
+    }
+
+    internal fun listenForFriendDataChanges(
+        onFriendChanged: (String, UserRepoModel?) -> Unit
+    ): FriendDataListener {
+        val listener = FriendDataListener(onFriendChanged)
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.FRIENDS)
                 .child(currentUser.uid)
                 .addChildEventListener(listener)
         }
@@ -50,59 +64,21 @@ internal object FriendRepository {
         }
     }
 
-    internal fun syncLocalSavedFriendsWithServer(scope: CoroutineScope, context: Context) {
+    internal fun removeListener(listener: FriendDataListener) {
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
             database
                 .child(DbKey.FRIENDS)
                 .child(currentUser.uid)
-                .get()
-                .addOnSuccessListener { snapshot ->
-                    scope.launch {
-                        val localFriends = context.savedFriendsDataStore.data.first().friendsList
-                        val localFriendUids = localFriends.map { it.uid }.toSet()
-                        val serverFriendUids = mutableSetOf<String>()
+                .removeEventListener(listener)
+        }
 
-                        for (child in snapshot.children) {
-                            val serverFriendUid = child.key!!
-                            serverFriendUids.add(serverFriendUid)
-
-                            if (!localFriendUids.contains(serverFriendUid)) {
-                                val timestamp = child.getValue(Long::class.java)!!
-
-                                database
-                                    .child(DbKey.USERS)
-                                    .child(serverFriendUid)
-                                    .get()
-                                    .addOnSuccessListener { snapshot ->
-                                        val serverFriend =
-                                            snapshot.getValue(UserRepoModel::class.java)!!
-
-                                        val localFriend = Friend.newBuilder()
-                                            .setUid(serverFriendUid)
-                                            .setDisplayName(serverFriend.displayName ?: "")
-                                            .setAvatarId(serverFriend.avatarId ?: 0)
-                                            .setRank(serverFriend.rank ?: 1500)
-                                            .setGamesPlayed(serverFriend.gamesPlayed ?: 0)
-                                            .setGameWon(serverFriend.gamesWon ?: 0)
-                                            .setTimestamp(timestamp)
-                                            .build()
-
-                                        scope.launch {
-                                            context.addSavedFriend(localFriend)
-                                        }
-                                    }
-                            }
-                        }
-
-                        for (localFriendUid in localFriendUids) {
-                            if (!serverFriendUids.contains(localFriendUid)) {
-                                context.removeSavedFriend(localFriendUid)
-                            }
-                        }
-                    }
-                }
+        for (friendListener in listener.friendListeners) {
+            database
+                .child(DbKey.USERS)
+                .child(friendListener.friendUid)
+                .removeEventListener(friendListener)
         }
     }
 
@@ -250,7 +226,7 @@ internal object FriendRepository {
     }
 
     internal class FriendRequestListener(
-        private val onRequestAdded: (Pair<String, UserRepoModel>) -> Unit,
+        private val onRequestAdded: (String, UserRepoModel) -> Unit,
         private val onRequestRemoved: (String) -> Unit
     ): ChildEventListener {
         override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -261,7 +237,7 @@ internal object FriendRepository {
                     val user = snapshot.getValue(UserRepoModel::class.java)
 
                     if (user != null) {
-                        onRequestAdded(Pair(uid, user))
+                        onRequestAdded(uid, user)
                     }
                 }
             }
@@ -278,6 +254,50 @@ internal object FriendRepository {
         }
 
         override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+
+        override fun onCancelled(error: DatabaseError) {}
+    }
+
+    internal class FriendDataListener(
+        private val onFriendChanged: (String, UserRepoModel?) -> Unit
+    ): ChildEventListener {
+        internal var friendListeners = emptyList<FriendListener>()
+
+        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+            val friendUid = snapshot.key!!
+            val listener = FriendListener(friendUid, onFriendChanged)
+
+            database.child(DbKey.USERS).child(friendUid).addValueEventListener(listener)
+            friendListeners = friendListeners + listener
+        }
+
+        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+
+        override fun onChildRemoved(snapshot: DataSnapshot) {
+            val friendUid = snapshot.key!!
+            val listener = friendListeners.filter { it.friendUid == friendUid }
+
+            if (listener.isNotEmpty()) {
+                database.child(DbKey.USERS).child(friendUid).removeEventListener(listener.first())
+                friendListeners = friendListeners.filter { it.friendUid != friendUid }
+            }
+
+            onFriendChanged(friendUid, null)
+        }
+
+        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+
+        override fun onCancelled(error: DatabaseError) {}
+    }
+
+    internal class FriendListener(
+        internal val friendUid: String,
+        private val onFriendChanged: (String, UserRepoModel?) -> Unit
+    ): ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val user = snapshot.getValue(UserRepoModel::class.java)
+            onFriendChanged(friendUid, user)
+        }
 
         override fun onCancelled(error: DatabaseError) {}
     }

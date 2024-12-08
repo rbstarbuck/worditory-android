@@ -120,7 +120,7 @@ internal class MainViewModel(
 
     private fun onAuthenticated(context: Context) {
         SavedGamesRepository.syncLocalSavedGamesWithServer(viewModelScope, context)
-        FriendRepository.syncLocalSavedFriendsWithServer(viewModelScope, context)
+//        FriendRepository.syncLocalSavedFriendsWithServer(viewModelScope, context)
         context.startService(Intent(context, FriendService::class.java))
 
         challengeListener = MatchRepository.listenForChallenges { challenge ->
