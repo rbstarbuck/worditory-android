@@ -36,7 +36,7 @@ import com.example.worditory.friends.FriendRepository
 internal fun SendFriendRequestView(
     viewModel: SendFriendRequestViewModel,
     onRequestSent: () -> Unit,
-    onError: (FriendRepository.OnFailure.Reason) -> Unit
+    onError: (FriendRepository.OnFailure) -> Unit
 ) {
     val enabledState = viewModel.enabledStateFlow.collectAsState()
     val visibilityState = viewModel.visibilityStateFlow.collectAsState()

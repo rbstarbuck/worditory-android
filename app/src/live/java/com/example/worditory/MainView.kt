@@ -30,7 +30,6 @@ import com.example.worditory.composable.WorditoryConfirmationDialogView
 import com.example.worditory.composable.WorditoryInfoDialogView
 import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.friends.FriendCardView
-import com.example.worditory.friends.FriendRepository
 import com.example.worditory.friends.SavedFriendsView
 import com.example.worditory.friends.request.AcceptFriendRequestView
 import com.example.worditory.friends.request.SendFriendRequestView
@@ -129,18 +128,7 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         SendFriendRequestView(
             viewModel = viewModel.sendFriendRequest,
             onRequestSent = { viewModel.friendRequestSent.show() },
-            onError = { reason ->
-                viewModel.sendFriendRequest.enabled = false
-                when (reason) {
-                    FriendRepository.OnFailure.Reason.EMAIL_NOT_REGISTERED -> {}
-                    FriendRepository.OnFailure.Reason.USER_IS_ALREADY_A_FRIEND -> {
-                        viewModel.friendAlreadyExists.show(
-                            onDismiss = { viewModel.sendFriendRequest.enabled = true }
-                        )
-                    }
-                    else -> {}
-                }
-            }
+            onError = { viewModel.handleFriendRequestError(it, context) }
         )
 
         FriendCardView(viewModel = viewModel.friendCard)
@@ -158,6 +146,12 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         )
 
         AcceptFriendRequestView(viewModel.acceptFriendRequest)
+
+        WorditoryConfirmationDialogView(
+            viewModel = viewModel.inviteFriendConfirmation,
+            text = stringResource(R.string.invite_friend_dialog),
+            confirmButtonText = stringResource(R.string.invite)
+        )
 
         NewBadgesView(viewModel.newBadges)
 

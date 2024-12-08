@@ -35,12 +35,12 @@ internal class SendFriendRequestViewModel: ViewModel() {
 
     internal fun sendFriendRequest(
         onSuccess: () -> Unit,
-        onFailure: (FriendRepository.OnFailure.Reason) -> Unit
+        onFailure: (FriendRepository.OnFailure) -> Unit
     ) {
         FriendRepository.sendFriendRequestFromEmail(
             email = emailAddressStateFlow.value,
             onSuccess = onSuccess,
-            onError = { onFailure(it.reason) }
+            onError = { onFailure(it) }
         )
     }
 }

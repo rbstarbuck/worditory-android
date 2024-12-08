@@ -1,6 +1,8 @@
 package com.example.worditory.friends
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import com.example.worditory.database.DbKey
 import com.example.worditory.user.UserRepoModel
 import com.example.worditory.user.sanitizeEmail
@@ -14,6 +16,7 @@ import com.google.firebase.database.database
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import com.example.worditory.R
 
 internal object FriendRepository {
     private val database = Firebase.database.reference
@@ -135,7 +138,10 @@ internal object FriendRepository {
                 val uid = snapshot.getValue(String::class.java)
 
                 if (uid == null) {
-                    onError(OnFailure(OnFailure.Reason.EMAIL_NOT_REGISTERED))
+                    onError(OnFailure(
+                        reason = OnFailure.Reason.EMAIL_NOT_REGISTERED,
+                        email = email)
+                    )
                 } else {
                     val currentUser = auth.currentUser
 
@@ -194,6 +200,17 @@ internal object FriendRepository {
         if (currentUser != null) {
             database.child(DbKey.FRIEND_REQUESTS).child(currentUser.uid).child(uid).removeValue()
         }
+    }
+
+    internal fun inviteFriend(email: String, context: Context) {
+        val intent = Intent(Intent.ACTION_VIEW);
+        val data = Uri.parse(
+            "mailto:$email?subject=" + context.getString(R.string.invite_email_subject) +
+                    "&body=" + context.getString(R.string.invite_email_body)
+        );
+        intent.data = data;
+
+        context.startActivity(intent)
     }
 
     internal fun ifOpponentIsFriend(gameId: String, isFriend: (Boolean) -> Unit) {
@@ -267,6 +284,7 @@ internal object FriendRepository {
 
     internal class OnFailure(
         internal val reason: Reason,
+        internal val email: String? = null,
         internal val error: DatabaseError? = null
     ) {
         enum class Reason {

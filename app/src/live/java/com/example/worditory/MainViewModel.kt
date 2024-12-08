@@ -45,6 +45,7 @@ internal class MainViewModel(
     internal val acceptFriendRequest = AcceptFriendRequestViewModel()
     internal val friendCard = FriendCardViewModel(navController)
     internal val challengeConfirmation = ChallengeConfirmationDialogViewModel()
+    internal val inviteFriendConfirmation = WorditoryConfirmationDialogViewModel()
 
     init {
         if (Firebase.auth.currentUser == null) {
@@ -90,6 +91,30 @@ internal class MainViewModel(
                     context.hasAskedForNotificationPermission()
                 }
             }
+        }
+    }
+
+    internal fun handleFriendRequestError(
+        error: FriendRepository.OnFailure,
+        context: Context
+    ) {
+        sendFriendRequest.enabled = false
+
+        when (error.reason) {
+            FriendRepository.OnFailure.Reason.EMAIL_NOT_REGISTERED -> {
+                inviteFriendConfirmation.show(
+                    onConfirmed = {
+                        FriendRepository.inviteFriend(error.email!!, context)
+                    },
+                    onCancelled = { sendFriendRequest.enabled = true }
+                )
+            }
+            FriendRepository.OnFailure.Reason.USER_IS_ALREADY_A_FRIEND -> {
+                friendAlreadyExists.show(
+                    onDismiss = { sendFriendRequest.enabled = true }
+                )
+            }
+            else -> {}
         }
     }
 
