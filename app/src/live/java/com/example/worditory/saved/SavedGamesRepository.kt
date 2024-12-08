@@ -82,6 +82,7 @@ internal object SavedGamesRepository {
                         isPlayer1 = game.player1 == auth.currentUser!!.uid,
                         scoreToWin = game.scoreToWin!!,
                         wordCount = wordCount,
+                        challenger = "",
                         timestamp = game.timestamp as Long,
                         game = game,
                         board = board,
@@ -152,50 +153,4 @@ internal object SavedGamesRepository {
             )
         }
     }
-
-//    private fun restoreSuperOwnerships(boardBuilder: BoardModel.Builder, boardSize: IntSize) {
-//        for (index in 0..<boardBuilder.tilesList.size) {
-//            val tile = boardBuilder.tilesList[index]
-//            if (tileOwnedByPlayer1(tile) && adjacentTiles(index, boardSize).all {
-//                    tileOwnedByPlayer1(boardBuilder.tilesList[it])
-//                }) {
-//                boardBuilder.setTiles(
-//                    index,
-//                    boardBuilder.tilesList[index].toBuilder().setOwnership(
-//                        TileModel.Ownership.SUPER_OWNED_PLAYER_1
-//                    )
-//                )
-//            } else if (tileOwnedByPlayer2(tile) && adjacentTiles(index, boardSize).all {
-//                    tileOwnedByPlayer2(boardBuilder.tilesList[it])
-//                }) {
-//                boardBuilder.setTiles(
-//                    index,
-//                    boardBuilder.tilesList[index].toBuilder().setOwnership(
-//                        TileModel.Ownership.SUPER_OWNED_PLAYER_2
-//                    )
-//                )
-//            }
-//        }
-//    }
-//
-//    private fun adjacentTiles(index: Int, boardSize: IntSize): List<Int> {
-//        val x = index % boardSize.width
-//        val y = index / boardSize.width
-//
-//        val indices = mutableListOf<Int>()
-//        if (x > 0) indices.add(index - 1)
-//        if (x < boardSize.width - 1) indices.add(index + 1)
-//        if (y >= boardSize.width) indices.add(index - boardSize.width)
-//        if (y < boardSize.height * (boardSize.width - 1)) indices.add(index + boardSize.width)
-//
-//        return indices
-//    }
-//
-//    private fun tileOwnedByPlayer1(tile: TileModel) =
-//        tile.ownership == TileModel.Ownership.OWNED_PLAYER_1
-//                || tile.ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_1
-//
-//    private fun tileOwnedByPlayer2(tile: TileModel) =
-//        tile.ownership == TileModel.Ownership.OWNED_PLAYER_2
-//                || tile.ownership == TileModel.Ownership.SUPER_OWNED_PLAYER_2
 }

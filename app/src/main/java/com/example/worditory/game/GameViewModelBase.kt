@@ -148,6 +148,7 @@ internal abstract class GameViewModelBase(
     internal val claimVictoryConfirmationDialog = WorditoryConfirmationDialogViewModel()
 
     internal val challengeDeclinedDialog = WorditoryInfoDialogViewModel()
+    internal val cancelGameDialog = WorditoryConfirmationDialogViewModel()
 
     internal val friendRequestSetDialog = WorditoryInfoDialogViewModel()
 

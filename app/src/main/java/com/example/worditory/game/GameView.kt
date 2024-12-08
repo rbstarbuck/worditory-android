@@ -157,6 +157,13 @@ internal fun GameView(
             cancelButtonText = stringResource(R.string.wait)
         )
 
+        WorditoryConfirmationDialogView(
+            viewModel = viewModel.cancelGameDialog,
+            text = stringResource(R.string.cancel_game_dialog),
+            confirmButtonText = stringResource(R.string.cancel_game),
+            cancelButtonText = stringResource(R.string.wait)
+        )
+
         WorditoryInfoDialogView(
             viewModel = viewModel.challengeDeclinedDialog,
             text = stringResource(R.string.challenge_declined_dialog)

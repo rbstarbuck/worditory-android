@@ -10,6 +10,7 @@ message LiveGameModel {
   bool is_player_1 = 2;
   int32 played_word_count = 3;
   int64 timestamp = 4;
-  bool is_game_over = 5;
-  optional OpponentModel opponent = 6;
+  string challenger = 5;
+  bool is_game_over = 6;
+  optional OpponentModel opponent = 7;
 }

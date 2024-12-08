@@ -10,6 +10,7 @@ import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.R
 import com.example.worditory.friends.FriendRepository
+import com.example.worditory.match.MatchRepository
 import com.example.worditory.navigation.LiveScreen
 import com.example.worditory.notification.Notifications
 import com.example.worditory.saved.SavedGamesService
@@ -39,9 +40,8 @@ internal class LiveGameViewModel(
 ) {
     private var playedWordCount = liveModel.playedWordCount
     private val isPlayer1 = liveModel.isPlayer1
+    private val challenger = liveModel.challenger
     private var timestamp = liveModel.timestamp
-
-    private var challengeDeclined = false
 
     private val latestWordListener: WordRepository.LatestWordListener
     private val opponentListener: GameRepository.UserListener
@@ -49,7 +49,9 @@ internal class LiveGameViewModel(
     private val timeoutListener: GameRepository.TimeoutListener
     private val challengeDeclinedListener: GameRepository.ChallengeDeclinedListener
 
+    private var opponentHasJoined = false
     private var isOpponentOpeningTurn = false
+    private var challengeDeclined = false
 
     private val nextGameJob: Job
 
@@ -58,6 +60,7 @@ internal class LiveGameViewModel(
             .setGame(model)
             .setIsPlayer1(isPlayer1)
             .setPlayedWordCount(playedWordCount)
+            .setChallenger(challenger)
             .setTimestamp(timestamp)
             .setIsGameOver(gameOverState != GameOver.State.IN_PROGRESS)
             .setOpponent(OpponentModel.newBuilder()
@@ -72,22 +75,31 @@ internal class LiveGameViewModel(
             onNewWord = { word ->
                 if (word.index!! >= playedWordCount) {
                     onNewWord(word, context)
+                } else if (challenger != "" && !opponentHasJoined) {
+                    cancelGameDialog.show(
+                        onConfirmed = {
+                            MatchRepository.deleteChallenge(challenger)
+                            GameRepository.removeFromPlayerGames(id)
+                            challengeDeclined = true
+                            onExitGame(context)
+                        }
+                    )
                 }
             },
-            onError = {} // TODO(handle errors)
+            onError = {}
         )
 
         opponentListener = GameRepository.listenForOpponent(
             gameId = id,
             opponent = if (isPlayer1) Game.Player.PLAYER_2 else Game.Player.PLAYER_1,
             onOpponentChange = { onOpponentJoined(it) },
-            onError = {} // TODO(handle errors)
+            onError = {}
         )
 
         timestampListener = GameRepository.listenForTimestampChange(
             gameId = id,
             onTimestampChange = { timestamp = it },
-            onError = {} // TODO(handle errors)
+            onError = {}
         )
 
         timeoutListener = GameRepository.listenForTimeout(
@@ -237,6 +249,9 @@ internal class LiveGameViewModel(
     }
 
     private fun onOpponentJoined(opponent: UserRepoModel) {
+        opponentHasJoined = true
+        cancelGameDialog.dismiss()
+
         FriendRepository.ifOpponentIsFriend(id) { isFriend ->
             if (!isFriend) {
                 scoreBoard.scorePlayer2.addFriend = true

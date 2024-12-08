@@ -24,7 +24,7 @@ import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.soundEnabled
 
 @Composable
-fun MenuView(
+internal fun MenuView(
     viewModel: MenuViewModel,
     modifier: Modifier = Modifier,
     onSoundClick: (Boolean) -> Unit,

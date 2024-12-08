@@ -107,6 +107,8 @@
     <string name="claim_victory_confirmation_dialog">Your opponent hasn\'t moved in two days.</string>
     <string name="claim_victory">Claim victory</string>
     <string name="challenge_declined_dialog">Your challenge was declined.</string>
+    <string name="cancel_game_dialog">Waiting for opponent.</string>
+    <string name="cancel_game">Cancel game</string>
 
     <string name="next">Next</string>
     <string name="back">Back</string>

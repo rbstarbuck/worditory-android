@@ -66,10 +66,21 @@ internal object MatchRepository {
                     onFailure(OnMatchFailure(Reason.USER_ALREADY_IN_WAITING_ROOM, match.gameId))
                 } else if (match.gameId == "") {
                     val gameId = generateKey()
-                    createGame(gameId, gameType, onSuccess, onFailure)
+                    createGame(
+                        gameId = gameId,
+                        gameType = gameType,
+                        challenger = "",
+                        onSuccess = onSuccess,
+                        onFailure = onFailure
+                    )
                     currentData.value = MatchRepoModel(gameId, userId)
                 } else {
-                    loadGame(match.gameId!!, match.userId!!, onSuccess, onFailure)
+                    loadGame(
+                        gameId = match.gameId!!,
+                        opponentUserId = match.userId!!,
+                        onSuccess = onSuccess,
+                        onFailure = onFailure
+                    )
                     currentData.value = MatchRepoModel("", "")
                 }
 
@@ -87,7 +98,7 @@ internal object MatchRepository {
     internal fun challengeFriend(
         friendUid: String,
         gameType: String,
-        onSuccess:  (OnMatchSuccess) -> Unit,
+        onSuccess: (OnMatchSuccess) -> Unit,
         onFailure: (OnMatchFailure) -> Unit
     ) {
         val currentUser = auth.currentUser
@@ -108,6 +119,7 @@ internal object MatchRepository {
                             createGame(
                                 gameId = gameId,
                                 gameType = gameType,
+                                challenger = friendUid,
                                 onSuccess = { onMatchSuccess ->
                                     database
                                         .child(DbKey.CHALLENGES)
@@ -168,7 +180,12 @@ internal object MatchRepository {
         onFailure: (OnMatchFailure) -> Unit
     ) {
         deleteChallenge(opponentUid)
-        loadGame(gameId, opponentUid, onSuccess, onFailure)
+        loadGame(
+            gameId = gameId,
+            opponentUserId = opponentUid,
+            onSuccess = onSuccess,
+            onFailure = onFailure
+        )
     }
 
     internal fun deleteChallenge(opponentUid: String) {
@@ -185,12 +202,19 @@ internal object MatchRepository {
                 .child(currentUser.uid)
                 .child(opponentUid)
                 .removeValue()
+
+            database
+                .child(DbKey.CHALLENGES)
+                .child(opponentUid)
+                .child(currentUser.uid)
+                .removeValue()
         }
     }
 
     private fun createGame(
         gameId: String,
         gameType: String,
+        challenger: String,
         onSuccess: (OnMatchSuccess) -> Unit,
         onFailure: (OnMatchFailure) -> Unit
     ) {
@@ -215,6 +239,7 @@ internal object MatchRepository {
                     isPlayer1 = true,
                     scoreToWin = scoreToWin,
                     wordCount = 0,
+                    challenger = challenger,
                     timestamp = 0,
                     game = game,
                     board = board,
@@ -270,6 +295,7 @@ internal object MatchRepository {
                         isPlayer1 = false,
                         scoreToWin = game.scoreToWin!!,
                         wordCount = 0,
+                        challenger = "",
                         timestamp = game.timestamp as Long,
                         game = game.copy(player2 = userId),
                         board = board,
@@ -349,6 +375,7 @@ internal class OnMatchSuccess(
     internal val isPlayer1: Boolean,
     internal val scoreToWin: Int,
     internal val wordCount: Int,
+    internal val challenger: String,
     internal val timestamp: Long,
     internal val game: GameRepoModel,
     internal val board: BoardRepoModel,

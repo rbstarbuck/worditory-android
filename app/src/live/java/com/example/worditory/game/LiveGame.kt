@@ -49,6 +49,7 @@ internal class LiveGame: Game() {
                 .setIsPlayer1(match.isPlayer1)
                 .setPlayedWordCount(match.wordCount)
                 .setTimestamp(match.timestamp)
+                .setChallenger(match.challenger)
                 .setIsGameOver(false)
                 .setGame(GameModel.newBuilder()
                     .setId(match.gameId)
