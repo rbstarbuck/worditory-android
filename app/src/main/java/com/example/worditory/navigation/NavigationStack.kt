@@ -107,7 +107,7 @@ internal fun NavigationStack(navController: NavHostController) {
                 )
             }
 
-            GameView(viewModel)
+            GameView(viewModel, isLiveGame = false)
         }
 
         composable(route = Screen.SavedGame.route) { backStack ->
@@ -129,7 +129,7 @@ internal fun NavigationStack(navController: NavHostController) {
                     )
                 }
 
-                GameView(viewModel)
+                GameView(viewModel, isLiveGame = false)
             } else {
                 // TODO(error handling when saved game not found)
                 Box(Modifier.fillMaxSize().background(colorResource(R.color.background)))

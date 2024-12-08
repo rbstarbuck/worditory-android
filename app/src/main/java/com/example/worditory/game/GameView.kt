@@ -35,7 +35,8 @@ import com.example.worditory.hasShownTutorial
 @Composable
 internal fun GameView(
     viewModel: GameViewModelBase,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLiveGame: Boolean
 ) {
     val context = LocalContext.current
 
@@ -104,7 +105,7 @@ internal fun GameView(
 
         TutorialView(viewModel.tutorial)
 
-        if (!hasShownTutorial.value) {
+        if (!hasShownTutorial.value && !isLiveGame) {
             viewModel.showTutorial(context)
         }
 
@@ -116,6 +117,7 @@ internal fun GameView(
             MenuView(
                 viewModel = viewModel.menu,
                 modifier = Modifier.alpha(animatedMenuAlpha.value),
+                isLiveGame = isLiveGame,
                 onSoundClick = { enabled -> viewModel.onSound(enabled, context) },
                 onHintClick = { viewModel.onHint() },
                 onPassTurnClick = { viewModel.onPassTurn(context) },

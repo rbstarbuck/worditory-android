@@ -27,6 +27,7 @@ import com.example.worditory.soundEnabled
 internal fun MenuView(
     viewModel: MenuViewModel,
     modifier: Modifier = Modifier,
+    isLiveGame: Boolean,
     onSoundClick: (Boolean) -> Unit,
     onHintClick: () -> Unit,
     onPassTurnClick: () -> Unit,
@@ -98,16 +99,18 @@ internal fun MenuView(
                 Text(text = stringResource(R.string.give_me_a_hint), fontSize = fontSize)
             }
 
-            WorditoryOutlinedButton(
-                onClick = {
-                    onDisplayTutorialClick()
-                    onDismiss()
-                },
-                modifier = Modifier
-                    .width(buttonWidth)
-                    .padding(vertical = buttonPaddingVertical)
-            ) {
-                Text(text = stringResource(R.string.game_rules), fontSize = fontSize)
+            if (!isLiveGame) {
+                WorditoryOutlinedButton(
+                    onClick = {
+                        onDisplayTutorialClick()
+                        onDismiss()
+                    },
+                    modifier = Modifier
+                        .width(buttonWidth)
+                        .padding(vertical = buttonPaddingVertical)
+                ) {
+                    Text(text = stringResource(R.string.game_rules), fontSize = fontSize)
+                }
             }
 
             WorditoryOutlinedButton(

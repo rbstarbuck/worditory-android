@@ -9,7 +9,6 @@ import androidx.navigation.navDeepLink
 import com.example.worditory.chooser.boardsize.LiveBoardSizeChooserViewModel
 import com.example.worditory.chooser.boardsize.BoardSizeChooserView
 import com.example.worditory.game.GameView
-import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.LiveGameViewModel
 import com.example.worditory.saved.savedLiveGamesDataStore
 import kotlinx.coroutines.flow.first
@@ -44,7 +43,7 @@ internal fun NavGraphBuilder.flavorStack(navController: NavController) {
                 )
             }
 
-            GameView(viewModel)
+            GameView(viewModel, isLiveGame = true)
         }
 
     }
