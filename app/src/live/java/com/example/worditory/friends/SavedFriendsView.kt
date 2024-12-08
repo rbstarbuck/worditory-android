@@ -22,7 +22,8 @@ internal fun SavedFriendsView(
     viewModel: SavedFriendsViewModel,
     modifier: Modifier = Modifier,
     onAddFriendClick: () -> Unit,
-    onFriendClick: (Friend) -> Unit
+    onFriendClick: (Friend) -> Unit,
+    onRemoveFriendClick: (Friend) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -48,9 +49,11 @@ internal fun SavedFriendsView(
                             .padding(horizontal = itemWidth / 12f),
                         avatar = ImageVector.vectorResource(R.drawable.add_friend),
                         displayName = stringResource(R.string.add_friend),
-                        shiftAvatar = false,
-                        itemWidth = itemWidth
-                    ) { onAddFriendClick() }
+                        isFriend = false,
+                        itemWidth = itemWidth,
+                        onClick = { onAddFriendClick() },
+                        onRemoveClick = {}
+                    )
                 } else {
                     val friend = friends[i - 1]
                     SavedFriendsRowItemView(
@@ -59,9 +62,11 @@ internal fun SavedFriendsView(
                             .padding(horizontal = itemWidth / 12f),
                         avatar = ImageVector.vectorResource(getResourceId(friend.avatarId)),
                         displayName = friend.displayName,
-                        shiftAvatar = true,
-                        itemWidth = itemWidth
-                    ) { onFriendClick(friend) }
+                        isFriend = true,
+                        itemWidth = itemWidth,
+                        onClick = { onFriendClick(friend) },
+                        onRemoveClick = { onRemoveFriendClick(friend) }
+                    )
                 }
             }
         }

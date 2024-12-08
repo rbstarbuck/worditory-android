@@ -46,6 +46,7 @@ internal class MainViewModel(
     internal val friendCard = FriendCardViewModel(navController)
     internal val challengeConfirmation = ChallengeConfirmationDialogViewModel()
     internal val inviteFriendConfirmation = WorditoryConfirmationDialogViewModel()
+    internal val deleteFriendConfirmation = WorditoryConfirmationDialogViewModel()
 
     init {
         if (Firebase.auth.currentUser == null) {
@@ -120,7 +121,7 @@ internal class MainViewModel(
 
     private fun onAuthenticated(context: Context) {
         SavedGamesRepository.syncLocalSavedGamesWithServer(viewModelScope, context)
-//        FriendRepository.syncLocalSavedFriendsWithServer(viewModelScope, context)
+        FriendRepository.syncLocalSavedFriendsWithServer(viewModelScope, context)
         context.startService(Intent(context, FriendService::class.java))
 
         challengeListener = MatchRepository.listenForChallenges { challenge ->

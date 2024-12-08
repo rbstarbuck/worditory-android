@@ -15,6 +15,9 @@ import com.google.firebase.database.ServerValue
 import com.google.firebase.database.database
 import com.example.worditory.R
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 internal object FriendRepository {
     private val database = Firebase.database.reference
@@ -79,6 +82,61 @@ internal object FriendRepository {
                 .child(DbKey.USERS)
                 .child(friendListener.friendUid)
                 .removeEventListener(friendListener)
+        }
+    }
+    internal fun syncLocalSavedFriendsWithServer(scope: CoroutineScope, context: Context) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database
+                .child(DbKey.FRIENDS)
+                .child(currentUser.uid)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    scope.launch {
+                        val localFriends = context.savedFriendsDataStore.data.first().friendsList
+                        val localFriendUids = localFriends.map { it.uid }.toSet()
+                        val serverFriendUids = mutableSetOf<String>()
+
+                        for (child in snapshot.children) {
+                            val serverFriendUid = child.key!!
+                            serverFriendUids.add(serverFriendUid)
+
+                            if (!localFriendUids.contains(serverFriendUid)) {
+                                val timestamp = child.getValue(Long::class.java)!!
+
+                                database
+                                    .child(DbKey.USERS)
+                                    .child(serverFriendUid)
+                                    .get()
+                                    .addOnSuccessListener { snapshot ->
+                                        val serverFriend =
+                                            snapshot.getValue(UserRepoModel::class.java)!!
+
+                                        val localFriend = Friend.newBuilder()
+                                            .setUid(serverFriendUid)
+                                            .setDisplayName(serverFriend.displayName ?: "")
+                                            .setAvatarId(serverFriend.avatarId ?: 0)
+                                            .setRank(serverFriend.rank ?: 1500)
+                                            .setGamesPlayed(serverFriend.gamesPlayed ?: 0)
+                                            .setGameWon(serverFriend.gamesWon ?: 0)
+                                            .setTimestamp(timestamp)
+                                            .build()
+
+                                        scope.launch {
+                                            context.addSavedFriend(localFriend)
+                                        }
+                                    }
+                            }
+                        }
+
+                        for (localFriendUid in localFriendUids) {
+                            if (!serverFriendUids.contains(localFriendUid)) {
+                                context.removeSavedFriend(localFriendUid)
+                            }
+                        }
+                    }
+                }
         }
     }
 
@@ -187,6 +245,15 @@ internal object FriendRepository {
         intent.data = data;
 
         context.startActivity(intent)
+    }
+
+    internal fun deleteFriend(uid: String) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            database.child(DbKey.FRIENDS).child(currentUser.uid).child(uid).removeValue()
+            database.child(DbKey.FRIENDS).child(uid).child(currentUser.uid).removeValue()
+        }
     }
 
     internal fun ifOpponentIsFriend(gameId: String, isFriend: (Boolean) -> Unit) {

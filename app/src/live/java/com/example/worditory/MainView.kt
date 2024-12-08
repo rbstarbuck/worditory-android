@@ -30,6 +30,7 @@ import com.example.worditory.composable.WorditoryConfirmationDialogView
 import com.example.worditory.composable.WorditoryInfoDialogView
 import com.example.worditory.composable.WorditoryOutlinedButton
 import com.example.worditory.friends.FriendCardView
+import com.example.worditory.friends.FriendRepository
 import com.example.worditory.friends.SavedFriendsView
 import com.example.worditory.friends.request.AcceptFriendRequestView
 import com.example.worditory.friends.request.SendFriendRequestView
@@ -84,6 +85,13 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 onFriendClick = { friend ->
                     viewModel.friendCard.friend = friend
                     viewModel.friendCard.enabled = true
+                },
+                onRemoveFriendClick = { friend ->
+                    viewModel.deleteFriendConfirmation.show(
+                        onConfirmed = {
+                            FriendRepository.deleteFriend(friend.uid)
+                        }
+                    )
                 }
             )
 
@@ -151,6 +159,12 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             viewModel = viewModel.inviteFriendConfirmation,
             text = stringResource(R.string.invite_friend_dialog),
             confirmButtonText = stringResource(R.string.invite)
+        )
+
+        WorditoryConfirmationDialogView(
+            viewModel = viewModel.deleteFriendConfirmation,
+            text = stringResource(R.string.remove_friend_dialog),
+            confirmButtonText = stringResource(R.string.delete)
         )
 
         NewBadgesView(viewModel.newBadges)

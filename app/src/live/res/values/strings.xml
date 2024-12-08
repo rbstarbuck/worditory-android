@@ -26,7 +26,9 @@
     <string name="rank">Rank</string>
 
     <string name="friend_avatar">Friend avatar</string>
+    <string name="remove_friend">Remove friend</string>
     <string name="add_friend">Add friend</string>
+    <string name="remove_friend_dialog">Delete friend?</string>
     <string name="send_friend_request_dialog_text">Send a friend request to challenge your buddy!</string>
     <string name="send">Send</string>
     <string name="friend_request_sent">Friend request sent!</string>
