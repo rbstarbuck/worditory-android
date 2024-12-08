@@ -25,7 +25,7 @@ internal abstract class MainViewModelBase(
 
     internal val newBadges = NewBadgesViewModel()
 
-    internal fun onPlayGameClicked() {
+    internal open fun onPlayGameClicked() {
         navController.navigate(Screen.NpcChooser.route)
     }
 

@@ -32,8 +32,12 @@ internal class MainViewModel(
     navController: NavController,
     context: Context
 ): MainViewModelBase(navController, context) {
+    internal var challengeListener: MatchRepository.ChallengeListener? = null
+
     internal val authentication = AuthenticationViewModel()
+
     internal val notificationPermission = WorditoryConfirmationDialogViewModel()
+
     internal val savedFriends = SavedFriendsViewModel()
     internal val sendFriendRequest = SendFriendRequestViewModel()
     internal val friendRequestSent = WorditoryInfoDialogViewModel()
@@ -56,8 +60,20 @@ internal class MainViewModel(
         }
     }
 
+    override fun onPlayGameClicked() {
+        if (challengeListener != null) {
+            MatchRepository.removeListener(challengeListener!!)
+        }
+
+        super.onPlayGameClicked()
+    }
+
     internal fun onPlayLiveGameClick() {
         authentication.authenticate {
+            if (challengeListener != null) {
+                MatchRepository.removeListener(challengeListener!!)
+            }
+
             navController.navigate(LiveScreen.BoardSizeChooser.route)
         }
     }
@@ -82,7 +98,7 @@ internal class MainViewModel(
         FriendRepository.syncLocalSavedFriendsWithServer(viewModelScope, context)
         context.startService(Intent(context, FriendService::class.java))
 
-        MatchRepository.listenForChallenges { challenge ->
+        challengeListener = MatchRepository.listenForChallenges { challenge ->
             challengeConfirmation.show(
                 user = challenge.user,
                 onConfirmed = {
