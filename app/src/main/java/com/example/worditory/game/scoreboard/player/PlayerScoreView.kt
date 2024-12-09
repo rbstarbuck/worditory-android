@@ -54,6 +54,7 @@ import com.example.worditory.composable.saveCoordinates
 import com.example.worditory.composable.Coordinates
 import com.example.worditory.composable.pxToDp
 import com.example.worditory.resourceid.getResourceId
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 internal fun PlayerScoreView(
@@ -92,9 +93,14 @@ internal fun PlayerScoreView(
         label = "scoreToWin"
     )
 
+    val canvasWidthStateFlow = MutableStateFlow(0f)
+    val canvasWidthState = canvasWidthStateFlow.collectAsState()
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         BoxWithConstraints(modifier.aspectRatio(1f)) {
             Canvas(modifier.aspectRatio(1f)) {
+                canvasWidthStateFlow.value = this.size.width
+
                 drawCircle(outlineColor, center = this.center, radius = this.size.width / 2f)
                 drawCircle(
                     avatarBackgroundColor,
@@ -221,11 +227,12 @@ internal fun PlayerScoreView(
             displayNameState.value + " (" + rankState.value + ")"
         }
 
-        Box(
+        Column(
             modifier = Modifier
+                .offset(y = (-5).dp)
                 .clip(RoundedCornerShape(20f.pxToDp(context)))
                 .background(indicatorColor),
-            contentAlignment = Alignment.Center
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = displayName,
@@ -234,6 +241,8 @@ internal fun PlayerScoreView(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             )
+
+            Spacer(Modifier.width((canvasWidthState.value / 2f).pxToDp(context)))
         }
     }
 }
