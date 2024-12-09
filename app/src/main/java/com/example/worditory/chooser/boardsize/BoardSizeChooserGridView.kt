@@ -45,11 +45,15 @@ internal fun BoardSizeChooserGridView(
     val context = LocalContext.current
     val speedIcon = ImageVector.vectorResource(speedIconId)
 
-    BoxWithConstraints(
+    val boxModifier = if (enabled) {
         modifier.clickable {
             onClick(Pair(boardWidth, boardHeight))
         }
-    ) {
+    } else {
+        modifier
+    }
+
+    BoxWithConstraints(boxModifier) {
         val colorFilter = if (enabled) null else ColorFilter.colorMatrix(ColorMatrix().apply {
             setToSaturation(0f)
         })
