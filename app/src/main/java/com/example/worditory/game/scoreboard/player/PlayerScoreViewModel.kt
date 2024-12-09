@@ -39,4 +39,12 @@ internal class PlayerScoreViewModel(
         set(value) {
             _addFriendStateFlow.value = value
         }
+
+    private val _rankStateFlow: MutableStateFlow<Int?> = MutableStateFlow(null)
+    internal val rankStateFlow = _rankStateFlow.asStateFlow()
+    internal var rank: Int?
+        get() = rankStateFlow.value
+        set(value) {
+            _rankStateFlow.value = value
+        }
 }

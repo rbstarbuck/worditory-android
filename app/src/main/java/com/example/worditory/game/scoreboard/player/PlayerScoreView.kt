@@ -7,12 +7,15 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -20,11 +23,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -35,6 +40,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -46,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 import com.example.worditory.composable.saveCoordinates
 import com.example.worditory.composable.Coordinates
+import com.example.worditory.composable.pxToDp
 import com.example.worditory.resourceid.getResourceId
 
 @Composable
@@ -54,11 +61,14 @@ internal fun PlayerScoreView(
     modifier: Modifier = Modifier,
     onAddFriend: () -> Unit
 ) {
+    val context = LocalContext.current
+
     val scoreState = viewModel.scoreStateFlow.collectAsState()
     val previousScoreState = viewModel.previousScoreStateFlow.collectAsState()
     val scoreToWinState = viewModel.scoreToWinStateFlow.collectAsState()
     val avatarIdState = viewModel.avatarId.collectAsState()
     val displayNameState = viewModel.displayName.collectAsState()
+    val rankState = viewModel.rankStateFlow.collectAsState()
     val addFriendState = viewModel.addFriendStateFlow.collectAsState()
 
     val avatarResId = getResourceId(avatarIdState.value)
@@ -182,7 +192,7 @@ internal fun PlayerScoreView(
             val maxWidth = this.maxWidth
             val fontSize = maxWidth.value * 0.25f / LocalDensity.current.fontScale
 
-            Column {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 AnimatedVisibility(
                     visible = previousScoreState.value == scoreState.value,
                     enter = fadeIn(tween(500)),
@@ -194,27 +204,36 @@ internal fun PlayerScoreView(
                         modifier = Modifier
                             .fillMaxHeight()
                             .width(maxWidth)
-                            .offset(y = (-5).dp)
                             .wrapContentHeight(Alignment.Bottom)
                             .wrapContentWidth(Alignment.CenterHorizontally)
                             .saveCoordinates(Coordinates.PlayerScore, viewModel.isPlayer1),
                         fontSize = fontSize.sp,
                         fontWeight = FontWeight.Bold
                     )
-
-                    Text(
-                        text = displayNameState.value,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(maxWidth)
-                            .offset(y = 8.dp)
-                            .wrapContentHeight(Alignment.Bottom)
-                            .wrapContentWidth(Alignment.CenterHorizontally)
-                            .padding(horizontal = 6.dp),
-                        fontSize = if (displayNameState.value.length > 9) 10.sp else 12.sp
-                    )
                 }
+
             }
+        }
+
+        val displayName = if (rankState.value == null) {
+            displayNameState.value
+        } else {
+            displayNameState.value + " (" + rankState.value + ")"
+        }
+
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(20f.pxToDp(context)))
+                .background(indicatorColor),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = displayName,
+                color = colorResource(R.color.font_color_dark),
+                modifier = Modifier.padding(horizontal = 6.dp),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

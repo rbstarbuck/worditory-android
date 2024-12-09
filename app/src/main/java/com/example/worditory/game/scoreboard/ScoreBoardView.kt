@@ -66,7 +66,7 @@ internal fun ScoreBoardView(
 
                 ScoreToWinView(
                     viewModel = viewModel.scoreToWinViewModel,
-                    modifier = Modifier.width(maxWidth / 3.5f)
+                    modifier = Modifier.width(maxWidth / 4f)
                 )
 
                 Row {
@@ -74,7 +74,7 @@ internal fun ScoreBoardView(
 
                     PlayerScoreView(
                         viewModel = viewModel.scorePlayer1,
-                        modifier = Modifier.fillMaxHeight().width(maxWidth / 2.2f),
+                        modifier = Modifier.width(maxWidth / 2.5f),
                         onAddFriend = onAddFriend
                     )
 
@@ -82,7 +82,7 @@ internal fun ScoreBoardView(
 
                     PlayerScoreView(
                         viewModel = viewModel.scorePlayer2,
-                        modifier = Modifier.fillMaxHeight().width(maxWidth / 2.2f),
+                        modifier = Modifier.width(maxWidth / 2.5f),
                         onAddFriend = onAddFriend
                     )
 

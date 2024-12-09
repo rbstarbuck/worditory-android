@@ -10,6 +10,7 @@ import com.example.worditory.game.word.PlayedWordRepoModel
 import com.example.worditory.game.word.WordRepository
 import com.example.worditory.R
 import com.example.worditory.friends.FriendRepository
+import com.example.worditory.getPlayerRank
 import com.example.worditory.match.MatchRepository
 import com.example.worditory.navigation.LiveScreen
 import com.example.worditory.notification.Notifications
@@ -21,6 +22,7 @@ import com.example.worditory.timeout.TIMEOUT_MILLIS
 import com.example.worditory.user.UserRepoModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 internal class LiveGameViewModel(
@@ -92,7 +94,7 @@ internal class LiveGameViewModel(
         opponentListener = GameRepository.listenForOpponent(
             gameId = id,
             opponent = if (isPlayer1) Game.Player.PLAYER_2 else Game.Player.PLAYER_1,
-            onOpponentChange = { onOpponentJoined(it) },
+            onOpponentChange = { onOpponentChange(it) },
             onError = {}
         )
 
@@ -126,6 +128,7 @@ internal class LiveGameViewModel(
         }
 
         viewModelScope.launch {
+            scoreBoard.scorePlayer1.rank = context.getPlayerRank().first()
             delay(1000L)
             isOpponentOpeningTurn = false
         }
@@ -248,7 +251,7 @@ internal class LiveGameViewModel(
         }
     }
 
-    private fun onOpponentJoined(opponent: UserRepoModel) {
+    private fun onOpponentChange(opponent: UserRepoModel) {
         opponentHasJoined = true
         cancelGameDialog.dismiss()
 
@@ -265,6 +268,8 @@ internal class LiveGameViewModel(
         if (opponent.displayName != null) {
             scoreBoard.scorePlayer2.displayName.value = opponent.displayName
         }
+
+        scoreBoard.scorePlayer2.rank = opponent.rank ?: 1500
     }
 
     private fun onClaimVictory(context: Context) {
