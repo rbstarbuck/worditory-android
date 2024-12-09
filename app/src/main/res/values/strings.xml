@@ -110,6 +110,9 @@
     <string name="cancel_game_dialog">Waiting for opponent.</string>
     <string name="cancel_game">Cancel game</string>
 
+    <string name="friend_request_sent">Friend request sent!</string>
+    <string name="add_friend">Add friend</string>
+
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="finish">Finish</string>
