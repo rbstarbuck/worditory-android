@@ -40,7 +40,7 @@
     <string name="invite_friend_dialog">Email address not registered. Would you like to invite them to download Worditory Live! and be your friend?</string>
     <string name="invite">Invite</string>
     <string name="invite_email_subject">Let\'s play Worditory Live!</string>
-    <string name="invite_email_body">I\'ve been having fun playing this word/strategy game called Worditory Live! Would you like to join me and be added to my friend\'s list?\n\nYou can download for Android here:\n\nhttps://play.google.com/store/apps/details?id=com.rbstarbuck.worditory.live</string>
+    <string name="invite_email_body">I\'ve been having fun playing this word/strategy game called Worditory Live! Would you like to join me and be added to my friend\'s list?\n\nYou can download for Android here:\nhttps://play.google.com/store/apps/details?id%3Dcom.rbstarbuck.worditory.live</string>
 
     <string name="play_live">Play Live!</string>
     <string name="play_against_ai">Play AI</string>
