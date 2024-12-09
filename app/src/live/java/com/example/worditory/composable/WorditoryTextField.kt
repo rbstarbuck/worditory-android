@@ -35,14 +35,19 @@ internal fun WorditoryTextField(
     placeholder: String,
     modifier: Modifier = Modifier,
     fontSize: TextUnit,
-    keyboardType: KeyboardType = KeyboardType.Unspecified
+    keyboardType: KeyboardType = KeyboardType.Unspecified,
+    maxCharacters: Int = -1
 ) {
     val textState = textStateFlow.collectAsState()
     val isVisuallyTransformed = remember { mutableStateOf(keyboardType == KeyboardType.Password) }
 
     OutlinedTextField(
         value = textState.value,
-        onValueChange = { textStateFlow.value = it },
+        onValueChange = {
+            if (maxCharacters < 0 || it.length <= maxCharacters) {
+                textStateFlow.value = it
+            }
+        },
         modifier = modifier,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         visualTransformation = if (isVisuallyTransformed.value) {

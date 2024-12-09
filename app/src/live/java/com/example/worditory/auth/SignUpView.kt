@@ -42,7 +42,8 @@ internal fun SignUpView(viewModel: SignUpViewModel, modifier: Modifier = Modifie
             textStateFlow = viewModel.displayNameStateFlow,
             placeholder = stringResource(R.string.display_name),
             fontSize = fontSize,
-            keyboardType = KeyboardType.Text
+            keyboardType = KeyboardType.Text,
+            maxCharacters = 10
         )
 
         Spacer(Modifier.height(20.dp))
