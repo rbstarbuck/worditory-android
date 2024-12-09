@@ -21,4 +21,4 @@ private fun eloRating(rankA: Int, rankB: Int, gamesPlayed: Int, outcome: Float) 
 private fun probability(rankA: Int, rankB: Int) =
     1.0 / (1.0 + 10.0.pow((rankA.toDouble() - rankB.toDouble()) / 400.0))
 
-private fun kValue(gamesPlayed: Int) = max(20f, 240f / (gamesPlayed + 2))
+private fun kValue(gamesPlayed: Int) = max(30f, 450f / (gamesPlayed + 5f))
