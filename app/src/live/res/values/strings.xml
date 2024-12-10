@@ -17,6 +17,7 @@
     <string name="timeout_notification_title">Timeout imminent!</string>
     <string name="claim_victory_notification_title">Claim victory!</string>
     <string name="friend_request_received_notification_title">Friend request!</string>
+    <string name="challenge_received_notification_title">Challenge!</string>
     <string name="player_turn_notification_text">played</string>
     <string name="passed_turn_notification_text">passed their turn</string>
     <string name="resigned_game_notification_text">resigned</string>
@@ -24,6 +25,7 @@
     <string name="timeout_notification_text">can claim victory in three hours</string>
     <string name="claim_victory_notification_text">You can claim victory against</string>
     <string name="friend_request_received_notification_text">sent a friend request</string>
+    <string name="challenge_received_notification_text">has challenged you to a game</string>
 
     <string name="live_games">Live! Games</string>=
     <string name="ai_games">AI Games</string>

@@ -480,6 +480,66 @@ internal object Notifications {
         }
     }
 
+
+    internal fun challengeReceived(
+        gameId: String,
+        displayName: String,
+        avatarId: Int,
+        context: Context
+    ) {
+        val largeIconSize = largeIconSize(context)
+        val largeIcon = context.getDrawable(getResourceId(avatarId))
+            ?.toBitmap(largeIconSize, largeIconSize)
+
+        val contentText =
+            displayName +
+                    " " +
+                    context.getString(R.string.challenge_received_notification_text)
+
+        val intent = Intent(
+            /* packageContext = */ context,
+            /* cls = */ MainActivity::class.java
+        )
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ 0,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_IMMUTABLE
+        )
+
+        var notification = NotificationCompat.Builder(context, FRIEND_REQUEST_CHANNEL_ID)
+            .setSmallIcon(R.drawable.challenge)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentTitle(context.getString(R.string.challenge_received_notification_title))
+            .setContentText(contentText)
+            .setLargeIcon(largeIcon)
+            .setContentIntent(pendingIntent)
+            .setGroup(FRIEND_REQUEST_GROUP)
+            .build()
+
+        val groupSummary = NotificationCompat.Builder(context, FRIEND_REQUEST_CHANNEL_ID)
+            .setSmallIcon(R.drawable.add_friend)
+            .setGroup(FRIEND_REQUEST_GROUP)
+            .setGroupSummary(true)
+            .build()
+
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return@with
+            }
+
+            notify(gameId.hashCode(), notification)
+            notify(FRIEND_REQUEST_NOTIFICATION_ID, groupSummary)
+        }
+    }
+
+
+
     internal fun cancel(id: String, context: Context) {
         val notificationManager = context.getSystemService(
             NOTIFICATION_SERVICE

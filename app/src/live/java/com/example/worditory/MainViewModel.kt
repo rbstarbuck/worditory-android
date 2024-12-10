@@ -130,6 +130,8 @@ internal class MainViewModel(
             challengeConfirmation.show(
                 user = challenge.user,
                 onConfirmed = {
+                    Notifications.cancel(challenge.gameId, context)
+
                     MatchRepository.acceptChallenge(
                         gameId = challenge.gameId,
                         opponentUid = challenge.userId,
@@ -144,6 +146,8 @@ internal class MainViewModel(
                     )
                 },
                 onCancelled = {
+                    Notifications.cancel(challenge.gameId, context)
+
                     MatchRepository.deleteChallenge(challenge.userId)
                     GameRepository.declineChallenge(challenge.gameId)
                 }
