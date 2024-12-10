@@ -260,16 +260,14 @@ internal object GameRepository {
             .child(DbKey.Words.COUNT)
             .get()
             .addOnSuccessListener { snapshot ->
-                val count = snapshot.getValue(Int::class.java)
+                val count = snapshot.getValue(Int::class.java) ?: 0
 
-                if (count != null) {
-                    val isPlayerTurn = when (isPlayer1) {
-                        true -> count % 2 == 0
-                        false -> count % 2 == 1
-                    }
-
-                    isPlayerTurn(isPlayerTurn)
+                val isPlayerTurn = when (isPlayer1) {
+                    true -> count % 2 == 0
+                    false -> count % 2 == 1
                 }
+
+                isPlayerTurn(isPlayerTurn)
             }
     }
 

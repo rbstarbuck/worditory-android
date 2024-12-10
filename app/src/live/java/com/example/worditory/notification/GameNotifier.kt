@@ -48,15 +48,25 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
                     timeoutDelta = TIMEOUT_MILLIS,
                     onTimeout = {
                         if (!NotificationService.isWarmingUp) {
-                            GameRepository.ifGameOver(liveGame.game.id) { isGameOver ->
-                                if (!isGameOver) {
-                                    UserRepository.getOpponent(liveGame.game.id) { opponent ->
-                                        Notifications.canClaimVictory(
-                                            gameId = liveGame.game.id,
-                                            opponentName = opponent.displayName ?: "",
-                                            opponentAvatarId = opponent.avatarId ?: 0,
-                                            context = context
-                                        )
+                            GameRepository.ifIsPlayerTurn(
+                                liveGame.game.id, liveGame.isPlayer1
+                            ) { isPlayerTurn ->
+                                GameRepository.ifGameOver(liveGame.game.id) { isGameOver ->
+                                    GameRepository.ifOpponentHasJoined(
+                                        liveGame.game.id
+                                    ) { opponentHasJoined ->
+                                        if (!isPlayerTurn && !isGameOver && opponentHasJoined) {
+                                            UserRepository.getOpponent(
+                                                liveGame.game.id
+                                            ) { opponent ->
+                                                Notifications.canClaimVictory(
+                                                    gameId = liveGame.game.id,
+                                                    opponentName = opponent.displayName ?: "",
+                                                    opponentAvatarId = opponent.avatarId ?: 0,
+                                                    context = context
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                             }

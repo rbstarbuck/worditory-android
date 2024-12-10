@@ -510,7 +510,7 @@ internal object Notifications {
 
         var notification = NotificationCompat.Builder(context, FRIEND_REQUEST_CHANNEL_ID)
             .setSmallIcon(R.drawable.challenge)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentTitle(context.getString(R.string.challenge_received_notification_title))
             .setContentText(contentText)
             .setLargeIcon(largeIcon)

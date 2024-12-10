@@ -25,7 +25,7 @@
     <string name="timeout_notification_text">can claim victory in three hours</string>
     <string name="claim_victory_notification_text">You can claim victory against</string>
     <string name="friend_request_received_notification_text">sent a friend request</string>
-    <string name="challenge_received_notification_text">has challenged you to a game</string>
+    <string name="challenge_received_notification_text">challenged you to a game</string>
 
     <string name="live_games">Live! Games</string>=
     <string name="ai_games">AI Games</string>
