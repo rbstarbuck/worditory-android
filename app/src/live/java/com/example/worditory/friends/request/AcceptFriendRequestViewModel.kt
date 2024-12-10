@@ -3,10 +3,9 @@ package com.example.worditory.friends.request
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.worditory.database.DatabaseRepository
 import com.example.worditory.friends.Friend
 import com.example.worditory.friends.FriendRepository
-import com.example.worditory.friends.addSavedFriend
+import com.example.worditory.notification.Notifications
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,16 +33,17 @@ internal class AcceptFriendRequestViewModel: ViewModel() {
     internal val visibilityStateFlow = _visibilityStateFlow.asStateFlow()
 
     internal fun acceptFriendRequest(friend: Friend, context: Context) {
-        FriendRepository.acceptFriendRequest(friend.uid)
+        Notifications.cancel(friend.uid, context)
 
-        DatabaseRepository.getServerTime { timestamp ->
-            viewModelScope.launch {
-                context.removeFriendRequest(friend.uid)
-            }
+        FriendRepository.acceptFriendRequest(friend.uid)
+        viewModelScope.launch {
+            context.removeFriendRequest(friend.uid)
         }
     }
 
     internal fun rejectFriendRequest(friend: Friend, context: Context) {
+        Notifications.cancel(friend.uid, context)
+
         FriendRepository.deleteFriendRequest(friend.uid)
         viewModelScope.launch {
             context.removeFriendRequest(friend.uid)

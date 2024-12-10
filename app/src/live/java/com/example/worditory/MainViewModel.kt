@@ -20,6 +20,7 @@ import com.example.worditory.game.LiveGame
 import com.example.worditory.match.MatchRepository
 import com.example.worditory.navigation.LiveScreen
 import com.example.worditory.notification.Notifications
+import com.example.worditory.notification.PersistentNotificationService
 import com.example.worditory.saved.SavedGamesRepository
 import com.example.worditory.saved.addSavedLiveGame
 import com.example.worditory.user.UserRepository
@@ -123,6 +124,7 @@ internal class MainViewModel(
         SavedGamesRepository.syncLocalSavedGamesWithServer(viewModelScope, context)
         FriendRepository.syncLocalSavedFriendsWithServer(viewModelScope, context)
         context.startService(Intent(context, FriendService::class.java))
+        context.startService(Intent(context, PersistentNotificationService::class.java))
 
         challengeListener = MatchRepository.listenForChallenges { challenge ->
             challengeConfirmation.show(

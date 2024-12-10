@@ -8,6 +8,10 @@
             android:exported="false"/>
 
         <service
+            android:name=".notification.PersistentNotificationService"
+            android:exported="false"/>
+
+        <service
             android:name=".saved.SavedGamesService"
             android:exported="false"/>
 

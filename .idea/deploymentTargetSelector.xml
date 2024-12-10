@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DIALOG" />
-        <DropdownSelection timestamp="2024-12-09T13:26:54.814214222Z">
+        <DropdownSelection timestamp="2024-12-10T06:16:49.594737910Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/home/rbstarbuck/.android/avd/Medium_Phone.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=RFCX5115SXP" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -15,12 +15,12 @@
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="PhysicalDevice" identifier="serial=RFCX5115SXP" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=/home/rbstarbuck/.android/avd/Medium_Phone.avd" />
               </handle>
             </Target>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=/home/rbstarbuck/.android/avd/Medium_Phone.avd" />
+                <DeviceId pluginId="PhysicalDevice" identifier="serial=RFCX5115SXP" />
               </handle>
             </Target>
           </targets>

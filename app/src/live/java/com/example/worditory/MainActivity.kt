@@ -6,8 +6,6 @@ import com.example.worditory.friends.FriendService
 import com.example.worditory.notification.NotificationService
 import com.example.worditory.notification.Notifications
 import com.example.worditory.saved.SavedGamesService
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
 
 class MainActivity: MainActivityBase() {
 
@@ -15,7 +13,6 @@ class MainActivity: MainActivityBase() {
         super.onCreate(savedInstanceState)
 
         Notifications.createChannels(this)
-        Firebase.database.setPersistenceEnabled(true)
     }
 
     override fun onStart() {

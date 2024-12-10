@@ -23,11 +23,14 @@ import com.example.worditory.resourceid.getResourceId
 private const val POST_NOTIFICATIONS_REQUEST_CODE = 0
 
 private const val PLAYER_TURN_GROUP = "com.rbstarbuck.worditory.live.notification.PLAYER_TURN"
+private const val FRIEND_REQUEST_GROUP = "com.rbstarbuck.worditory.live.notification.FRIEND_REQUEST"
 
 private const val PLAYER_TURN_CHANNEL_ID = "playerTurn"
 private const val TIMEOUT_CHANNEL_ID = "timeout"
+private const val FRIEND_REQUEST_CHANNEL_ID = "friendRequest"
 
 private const val PLAYER_TURN_NOTIFICATION_ID = 0
+private const val FRIEND_REQUEST_NOTIFICATION_ID = 1
 
 internal object Notifications {
     internal fun requestPermission(context: Context) {
@@ -60,8 +63,17 @@ internal object Notifications {
             )
             timeoutChannel.description = context.getString(R.string.timeout_channel_description)
 
+            val friendRequestChannel = NotificationChannel(
+                /* id = */ FRIEND_REQUEST_CHANNEL_ID,
+                /* name = */ context.getString(R.string.friend_request_channel_name),
+                /* importance = */ NotificationManager.IMPORTANCE_LOW
+            )
+            timeoutChannel.description =
+                context.getString(R.string.friend_request_channel_description)
+
             notificationManager.createNotificationChannel(playerTurnChannel)
             notificationManager.createNotificationChannel(timeoutChannel)
+            notificationManager.createNotificationChannel(friendRequestChannel)
         }
     }
 
@@ -411,12 +423,69 @@ internal object Notifications {
         }
     }
 
-    internal fun cancel(gameId: String, context: Context) {
+    internal fun friendRequestReceived(
+        uid: String,
+        displayName: String,
+        avatarId: Int,
+        context: Context
+    ) {
+        val largeIconSize = largeIconSize(context)
+        val largeIcon = context.getDrawable(getResourceId(avatarId))
+            ?.toBitmap(largeIconSize, largeIconSize)
+
+        val contentText =
+            displayName +
+                    " " +
+                    context.getString(R.string.friend_request_received_notification_text)
+
+        val intent = Intent(
+            /* packageContext = */ context,
+            /* cls = */ MainActivity::class.java
+        )
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ 0,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_IMMUTABLE
+        )
+
+        var notification = NotificationCompat.Builder(context, FRIEND_REQUEST_CHANNEL_ID)
+            .setSmallIcon(R.drawable.add_friend)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentTitle(context.getString(R.string.friend_request_received_notification_title))
+            .setContentText(contentText)
+            .setLargeIcon(largeIcon)
+            .setContentIntent(pendingIntent)
+            .setGroup(FRIEND_REQUEST_GROUP)
+            .build()
+
+        val groupSummary = NotificationCompat.Builder(context, FRIEND_REQUEST_CHANNEL_ID)
+            .setSmallIcon(R.drawable.add_friend)
+            .setGroup(FRIEND_REQUEST_GROUP)
+            .setGroupSummary(true)
+            .build()
+
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return@with
+            }
+
+            notify(uid.hashCode(), notification)
+            notify(FRIEND_REQUEST_NOTIFICATION_ID, groupSummary)
+        }
+    }
+
+    internal fun cancel(id: String, context: Context) {
         val notificationManager = context.getSystemService(
             NOTIFICATION_SERVICE
         ) as NotificationManager
 
-        notificationManager.cancel(gameId.hashCode())
+        notificationManager.cancel(id.hashCode())
     }
 
     private fun largeIconSize(context: Context) = when(context.resources.displayMetrics.densityDpi) {
