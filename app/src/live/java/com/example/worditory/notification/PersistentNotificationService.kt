@@ -21,7 +21,7 @@ internal class PersistentNotificationService: Service() {
             onRequestAdded = { uid, user ->
                 Notifications.friendRequestReceived(
                     uid = uid,
-                    displayName = user.displayName ?: "",
+                    displayName = user.displayName ?: "User",
                     avatarId = user.avatarId ?: 0,
                     context = this
                 )
@@ -32,7 +32,7 @@ internal class PersistentNotificationService: Service() {
         challengeListener = MatchRepository.listenForChallenges { challenge ->
             Notifications.challengeReceived(
                 gameId = challenge.gameId,
-                displayName = challenge.user.displayName ?: "",
+                displayName = challenge.user.displayName ?: "User",
                 avatarId = challenge.user.avatarId ?: 0,
                 context = this
             )
@@ -40,6 +40,8 @@ internal class PersistentNotificationService: Service() {
     }
 
     override fun onDestroy() {
+        FriendRepository.removeListener(friendRequestListener)
+        MatchRepository.removeListener(challengeListener)
 
         super.onDestroy()
     }
