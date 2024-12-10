@@ -41,6 +41,7 @@ internal class AuthenticationViewModel: ViewModel() {
 
     internal val signIn = SignInViewModel(auth, enabledStateFlow)
     internal val signUp = SignUpViewModel(auth, enabledStateFlow)
+    internal val passwordRecovery = PasswordResetViewModel(auth, enabledStateFlow)
 
     internal fun dismiss() {
         enabled = false

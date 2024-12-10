@@ -32,6 +32,8 @@ internal fun AuthenticationView(viewModel: AuthenticationViewModel) {
     val visibilityState = viewModel.visibilityStateFlow.collectAsState()
     val screenState = viewModel.screenStateFlow.collectAsState()
 
+    val resetEmailSent = stringResource(R.string.password_reset_email_sent)
+
     val animatedAlpha = animateFloatAsState(
         targetValue = if (enabledState.value) 1f else 0f,
         animationSpec = tween(500),
@@ -70,6 +72,24 @@ internal fun AuthenticationView(viewModel: AuthenticationViewModel) {
                                 .padding(15.dp)
                         )
 
+                        Text(
+                            text = stringResource(R.string.forgot_password),
+                            modifier = Modifier
+                                .pointerInput(screenState) {
+                                    detectTapGestures(
+                                        onTap = {
+                                            viewModel.screen =
+                                                Authentication.Screen.PASSWORD_RESET
+                                        }
+                                    )
+                                },
+                            color = colorResource(R.color.link_text),
+                            fontSize = linkFontSize,
+                            textDecoration = TextDecoration.Underline
+                        )
+
+                        Spacer(Modifier.height(15.dp))
+
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = stringResource(R.string.no_account) + " ",
@@ -78,11 +98,14 @@ internal fun AuthenticationView(viewModel: AuthenticationViewModel) {
                             )
                             Text(
                                 text = stringResource(R.string.sign_up),
-                                modifier = Modifier.pointerInput(screenState) {
-                                    detectTapGestures(
-                                        onTap = { viewModel.screen = Authentication.Screen.SIGN_UP }
-                                    )
-                                },
+                                modifier = Modifier
+                                    .pointerInput(screenState) {
+                                        detectTapGestures(
+                                            onTap = {
+                                                viewModel.screen = Authentication.Screen.SIGN_UP
+                                            }
+                                        )
+                                    },
                                 color = colorResource(R.color.link_text),
                                 fontSize = linkFontSize,
                                 textDecoration = TextDecoration.Underline
@@ -116,6 +139,33 @@ internal fun AuthenticationView(viewModel: AuthenticationViewModel) {
                                 textDecoration = TextDecoration.Underline
                             )
                         }
+                    }
+
+                    Authentication.Screen.PASSWORD_RESET -> {
+                        PasswordResetView(
+                            viewModel = viewModel.passwordRecovery,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(15.dp),
+                            onPasswordReset = { email ->
+                                viewModel.signIn.emailStateFlow.value = email
+                                viewModel.signIn.passwordStateFlow.value = ""
+                                viewModel.signIn.errorMessage = "$resetEmailSent $email"
+                                viewModel.screen = Authentication.Screen.SIGN_IN
+                            }
+                        )
+
+                        Text(
+                            text = stringResource(R.string.sign_in),
+                            modifier = Modifier.pointerInput(screenState) {
+                                detectTapGestures(
+                                    onTap = { viewModel.screen = Authentication.Screen.SIGN_IN }
+                                )
+                            },
+                            color = colorResource(R.color.link_text),
+                            fontSize = linkFontSize,
+                            textDecoration = TextDecoration.Underline
+                        )
                     }
                 }
 

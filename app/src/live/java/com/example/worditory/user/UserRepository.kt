@@ -207,6 +207,16 @@ internal object UserRepository {
             }
         }
     }
+
+    internal fun ifEmailIsRegistered(email: String, isRegistered: (Boolean) -> Unit) {
+        database
+            .child(DbKey.EMAIL_TO_UID)
+            .child(sanitizeEmail(email))
+            .get()
+            .addOnSuccessListener { snapshot ->
+                isRegistered(snapshot.exists())
+            }
+    }
 }
 
 internal fun sanitizeEmail(email: String) =

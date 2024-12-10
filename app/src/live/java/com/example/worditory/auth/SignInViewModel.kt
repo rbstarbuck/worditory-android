@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 internal class SignInViewModel(
     private val auth: FirebaseAuth,
-    internal var enabledStateFlow: StateFlow<Boolean>
+    internal val enabledStateFlow: StateFlow<Boolean>
 ): ViewModel() {
     internal var onAuthenticated: () -> Unit = {}
 
