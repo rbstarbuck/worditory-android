@@ -164,7 +164,7 @@ internal class BadgesRowViewModel(context: Context): ViewModel() {
     internal val played8LetterWord = BadgeViewModel(
         composableCoordinates = Coordinates.BadgePlayed8LetterWord,
         showBadgePredicate = {
-            context.played7LetterWord().map { it != null }
+            context.played8LetterWord().map { it != null }
         }
     )
 }
