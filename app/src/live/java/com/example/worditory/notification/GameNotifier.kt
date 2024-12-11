@@ -9,7 +9,11 @@ import com.example.worditory.timeout.TIMEOUT_MILLIS
 import com.example.worditory.timeout.TIMEOUT_WARNING_MILLIS
 import com.example.worditory.user.UserRepository
 
-internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
+internal class GameNotifier(
+    liveGame: LiveGameModel,
+    isActivityRunning: () -> Boolean,
+    context: Context
+) {
     private var timeoutListener: GameRepository.TimeoutListener? = null
 
     private val isPlayerTurnListener = GameRepository.listenForIsPlayerTurn(
@@ -25,7 +29,7 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
                     gameId = liveGame.game.id,
                     timeoutDelta = TIMEOUT_WARNING_MILLIS,
                     onTimeout = {
-                        if (!NotificationService.isWarmingUp) {
+                        if (!isActivityRunning()) {
                             GameRepository.ifGameOver(liveGame.game.id) { isGameOver ->
                                 if (!isGameOver) {
                                     UserRepository.getOpponent(liveGame.game.id) { opponent ->
@@ -47,7 +51,7 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
                     gameId = liveGame.game.id,
                     timeoutDelta = TIMEOUT_MILLIS,
                     onTimeout = {
-                        if (!NotificationService.isWarmingUp) {
+                        if (!isActivityRunning()) {
                             GameRepository.ifIsPlayerTurn(
                                 liveGame.game.id, liveGame.isPlayer1
                             ) { isPlayerTurn ->
@@ -82,7 +86,7 @@ internal class GameNotifier(liveGame: LiveGameModel, context: Context) {
     private val wordListener = WordRepository.listenForLatestWord(
         gameId = liveGame.game.id,
         onNewWord = { playedWord ->
-            if (!NotificationService.isWarmingUp) {
+            if (!isActivityRunning()) {
                 val isOpponentWord = when (liveGame.isPlayer1) {
                     true -> playedWord.index!! % 2 == 1
                     false -> playedWord.index!! % 2 == 0

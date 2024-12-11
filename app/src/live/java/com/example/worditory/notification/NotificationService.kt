@@ -1,5 +1,7 @@
 package com.example.worditory.notification
 
+import android.app.ActivityManager
+import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
@@ -11,6 +13,17 @@ import kotlinx.coroutines.launch
 internal class NotificationService: Service() {
     private var notifiers = emptyList<GameNotifier>()
 
+    private var isWarmingUp = true
+
+    private val isActivityRunning: () -> Boolean = {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        isWarmingUp && if (manager.runningAppProcesses.isNotEmpty()) {
+            manager.runningAppProcesses[0].importance == IMPORTANCE_FOREGROUND
+        } else {
+            false
+        }
+    }
+
     override fun onBind(p0: Intent?): IBinder? {
         return null
     }
@@ -18,12 +31,12 @@ internal class NotificationService: Service() {
     override fun onCreate() {
         super.onCreate()
 
-        val context = this
-
-        isWarmingUp = true
         GlobalScope.launch {
             savedLiveGamesDataStore.data.collect { savedGames ->
-                notifiers = savedGames.gamesList.map { GameNotifier(it, context) }
+                clearNotifiers()
+                notifiers = savedGames.gamesList.map {
+                    GameNotifier(it, isActivityRunning, this@NotificationService)
+                }
             }
         }
 
@@ -34,17 +47,16 @@ internal class NotificationService: Service() {
     }
 
     override fun onDestroy() {
+        clearNotifiers()
+
+        super.onDestroy()
+    }
+
+    private fun clearNotifiers() {
         for (notifier in notifiers) {
             notifier.removeListeners()
         }
 
         notifiers = emptyList()
-
-        super.onDestroy()
-    }
-
-    companion object {
-        internal var isWarmingUp = true
-            private set
     }
 }
