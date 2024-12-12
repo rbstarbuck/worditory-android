@@ -23,12 +23,8 @@ import com.example.worditory.game.Game
 import com.example.worditory.game.NpcGameViewModel
 import com.example.worditory.game.GameView
 import com.example.worditory.game.npc.NpcModel
-import com.example.worditory.getPlayerAvatarId
-import com.example.worditory.mutableStateIn
 import com.example.worditory.saved.SavedNpcGames
 import com.example.worditory.saved.savedNpcGamesDataStore
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 internal fun NavigationStack(navController: NavHostController) {

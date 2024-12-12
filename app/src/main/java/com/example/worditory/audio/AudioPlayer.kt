@@ -6,7 +6,8 @@ import android.os.CountDownTimer
 import com.example.worditory.R
 import com.example.worditory.setSoundEnabled
 import com.example.worditory.soundEnabled
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -24,7 +25,7 @@ internal object AudioPlayer {
         gameOverWin = MediaPlayer.create(context, R.raw.game_over_win)
         gameOverLose = MediaPlayer.create(context, R.raw.game_over_lose)
 
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.Default).launch {
             enabled = context.soundEnabled().first()
         }
     }
@@ -32,7 +33,7 @@ internal object AudioPlayer {
     internal fun setEnabled(e: Boolean, context: Context) {
         enabled = e
 
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.Default).launch {
             context.setSoundEnabled(e)
         }
     }

@@ -9,7 +9,6 @@ import com.example.worditory.friends.request.clearFriendRequests
 import com.example.worditory.friends.request.removeFriendRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
