@@ -7,25 +7,32 @@ import com.example.worditory.database.DatabaseRepository
 import com.example.worditory.friends.request.addFriendRequest
 import com.example.worditory.friends.request.clearFriendRequests
 import com.example.worditory.friends.request.removeFriendRequest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class FriendService: Service() {
     private lateinit var friendRequestListener: FriendRepository.FriendRequestListener
     private lateinit var friendDataListener: FriendRepository.FriendDataListener
 
+    private lateinit var listenerJob: Job
+
     override fun onBind(p0: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
 
-        GlobalScope.launch {
+        val scope = CoroutineScope(Dispatchers.Default)
+
+        listenerJob = scope.launch {
             clearFriendRequests()
 
             friendRequestListener = FriendRepository.listenForFriendRequests(
                 onRequestAdded = { uid, user ->
                     DatabaseRepository.getServerTime { timestamp ->
-                        GlobalScope.launch {
+                        scope.launch {
                             addFriendRequest(
                                 Friend.newBuilder()
                                     .setUid(uid)
@@ -41,7 +48,7 @@ internal class FriendService: Service() {
                     }
                 },
                 onRequestRemoved = { uid ->
-                    GlobalScope.launch {
+                    scope.launch {
                         removeFriendRequest(uid)
                     }
                 }
@@ -50,7 +57,7 @@ internal class FriendService: Service() {
             friendDataListener = FriendRepository.listenForFriendDataChanges { uid, user ->
                 if (user != null) {
                     DatabaseRepository.getServerTime { timestamp ->
-                        GlobalScope.launch {
+                        scope.launch {
                             addSavedFriend(
                                 Friend.newBuilder()
                                     .setUid(uid)
@@ -66,7 +73,7 @@ internal class FriendService: Service() {
                         }
                     }
                 } else {
-                    GlobalScope.launch {
+                    scope.launch {
                         removeSavedFriend(uid)
                     }
                 }
@@ -75,6 +82,7 @@ internal class FriendService: Service() {
     }
 
     override fun onDestroy() {
+        listenerJob.cancel()
         FriendRepository.removeListener(friendRequestListener)
         FriendRepository.removeListener(friendDataListener)
 
