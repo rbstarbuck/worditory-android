@@ -51,6 +51,7 @@ internal class LiveGameViewModel(
     private val timeoutListener: GameRepository.TimeoutListener
     private val challengeDeclinedListener: GameRepository.ChallengeDeclinedListener
 
+    private var isOpponentOpeningMove = true
     private var opponentHasJoined = false
     private var challengeDeclined = false
 
@@ -71,6 +72,12 @@ internal class LiveGameViewModel(
             .build()
 
     init {
+        isOpponentOpeningMove = true
+        viewModelScope.launch {
+            delay(2000L)
+            isOpponentOpeningMove = false
+        }
+
         latestWordListener = WordRepository.listenForLatestWord(
             gameId = id,
             onNewWord = { word ->
@@ -208,6 +215,10 @@ internal class LiveGameViewModel(
                     board.word.model = WordModel()
 
                     board.word.withDrawPathTweenDuration(millis = word.tiles.size * 350) {
+                        if (isOpponentOpeningMove) {
+                            delay(1500L)
+                        }
+
                         for (repoTile in word.tiles) {
                             val tile = board.tiles[flipTileIndex(repoTile.index!!)]
                             board.word.onSelectTile(tile, Game.Player.PLAYER_2)
