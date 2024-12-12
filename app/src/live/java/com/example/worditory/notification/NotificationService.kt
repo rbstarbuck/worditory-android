@@ -6,12 +6,18 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.example.worditory.saved.savedLiveGamesDataStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 internal class NotificationService: Service() {
     private var notifiers = emptyList<GameNotifier>()
+
+    private val savedGamesJob = SupervisorJob()
 
     private var isWarmingUp = true
 
@@ -33,7 +39,8 @@ internal class NotificationService: Service() {
 
         isWarmingUp = true
 
-        GlobalScope.launch {
+        val scope = CoroutineScope(Dispatchers.Default + savedGamesJob)
+        scope.launch {
             savedLiveGamesDataStore.data.collect { savedGames ->
                 clearNotifiers()
                 notifiers = savedGames.gamesList.map {
@@ -42,13 +49,14 @@ internal class NotificationService: Service() {
             }
         }
 
-        GlobalScope.launch{
+        scope.launch{
             delay(3000L)
             isWarmingUp = false
         }
     }
 
     override fun onDestroy() {
+        savedGamesJob.cancel()
         clearNotifiers()
 
         super.onDestroy()
