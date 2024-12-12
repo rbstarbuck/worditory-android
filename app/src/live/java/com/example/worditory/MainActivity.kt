@@ -11,7 +11,6 @@ class MainActivity: MainActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         Notifications.createChannels(this)
     }
 

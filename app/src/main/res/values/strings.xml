@@ -124,4 +124,6 @@
     <string name="tutorial_text_6">Your score is always equal to the number of tiles you own.</string>
     <string name="tutorial_text_7">You win when your score reaches the \"score to win\" displayed at the top, which ticks down by one after each turn.</string>
     <string name="tutorial_text_8">Click \"Game rules\" in the menu to come back to this tutorial.</string>
+
+    <string name="loading">Loading</string>
 </resources>

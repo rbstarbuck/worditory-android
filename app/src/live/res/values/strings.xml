@@ -70,6 +70,4 @@
     <string name="password_reset_email_sent">Password reset link sent to</string>
 
     <string name="waiting">Waiting…</string>
-
-    <string name="loading">Loading</string>
 </resources>
