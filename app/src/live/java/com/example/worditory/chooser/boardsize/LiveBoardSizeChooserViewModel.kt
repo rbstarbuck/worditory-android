@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.worditory.config.FeatureFlags
 import com.example.worditory.game.LiveGame
+import com.example.worditory.loading.LoadingViewModel
 import com.example.worditory.match.MatchRepository
 import com.example.worditory.match.OnMatchFailure
 import com.example.worditory.navigation.LiveScreen
@@ -17,6 +18,8 @@ internal class LiveBoardSizeChooserViewModel(
     override val enabledSizesStateFlow = FeatureFlags.BoardSizes.get
 
     override fun onBoardSizeClick(boardWidth: Int, boardHeight: Int, context: Context) {
+        loading.enabled = true
+
         val gameType = "size${boardWidth}x${boardHeight}"
 
         MatchRepository.makeMatch(

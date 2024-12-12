@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worditory.R
 import com.example.worditory.game.board.tile.Tile
+import com.example.worditory.loading.LoadingView
 
 @Composable
 internal fun BoardSizeChooserView(
@@ -188,4 +189,6 @@ internal fun BoardSizeChooserView(
             Spacer(Modifier.weight(1f))
         }
     }
+
+    LoadingView(viewModel.loading)
 }

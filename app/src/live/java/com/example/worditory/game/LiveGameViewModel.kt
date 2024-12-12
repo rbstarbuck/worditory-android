@@ -52,7 +52,6 @@ internal class LiveGameViewModel(
     private val challengeDeclinedListener: GameRepository.ChallengeDeclinedListener
 
     private var opponentHasJoined = false
-    private var isOpponentOpeningTurn = false
     private var challengeDeclined = false
 
     private val nextGameJob: Job
@@ -129,8 +128,6 @@ internal class LiveGameViewModel(
 
         viewModelScope.launch {
             scoreBoard.scorePlayer1.rank = context.getPlayerRank().first()
-            delay(1000L)
-            isOpponentOpeningTurn = false
         }
     }
 
@@ -211,10 +208,6 @@ internal class LiveGameViewModel(
                     board.word.model = WordModel()
 
                     board.word.withDrawPathTweenDuration(millis = word.tiles.size * 350) {
-                        if (isOpponentOpeningTurn) {
-                            delay(2000L)
-                        }
-
                         for (repoTile in word.tiles) {
                             val tile = board.tiles[flipTileIndex(repoTile.index!!)]
                             board.word.onSelectTile(tile, Game.Player.PLAYER_2)

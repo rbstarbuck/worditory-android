@@ -9,4 +9,6 @@
     <color name="accept_friend_request_background">#FFDDDDDD</color>
     <color name="accept_friend_request_display_name_background">#FFEEEEEE</color>
     <color name="accept_friend_request_separator">#FFCCCCCC</color>
+
+    <color name="loading_background">#80000000</color>
 </resources>

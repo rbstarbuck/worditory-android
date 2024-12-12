@@ -17,7 +17,7 @@ internal class NotificationService: Service() {
 
     private val isActivityRunning: () -> Boolean = {
         val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        isWarmingUp && if (manager.runningAppProcesses.isNotEmpty()) {
+        isWarmingUp || if (manager.runningAppProcesses.isNotEmpty()) {
             manager.runningAppProcesses[0].importance == IMPORTANCE_FOREGROUND
         } else {
             false
@@ -30,6 +30,8 @@ internal class NotificationService: Service() {
 
     override fun onCreate() {
         super.onCreate()
+
+        isWarmingUp = true
 
         GlobalScope.launch {
             savedLiveGamesDataStore.data.collect { savedGames ->
