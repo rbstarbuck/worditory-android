@@ -81,17 +81,28 @@ internal fun MainView(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             SavedFriendsView(
                 viewModel = viewModel.savedFriends,
                 modifier = Modifier.fillMaxWidth(),
-                onAddFriendClick = { viewModel.sendFriendRequest.enabled = true },
+                onAddFriendClick = {
+                    viewModel.authentication.authenticate {
+                        viewModel.authentication.dismiss()
+                        viewModel.sendFriendRequest.enabled = true
+                    }
+                },
                 onFriendClick = { friend ->
-                    viewModel.friendCard.friend = friend
-                    viewModel.friendCard.enabled = true
+                    viewModel.authentication.authenticate {
+                        viewModel.authentication.dismiss()
+                        viewModel.friendCard.friend = friend
+                        viewModel.friendCard.enabled = true
+                    }
                 },
                 onRemoveFriendClick = { friend ->
-                    viewModel.deleteFriendConfirmation.show(
-                        onConfirmed = {
-                            FriendRepository.deleteFriend(friend.uid)
-                        }
-                    )
+                    viewModel.authentication.authenticate {
+                        viewModel.authentication.dismiss()
+                        viewModel.deleteFriendConfirmation.show(
+                            onConfirmed = {
+                                FriendRepository.deleteFriend(friend.uid)
+                            }
+                        )
+                    }
                 }
             )
 
