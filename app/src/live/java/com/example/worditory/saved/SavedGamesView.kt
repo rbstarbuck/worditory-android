@@ -10,11 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import com.example.worditory.game.LiveGameModel
 import com.example.worditory.game.NpcGameModel
 import com.example.worditory.game.gameover.GameOver
-import com.example.worditory.game.npc.NonPlayerCharacter
 
 @Composable
 internal fun SavedGamesView(
