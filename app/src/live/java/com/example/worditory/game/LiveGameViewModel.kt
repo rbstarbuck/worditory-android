@@ -334,6 +334,7 @@ internal class LiveGameViewModel(
             viewModelScope.launch {
                 context.removeSavedLiveGame(id)
             }
+            GameRepository.deleteGame(id)
         }
 
         nextGameJob.cancel()

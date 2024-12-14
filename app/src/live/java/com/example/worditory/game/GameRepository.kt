@@ -10,7 +10,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.MutableData
 import com.google.firebase.database.ServerValue
+import com.google.firebase.database.Transaction
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
@@ -299,6 +301,50 @@ internal object GameRepository {
             .child(auth.currentUser!!.uid)
             .child(gameId)
             .setValue(false)
+    }
+
+    internal fun deleteGame(gameId: String) {
+        database
+            .child(DbKey.GAMES)
+            .child(gameId)
+            .runTransaction(object : Transaction.Handler {
+                override fun doTransaction(currentData: MutableData): Transaction.Result {
+                    val game = currentData.getValue(GameRepoModel::class.java)
+
+                    if (game != null) {
+                        if (game.playerHasDeleted != true) {
+                            currentData.value = game.copy(playerHasDeleted = true)
+                        } else {
+                            database.child(DbKey.WORDS).child(gameId).removeValue()
+                            database.child(DbKey.BOARDS).child(gameId).removeValue()
+                            if (game.player1 != null) {
+                                database
+                                    .child(DbKey.PLAYER_GAMES)
+                                    .child(game.player1)
+                                    .child(gameId)
+                                    .removeValue()
+                            }
+                            if (game.player2 != null) {
+                                database
+                                    .child(DbKey.PLAYER_GAMES)
+                                    .child(game.player2)
+                                    .child(gameId)
+                                    .removeValue()
+                            }
+                            currentData.value = null
+                        }
+                    }
+
+                    return Transaction.success(currentData)
+                }
+
+                override fun onComplete(
+                    error: DatabaseError?,
+                    committed: Boolean,
+                    currentData: DataSnapshot?
+                ) {}
+
+            })
     }
 
     internal class UserListener(

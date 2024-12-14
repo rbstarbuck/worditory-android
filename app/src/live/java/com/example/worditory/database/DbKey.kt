@@ -32,6 +32,7 @@ internal object DbKey {
         const val PLAYER_1_WON = "player1Won"
         const val PLAYER_2_WON = "player2Won"
         const val TIMESTAMP = "timestamp"
+        const val PLAYER_HAS_DELETED = "playerHasDeleted"
     }
 
     internal object Boards {
