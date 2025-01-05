@@ -1,0 +1,11 @@
+Worditory Live! (hereby referred to as "the app") contains no advertisements or in-app purchases of any kind.
+
+For complete functionality, authentication is required and an email address must be provided. Email addresses are not displayed to other users. Email addresses will never be used by the app's creators tp send spam or other emails at any time.
+
+Target audience for this app is anyone 8 years of age or more.
+
+This app uses Android's POST_NOTIFICATIONS permission in order send notifications to the user. Users must opt in to receiving notifications, and if one does not no notifications will be sent.
+
+This app has a content rating of "Everyone".
+
+The app does not contain COvid-19 contact tracing.
